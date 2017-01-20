@@ -1,0 +1,127 @@
+#how to pen a newtwork drive:
+smb://172.21.9.4
+
+#redirect to dev/null
+> /dev/null 2>&1
+
+# create large file
+dd if=/dev/zero of=file.txt count=10000000 bs=1024
+
+#navigate between commands
+CTRL + R - to find one of the last commands instead of arrows
+
+
+FILES:
+-------
+#show file permissions
+stat -c "%a %n" *
+
+explanation:
+-----------
+Replace * with the relevant directory or the exact filename that you want to examine.
+
+From the man page of stat,
+
+-c  --format=FORMAT
+          use  the  specified  FORMAT instead of the default; output a newline after
+          each use of FORMAT
+%a     Access rights in octal
+%n     File name
+ 
+#scp to HAL
+barak@ran-pc-linux:~/ng_build_87/versions$ scp NG-master-4.5.1.87d-vrf.ver nbase@194.90.136.1:\image
+
+#how to copy a dir -- no need *
+sudo cp -r /opt/valgrind/ dist/arm_msys_root/opt/
+
+#copy source file to dest file (if dest file doesn't exist, it is created)
+cp 0001-enable_aufs.patch ../../../install/kernel3.4.69/build/patches/0044-enable_aufs.patch
+
+#copy a file into a folder
+cp ../install/kernel3.4.69/build/patches/0044-enable_aufs.patch ~/wkspaces/new_dist/install/kernel3.4.69/build/patches/
+
+#linux show threads of a process
+ps -T -p <pid>
+
+ps -aux
+s -aux | grep bcompare
+sudo kill -9 <PID>
+
+#count files under some folder
+ls /ver/*.bundle | wc -l
+
+
+#tar and untar:
+#tar:
+tar cvzf new.tar.gz ./root ./run ./usr ./var ./sbin ./lib ./etc ./dev ./bin
+//c = create a zip file
+//x = extract zip
+
+
+#dmesg
+dmesg (Display message or driver message) is a command which will show Kernel ring buffers. These messages contain valuable information about device drivers loaded into the kernel at the time of booting as well as when we connect a hardware to the system on the fly. In other words dmesg will give us details about hardware drivers connected to, disconnected from a machine and any errors when hardware driver is loaded into the kernel. These messages are helpful in diagnosing or debugging hardware and device driver issues. 
+
+dmesg output format
+[ time ] device name: message
+[ time ] : number seconds from the boot time. If we see something like 34.23445 as time stamp, that indicates this message was created after 34 seconds of booting the machine.
+
+device name: This will give us the hardware device name along with manufacture details.
+
+message: This is actual information we have to look at, this message contain information about devices loaded information, if it's not loaded it will give us error etc.
+
+
+dmesg | grep -i eth0
+
+dmesg | grep -i usb
+
+dmesg | grep -i Memory
+
+dmesg | grep -i tty
+
+#ping
+ping hal
+ping www.google.com
+ping hal
+
+#ssh
+ssh kostaz@172.21.10.144
+ssh admin@<ip of target>
+ssh ran@172.21.13.26
+
+mount:
+------
+/etc/fstab
+
+#current dir
+pwd
+
+#cscope
+cscope -Rbk
+
+
+log files:
+---------
+var/log/messages
+dmesg
+
+#watch last 300 lines, default is 10 lines
+tail -n300 /var/log/messages
+=> /var/log/messages : General log messages
+
+=> /var/log/boot : System boot log
+
+=> /var/log/debug : Debugging log messages
+
+=> /var/log/auth.log : User login and authentication logs
+
+=> /var/log/dmesg : Linux kernel ring buffer log
+
+=> /var/log/dpkg.log : All binary package log includes package installation and other information
+
+
+
+meld:
+----
+If you start Meld from the command line, you can tell it what to do when it starts.
+For a two- or three-way file comparison, start Meld with meld file1 file2 or meld file1 file2 file3 respectively.
+For a two- or three-way directory comparison, start Meld with meld dir1 dir2 or meld dir1 dir2 dir3.

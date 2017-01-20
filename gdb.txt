@@ -1,0 +1,34 @@
+/home/barak/eclipse/cpp-mars
+
+
+bastille-netfilter stop
+
+ps -aux | grep vtysh
+
+gdbserver :12345 --attach vtysh-PID &
+
+
+
+../dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/bin/arm-linux-gnueabi-gdb ../dist/arm_msys_root/usr/local/nbase/bin/vtysh
+
+target remote 172.21.11.101:12345
+
+if I want to debug signal handler
+
+1) set the breakpoint in handler: b sigint
+2) let GDB not handling the signal but pass it: handle SIGUSR2 nostop pass
+
+
+run and debug a process by gdb
+
+
+cd /usr/local/nbase/bin/
+
+gdbserver :12345 vtysh
+
+../dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/bin/arm-linux-gnueabi-gdb ../dist/arm_msys_root/usr/local/nbase/bin/vtysh
+
+
+target remote 172.21.11.101:12345
+ 
+ 
