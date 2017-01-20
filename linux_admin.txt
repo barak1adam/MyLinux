@@ -50,6 +50,10 @@ sudo kill -9 <PID>
 #count files under some folder
 ls /ver/*.bundle | wc -l
 
+#show a full path for a file:
+============================
+ls $PWD/serial.c
+readlink -f serial.c
 
 #tar and untar:
 #tar:
