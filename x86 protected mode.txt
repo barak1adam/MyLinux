@@ -1,0 +1,68 @@
+protected mode (Privilege/Supervisor/Kernel):
+=============================================a
+an operational mode of x86-compatible CPU.
+allows running SW the following features:
+Privilege levels, segment addressing & virtual memoy, paging, multitasking.
+
+Protected mode features:
+------------------------
+
+* Privilege levels - in x86, 4 levels/rings (0-3)
+usually kernel operates in level 0, applications in 3.
+level 0 allows all CPU instructions, disabling/enabling interrupts, access to all memory addresses,
+memory management operations, access to CPU special registers.
+
+* Segment addressing
+segment part - 16 upper bits of an address. 13 upper bits (3:15) - index to entry Descriptor Table. 
+bit 2 - index is in GDT or LDT. bits 0:1 - permissions.
+offset part - 16 lower bits of an address.
+
+* Paging
+allows os to restrict control to pages to specific tasks. used for os virtual memory implemenation
+allows swapping of paging to disk.
+The x86 architecture allows control of pages through two arrays: page directories and page tables.
+page directories entries (PDE) - a pointer to a page table
+page table entries (PTE) - a pointer to actual page physical address
+At any given time, only one page directory may be in active use.
+
+* Multitasking
+rings, call gates and TSS, allows os to implement preemtive multitasking mode.
+(preemtive multitasking mode allows interrupts to preempt running tasks and then a scheduler will
+let the higher runnable task to run. It ensures all tasks will get CPU time)
+implemented by kernel scheduler & context swtich mechanism.
+TSS allows registers, stacks, segment selectors to be modified without affecting another task.
+TSS allows privelege level and I/O permissions to be independednt of another task.
+
+HW task switches have high performance overhead. So not just TSS features are used 
+for multitasking but instead a cominatin of HW & SW (kernel) is used.
+
+
+
+
+Entering Protected mode:
+------------------------
+First run in real mode for backward compatability, then enter protected mode.
+To enter protected mode:
+sets up several descriptor tables and enables the Protection Enable (PE) bit in the control register 0 (CR0).
+
+CR0 controls the processor operation. e.g.:
+-------------------------------------------
+0: PE bit - Protected mode enabled. If 1, system is in protected mode, else system is in real mode
+30: CD bit - Cache disable.  Globally enables/disable the memory cache
+31: PG bit - Paging (virtual addressing). If 1, enable paging and use the CR3 register, else disable paging
+
+CR2 Page Fault Linear Address (PFLA):
+-------------------------------------
+When a page fault occurs, the address the program attempted to access is stored in the CR2 register.
+
+CR3 - virtual addressing (Only if CR0:PG is 1):
+-----------------------------------------------
+enables the processor to translate linear (virtual) addresses into physical addresses,
+by locating the page directory and page tables for the current task.
+The upper 20 bits of CR3 become the page directory base register (PDBR), which stores the physical address of the first page directory entry.
+Lower 12 bit are the page offset.
+
+CR4 - control operations in protected mode (Only if CR0:PE is 1
+
+
+

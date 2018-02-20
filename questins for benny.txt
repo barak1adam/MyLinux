@@ -1,0 +1,131 @@
+Benny:
+
+Is linux RT? Is kernel preemtive? p. 62
+-----------------------------------------
+
+non preempive till 2.6. it means that a thread running in kernel mode will run to completion
+even it's timelice is expired. It will release the CPU only if done or it is going to sleep voluntarely by its own code, not by the scheduler.
+it can cause higher priority threads to starve the current and lower thread keep calling sys calls and stay in kernel mode.
+(priority inversion)
+Since 2.6 the kernel is preemptive, the scheduler can preemt the current thread with another thread even it is running.
+it makes more sync issues to handle.
+
+It is RT becuase RT threads are always scheduled before normal threads but it not hard RT.
+hard RT means deterministic - tasks must run in predefined deadlines. 
+(it makes interrupt and context switch more strict)
+
+RTLinux is hard RT.
+
+talk about kernel stacks on behalf of the user processes.
+
+draw interrupt vectors:
+only one line goes from IPC to CPU? masking one irq or disabling all of them
+is done on the CPU register ?
+
+void disable_irq(unsigned int irq); 
+void disable_irq_nosync(unsigned int irq); 
+The first two functions disable a given interrupt line in the interrupt controller
+
+draw mmu, TLBs
+
+dma - what does it mean non cachable?
+
+kernel - draw sync table
+
+make sure: how user space and kernel space are enforced
+
+make sure: are priorities dynamically changed in CFS ?
+I know that RT priorities are static, and that CFS is working on vtime
+balancing...
+
+copy_from_user() copy_to_user() can block. can the kernel block ?
+all system calls are like interrupt handlers, how can we block?
+answer:
+kernel implement the system call, upon blocking will call sched() to resume
+the next process
+
+robert love:
+interrupt handlers cannot sleep and thus are much more limited in what they can do than system 
+calls running in process context.
+system calls running always in the kernel context, isn't it?
+
+asmlinkage
+
+is linux kernel a process ?
+Linux kernel can't be considered as a process, because this is one of its responsibilities to manage processes.
+You can consider kernel as a big interrupt handler. After the kernel grants processor to the thread, 
+the only way to get control back are interrupts (or system calls, which are also interrupts).
+
+it has no pid, it is not running in the user space,
+it doesn't have a task_struct, it cannot be swapped out of memory, 
+it has no entry in process table, it is not scheduled by the kernel scheduler
+
+but:
+it has threads running (with task_structs)
+it can be preempted
+
+
+cpu expert:
+sys call instuction 0x80
+stacks allocation
+cache
+mmu
+address bus / data bus - 32 / 64 bits
+
+Spin locks:
+------------
+A spin lock is a lock that can be held by at most one thread of execution. 
+If a thread of execution attempts to acquire a spin lock while it is already held, which is called 
+contended, the thread busy loops spins—waiting for the lock to become available. If the lock is not contended, the thread 
+can immediately acquire the lock and continue.
+
+1. the lock is held only by one owner - the locking thread. (like mutex)
+2. atomicity - preemption is disabled.
+3. since preemption is disabled for atomicity we should not sleep in the critical region, not to break atomicity.
+4. if preemption is disabled, spinning is not an issue. it is an issue just for other processors.
+5. the blocking thread is not going to sleep like in other locks (not going to waiting queue), 
+it is busy waiting (active in ready queue).
+Since preemption is disabled, the blocking thread is not going to run out of the ready Q.
+If premmption was enabled, it would spend cpu time by going back and forth the ready Q for busy waiting
+till the lock is released.
+6. since no other thread can run, and since another processor might spin, we must not go to sleep and unlcock
+as soon as possible.
+
+in preemptive mode - even busy waiting thread can be preempted by the kernel.
+but since interrupts are out of the scheduling context, they can spin forever.
+
+spinlocks makes the critical region atomic, preemption is disabled - the locking thread will not be preemted.
+1. if needed, we have to disable interrupts ourselves.
+2. we must NOT go to sleep nor relinquish the cpu.
+
+
+If preemption was enabled, or if the locking thread would go to sleep or release cpu and some other thread will take in, 
+the blocking thread will spin for long time (sharing the cpu with all tasks that ready to run in the ready q), 
+till the locking thread will get cpu again and unlock.
+
+Alternative to spin lock, is to enable preemption and put the blocking thread to sleep.
+meaning impmplementing 2 context switches - 
+-schedule another thread in
+-schedulte the blockig thread in when lock is released.
+this is an overhead related to to just spin lock implementation.
+so we should try unlock asap, otherwise it is not worth to spin, but to make the alternative of 
+context switch.
+
+Benny:
+The kernel must ensure that right after the spinlock is unlocked, the blocking thread is locking and gets into
+the critical region before preemption is enabled, otherwise it might spin for a long time.
+So the kernel should make all spinning threads run before enable preemption.
+
+if the spin lock is required also by interrupt handler, we must disable interrupts when locking, to ensure handler will
+not spin forever.
+
+spinlock was initially inteneded for multiple processors:
+if one locks, the other will never get in.
+
+
+using spin_lock_irqsave to avoid interrupt handlers to be called and start spining.
+but in the interrupt handler itself - why to use it and not reular spin_lock? maybe to avoid other interrupt handlers...
+
+spin locks and bottom halves:
+softirq, tasklets cannot preempt a running softirq/tasklet on the same processor,
+so if data shared between bottom-halves, no need to disable bh, but to use regular spinlock.

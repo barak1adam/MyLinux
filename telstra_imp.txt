@@ -1,0 +1,69 @@
+initial line will be:
+======================
+password required       pam_unix.so
+
+1)
+password-policy
+[no] encryption <encryption-algorithm>
+
+no encryption
+encryption des:
+==============
+if md5 | sha256 | sha512 - then delete
+sed -n -i '/^password/s/md5\|sha256\|sha512//' file
+
+if md5 / sha256 / sha512 - then delete
+sed -n -i '/^password/s/md5\|sha256\|sha512//' file
+append md5 / sha256 / sha512 to pam_unix.so params
+sed -n -i "/^password/s/$/ $arg/" file
+
+2)
+password-policy
+ [no] aging <days>
+ 
+set warning be default
+range is 1-105
+config_aging //login.defs
+a=$2; awk -v string="$a" -F: 'BEGIN{OFS=":"}/admin/{gsub(/.*/,string,$5)}1' /etc/shadow
+
+3) password-policy
+ [no] history
+ 
+ no: if "remember=10" then delete
+ 
+ 
+ make sure /etc/security/opasswd exists  /*********** to do **************/
+ if  "remember=10" exit
+ else append "remember=10"
+ 
+4) password-policy
+
+add line of pam_cracklib.so above pam_unix //I can add the #line by default and just remove the "#"
+ /*********** to do **************/
+add "use_authtok" after pam_unix.
+
+no:
+add "#" to pam_cracklib line
+remove "use_authtok" 
+
+
+5) ssh
+like kex command
+
+
+
+TO DO:
+------
+1. build a clean version without 
+2. commit 1: upgrade pam and in distribution
+3. commit 2: change files content and links
+4. commit 3: add the script that make all job, except ssh
+handle auth, not just password
+5. commit 4: add CLI commands password-policy
+6. commit 5: add CLI boot command for ssh
+7. handle long-mode
+
+ 
+ 
+ 
+

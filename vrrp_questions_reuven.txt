@@ -1,0 +1,31 @@
+vrrpd is checking if one of the virtual ip is owned by the router. if yes - set priority to 255, else 100 or user value
+vrrpd is checking if owner is set and priority is not 255 - return error.
+now we are in a legal state where owner is set becuase it really owns an IP and priority is 255.
+so actually ownership is set by vrrpd and is not required by CLI.
+
+then it is using owner flag when entering or leaving master state:
+when entering master state - if not an owner, add a new IP interface with the vmac. if owner, just set the vmac to the real IP.
+when leaving master state - if not an owner, remove the IP interface with its vmac. if owner, set the real mac again to the real ip.
+
+
+
+
+svrrp (vrrp.c):
+ownership is checked again when virtual addresses are configured. exactly as done by vrrpd. why? don't see it is handled by the vrrpd...
+
+the functions of updating ownership when real interfaces are added or removed are not used !
+
+
+keepalived:
+
+1. is ownership is handled - mean is priority is set automatically to 255 (if not confiugred by the user)?
+why priority is abled to change in case of ownership ??
+
+2. vmac:
+the rfc says always to use the vmac. (as done in vrrpd)
+so why is the #use real mac option allowed?
+
+3. how ownership is updated when real interfaces are added or removed ?
+
+
+

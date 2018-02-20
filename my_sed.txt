@@ -1,0 +1,59 @@
+format: sed '' file
+operates on lines
+
+modes of operatoins:
+====================
+  -n, --quiet, --silent
+                 suppress automatic printing of pattern space
+  -e script, --expression=script
+                 add the script to the commands to be executed
+  -f script-file, --file=script-file
+                 add the contents of script-file to the commands to be executed
+  --follow-symlinks
+                 follow symlinks when processing in place
+  -i[SUFFIX], --in-place[=SUFFIX]
+                 edit files in place (makes backup if SUFFIX supplied)
+  -l N, --line-length=N
+                 specify the desired line-wrap length for the `l' command
+  --posix
+                 disable all GNU extensions.
+  -r, --regexp-extended
+                 use extended regular expressions in the script.
+
+examples:
+=========
+
+#just print the file. r - extra capabilities of sed
+sed -r '' file
+
+#n - no output
+sed -n -r '' file 
+
+#print file except lines 2 to 4
+sed -r '2,4d' file
+
+#print only lines 2 to 4
+sed -r -n '2,4p' file //-n says not to print any line, and then '2,4p' make just the relevant print
+
+#replace text but file is not changed, output is stdout
+sed 's/pattern/newstring/g' file
+
+#replace, but change the file (i = in place)
+sed -i 's/pattern/newstring/g' file
+
+#replace lower case with upper. without g, only first t in each line is replaced
+sed 's/t/T/g' file
+#replace, i - ignore case
+sed 's/t/T/gi' file
+#replace just in range of lines (range, e.g 3 to 5)
+#3,+3 means 3 lines starting from line 3
+#3, $ means line 3 to the end of file
+sed 3,5 's/t/T/g' file
+
+#delete every line that match a pattern
+sed -r '/pattern/d' file
+
+#passing command line args to sed - use "" instead of ''
+sed -n -i "/^password/s/$/ $arg/" file
+
+

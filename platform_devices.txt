@@ -1,0 +1,20 @@
+linux platfrom devices
+
+a kernel subsystem to connect drivers to devices.
+platform devices - those who need to load on boot, not "wake up" devices like usb, pci, etc...
+
+driver is registered by platform_driver_register()
+device is registered or explicitly by calling explicitly platform_device_register() or by adding an entry to DTS file.
+
+the binding is done by the kernel based on the specific device name (compatible)
+if binding found, the probe is invoked to provide the driver with the specific device data (like specific GPIOs used in 
+my driver, etc...)
+without probing the driver know nothing about the specifc device.
+
+for example: in RTC - I had to provide the exact model number to make the binding.
+
+legacy - only minor numbers were used, but then the user application has to be changed.
+
+Driver binding is performed automatically by the driver core, invoking
+driver probe() after finding a match between device and driver.  If the
+probe() succeeds, the driver and device are bound as usual.

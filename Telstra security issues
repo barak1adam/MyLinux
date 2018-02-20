@@ -1,0 +1,126 @@
+Sunday:
+
+update 6-1130 hours on Friday
+
+Reuven:
+=======
+1)check CLI and sources.
+2) check complexity with pam_unix
+3) go over all pam settings with Reuven
+
+Then:
+=====
+2)check/review all pam commands but complexity
+
+3) read about cracklib compilation
+
+4) set a dr meeting
+
+
+
+
+
+1) set password expiration is done via login pam file? passwd pam file? login.defs?
+Reuven, check PC/target
+a: 
+There are flags in both login.defs and pam.
+should be in passwd pam file or in common-password pam file.
+
+2) what between pam_unix to login.defs? is pam_unix (used in pam.d) overrites login.defs?
+Reuven, check PC/target
+a: it is written inside login defs.
+expiration for example, still handled by login.defs
+
+*3) Can we implement password complexity only with pam_unix? not straight forward, Reuven.
+
+4) Is cracklib always too much strong ? just check it out with Telstra settings on the PC
+try Avshi P@ssw0rd
+
+*5) understand cracklib minlen - done !
+
+6) cracklib compilation - 
+6.1) upgrade all PAM lib and get latest prebuilt sub-components like cracklibs? 
+risky, but no need to compile
+6.2) build current old PAM with missing sub-components. search google !!!
+
+
+pam_unix:
+Usually this just means checking the /etc/passwd and /etc/shadow files, as expected.
+etc/passwd holds users settings. 
+An x character on the password columns indicates that encrypted password is stored in /etc/shadow file
+
+password history:
+pam_cracklib is capable of consulting a user's password "history" and not allowing them to re-use old passwords.
+However, the functionality for actually storing the user's old passwords is enabled via the pam_unix module.
+The first step is to make sure to create an empty /etc/security/opasswd file for storing old user passwords. 
+If you forget to do this before enabling the history feature in the PAM configuration file, 
+then all user password updates will fail.
+Treat your opasswd file like your /etc/shadow file because it will end up containing user password hashes
+
+#touch /etc/security/opasswd
+#chown root:root /etc/security/opasswd
+#chmod 600 /etc/security/opasswd
+
+pam_cracklib:
+The pam_cracklib module is enabled via the system's standard PAM configuration interface. 
+On Debian systems, this is the /etc/pam.d/common-password file
+
+pam_cracklib also checks the user's password against it's own internal dictionaries of easily guessed passwords. 
+On Debian systems, pam_cracklib's dictionaries live in /var/cache/cracklib and are rebuilt nightly by the
+/usr/sbin/update-cracklib script
+
+
+
+
+telstra issues:
+
+1) passwords encryption
+DES - change it to SHA*. 
+q:
+change it in login.defs or in PAM file?
+a:
+check it on PC, target
+
+CLI not needed
+
+2.1) passwords expiration
+immediately after first use for one-time passwords.
+thereafter, at intervals of no more than 105 days.
+
+q:
+what is one time passwords 
+a: password max days will set both the expiriation day of the first time password and for the expiration
+intervals for the next passwords.
+
+CLI needed
+
+2.2) password history: Not reuse the previous 10 passwords
+
+q:
+how to set it?
+a: by pam_unix
+
+CLI needed
+
+3.1) minimum length of password of 8 chars
+CLI needed
+
+3.2) Passwords must be changed on before expiry
+CLI not needed
+q: what does it mean ?
+a: it means warning before expiration
+
+3.3) password complexity
+Contain at least 3 of the following complexity characteristics:
+o Uppercase alphabetic characters
+o Lowercase alphabetic characters
+o Numeric characters
+o Non-alphanumeric (special) characters
+
+CLI needed
+q: pam_cracklib or pam_unix ?
+
+3.4) weak SSH ciphers
+need to be removed and support just the strong ciphers
+No CLI needed.
+

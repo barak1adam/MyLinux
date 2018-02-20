@@ -1,0 +1,29 @@
+OS expert, CPU expert.
+
+linux boot process - embedded linux book
+
+kernel data structures -benny, chapter 17 robert love
+
+developing kernel modules + char drivers - benny + hello world exc.
++ rasbery pi example + review linux device tree
+
+memory mgmt - benny, chapter 12 robert love
+
+kernel sync - benny, chapters 9,10 robert love
+
+interrupts benny, chapter 7+8 robert love
+
+chapter 15 - process address space
+
+review questions
+
+review user space programs + paretheses program
+
+review my pdp work in MRV
+
+
+my target:
+expert os
+expert computer organization
+expert debug
+hands on rasp pi

@@ -1,0 +1,284 @@
+Rt
+
+if a FIFO or RR task is running and not explicitly yields the CPU, 
+how a higher priority task will preempt it?
+
+RT priorities are always static
+
+not hard RT - Linux makes no guarantees on the capability to schedule real-time tasks. why?
+
+process affinity - bit mask says which processor is allowed for the process to run on.
+
+
+kernel space vs user space
+
+
+how do we make the diff between kernel memory access priv and user memory access priv
+In Kernel mode, the executing code has complete and unrestricted access to the underlying hardware.
+It can execute any CPU instruction and reference any memory address.
+In User mode, the executing code has no ability to directly access hardware or reference memory
+
+instructions protection:
+-----------------------------
+You can tell if you're in user-mode or kernel-mode from the privilege level set in the code-segment register (CS)
+It is a bit in Status register of cpu's registers set. When "mode bit=0",,,
+it is considered as kernel mode(also called,monitor mode,privileged mode,protected mode...and many other...) 
+When "mode bit=1",,it is considered as User mode...and user can now perform its personal applications without any special kernel interruption.
+
+
+memory protection:
+-----------------
+memory is protected by virtual memory and the use of MMU page tables
+page entries are marked with a mode bit
+When the User/Kernel bit is 1, access to the page can only be done when the CPU is in kernel mode.
+
+http://minnie.tuhs.org/CompArch/Lectures/week06.html
+
+
+.The defined software interrupt on 
+x86 is interrupt number 128, which is incurred via the 
+int $0x80 
+instruction. It triggers 
+a switch to kernel mode and the execution of exception vector 128, which is the system 
+call handler.
+
+Page 101 in Robert Love is very importand to Nyotron
+
+context switch
+---------------
+https://stackoverflow.com/questions/12630214/context-switch-internals
+
+only threads have stack
+in the kernel - only one current active thread
+kernel uses one stack for thr current stack, it is reused - everytime 
+a thread is leaving the kernel this stack is cleaned up.
+
+(BTW, there is a seperate stack in the kernel for interrupts.
+this stack is also reused for every interrupt)
+
+every thread has a user stack and a kernel stack.
+first is used when the thread is in user mode, the second in kernel mode.
+
+learn my interrupt handler in MRV
+
+Masking interrupts:
+================== 
+Interrupt handlers in Linux need not be reentrant. When a given interrupt handler is execut-
+ing, the corresponding interrupt line is masked out on all processors, preventing another 
+interrupt on the same line from being received. Normally all other interrupts are enabled, so 
+other interrupts are serviced, but the current line is always disabled. Consequently, the 
+same interrupt handler is never invoked concurrently to service a nested interrupt. This 
+greatly simplifies writing your interrupt handler.
+
+
+Interrupt stack / kernel stack:
+===============================
+The setup of an interrupt handler’s stacks is a configuration option. Historically, inter-
+rupt handlers did not receive their own stacks. Instead, they would share the stack of the 
+process that they interrupted.
+ 
+The kernel stack is two pages in size; typically, that is 8KB 
+on 32-bit architectures and 16KB on 64-bit architectures. Because in this setup interrupt 
+handlers share the stack, they must be exceptionally frugal with what data they allocate 
+there. Of course, the kernel stack is limited to begin with, so all kernel code should be 
+cautious.
+Early in the 2.6 kernel process, an option was added to reduce the stack size from two 
+pages down to one, providing only a 4KB stack on 32-bit systems.This reduced memory 
+pressure because every process on the system previously needed two pages of contiguous, 
+nonswappable kernel memory.To cope with the reduced stack size, interrupt handlers 
+were given their own stack, one stack per processor, one page in size. This stack is referred 
+to as the 
+interrupt stack
+.Although the total size of the interrupt stack is half that of the 
+original shared stack, the average stack space available is greater because interrupt handlers 
+get the full page of memory to themselves.
+
+Barak:
+not per process
+less space but just for interrupts now, not shared with a process
+per CPU, not per kernel
+CPU switches to the kernel-mode stack - with the int $80 syscall mechanism
+not all registers values are needed by the CPU to save
+
+Deferred work:
+=============
+what to defer?
+-----------------
+If the work is time sensitive, perform it in the interrupt handler.
+If the work is related to the hardware, perform it in the interrupt handler.
+If the work needs to ensure that another interrupt (particularly the same interrupt) 
+does not interrupt it, perform it in the interrupt handler.
+
+For everything else, consider performing the work in the bottom half.
+
+softirqs
+---------
+It is crucial to understand why to defer work, and when exactly to defer it.You want to 
+limit the amount of work you perform in an interrupt handler because interrupt handlers 
+run with the current interrupt line disabled on all processors.Worse, handlers that register 
+with IRQF_DISABLED run with all interrupt lines disabled on the local processor, plus the 
+current interrupt line disabled on all processors
+
+A softirq never preempts another softirq.The only event that can preempt a softirq is 
+an interrupt handler. Another softirq—even the same one—can run on another processor, 
+however.
+
+Softirqs are a set of statically defined bottom halves that 
+can run simultaneously on any processor; even two of the same type can run concur-
+rently.Tasklets, which have an awful and confusing name, are flexible, dynamically cre-
+ated bottom halves built on top of softirqs.Two different tasklets can run concurrently on 
+different processors, but two of the same type of tasklet cannot run simultaneously.Thus, 
+tasklets are a good trade-off between performance and ease of use
+
+The softirq handlers run with interrupts enabled and cannot sleep.While a handler 
+runs, softirqs on the current processor are disabled.Another processor, however, can exe-
+cute other softirqs. If the same softirq is raised again while it is executing, another proces-
+sor can run it simultaneously.This means that any shared data—even global data used only 
+within the softirq handler—needs proper locking (as discussed in the next two chapters). 
+This is an important point, and it is the reason tasklets are usually preferred.
+Consequently, most softirq handlers resort to per-processor data (data 
+unique to each processor and thus not requiring locking) and other tricks to avoid 
+explicit locking and provide excellent scalability.
+
+IF MULTIPLE PROCESSORS NOT NEEDED:
+Tasklets are essentially softirqs in which multiple instances of 
+the same handler cannot run concurrently on multiple processors.
+
+raise_softirq() disable interrupts before raising, then restore interrupts
+if interrupts are already disabled, raise_softirq_irqoff() can be used.
+
+Why interrupts should be disabled when raisnig the softirq ??
+
+Tasklets
+--------
+Not related to tasks !
+
+Because tasklets are implemented on top of softirqs, they are softirqs. As discussed, tasklets 
+are represented by two softirqs: HI_SOFTIRQ and TASKLET_SOFTIRQ. The only difference in these types is that the 
+HI_SOFTIRQ based tasklets run prior to the TASKLET_SOFTIRQ based tasklets.
+
+state TASKLET_STATE_RUN relevant only for multiple processors.
+
+As with softirqs, tasklets cannot sleep
+Tasklet can run concurrently with interrupt handlers, or with other tasklets (not the same)
+running on another CPU, or with some softirq.
+If data is shared in these cases, we might disable interrupts or use locking (but no sleeping!)
+
+After a tasklet is scheduled, it runs once at some time in the near future. If the same 
+tasklet is scheduled again, before it has had a chance to run, it still runs only once. If it is 
+already running, for example on another processor, the tasklet is rescheduled and runs 
+again.
+
+remove a tasklet via tasklet_kill() - it can sleep, don't use it in interrupt handler.
+
+softirqs (and tasklets) processing:
+-----------------------------------
+--In the return from hardware interrupt code path 
+--In the ksoftirqd kernel thread - per processor kernel thread.
+--In any code that explicitly checks for and executes pending softirqs, such as the net-
+working subsystem (network softirqs react thmeselves again)
+
+reacting softirq: while running, a softirq can raise itself so that it runs again.
+
+1. softirqs reacting themselves and all pending softirqs - makes the system responsive
+but might starve the user applications on load of interrupts.
+2. handling reactivated softirq only on the next time of running softirqs.
+this might happen only on the next interrupt. It prevents user applications starvation but might starve
+the softirqs on idle time.
+
+solution:
+not immediate handle reactivated softirqs, only if a threshold of pending softirqs is exceeding.
+
+the kernel thread is running on low priority. 
+It ensures that finally pending softirqs are handled and it resolves the issue of idle system
+becuase on idle system even low priority threads will run immediately (nothing else to do...)
+
+kernel thread iterates all pending softirq. after each loop it gives the chance for scheduling:
+for (;;) { 
+	if (!softirq_pending(cpu))
+		schedule();
+	set_current_state(TASK_RUNNING);
+	while (softirq_pending(cpu)) { 
+		do_softirq(); 
+		if (need_resched()) 
+			schedule();
+	}
+	set_current_state(TASK_INTERRUPTIBLE); 
+}
+
+bottom halfs - what to use and when?
+-------------------------------------
+If process context is not a requirement—specifically, if you have no need to 
+sleep—softirqs or tasklets are perhaps better suite.
+
+softirq - no serialization (same handlers runs simultaneously on multiple processors).
+ if the code is highly threaded and is designed per processor, use softirq.
+
+tasklet - cannot run simultaneously on multiple processors, easy to use if the code is
+not requiring the use of multicore.
+
+workqueue - If your deferred work needs to run in process context, your only choice of the three is 
+work queues. 
+
+Work queues involve the highest over-head because they involve kernel threads and, therefore, context switching.This is not to 
+say that they are inefficient, but in light of thousands of interrupts hitting per second (as 
+the networking subsystem might experience), other methods make more sense. For most 
+situations, however, work queues are sufficient.
+
+ease of use:
+------------
+workqueue
+tasklet
+softirq
+
+
+finally:
+--------
+if you need another process to make the job or if the defferd handler might sleep - use workqueues, 
+otherwise use tasklets. only if needs scalability (multi cores) - use softirqs.
+
+remember:
+---------
+softirqs and tasklets are async to scheduled processes.
+workueues are synced.
+so locking on shared datat might be required for softirqs/tasklets
+(local_bh_disable() / local_bh_enable() might be used)
+
+
+Synchronization
+----------------
+
+The kernel has similar causes of concurrency:
+
+Interrupts
+— An interrupt can occur asynchronously at almost any time, interrupting the currently executing code.
+
+Softirqs and tasklets
+— The kernel can raise or schedule a softirq or tasklet at 
+almost any time, interrupting the currently executing code.
+
+Kernel preemption
+— Because the kernel is preemptive, one task in the kernel 
+can preempt another.
+
+Sleeping and synchronization with user-space
+— A task in the kernel can sleep and thus invoke the scheduler, resulting in the running of a new process.
+
+Symmetrical multiprocessing
+— Two or more processors can execute kernel code at exactly the same time.
+
+What does need locking? Most global kernel data structures do. A good rule of thumb 
+is that if another thread of execution can access the data, the data needs some sort of 
+locking; if anyone else can see it, lock it. Remember to lock data, not code.
+
+
+spinlocks
+---------
+one thread acquires the lock
+others will spin - busy loop (waste cpu) for the lock till it is available.
+blocking thread will not go to sleep so context will not be changed out and back to other thread.
+it is wise to hold spin locks for less than the duration of two context switches. Because most of us have better things 
+to do than measure context switches, just try to hold the lock for as little time as possible.
+
+
+

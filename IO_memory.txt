@@ -1,0 +1,173 @@
+memory
+exercise bits to memory size
+
+kernel memory
+--------------
+allocations cannot cross zone boundaries
+must free only allocated pages
+A kernel allocation can fail, and your code must check for and handle such errors.This might mean 
+unwinding everything you have done thus far. It therefore often makes sense to allocate 
+your memory at the start of the routine to make handling the error easier.
+
+alloc_page, get_page, , etc... - used for chunck of pages
+
+kmalloc - chunks of bytes
+
+You cannot specify __GFP_HIGHMEM to either __get_free_pages() or kmalloc(). 
+Because these both return a logical address, and not a page structure, it is possible that 
+these functions would allocate memory not currently mapped in the kernel’s virtual 
+address space and, thus, does not have a logical address. Only alloc_pages() can allocate 
+high memory.The majority of your allocations, however, will not specify a zone modifier 
+because ZONE_NORMAL is sufficient.
+
+in interrupt context:
+the GFP_ATOMIC flag is the only option when the current code cannot sleep,
+such as with interrupt handlers, softirqs, and tasklets.
+
+in process context:
+the GFP_KERNEL allocation can put the caller to sleep to swap inactive pages to disk, flush 
+dirty pages to disk, and so on
+
+device drivers:
+The GFP_DMA flag is used to specify that the allocator must satisfy the request from
+ZONE_DMA.This flag is used by device drivers, which need DMA-able memory for their 
+devices. Normally, you combine this flag with the GFP_ATOMIC or GFP_KERNEL flag.
+
+
+kfree:
+The kfree() method frees a block of memory previously allocated with kmalloc(). 
+Do not call this function on memory not previously allocated with 
+kmalloc(), or on memory that has already been freed. 
+(Doing so is a bug, resulting in bad behavior such as freeing memory belonging to another part of the kernel)
+
+Note that calling kfree(NULL) is explicitly checked for and safe
+
+
+DMA:
+Direct memory access (DMA) is a feature of computer systems that allows certain hardware subsystems to access main system memory (Random-access memory), independent of the central processing unit (CPU).
+
+Without DMA, when the CPU is using programmed input/output, it is typically fully occupied for the entire duration of the read or write operation,
+and is thus unavailable to perform other work. 
+With DMA, the CPU first initiates the transfer, then it does other operations while the transfer is in progress, 
+and it finally receives an interrupt from the DMA controller when the operation is done. 
+
+vmalloc vs kmalloc
+-------------------
+vmalloc allocates virtually contiguous and not necessarily physically contiguous (kmalloc)
+hw devices that are not using MMU (or reside on MMU part that is set to do nothing), work with physical memory, not virtual
+So they use kmalloc, not vmalloc.
+only sw drivers / buffers are allocated by vmalloc.
+But in most of the kernel kmalloc is used although contiguous physical memory is not needed. 
+This is because of performance. vmalloc has overhead of updating the MMU and much of TLB trashing.
+
+vmalloc is used only to obtain large regions of memory.
+
+consider that vmalloc is sleepable and cannot be called from interrupt context.
+
+kmalloc ---> kfree
+vmalloc ---> vfree
+
+dynamic allocations - slab layer:
+-----------------------------------
+the problem is that the kernel doesn't know about or manage free lists (pools of allocated objects)
+it cannot notify drivers to shrink lists when memory goes low.
+the solution: slab layer - generic object caching layer.
+
+handle groups (caches) of objects - one cache per object type (inode struct, task struct, etc)
+caches are divided into slabs, typically one slab = one page
+slab contains objects.
+when object is requested - will be allocated from: 1.partial slab 2. empty slab 3.new slab
+kernel can control memory and free pages when memory is low.
+
+kmem_cache_create(), kmem_cache_destroy() - sleepable.
+then to get an object from the created cache: kmem_cache_alloc()
+to deallocate an object: kmem_cache_free()
+
+If you frequently create many objects of the same type, consider using the slab cache. Definitely do not implement your 
+own free list!
+
+static allocations - if not using slab allocations:
+----------------------------------------------------
+keep static allocations to minimum.
+be careful with static allocations on the stack.
+keep the sum of all local (that is, automatic) variables in a particular 
+function to a maximum of a couple hundred bytes.
+
+user space process stack is large and growing
+kernel stack is fixed and small - one page !
+
+permanent mappings in high memory are limited.
+kmap, kunmap - can sleep
+tmp mappings:
+kmap_atomic()- not sleep. page is unmapped automtically on the next tmp mapping
+kunmap_atomic() - to unmap explicitly
+
+process address space:
+======================
+Kernel threads do not have a process address space and therefore do not have an associated memory descriptor.
+Thus, the mm field of a kernel thread’s process descriptor is NULL. 
+This is the definition of a kernel thread—processes that have no user context.
+
+
+whenever a kernel thread begins running, kernel threads use the memory descriptor of whatever task ran previously
+Therefore, when a kernel thread is scheduled, the kernel notices that mm is NULL and keeps the previous process’s address space loaded.
+The kernel then updates the active_mm field of the kernel thread’s process descriptor to refer to the previous process’s memory 
+descriptor.The kernel thread can then use the previous process’s page tables as needed. 
+Because kernel threads do not access user-space memory, they make use of only the 
+information in the address space pertaining to kernel memory, which is the same for all 
+processes.
+
+Each of the memory areas associated with the process corresponds to a vm_area_struct 
+structure. Because the process was not a thread, it has a unique mm_struct structure referenced from its task_struct.
+
+Pages:
+======
+TLB is the processor cache for mapping
+first TLB is checked. only if there is a miss, page tables are used
+
+
+-- - DMA allocations
+--virtual memory
+--MMU
+--memoory mapped io
+--memcpy implementation
+
+
+memory mapped  & port mapped io:
+===============================
+
+when io is memory mapped, ioremap can be used to convert phy address to virtual address.
+if an I/O is directly memory mapped, it bypass the MMU (or set it to do no mapping)
+
+ioremap:
+--returns a virtual address
+--handle directly or non-directly memory mapped I/O
+--if kernel version > 2.0, ioremap can map size of memory smaller than page size
+
+virtual addresses returned by ioremap, SHOULD NOT BE DEREFRENCED DIRECTLY,
+becuase it is not part of the system RAM and caching cannot be used by default.
+It might be the address of IO registers and not IO memory and should not be handled like RAM.
+This is because attempts to read a full cache line from I/O memory can have no end of unexpected side effects,
+and delaying writes to I/O memory can change the way the device operates.
+ioremap - by default caching is disabled and special functions are used
+to read/write to I/O memory: readb(), writeb(), ..., readl(), writel().
+
+ioremap() returns __iomem to warn compilation about directly dereferencing.
+
+But if this is just area of memory in IO (graphics / video adapter for example),
+then we would like to enable cache.
+ioremap_cache() - enable caching on the returned virtual addresses
+ioremap_wc() - enable caching both for read and write //Write back, MEMREMAP_WB
+ioremap_wt() - enable caching for read, disable caching for write //Write through, MEMREMAP_WT
+
+if used as ordinary memory, __iomem shouldn't be returned (or ignored)
+and let the programmer use the pointer as a regular RAM-like.
+
+PCI
+memory mapped IO
+physical devices are not predefined on the device but dynamically allocate when power is on.
+
+
+Benny:
+memory mapped actuall access RAM? no. it is RAM-like memory provided by the I/O.
+we can see in /proc/iomem that it is different areas from RAM.

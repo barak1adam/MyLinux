@@ -1,0 +1,50 @@
+//check password sanity
+_pam_unix_approve_pass
+	if (no new pass || new == old)
+		return err;
+	msg = password_check();
+	if (!msg) // success
+		msg = check_old_password(); //history
+	if (msg) //error
+		return err
+	else
+		return success;
+
+pam_sm_chauthtok
+	parse args
+	if (flags & PAM_PRELIM_CHECK)
+		check cracklib exists
+	else // update password
+	{
+		"do update"
+		retval = pam get oldtoken; //if err, oldtoken = null;
+		retval = success;
+		
+		//on every err, continue
+		
+		do
+		{
+			token1 = token2 = NULL;
+			if (maxretires reached) 
+				return retval;
+			
+			prompt the user for password (token1)
+			"testing password, retval = %s"
+			"against cracklib"
+			"for strenght" // checking new against old !!!
+			if (oldtoken)
+				retval= _pam_unix_approve_pass(oldtoken, token1); //PRINT token1
+			"after testing: retval = %s"
+			if retval=error
+				continue;
+			get user token2
+			if (token1 ! token2)
+				continue;
+			
+			if (successfully got password twice)
+				pam set authtok
+				return success;
+					
+		} while (max retries --)
+			
+			

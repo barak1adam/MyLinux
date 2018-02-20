@@ -1,0 +1,398 @@
+kernel boot process:
+=====================
+First we have to cross-compile the kernel image.
+here is part of our build script:
+--------------------------------
+
+export ARCH=arm
+export CROSS_COMPILE=../toolchain/bin/arm-marvell-linux-gnueabi-
+
+/********* config settings start ***************************/
+make msys_bc2_cpss_defconfig
+... menuconfig ... ---> saves in .config
+/* make savedefconfig ; cp defconfig arch/arm/configs/msys_bc2_cpss_defconfig */
+
+/********* config settings end *****************************/
+
+time make -s -j 11 uImage
+
+In general, major kernel image components are:
+-----------------------------------------------
+vmlinux - Kernel proper, in ELF format, including symbols, comments, debug info
+ (if compiled with -g), and architecture-generic components.
+Image - Binary kernel module, stripped of symbols, notes, and comments.
+it is the stripped vmlinux.
+
+additional object modules like:
+
+head.o - ARM-specific startup code generic to ARM processors. This object is passed control 
+by the bootloader.
+
+piggy.gz - The file Image compressed with gzip.
+
+piggy.o - The file piggy.gz in assembly language format so that it can be linked with a sub-
+sequent object, misc.o (see the text).
+
+misc.o - Routines used to decompress the kernel image (piggy.gz)
+(boot message "Uncompressing Linux . . . Done" on some architectures)
+
+head-<arch>.o , big-endian.o
+
+vmlinux - final vmlinux - same name as of vmlinux proper image,
+but it is different. this file is the Composite kernel image !
+it is the result of the kernel proper linked with all the other
+object listed above.
+
+zImage - Final composite kernel image loaded by bootloader
+
+Here is the build flow:
+vmlinusx (kernel proper) ---- stripped by objcopy ----> Image
+Image --------> compressed -------> piggy.gz
+piggy.gz -------> simply included into an assembly file (piggy.S) ---> piggy.o
+piggy.o ----- linked with other objects (head.o, misc.o, ...)----> final bootable vmlinux
+vmlinux ------ compressed ----------> zImage
+
+The boot flow:
+bootloader resides in a non-volatile memory (flash)
+bootloader starts on power up. It is designed primarily to do low-level initialization,
+operating system image loading, and system diagnostics.
+bootloader is machine dependent, not OS dependent
+bootstrap is the submoduel that is OS depenedent and "glue" the bootloader to OS.
+bootsrap is responsible to create the proper environment, to decompress and relocate 
+the kernel and pass control to it.
+bootloader calls head.o in bootstrap at label "start"
+
+
+Note: kernel proper also has an object head.o.
+Control is passed from the bootstrap loader directly to the kernel proper,
+to that kernel module head.o (which is arch dependent, so we have many of them under ../arch)
+
+kernel head.o do the fololowing:
+--Checks for valid processor and architecture
+--Creates initial page table entries
+--Enables the processor’s memory management unit (MMU)
+--Establishes limited error detection and reporting
+--Jumps to the start of the kernel proper, start_kernel() in main.c
+
+It is important to remember that physical addresses are replaced by logical addresses the moment the MMU is enabled.
+--debugging is impossible at this stage
+--hw initialization (e.g.fw donwload to fpga) should not be done at this stage and pstponed as much as possible
+after kernel initialization. This is because very limited memory is mapped to MMU, page fault handlers are not installed
+yet and any page fault will be ended in a system crash.
+
+start_kernel at ../init/main.c. first move from assembly to a kernel C file !
+
+main calls in start_kernel():
+--setup_arch() found  in .../arch/arm/kernel/setup.c
+setup_arch(&command_line) is processing the command line params to init the
+specific machine and also calls setup_processor to init the CPU.
+kernel command line params processing by the __setup macro.
+the idea is that a list of commandline strings + setup function pointers is 
+emitted by the compiler into a special section within the ELF object module, called .init.setup
+Later, after these one-time initialization functions and data objects have been used, the kernel frees the 
+memory occupied by these items.
+--subsystems initialization (timers, sched, console, signals, buffers, security,  etc..)
+--call rest_init():
+1. it calls the first kernel thread "init" with PID 1, the parent of all later user space processes
+	kernel init is called by invoking a kernel thread with "kernel_init()" thread function.
+	kernel_init():
+		-- calls do_initcalls(), which is the function responsible for calling most of the initialization functions registered with the 
+		*_initcall family of macros.
+		-- freeing the memory used by the initialization functions and data
+		--opening a system console device
+		--starting the first user space process: see next section
+		
+2. the current "start_kernel" thread becomes the IDLE thread.
+
+
+--initial RAM Disk - initrd OR initial RAM FS - initramfs
+is a small, self contained root fs, used to load specific device drivers
+required to finally mount the real root fs.
+set in kernel configuration and compiled into the kernel.
+
+for example: initrd:
+--------------------
+bootstrap part of the bootlaoder is responsible for loading the kernel
+into memory, loading the initrd image to another section in
+memory and then gives the kernel control with the address of initrd.
+The kernel must know where the initrd image is located so it can load it.
+
+sometimes, like in ARM arch, the kernel and the initrd are compressed in one image
+since the bootstrap has no sufficient linux support for loading the initrd images.
+In this case, how will the kernel know where the initrd image starts?
+The answer: initrd address is given in the kernel boot command line along with its size
+
+for example:
+console=ttyS0,115200 root=/dev/nfs                        \
+   nfsroot=192.168.1.9:/home/chris/sandbox/omap-target    \
+   initrd=0x10800000,0x14af47
+   
+((remember - this is a real addres kernel image size in boot cmd line is the comressed size.)
+
+When the kernel boots, first it detects the presence of the initrd image.
+Then it copies the compressed binary file from the specified physical location in RAM into a proper 
+kernel ramdisk and mounts it as the root file system.
+the initrd binary includes a linuxrc file which the kernel first executes as a script.
+it let the system designer to specify the behaviour of initrd.
+In  practice,  this  file  would  contain  directives  required  before  we  mount  the  real 
+root file system. One example might be to load CompactFlash drivers to obtain a real 
+root  file  system  from  a  CompactFlash  device.
+After the kernel copies the ramdisk from physical memory into a kernel ramdisk, 
+it returns this physical memory to the available memory pool. You can think of this as 
+transferring the initrd image from physical memory at the hard-coded address into 
+the kernel’s own virtual memory (in the form of a kernel ramdisk device).
+
+initramfs - different implmentation. easy to use, inluded in the linux
+kernel rootfs, not need to load it sperately.
+initramfs is loaded before the call to do_basic_setup(), which provides a mechanism
+for loading firmware for devices before its driver has been loaded
+do_basic_setup() is called in init/main.c and calls do_initcalls() to call
+all drivers initialization routines.
+1) gen_initramfs_list.sh is used to define which file nodes will be created
+in the ramfs.
+2) or locate the disired minimal fs under some dir like /usr/myinitramfs_root/ and set the kernel
+configuration to build it as the initramfs. (set INITRAMFS_SOURCE to that dir)
+
+ramdisk_execute_command pointer in main.c points to the name of the exe to run by
+the kernel from initramfs. If found - it will invoke it, otherwise it will look for it in the real fs locations.
+
+ramdisk_execute_command is by default set to "init", but can be override
+to any name by the kernel boot command "initrd=" directive.
+
+
+use space initialization:
+=========================
+"init" kernel thread should:
+--mount the root file system
+--spawn the first user space program: init.
+
+A user init program can be methioned in the command line itself
+(for example: initcall_debug init=/sbin/myinit console=ttyS1,115200 root=/dev/hda1)
+but if not specfied, recall the the kernel _rest_init function that
+will try other std init binaries (/sbin/init,...,/bin/sh).
+Anyway, they are all programs that are expected to reside on a root file system !
+so a root fs should be already mounted at this stage !
+
+rest_init invoked by "kernel_init":
+---------------------------------
+if (exec_command)
+	run_init_process(exec_command)
+run_init_process("/sbin/init")
+run_init_process("/etc/init")
+run_init_process("/bin/init")
+run_init_process("/bin/sh")
+
+panic("no init found...")
+
+run_init_process - wrapper for execve(), never returns in case of sucess
+the callee program replaces the calling program.
+
+--need satisfy the executable dependencies in rootfs. e.g. bin/sh without 
+its dependencies will not work.
+1. libraries
+2. conf / data  (e.g. inittab file for init exec)
+
+for finding the libs, we can use ldd
+
+remember: rootfs, console, init exec - all given by the user boot command
+line.
+
+Init process will start all other user space processes in the following
+manner:
+
+System V init - the std init program + startup scripts.
+
+run level scripts are in /etc/rc.d/init.d
+sym links to scripts are in /etc/rc.d
+levels 0 to 6
+sym links start with s or k (start, kill)
+what scripts are called and how, all is set in inittab file.
+
+
+init is the parent process for all user applications
+Thus they all inherits its env. variables like PATH...
+
+
+asmlinkage void __init start_kernel(void)
+{
+	char * command_line;
+	extern struct kernel_param __start___param[], __stop___param[];
+/*
+ * Interrupts are still disabled. Do necessary setups, then
+ * enable them
+ */
+	lock_kernel();
+	page_address_init();
+	printk(linux_banner);
+	setup_arch(&command_line);
+	setup_per_cpu_areas();
+
+	/*
+	 * Mark the boot cpu "online" so that it can call console drivers in
+	 * printk() and can access its per-cpu storage.
+	 */
+	smp_prepare_boot_cpu();
+
+	/*
+	 * Set up the scheduler prior starting any interrupts (such as the
+	 * timer interrupt). Full topology setup happens at smp_init()
+	 * time - but meanwhile we still have a functioning scheduler.
+	 */
+	sched_init();
+	build_all_zonelists();
+	page_alloc_init();
+	printk("Kernel command line: %s\n", saved_command_line);
+	parse_early_param();
+	parse_args("Booting kernel", command_line, __start___param,
+		   __stop___param - __start___param,
+		   &unknown_bootoption);
+	sort_main_extable();
+	trap_init();
+	rcu_init();
+	init_IRQ();
+	pidhash_init();
+	init_timers();
+	softirq_init();
+	time_init();
+
+	/*
+	 * HACK ALERT! This is early. We're enabling the console before
+	 * we've done PCI setups etc, and console_init() must be aware of
+	 * this. But we do want output early, in case something goes wrong.
+	 */
+	console_init();
+	if (panic_later)
+		panic(panic_later, panic_param);
+	profile_init();
+	local_irq_enable();
+#ifdef CONFIG_BLK_DEV_INITRD
+	if (initrd_start && !initrd_below_start_ok &&
+			initrd_start < min_low_pfn << PAGE_SHIFT) {
+		printk(KERN_CRIT "initrd overwritten (0x%08lx < 0x%08lx) - "
+		    "disabling it.\n",initrd_start,min_low_pfn << PAGE_SHIFT);
+		initrd_start = 0;
+	}
+#endif
+	vfs_caches_init_early();
+	mem_init();
+	kmem_cache_init();
+	numa_policy_init();
+	if (late_time_init)
+		late_time_init();
+	calibrate_delay();
+	pidmap_init();
+	pgtable_cache_init();
+	prio_tree_init();
+	anon_vma_init();
+#ifdef CONFIG_X86
+	if (efi_enabled)
+		efi_enter_virtual_mode();
+#endif
+	fork_init(num_physpages);
+	proc_caches_init();
+	buffer_init();
+	unnamed_dev_init();
+	security_init();
+	vfs_caches_init(num_physpages);
+	radix_tree_init();
+	signals_init();
+	/* rootfs populating might need page-writeback */
+	page_writeback_init();
+#ifdef CONFIG_PROC_FS
+	proc_root_init();
+#endif
+	check_bugs();
+
+	acpi_early_init(); /* before LAPIC and SMP init */
+
+	/* Do the rest non-__init'ed, we're now alive */
+	rest_init();
+}
+
+static void noinline rest_init(void)
+	__releases(kernel_lock)
+{
+	kernel_thread(init, NULL, CLONE_FS | CLONE_SIGHAND);
+	numa_default_policy();
+	unlock_kernel();
+ 	cpu_idle();
+}
+
+kernel thread: init:
+
+static int init(void * unused)
+{
+	lock_kernel();
+	/*
+	 * Tell the world that we're going to be the grim
+	 * reaper of innocent orphaned children.
+	 *
+	 * We don't want people to have to make incorrect
+	 * assumptions about where in the task array this
+	 * can be found.
+	 */
+	child_reaper = current;
+
+	/* Sets up cpus_possible() */
+	smp_prepare_cpus(max_cpus);
+
+	do_pre_smp_initcalls();
+
+	fixup_cpu_present_map();
+	smp_init();
+	sched_init_smp();
+
+	/*
+	 * Do this before initcalls, because some drivers want to access
+	 * firmware files.
+	 */
+	populate_rootfs();
+
+	do_basic_setup();
+
+	/*
+	 * check if there is an early userspace init.  If yes, let it do all
+	 * the work
+	 */
+	if (sys_access((const char __user *) "/init", 0) == 0)
+		execute_command = "/init";
+	else
+		prepare_namespace();
+
+	/*
+	 * Ok, we have completed the initial bootup, and
+	 * we're essentially up and running. Get rid of the
+	 * initmem segments and start the user-mode stuff..
+	 */
+	free_initmem();
+	unlock_kernel();
+	system_state = SYSTEM_RUNNING;
+	numa_default_policy();
+
+	if (sys_open((const char __user *) "/dev/console", O_RDWR, 0) < 0)
+		printk("Warning: unable to open an initial console.\n");
+
+	(void) sys_dup(0);
+	(void) sys_dup(0);
+	
+	/*
+	 * We try each of these until one succeeds.
+	 *
+	 * The Bourne shell can be used instead of init if we are 
+	 * trying to recover a really broken machine.
+	 */
+
+	if (execute_command)
+		run_init_process(execute_command);
+
+	run_init_process("/sbin/init");
+	run_init_process("/etc/init");
+	run_init_process("/bin/init");
+	run_init_process("/bin/sh");
+
+	panic("No init found.  Try passing init= option to kernel.");
+}
+
+
+
+ 

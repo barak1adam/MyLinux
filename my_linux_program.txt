@@ -1,0 +1,65 @@
+1. VIM - 1 regular week
+
+
+compare all gvim-tips file and make one final version on github
+
+clean files on home linux
+
+learn vim tutorial by Kosta
+
+hands on
+
+Understand how to add plug ins to vim
+
+make the list plugin (ToggleList) working in home pc
+
+hands on cscope
+
+hands on vimdiff
+
+learn how to edit vimrc
+
+SED
+
+AWK
+
+2. Git Advanced - 1 regular week
+
+reset
+fetch, pull, branches
+sqaush
+stash
+git ignore
+multiple branches checkouts
+hands on git init (what must be set to git config)
+creating and applying patches
+
+3. linux utils - 1 regular week
+
+Install, sync, rsync, tar - 1 day
+
+grep, find, ag - advanced - 1 day
+
+aliases, cdscripts, cd ../../../, terminator igor/olga
+
+bash scripting - 2 days including hands on
+
+4. python - 1 regular week
+
+including real programming for MRV
+
+5. refresh kernel readings - 1 regular week
+including kernel - config, defconfig, kernel.org
+
+6. write a kernel driver - 1 regular week
+write to Raspberi PI including all advanced topics
+like ADT driver.
+
+7. During the working hours: till 30/3
+including Yocto hands on
+build systems, tool chains - introduction
+
+
+
+
+

@@ -1,0 +1,34 @@
+10/12 - 15/12:
+=============
+
+Robert Love (kernel):
+=====================
+*process address space chapter 15
+*page chache chapter 16
+
+Gorman:
+=======
+Describing physical memory
+*Page Table mgmt
+process address space
+Physical page allocation
+
+Robert Love (user):
+=====================
+prcoess address space
+
+
+hands on:
+
+*setting host env including gvim
+*installing ubuntu on sdcard raspberry pi
+*installing with yocto
+
+
+grep
+find
+bashrc
+vim + diff tools
+git
+
+
