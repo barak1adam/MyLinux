@@ -1,5 +1,8 @@
-spaGGVIM tips:
+GVIM tips:
 ---------
+pipe output into vim:
+ls -la | vim -
+ls -la | gvim -
 
 run cscope in the root dir: cscope -Rbk
 
@@ -20,6 +23,9 @@ go back: CTRL + T
 
 move between open tabs:
 CTRL + pgDown, CTRL + pgUp
+
+move to last active tab: CTRL+L (c-l)
+(I've added a mapping)
 
 F9 - outline functions, variables
 F9 - close
@@ -59,6 +65,7 @@ then y
 then p 
 
 p PASTE AFTER THE CURSOR !
+P paste before the cursor !
 
 
 viw - select word under the cursor (copy to default register "")
@@ -134,6 +141,7 @@ movement:
 --------------------------------------------------
 e - move cursor to end of word
 w - move cursor to start of the next word
+b - same like "w", but backwords
 0 - start of line
 $ - end of line
 G - moves to the end of the file.
@@ -141,10 +149,35 @@ gg - start of file
 number  G  moves to that line number
 j$ - end of the next line
 
+H: Move cursor to the top of the currently visible page (think "high")
+
+M: Move cursor to the middle of the currently visible page
+
+L: Move cursor to the bottom of the currently visible page (think "low")
+
+CTRL-D: Page down
+
+CTRL-U: Page up
+
+
+m: Typing "m" followed by a letter creates a mark reference by that letter.
+	Lower-case letters are specific to the current document, while upper-case letters can only be used once (they can be used to jump to sections in different documents.
+
+': The single quote followed by a mark letter (previously defined with the "m" as above), will move the cursor to the beginning of the line containing that mark.
+
+`: The back-tick followed by a mark letter will move the cursor to the exact position of the mark.
+
+
 gvim back and forward:
 ---------------------
 CTRL+o back
 CTRL+i forward
+
+how to go back to my last editing position ?
+1) u + CTRL+R (undo + redo)
+2) `.
+
+^ - move to the begining of the text in a line, not to 0.
 
 --------------------------------------------------
 
@@ -155,6 +188,12 @@ a - insert after the cursor
 A - insert at the end of the line
 o - open a new line after the current line (line of cursor)
 O - open a new line before (UPPER) the current line (line of cursor)
+
+
+add a new line down the current line, change to insert mode and locate the cursor exactly down the start of the current line:
+ESC + o
+same, but above the current line:
+ESC+SHIFT+o
 ----------------------------------------------------
 
 
@@ -168,6 +207,9 @@ select lines
 >G     Indent until end of file
 >}     Indent until next paragraph
 >iB    Indent contents of current { } block
+
+set tab to 2 spaces:
+:set tabstop=2
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                Lesson 1 SUMMARY
@@ -352,15 +394,26 @@ Now go on to the next lesson.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-
+===========
 cscope:
--------
--------
+===========
+
+1. create cscope.out
 
 #cscope
 cscope -Rbk
 
-grep:
+#cscope Alex:
+echo 1
+find . -name "*.[ch]" > cscope.files
+find . -name "*.def" >> cscope.files
+#find . -follow -name "*.[ch]" > cscope.files
+echo 2
+cscope -b
+echo 3
+
+2. grep:
+
 caller: CTRL + \ + c
 symbol: CTRL + \ + s
 global def: CTRL + \ + g
@@ -370,8 +423,36 @@ cs find t mvBoardIdGet
 cs find s mvBoardIdGet
 cs find g mvBoardIdGet
 
+cscope commands:
+================
+add  : Add a new database             (Usage: add file|dir [pre-path] [flags])
+find : Query for a pattern            (Usage: find c|d|e|f|g|i|s|t name)
+       c: Find functions calling this function
+       d: Find functions called by this function
+       e: Find this egrep pattern
+       f: Find this file
+       g: Find this definition
+       i: Find files #including this file
+       s: Find this C symbol
+       t: Find this text string
+help : Show this message              (Usage: help)
+kill : Kill a connection              (Usage: kill #)
+reset: Reinit all connections         (Usage: reset)
+show : Show connections               (Usage: show)
 
 
+
+3. to add/update cscope db:
+
+:cs reset (to update current db with new code added)
+:cs add cscpe.out (add cscope to gvim)
+
+4. navigation:
+
+go to definition: CTRL + ]
+go back: CTRL + T
+
+[[ - jump to start of current function
 
 
 vertical editing:
@@ -440,10 +521,121 @@ new //without any file name, a new file is openend
 :ls
 for list of open buffers
 
+:e edit a new buffer in the current tab
+:e <file>: Edit another file in a new buffer in the curent tab and switch to it
+:q - quit the current tab.
 :bp previous buffer
 :bn next buffer
 :bn (n a number) move to n'th buffer
+:bfirst
+:blast
+:bdelete delete the current buffer
 :b <filename-part> with tab-key providing auto-completion (awesome !!)
+
+to get GVIM settings:
+===================
+:set tabstop ------------------- > if you don't write a value, it prints out the current value.
+
+
+find & replace words in a file:
+===============================
+The :substitute command searches for a text pattern, and replaces it with a text string. 
+There are many options, but these are what you probably want:
+
+:%s/foo/bar/g
+Find each occurrence of 'foo' (in all lines), and replace it with 'bar'.
+% = all file
+
+:s/foo/bar/g
+Find each occurrence of 'foo' (in the current line only), and replace it with 'bar'.
+
+to fine and replace in selected section, first select, then use
+:'<,'>s/foo/bar/g
+
+g - is used to replace all occurnaces in a line, section, file,...
+without 'g', only the first occurance will be replaced.
+
+:%s/foo/bar/gc
+Change each 'foo' to 'bar', but ask for confirmation first.
+
+:%s/\<foo\>/bar/gc
+Change only whole words exactly matching 'foo' to 'bar'; ask for confirmation.
+
+:%s/foo/bar/gci
+Change each 'foo' (case insensitive due to the i flag) to 'bar'; ask for confirmation.
+
+:%s/foo\c/bar/gc is the same because \c makes the search case insensitive.
+This may be wanted after using :set noignorecase to make searches case sensitive (the default).
+
+:%s/foo/bar/gcI
+Change each 'foo' (case sensitive due to the I flag) to 'bar'; ask for confirmation.
+
+:%s/foo\C/bar/gc is the same because \C makes the search case sensitive.
+This may be wanted after using :set ignorecase to make searches case insensitive.
+
+
+
+
+to get rid of highlights:
+========================
+:noh
+
+remove unwanted spaces to a block of code:
+=========================================
+for example, first make the desired settings:
+set expandtab
+set shifttab=2
+set tabstop=2
+then, select the code and press '='
+
+%s/\s\+$//e
+
+replace a word in block:
+========================
+select the code (v) then press :
+then use:
+s/foo/bar/gc
+
+
+
+
+
+kosta, new plugins:
+===================
+:Obsession
+gvims
+
+,f - Fuzzy File Search
+,b - show open buffers
+,a - Grep current word using 'ag' (world's best grepper)
+
+Install new plugin
+1) Add line in ~/.vimrc Plugin "postfix of github project path"
+2) Reenter vim (source ~/.vimrc)
+3) PluginInstall
+
+Uninstall vim plugin
+1) Revome line...
+2) ...
+3) PluginClean
+
+F8 - open source code tags
+F9 - show white spaces and tabs
+
+AutoSave
+
+Installing vim on fresh PC
+==========================
+1) sudo apt install vim...gvim...
+2) clone, compile and install 'ag' (grepper)
+3) copy '.vim' and '.vimrc' to ~.
+
+DifDiff orig_dir new_dir
+
+:vsplit file
+
+from commandline:
+gvimdiff file1 file2
 
 colors for vimdiff:
 ==================
@@ -465,6 +657,16 @@ zc          - close folded text
 If you load up two files in splits (:vs or :sp), you can do
 :diffthis on each window and achieve a diff of files that were already loaded in buffers
 :diffoff can be used to turn off the diff mode. 
+
+
+
+vimrc and gvimrc
+==================
+The gvimrc file is where GUI-specific startup commands should be placed. It is always sourced after the vimrc file.
+You can use the gvimrc files to set up your own customized menus (see :menu) and initialize other things 
+that you may want to set up differently from the terminal version.
+
+usually use vimrc !
 
 
 
