@@ -650,8 +650,10 @@ colors for vimdiff:
 do (diff obtain) - take diff to my current file
 dp (diff put) - put diff from my current file to the diff file
 CTRL+W w - moving cursor to the other file
-zo          - open folded text
-zc          - close folded text
+zo - open folded text
+zc - close folded text
+zM - expand all sections
+zR - fold all sections
 :diffupdate - re-scan the files for differences
 
 If you load up two files in splits (:vs or :sp), you can do
