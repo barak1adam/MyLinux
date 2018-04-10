@@ -184,8 +184,6 @@ map <left> :tabp<cr>
 " map <leader>tc :tabclose<cr>
 " map <leader>tm :tabmove
 "
-:unmap tn
-:map tn :tabnew <C-R>* <CR> 
 
 " When pressing <leader>cd switch to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>
@@ -336,6 +334,7 @@ if has("autocmd")
 endif
 
 map <F5> :!cscope -Rbk<CR>:cs reset<CR><CR>
+nmap <leader>cs :!cscope -Rbk<CR>:cs reset<CR><CR>
 
 " Map Control-Backspace to delete previous word
 " http://vim.wikia.com/wiki/Map_Ctrl-Backspace_to_delete_previous_word
