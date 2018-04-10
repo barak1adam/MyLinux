@@ -415,10 +415,10 @@ endif
 " <C-a> select all text
 " <C-p> is used for paste
 " 
-:imap <C-P> <esc>"+gPi
-:imap <C-P> <esc>"*gPi
-:nmap <C-P> <esc>"+gP
-:nmap <C-P> <esc>"*gP
+:imap <C-P> <esc>"+gpi
+:imap <C-P> <esc>"*gpi
+:nmap <C-P> <esc>"+gp
+:nmap <C-P> <esc>"*gp
 
 " try to change C-p to C-v
 " inside gvim, I can always use Y and P. 
