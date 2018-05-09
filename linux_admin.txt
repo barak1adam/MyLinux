@@ -129,3 +129,104 @@ meld:
 If you start Meld from the command line, you can tell it what to do when it starts.
 For a two- or three-way file comparison, start Meld with meld file1 file2 or meld file1 file2 file3 respectively.
 For a two- or three-way directory comparison, start Meld with meld dir1 dir2 or meld dir1 dir2 dir3.
+
+
+grep:
+====
+
+grep by default is case sensitive
+format: grep [OPTIONS] PATTERN [FILE...]
+
+examples:
+
+#grep a string in file
+grep 'str' file1
+
+#grep a string in multiple files
+grep 'str' file1 file2 file3
+
+#grep multiple strings in file
+grep 'str1 str2' file1
+
+#use a linux command, then pipe grep
+cat file | grep 'word'
+
+#ignore caste
+grep -i "barak" /etc/passwd
+
+#grep recursive
+grep -r "192.168.1.5" /etc/
+grep -R "192.168.1.5" /etc/
+
+#supress file names in each line of the output
+grep -h -R "192.168.1.5" /etc/
+grep -hR "192.168.1.5" /etc/
+
+#whole word only
+grep -w "boo" file
+
+#multiple words search with egrep
+egrep -w 'word1|word2' /path/to/file
+
+#count the number of times a word was matched
+grep -c 'word' /path/to/file
+
+#show line numbers
+grep -n 'root' /etc/passwd
+
+#NOT - grep all line that do NOT match a word
+grep -v bar /path/to/file
+
+#show only file names
+grep -l 'main' *.c
+
+#use reg expressions
+grep "lines.*empty" demo_file
+
+#match only lines start with a string
+grep ^vivek /etc/passwd
+
+#match only lines end with a string
+grep 'foo$' filename
+
+#reg expressions:
+? The preceding item is optional and matched at most once.
+* The preceding item will be matched zero or more times.
++ The preceding item will be matched one or more times.
+{n} The preceding item is matched exactly n times.
+{n,} The preceding item is matched n or more times.
+{,m} The preceding item is matched at most m times.
+{n,m} The preceding item is matched at least n times, but not more than m times.
+
+#kosta grep: r=recursive, n=show line numbers, H-show file names (default of grep)
+grep -rnH mount *
+
+#use grep and sed to edit multiple files
+#r = recursiv
+#l = list file names only
+#i = ignore case
+grep -rli 'stdio.h' * | xargs sed -i 's/stdio.h/STDIO.H/g'
+
+
+find:
+=====
+
+syntax: 
+find [-H] [-L] [-P] [-D debugopts] [-Olevel] [starting-point...] [expression]
+
+serach the directory tree according to criterias in expression.
+if expression is False, skip this file and move on finding the next file where expression is True.
+expression is False if one criteria is False for AND conditions, or if all are False for OR conditions.
+
+expression is made up of options, tests and actions. Print (full file name) is a default action
+
+-exec command ;
+    Execute command; true if 0 status is returned.  All following arguments to find are  taken
+    to  be  arguments  to the command until an argument consisting of `;' is encountered.  The
+    string `{}' is replaced by the current file name being processed everywhere it  occurs  in
+    the arguments to the command.
+
+shell reserved chars might be used quoted by 'c' or \c
+
+examples:
+--------
