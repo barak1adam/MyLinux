@@ -1,459 +1,26 @@
 GVIM tips:
----------
+++++++++++
+
 pipe output into vim:
+====================
 ls -la | vim -
 ls -la | gvim -
 
-run cscope in the root dir: cscope -Rbk
+navigation and editing:
+======================
 
-open included file (on cursor) in a new tab: CTRL+W, gf
-(gf - go to file)
-
-open a file in the same buffer: :e <file>
-
-show open files in the same buffer: ,+ 0
-
-cscope:
--------
-go to definition: CTRL + ]
-go back: CTRL + T
-
-[[ - jump to start of current function
-
-
-move between open tabs:
-CTRL + pgDown, CTRL + pgUp
-
-move to last active tab: CTRL+L (c-l)
-(I've added a mapping)
-
-F9 - outline functions, variables
-F9 - close
-
-show line numbers:
-:set nu
-
-i - insert before the cursor position
-a - insert after the current postion
-A - insert at the end of the line
-
-
-e - go to the end of the line
-0 - go to the begining of the line.
-
-CTRL + ] jump to tag
-CTRL + T, CTRL + O pop last tag
-
-
-copy and paste:
---------------
-esc + y + $ - cp to the end of the line
-esc + p - paste it
-
-esc + y + w - cp to the end of the word
-esc + p - paste it
-
-select then copy and paste:
-----------------------------
-esc+v
-e - select to the end of words
-$ - to the end of line
-h,j,k,l - select with arrows
-
-then y
-
-then p 
-
-p PASTE AFTER THE CURSOR !
-P paste before the cursor !
-
-
-viw - select word under the cursor (copy to default register "")
-yiw - select word under the cursor and copy it (copy to default register "" and to "0 register)
-
-use xnoremap p "_dP to make "p" always paste what in "0, e.g what was originally yanked.
-
-
-yiw - copy current word
-viwp - select other word under the cursor and paste what was yanked. will paste it again till something else is yanked.
-
-
-copy out of GVIM:
-----------------
-viw - select word
-V - select a line withouy the ending newline char
-ve - select till the end of word
-vw - select till the next word
-v$ - select to end of line
-
-then paste with mouse middle button
-
-
-
-normal mode:
--------------
-"+yiw - copy current word to clipboard
-"5p - paste what in register 5
-"0p - paste what in register 0, e.g what was just yanked
-"*p - paste what in register *, e.g what was last selected
-
-
-insert mode:
-------------
-you get " by typing CTRL+r
-
-"5 - paste what in register 5
-"0 - paste what in register 0, e.g what was just yanked
-"* - paste what in register *, e.g what was last selected
-
-visual mode:
-------------
-viw "+y - select current word, then copy what is selected to clipboard
-
-better to use the mouse here...
-
-select all
-==========
-gg v G y
-
-:%y+
-
-
-
-mappings:
+editing:
 --------
-
-:unmap ,tn
-:map tn :tabnew <C-R>* <CR> //open in a new tab what is selected by the mouse
-:map c :close <CR> //close tab
-:Bclose - close buffer
-,bd - close buffer
-
-
-:tabnew . //open folder view
-mouse click on file to open it
-select the file name by "V", then press "tn"
-CTRL-O - back to prev buffer
-
-
-
-movement:
---------------------------------------------------
-e - move cursor to end of word
-w - move cursor to start of the next word
-b - same like "w", but backwords
-0 - start of line
-$ - end of line
-G - moves to the end of the file.
-gg - start of file
-number  G  moves to that line number
-j$ - end of the next line
-
-H: Move cursor to the top of the currently visible page (think "high")
-
-M: Move cursor to the middle of the currently visible page
-
-L: Move cursor to the bottom of the currently visible page (think "low")
-
-CTRL-D: Page down
-
-CTRL-U: Page up
-
-
-m: Typing "m" followed by a letter creates a mark reference by that letter.
-	Lower-case letters are specific to the current document, while upper-case letters can only be used once (they can be used to jump to sections in different documents.
-
-': The single quote followed by a mark letter (previously defined with the "m" as above), will move the cursor to the beginning of the line containing that mark.
-
-`: The back-tick followed by a mark letter will move the cursor to the exact position of the mark.
-
-
-gvim back and forward:
----------------------
-CTRL+o back
-CTRL+i forward
-
-how to go back to my last editing position ?
-1) u + CTRL+R (undo + redo)
-2) `.
-
-^ - move to the begining of the text in a line, not to 0.
-
---------------------------------------------------
-
-insert:
---------------------------------------------------
 i - insert before the cursor
 a - insert after the cursor
 A - insert at the end of the line
 o - open a new line after the current line (line of cursor)
 O - open a new line before (UPPER) the current line (line of cursor)
 
-
 add a new line down the current line, change to insert mode and locate the cursor exactly down the start of the current line:
 ESC + o
 same, but above the current line:
 ESC+SHIFT+o
-----------------------------------------------------
-
-
-indent:
----------
-ESC+V
-select lines
-> to indent selected lines
-< to de-indent
-
->G     Indent until end of file
->}     Indent until next paragraph
->iB    Indent contents of current { } block
-
-set tab to 2 spaces:
-:set tabstop=2
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                               Lesson 1 SUMMARY
-
-
-  1. The cursor is moved using either the arrow keys or the hjkl keys.
-         h (left)       j (down)       k (up)       l (right)
-
-  2. To start Vim from the shell prompt type:  vim FILENAME <ENTER>
-
-  3. To exit Vim type:     <ESC>   :q!   <ENTER>  to trash all changes.
-             OR type:      <ESC>   :wq   <ENTER>  to save the changes.
-			 wa, wall, wa! - save all changes
-             ZZ - commit changes and exit the file.
-             :e! - reload
-
-  4. To delete the character at the cursor type:  x
-
-  5. To insert or append text type:
-         i   type inserted text   <ESC>         insert before the cursor
-         A   type appended text   <ESC>         append after the line
-
-NOTE: Pressing <ESC> will place you in Normal mode or will cancel
-      an unwanted and partially completed command.
-
-Now continue with Lesson 2.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-count/number is always before the command
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                               Lesson 2 SUMMARY
-
-
-  1. To delete from the cursor up to the next word type:    dw
-  2. To delete from the cursor to the end of a line type:    d$
-  3. To delete a whole line type:    dd
-  
-  to join 2 lines, type J
-
-  4. To repeat a motion prepend it with a number:   2w
-  5. The format for a change command is:
-               operator   [number]   motion
-     where:
-       operator - is what to do, such as  d  for delete
-       [number] - is an optional count to repeat the motion
-       motion   - moves over the text to operate on, such as  w (word),
-                  $ (to the end of line), etc.
-
-  6. To move to the start of the line use a zero:  0
-
-  7. To undo previous actions, type:           u  (lowercase u)
-     To undo all the changes on a line, type:  U  (capital U)
-     To undo the undo's, type:                 CTRL-R
-     
-     undo /redo - refers to commands. e.g typing 10 letters then ESC, considered one command.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                               Lesson 3 SUMMARY
-
-
-  1. To put back text that has just been deleted, type   p .  This puts the
-     deleted text AFTER the cursor (if a line was deleted it will go on the
-     line below the cursor).
-
-  2. To replace the character under the cursor, type   r   and then the
-     character you want to have there.
-
-  3. The change operator allows you to change from the cursor to where the
-     motion takes you.  eg. Type  ce  to change from the cursor to the end of
-     the word,  c$  to change to the end of a line.
-
-  4. The format for change is:
-
-         c   [number]   motion
-
-Now go on to the next lesson.
-
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                               Lesson 4 SUMMARY
-
-
-  1. CTRL-G  displays your location in the file and the file status.
-             G  moves to the end of the file.
-     number  G  moves to that line number.
-            gg  moves to the first line.
-
-  2. Typing  /  followed by a phrase searches FORWARD for the phrase.
-     Typing  ?  followed by a phrase searches BACKWARD for the phrase.
-     After a search type  n  to find the next occurrence in the same direction
-     or  N  to search in the opposite direction.
-     CTRL-O takes you back to older positions, CTRL-I to newer positions.
-
-  3. Typing  %  while the cursor is on a (,),[,],{, or } goes to its match.
-
-  4. To substitute new for the first old in a line type    :s/old/new
-     To substitute new for all 'old's on a line type       :s/old/new/g
-     To substitute phrases between two line #'s type       :#,#s/old/new/g
-     To substitute all occurrences in the file type        :%s/old/new/g
-     To ask for confirmation each time add 'c'             :%s/old/new/gc
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                               Lesson 5 SUMMARY
-
-
-  1.  :!command  executes an external command.
-
-      Some useful examples are:
-         (MS-DOS)         (Unix)
-          :!dir            :!ls            -  shows a directory listing.
-          :!del FILENAME   :!rm FILENAME   -  removes file FILENAME.
-
-  2.  :w FILENAME  writes the current Vim file to disk with name FILENAME.
-
-  3.  v  motion  :w FILENAME  saves the Visually selected lines in file
-      FILENAME.
-
-  4.  :r FILENAME  retrieves disk file FILENAME and puts it below the
-      cursor position.
-
-  5.  :r !dir  reads the output of the dir command and puts it below the
-      cursor position.
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                               Lesson 6 SUMMARY
-
-  1. Type  o  to open a line BELOW the cursor and start Insert mode.
-     Type  O  to open a line ABOVE the cursor.
-
-  2. Type  a  to insert text AFTER the cursor.
-     Type  A  to insert text after the end of the line.
-
-  3. The  e  command moves to the end of a word.
-
-  4. The  y  operator yanks (copies) text,  p  puts (pastes) it.
-
-  5. Typing a capital  R  enters Replace mode until  <ESC>  is pressed.
-
-  6. Typing ":set xxx" sets the option "xxx".  Some options are:
-        'ic' 'ignorecase'       ignore upper/lower case when searching
-        'is' 'incsearch'        show partial matches for a search phrase
-        'hls' 'hlsearch'        highlight all matching phrases
-     You can either use the long or the short option name.
-
-  7. Prepend "no" to switch an option off:   :set noic
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                               Lesson 7 SUMMARY
-
-
-  1. Type  :help  or press <F1> or <Help>  to open a help window.
-
-  2. Type  :help cmd  to find help on  cmd .
-
-  3. Type  CTRL-W CTRL-W  to jump to another window
-
-  4. Type  :q  to close the help window
-
-  5. Create a vimrc startup script to keep your preferred settings.
-
-  6. When typing a  :  command, press CTRL-D to see possible completions.
-     Press <TAB> to use one completion.
-
-
-
-
-
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-===========
-cscope:
-===========
-
-1. create cscope.out
-
-#cscope
-cscope -Rbk
-
-#cscope Alex:
-echo 1
-find . -name "*.[ch]" > cscope.files
-find . -name "*.def" >> cscope.files
-#find . -follow -name "*.[ch]" > cscope.files
-echo 2
-cscope -b
-echo 3
-
-2. grep:
-
-caller: CTRL + \ + c
-symbol: CTRL + \ + s
-global def: CTRL + \ + g
-
-
-cs find t mvBoardIdGet
-cs find s mvBoardIdGet
-cs find g mvBoardIdGet
-
-cscope commands:
-================
-add  : Add a new database             (Usage: add file|dir [pre-path] [flags])
-find : Query for a pattern            (Usage: find c|d|e|f|g|i|s|t name)
-       c: Find functions calling this function
-       d: Find functions called by this function
-       e: Find this egrep pattern
-       f: Find this file
-       g: Find this definition
-       i: Find files #including this file
-       s: Find this C symbol
-       t: Find this text string
-help : Show this message              (Usage: help)
-kill : Kill a connection              (Usage: kill #)
-reset: Reinit all connections         (Usage: reset)
-show : Show connections               (Usage: show)
-
-
-
-3. to add/update cscope db:
-
-:cs reset (to update current db with new code added)
-:cs add cscpe.out (add cscope to gvim)
-
-4. navigation:
-
-go to definition: CTRL + ]
-go back: CTRL + T
-
-[[ - jump to start of current function
-
 
 vertical editing:
 -----------------
@@ -473,43 +40,185 @@ ESC
 after the ESC all new text will be typed in vertically !!!!!!!1
 
 
+how to go back to my last editing position ?
+--------------------------------------------
+1) u + CTRL+R (undo + redo)
+2) `.
 
-save session:
-:mksession ~/mysession.vim
+movement:
+--------
+e - move cursor to end of word
+w - move cursor to start of the next word
+b - same like "w", but backwords
+0 - start of line
+$ - end of line
+G - moves to the end of the file.
+gg - start of file
+number  G  moves to that line number
+j$ - end of the next line
+^ - move to the begining of the text in a line, not to 0.
+
+H: Move cursor to the top of the currently visible page (think "high")
+
+M: Move cursor to the middle of the currently visible page
+
+L: Move cursor to the bottom of the currently visible page (think "low")
+
+CTRL-D: Page down
+
+CTRL-U: Page up
+
+[[ - jump to start of current function
+
+CTRL+o back
+CTRL+i forward
+
+marking:
+--------
+m: Typing "m" followed by a letter creates a mark reference by that letter.
+	Lower-case letters are specific to the current document, while upper-case letters can only be used once (they can be used to jump to sections in different documents.
+
+': The single quote followed by a mark letter (previously defined with the "m" as above), will move the cursor to the beginning of the line containing that mark.
+
+`: The back-tick followed by a mark letter will move the cursor to the exact position of the mark.
 
 
-restore session:
-vim -S ~/mysession.vim
-vim + :source ~/mysession.vim
+indent:
+---------
+ESC+V
+select lines
+> to indent selected lines
+< to de-indent
 
+>G     Indent until end of file
+>}     Indent until next paragraph
+>iB    Indent contents of current { } block
+
+set tab to 2 spaces:
+:set tabstop=2
+
+
+copy and paste:
+===============
+
+
+esc + y + $ - cp to the end of the line
+esc + p - paste it
+
+esc + y + w - cp to the end of the word
+esc + p - paste it
+
+select then copy and paste:
+----------------------------
+select:
+
+esc+v
+e - select to the end of words
+$ - to the end of line
+h,j,k,l - select with arrows
+
+copy:
+
+then y
+
+paste:
+
+then p 
+
+p PASTE AFTER THE CURSOR !
+P paste before the cursor !
+
+registers and tips:
+-------------------
+
+" - register prefix
+0 - register holds what was just yanked 
+* - register holds what was just selected
++ - register holds what's in clipboard
+
+viw - select word under the cursor (copy to default register "")
+V - select a line withouy the ending newline char
+ve - select till the end of word
+vw - select till the next word
+v$ - select to end of line
+gg v G - select all
+
+yiw - select word under the cursor and copy it (copy to default register "" and to "0 register)
+
+yiw - copy current word
+viwp - select other word under the cursor and paste what was yanked. 
+will paste it again till something else is yanked.
+
+copy out of GVIM:
+----------------
+
+select all: gg v G
+copy to cipboard: "+y
+cut to clipboard: "+x
+paste from clipboard: "+gP
+
+
+normal mode:
+-------------
+"+yiw - copy current word to clipboard
+"5p - paste what in register 5
+"0p - paste what in register 0, e.g what was just yanked
+"*p - paste what in register *, e.g what was last selected
+"*p - paste what in register *, e.g what was last selected
+
+
+insert mode:
+------------
+you get " by typing CTRL+r
+
+"5 - paste what in register 5
+"0 - paste what in register 0, e.g what was just yanked
+"* - paste what in register *, e.g what was last selected
+
+visual mode:
+------------
+viw "+y - select current word, then copy what is selected to clipboard
+
+better to use the mouse here...
+
+
+files:
+======
+
+open included file (on cursor) in a new tab: CTRL+W, gf
+(gf - go to file)
+
+open a file in the same buffer: :e <file>
+
+show open files in the same buffer: ,+ 0
+
+ls current dir:
+:e . 
+
+
+windows:
+========
+
+move between open tabs:
+CTRL + pgDown, CTRL + pgUp
+
+move to last active tab: CTRL+L (c-l)
+(I've added a mapping)
 
 splitting windows:
-==================
+------------------
 
 While running vim:
 
 :sp filename for a horizontal split
 :vsp filename or :vs filename for a vertical split
+:vsplit file
 
 Ctrl+W, Q to close one
 
 Ctrl+W, Ctrl+W to switch between windows
 
 Ctrl+W, J (xor K, H, L) to switch to adjacent window (intuitively up, down, left, right)
-
-
-
-move to shell to ls for files:
-=============================
-:sh
-exit - to quit shell
-
-
-files and folders:
-==================
-
-ls current dir:
-:e . 
 
 
 buffers:
@@ -532,9 +241,72 @@ for list of open buffers
 :bdelete delete the current buffer
 :b <filename-part> with tab-key providing auto-completion (awesome !!)
 
+cscope:
+=======
+
+1. create cscope.out in the root dir:
+------------------------------------
+cscope -Rbk
+
+	#or make it like Alex:
+	echo 1
+	find . -name "*.[ch]" > cscope.files
+	find . -name "*.def" >> cscope.files
+	#find . -follow -name "*.[ch]" > cscope.files
+	echo 2
+	cscope -b
+	echo 3
+
+2. to add/update cscope db:
+--------------------------
+:cs reset (to update current db with new code added)
+:cs add cscpe.out (add cscope to gvim)
+
+3. navigation:
+--------------
+go to definition: CTRL + ]
+go back: CTRL + T, CTRL + O
+[[ - jump to start of current function
+
+4. grep:
+--------
+caller: CTRL + \ + c
+symbol: CTRL + \ + s
+global def: CTRL + \ + g
+
+find : Query for a pattern (Usage: find c|d|e|f|g|i|s|t name)
+       c: Find functions calling this function
+       d: Find functions called by this function
+       e: Find this egrep pattern
+       f: Find this file
+       g: Find this definition
+       i: Find files #including this file
+       s: Find this C symbol
+       t: Find this text string
+
+cs find t mvBoardIdGet
+cs find s mvBoardIdGet
+cs find g mvBoardIdGet
+
+
+Session:
+========
+save session:
+:mksession ~/mysession.vim
+
+restore session:
+vim -S ~/mysession.vim
+vim + :source ~/mysession.vim
+
+
+move to Linux shell to ls for files:
+===================================
+:sh
+exit - to quit shell
+
 to get GVIM settings:
-===================
-:set tabstop ------------------- > if you don't write a value, it prints out the current value.
+=====================
+:set tabstop ------> if you don't write a value, it prints out the current value.
 
 
 find & replace words in a file:
@@ -573,8 +345,12 @@ Change each 'foo' (case sensitive due to the I flag) to 'bar'; ask for confirmat
 :%s/foo\C/bar/gc is the same because \C makes the search case sensitive.
 This may be wanted after using :set ignorecase to make searches case insensitive.
 
-
-
+Replace in multiple files:
+==========================
+grep -rli 'stdio.h' * | xargs sed -i 's/stdio.h/STDIO.H/g'
+r = recursiv
+l = list file names only
+i = ignore case
 
 to get rid of highlights:
 ========================
@@ -597,44 +373,19 @@ then use:
 s/foo/bar/gc
 
 
-
-
-
-kosta, new plugins:
-===================
-:Obsession
-gvims
-
-,f - Fuzzy File Search
-,b - show open buffers
-,a - Grep current word using 'ag' (world's best grepper)
-
-Install new plugin
-1) Add line in ~/.vimrc Plugin "postfix of github project path"
-2) Reenter vim (source ~/.vimrc)
-3) PluginInstall
-
-Uninstall vim plugin
-1) Revome line...
-2) ...
-3) PluginClean
-
-F8 - open source code tags
-F9 - show white spaces and tabs
-
-AutoSave
-
 Installing vim on fresh PC
 ==========================
 1) sudo apt install vim...gvim...
 2) clone, compile and install 'ag' (grepper)
 3) copy '.vim' and '.vimrc' to ~.
 
+DIFF:
+=====
+
+to diff directories:
 DifDiff orig_dir new_dir
 
-:vsplit file
-
-from commandline:
+to diff files from commandline:
 gvimdiff file1 file2
 
 colors for vimdiff:
@@ -650,23 +401,68 @@ colors for vimdiff:
 do (diff obtain) - take diff to my current file
 dp (diff put) - put diff from my current file to the diff file
 CTRL+W w - moving cursor to the other file
-zo          - open folded text
-zc          - close folded text
+zo - open folded text
+zc - close folded text
+zM - expand all sections
+zR - fold all sections
 :diffupdate - re-scan the files for differences
 
 If you load up two files in splits (:vs or :sp), you can do
 :diffthis on each window and achieve a diff of files that were already loaded in buffers
 :diffoff can be used to turn off the diff mode. 
 
-
-
 vimrc and gvimrc
 ==================
-The gvimrc file is where GUI-specific startup commands should be placed. It is always sourced after the vimrc file.
-You can use the gvimrc files to set up your own customized menus (see :menu) and initialize other things 
-that you may want to set up differently from the terminal version.
+The gvimrc file is where GUI-specific startup commands should be placed. 
+It is always sourced after the vimrc file.
+You can use the gvimrc files to set up your own customized menus (see :menu)
+and initialize other things that you may want to set up differently 
+from the terminal version.
 
 usually use vimrc !
 
+My mappings and tips
+====================
 
+F9 - outline functions, variables
+F9 - close
+
+show line numbers:
+:set nu
+
+:unmap ,tn
+:map tn :tabnew <C-R>* <CR> //open in a new tab what is selected by the mouse
+
+:map c :close <CR> //close tab
+
+:Bclose - close buffer
+
+,bd - close buffer
+
+
+:tabnew . //open folder view
+mouse click on file to open it
+select the file name by "V", then press "tn"
+CTRL-O - back to prev buffer
+
+use xnoremap p "_dP: to make "p" always paste what in "0, e.g what was originally yanked.
+
+kosta, new plugins:
+===================
+:Obsession
+gvims
+
+,f - Fuzzy File Search
+,b - show open buffers
+,a - Grep current word using 'ag' (world's best grepper)
+
+Install new plugin
+1) Add line in ~/.vimrc Plugin "postfix of github project path"
+2) Reenter vim (source ~/.vimrc)
+3) :PluginInstall
+
+Uninstall vim plugin
+1) Revome line...
+2) ...
+3) PluginClean
 

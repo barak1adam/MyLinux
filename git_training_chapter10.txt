@@ -1,0 +1,14 @@
+git trainings, chapter 10:
+--------------------------
+
+backup repository by cp .dir
+
+.git core entries:
+
+head - pointer to current (checkout) branch
+
+index - pointer to staging area
+
+objects - all git git DB content
+
+refs - pointers to commit objects (branches)
