@@ -1,0 +1,104 @@
+nfv instllations:
+================
+
+Linux on flash: mrv, 123456
+
+Linux on USB: admin, 12345t. root, 123456
+
+
+Adva connector: root, overture
+
+x86 model is Kontron COMe-bBD7
+
+
+how to burn linux witout GUI on disk on key:
+===========================================
+target usb key is at least 8G
+installing CentOs on the target usb key
+connect the installation USB key and the target USB key the PC, disconnect the Hard disc
+install the Centos on target
+tips for installation:
+select infrastructure server + ftp (for networking)
+select target device as the new usb key
+if needed, refresh list , recalim space + delete all
+set auto partioning (default)
+admin 12345t
+root 123456
+
+
+then change GRUB settings to make it txt only:
+---------------------------------------------
+boot from the new installed centos
+
+login as root
+
+vim /etc/default/grub and enter the following settings:
+> GRUB_TERMINAL_OUTPUT="serial console"
+> GRUB_SERIAL_COMMAND="serial --speed=115200"
+> GRUB_CMDLINE_LINUX="console=ttyS0,115200n8"
+
+then:
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
+how to burn linux witout GUI on flash:
+======================================
+use the connector to connect the flash to a usb key
+make the same installation as above
+user mrv 123456
+
+
+what are the correct BIOS settings for Kontron:
+==============================================
+BIOS->BOOT->BOOT OPT #1 from HD
+Enter to Main->CSM
+CSM->storage:  legacy
+CSM->boot option: uefi and legacy
+
+
+BIOS settings for production to test USB and back to flash:
+===========================================================
+disable flash controller
+
+
+10G drives installaion procedure:
+=================================
+email from Eitan:
+-----------------
+
+10G KR backplane driver installation:
+ 
+1.   BIOS->BOOT->BOOT OPT #1 – USB disk
+2.   Enter to Main->CSM
+3.   CSM->storage:  uefi
+4.   CSM->boot option: uefi only
+5.   Save & Exit
+6.   Now module should boot from disk
+7.   Shell> FS0:
+8.   cd \2016_WW20_BDXDE_LEK_PKG\TOOLS\EFI2_x64\SVTools\
+9.    lanconf64e.efi
+10.   now driver utility is supposed to run
+11.   EEPROM FLASH
+12.   NVM IMAGE
+13.   UPDATE IMAGE
+14.   Choose driver for BDXDE_KR_BACKPLANE_LED_HI_NO_MNG_1.13v02_800006A8
+15.   It take 5 minutes to burn the flash
+16.   Choose driver to burn the second 10g interface
+17.   After burn is done -> pull out the usb
+18.   Reset the module
+19.   Stop at bios
+20.   BIOS->BOOT->BOOT OPT #1 from HD
+21.   Enter to Main->CSM
+22.   CSM->storage:  legacy
+23.   CSM->boot option: uefi and legacy
+
+
+how to detect USB key on eval board:
+====================================
+use usb port 2, not 1
+see on USB screen that a new device is detected
+
+
+how to run flood ping from PC towards port 9:
+---------------------------------------------
+configure the OS-V (Pavel)
+sudo ping -f 172.21.10.189
