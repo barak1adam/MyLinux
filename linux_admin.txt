@@ -230,6 +230,89 @@ shell reserved chars might be used quoted by 'c' or \c
 
 examples:
 --------
+#find all files and sub directories in the current directory
+find
+find .
+find . -print
+
+#find all files and sub directories in any other directory
+find /home/barak
+
+#find -r files or directories by name
+find . -name "text"
+find . -type f -name "text.txt"
+#ignore case
+find . -iname "Text.txt"
+
+#maxdepth
+find ./test -maxdepth 1 -name *.php
+
+#exclude files or folders
+find ./test -not -name *.php
+find ./test ! -name *.php
+
+#combine multiple criterias: the default is AND 
+find ./test ! -name "*.php" ! -name "*.txt"
+
+#-a = AND
+#If we like OR, we need to explicitly use -o
+find ./test ! -name "*.php" -o -name "*.txt"
+
+#rename multiple files
+find . -type f -name 'text1' -exec mv {} {}.txt \;
+
+#find directories only
+find . -type d "barak"
+
+#find files only
+find . -type f "barak"
+
+#find files with permissions 777
+find . -type f -perm 777
+
+#ind read only files
+find . -type f -perm /u=r
+
+#find executable files
+find . -type f -perm /u=x
+
+#change mode to multiple files
+find . -type f -perm 777 -exec chmod 644 {} \;
+
+#find an remove multiple files. using xargs, no need {}
+find . -type f -name "*.txt" -exec rm -f {} \;
+find . -type f -name "*.txt" | xargs rm -f
+
+#find files by user
+find /home -user barak
+
+#ind files by group
+find /home -group dev
+
+#find files in current level only modified in the last 50 days
+find . -maxdepth 1 -mtime -50
+
+#find files in current level only accessed in the last 50 days
+find . -maxdepth 1 -mtime -50
+
+#find files modified in the last 50 minutes
+find . -mmin -60
+
+#find files modified in the last 100 days but not less than 50 days
+find . -mtime -100 -mtime +50
+
+#find files less than 10M
+find . -type f -size -10M
+
+#find files bigger than 10M
+find . -type f -size +10M
+
+#AND = -a
+find -O3 . \( -name "subtest3" \) -a \( -type d \)
+
+#what is the difference between xargs and find -exec
+#using | after the find, used by the shell
+#using -exec is part of the find, not the shell and is taken on every entry during the search.
 
 
 bash:
