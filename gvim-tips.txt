@@ -90,6 +90,9 @@ select lines
 > to indent selected lines
 < to de-indent
 
+x> where x is the number of times to indent right
+x< where x is the number of times to indent left
+
 >G     Indent until end of file
 >}     Indent until next paragraph
 >iB    Indent contents of current { } block

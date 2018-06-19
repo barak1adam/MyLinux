@@ -230,3 +230,8 @@ shell reserved chars might be used quoted by 'c' or \c
 
 examples:
 --------
+
+
+bash:
+=====
+for f in *; do cat $f; done
