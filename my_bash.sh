@@ -45,8 +45,6 @@ echo "help,$(printf "%s:," "${ARGUMENT_LIST[@]}")"
 
 echo --name "$(basename "$0")"
 
-exit 0
-
 #ARGUMENT_LIST=("master" "branch")
 #
 #A="help,$(printf "%s:," "${ARGUMENT_LIST[@]}")"
@@ -68,7 +66,6 @@ done
 for i in ${array[@]}; do
     echo $i
 done
-exit 0
 
 # read arguments
 #opts=$(getopt \
@@ -142,8 +139,6 @@ done
 #################
 
 
-exit 0
-
 #print line numbers while running (bash -x my_sdcript.sh)
 #PS1,PS2,PS3,PS4 are available prompts in linux
 #for further info: https://www.linuxnix.com/linuxunix-ps4-prompt-explained-with-examples/
@@ -210,9 +205,12 @@ fi
 # remember that the the return value of the TEST-COMMAND is evaluated. 
 # if it is 0 it means success (0 is not false...), then we go into CONSEQUENT-COMMANDS...
 # so if a command is using as the test expression, it will be true if its return value is 0 !
-if [ grep $USER /etc/passwd ]; then echo expression evaluated as true; fi
+if [ `grep $USER /etc/passwd` ]; then echo expression evaluated as true; fi
+if [ $(grep $USER /etc/passwd) ]; then echo expression evaluated as true; fi
 if [ `grep "blabla" /etc/passwd` ]; then echo true; else echo false; fi
-if [ "$T1" = "$T2" ]; then echo barak; echo adam; echo adam; fi
+# =,== are the same
+if [ "$T1" == "$T2"   ]; then echo barak; echo adam; echo adam; else echo \$T1 != \$T2; fi
+if [ "$T1" = "$T2"   ]; then echo barak; echo adam; echo adam; else echo \$T1 != \$T2; fi
 
 # Expressions used with if
 
@@ -247,7 +245,6 @@ if [ "$T1" = "$T2" ]; then echo barak; echo adam; echo adam; fi
 # [ STRING1 != STRING2 ] 	True if the strings are not equal.
 # [ STRING1 < STRING2 ] 	True if "STRING1" sorts before "STRING2" lexicographically in the current locale.
 # [ STRING1 > STRING2 ] 	True if "STRING1" sorts after "STRING2" lexicographically in the current locale.
-# [ ARG1 OP ARG2 ]	"OP" is one of -eq, -ne, -lt, -le, -gt or -ge. These arithmetic binary operators return true if "ARG1" is equal to, not equal to, less than, less than or equal to, greater than, or greater than or equal to "ARG2", respectively. "ARG1" and "ARG2" are integers.
 
 # Combining expressions
 
@@ -260,5 +257,65 @@ if [ -f /var/log/messages ]
   then
     echo "/var/log/messages exists."
 fi
+
+if [ -a /var/log/messages ]
+  then
+    echo "/var/log/messages exists."
+fi
+
+if [ -e /var/log/messages ]
+  then
+    echo "/var/log/messages exists."
+fi
+
+# arithmetic binary operations
+# [ ARG1 OP ARG2 ]	"OP" is one of -eq, -ne, -lt, -le, -gt or -ge. These arithmetic binary operators return true if "ARG1" is equal to, not equal to, less than, less than or equal to, greater than, or greater than or equal to "ARG2", respectively. "ARG1" and "ARG2" are integers.
+if [ $? -eq 0 ]; then echo 'That was a good job!'; fi
+if [ $? -ne 0 ]; then echo 'That was NOT a good job!'; fi
+
+if [ -f work.txt ]; then num=`wc -l work.txt`; else num=0; fi
+if [ "$num" -gt "150" ]; then echo ; echo "you've worked hard enough for today."; echo ; fi
+
+# using a && b is same as if (a true) then b;
+# using a || b is same as if (a false) then b;
+if [ "$(whoami)" != 'root' ]; then
+        echo "You have no permission to run $0 as non-root user."
+        #exit 1;
+else
+        echo "You have root permission to run $0"
+        #exit 0;
+fi
+
+#same like:
+# [ "$(whoami)" != 'root' ] && ( echo you are using a non-privileged account; exit 1 )
+# [ "$(whoami)" != 'root' ] || ( echo you are using a root privileged account; exit 0 )
+
+# [] vs. [[]]
+#
+#
+# Contrary to [, [[ prevents word splitting of variable values.
+# So, if VAR="var with spaces", you do not need to double quote $VAR in a test - eventhough using quotes remains a good habit. 
+# Also, [[ prevents pathname expansion, so literal strings with wildcards do not try to expand to filenames. Using [[, == and != interpret strings to the right as shell glob patterns to be matched against the value to the left, for instance: [[ "value" == val* ]].
+
+gender="male  "
+if [[ "$gender" == "f*" ]]; then echo "Pleasure to meet you, Madame."; else echo "How come the lady hasn't got a drink yet?"; fi
+if [[ $gender == "f*" ]]; then echo "Pleasure to meet you, Madame."; else echo "How come the lady hasn't got a drink yet?"; fi
+
+# file names with spaces
+# the following might be wrong if $1 iclude words with spaces between them.
+# to resolve: in the if statement use "$FILENAME" or use [[  ]]
+
+FILENAME="$1"
+if [ -f $FILENAME ]; then
+  echo "Size is $(ls -lh $FILENAME | awk '{ print $5 }')"
+  echo "Type is $(file $FILENAME | cut -d":" -f2 -)"
+  echo "Inode number is $(ls -i $FILENAME | cut -d" " -f1 -)"
+  echo "$(df -h $FILENAME | grep -v Mounted | awk '{ print "On",$1", \
+which is mounted as the",$6,"partition."}')"
+else
+  echo "File does not exist."
+fi
+
+# switch - case:
 
 
