@@ -1,31 +1,45 @@
-1. VIM - 1 regular week
+1. Bash:
+========
+8 - writing interactive scripts
+9 - loops
+10 - variables and arrays
+Read 3-4
+Review my_bash.sh
+
+5 -sed and update my_sed in git
+
+6 - awk and update my_awk
+
+divide my linux_admin into small files
+
+hands on:
+=========
+writing a script
 
 
-compare all gvim-tips file and make one final version on github
+
+2. VIM - 1 regular week:
+========================
 
 clean files on home linux
 
-learn vim tutorial by Kosta
+learn vim the hard way: 2-8, 10, 17, 19, 23, 28-30, 45, 48.
 
-hands on
+hands on:
+=========
 
+fix copy paste
+review Kosta's tutorial
 Understand how to add plug ins to vim
-
-make the list plugin (ToggleList) working in home pc
-
-hands on cscope
-
+hands on cscope, fast source code guide
+understand fzf and fzf plugin
 hands on vimdiff
 
-learn how to edit vimrc
-
-SED
-
-AWK
-
-2. Git Advanced - 1 regular week
+3. Git Advanced
+================
 
 reset
+rebase -i
 fetch, pull, branches
 sqaush
 stash
@@ -34,32 +48,38 @@ multiple branches checkouts
 hands on git init (what must be set to git config)
 creating and applying patches
 
-3. linux utils - 1 regular week
+4. linux admin
+===============
 
-Install, sync, rsync, tar - 1 day
+Install, sync, rsync
 
-grep, find, ag - advanced - 1 day
+zip vs tar
+
+grep, find, ag
 
 aliases, cdscripts, cd ../../../, terminator igor/olga
 
-bash scripting - 2 days including hands on
 
-4. python - 1 regular week
+5. python
+=========
 
-including real programming for MRV
+Including real programming for MRV in TC.
 
-5. refresh kernel readings - 1 regular week
+6. Refresh kernel readings
+============================
 including kernel - config, defconfig, kernel.org
 
-6. write a kernel driver - 1 regular week
+7. write my kernel driver
+==========================
 write to Raspberi PI including all advanced topics
 like ADT driver.
 
-7. During the working hours: till 30/3
+Next:
+=====
 including Yocto hands on
 build systems, tool chains - introduction
+full installtion of a linux host - kosta env
 
+Review user space programming
 
-
-
-
+ARM programming
