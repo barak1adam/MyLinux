@@ -84,7 +84,7 @@ done
 
 #eval example:
 #=============
-a="ls ~/Desktop | more"
+a="ls -la ~/Desktop/Team.txt"
 #try $a. without eval string is not interperted as a shell command
 $a
 #try with eval
@@ -305,17 +305,68 @@ if [[ $gender == "f*" ]]; then echo "Pleasure to meet you, Madame."; else echo "
 # the following might be wrong if $1 iclude words with spaces between them.
 # to resolve: in the if statement use "$FILENAME" or use [[  ]]
 
-FILENAME="$1"
-if [ -f $FILENAME ]; then
-  echo "Size is $(ls -lh $FILENAME | awk '{ print $5 }')"
-  echo "Type is $(file $FILENAME | cut -d":" -f2 -)"
-  echo "Inode number is $(ls -i $FILENAME | cut -d" " -f1 -)"
-  echo "$(df -h $FILENAME | grep -v Mounted | awk '{ print "On",$1", \
-which is mounted as the",$6,"partition."}')"
-else
-  echo "File does not exist."
-fi
+#FILENAME="$1"
+#if [ -f $FILENAME ]; then
+#  echo "Size is $(ls -lh $FILENAME | awk '{ print $5 }')"
+#  echo "Type is $(file $FILENAME | cut -d":" -f2 -)"
+#  echo "Inode number is $(ls -i $FILENAME | cut -d" " -f1 -)"
+#  echo "$(df -h $FILENAME | grep -v Mounted | awk '{ print "On",$1", \
+#which is mounted as the",$6,"partition."}')"
+#else
+#  echo "File does not exist."
+#fi
 
-# switch - case:
+# switch - case
 
+# note about the '|' for multiple patterns
+# spaces are not matter
+# *) is the default case
+# ;; is must at the end of each close.
 
+# This script does a very simple test for checking disk space.
+space=`df -h | awk '{print $5}' | grep % | grep -v Use | sort -n | tail -1 | cut -d "%" -f1 -`
+
+case $space in
+  [1-6]*)
+  Message="All is quiet."
+  ;;
+[7-8]*)
+  Message="Start thinking about cleaning out some stuff.  There's a partition that is $space % full."
+  ;;
+    9[1-2] | 9[3-8]             )
+  Message="Better hurry with that new disk...  One partition is $space % full."
+  ;;
+99)
+  Message="I'm drowning here!  There's a partition at $space %!"
+  ;;
+*)
+  Message="I seem to be running with an nonexistent amount of disk space..."
+  ;;
+esac
+
+echo $Message
+
+case "$1" in
+        start)
+            start
+            ;;
+        stop)
+            stop
+            ;;
+        status)
+            status anacron
+            ;;
+        restart)
+            stop
+            start
+            ;;
+        condrestart)
+            if test "x`pidof anacron`" != x; then
+                stop
+                start
+            fi
+            ;;
+        *)
+            echo $"Usage: $0 {start|stop|restart|condrestart|status}"
+            exit 1
+esac

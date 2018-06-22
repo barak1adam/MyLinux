@@ -318,3 +318,12 @@ find -O3 . \( -name "subtest3" \) -a \( -type d \)
 bash:
 =====
 for f in *; do cat $f; done
+
+# list size of files and folders under the PWD
+sudo du -h --max-depth=1
+
+# rounded to MBytes
+sudo du -BM --max-depth=1
+
+# rounded to GBytes
+sudo du -BG --max-depth=1
