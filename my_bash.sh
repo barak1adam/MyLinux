@@ -175,16 +175,6 @@ else
   echo "cp command exit NOT OK"
 fi
 
-#echo -e
-
-
-
-
-#use a list
-
-#list of arguments:w
-
-
 # if TEST-COMMANDS; then CONSEQUENT-COMMANDS; fi
 
 # The TEST-COMMAND list is executed, and if its return status is zero !!!, the CONSEQUENT-COMMANDS list is executed.
@@ -368,5 +358,111 @@ case "$1" in
             ;;
         *)
             echo $"Usage: $0 {start|stop|restart|condrestart|status}"
-            exit 1
+            #exit 1
 esac
+
+
+# echo
+# The echo built-in command outputs its arguments, separated by spaces and terminated with a newline character.
+# The return status is always zero. echo takes a couple of options:
+# -e: interprets backslash-escaped characters.
+# -n: suppresses the trailing newline.
+
+#by default, printout is terminated with a newline
+echo "Hmmmmmm fish... Tux happy!"
+# add \x by using -e
+echo -e "Hmmmmmm fish... Tux happy! \n"
+# supress the default newline by using -n
+echo -n "Hmmmmmm fish... Tux happy!"
+echo -en "Hmmmmmm fish... Tux happy!\n"
+# Escape sequences used by the echo command
+# \a	Alert (bell).
+# \b	Backspace.
+# \c	Suppress trailing newline.
+# \e	Escape.
+# \f	Form feed.
+# \n	Newline.
+# \r	Carriage return.
+# \t	Horizontal tab.
+# \v	Vertical tab.
+# \\	Backslash.
+
+# read
+# read [options] NAME1 NAME2 ... NAMEN
+# One line is read from the standard input, or from the file descriptor supplied as an argument to the -u option.
+# The first word of the line is assigned to the first name, NAME1, the second word to the second name, and so on
+# The characters in the value of the IFS variable are used to split the input line into words or tokens
+# If no names are supplied, the line read is assigned to the variable REPLY
+# The return code of the read command is zero, unless:
+    # an EOF is encountered
+    # read times out
+    # an invalid file descriptor is supplied as the argument to the -u option
+
+# read built-in options
+# -a ANAME	The words are assigned to sequential indexes of the array variable ANAME, starting at 0. All elements are removed from ANAME before the assignment. Other NAME arguments are ignored.
+# -d DELIM	The first character of DELIM is used to terminate the input line, rather than newline.
+# -e	readline is used to obtain the line.
+# -n NCHARS	read returns after reading NCHARS characters rather than waiting for a complete line of input.
+# -p PROMPT	Display PROMPT, without a trailing newline, before attempting to read any input. The prompt is displayed only if input is coming from a terminal.
+# -r	If this option is given, backslash does not act as an escape character. The backslash is considered to be part of the line. In particular, a backslash-newline pair may not be used as a line continuation.
+# -s	Silent mode. If input is coming from a terminal, characters are not echoed.
+# -t TIMEOUT	Cause read to time out and return failure if a complete line of input is not read within TIMEOUT seconds. This option has no effect if read is not reading input from the terminal or from a pipe.
+# -u FD	Read input from file descriptor FD.
+
+#echo -n "Type the year that you want to check (4 digits), followed by [ENTER]:"
+#read year
+#if (( ("$year" % 400) == "0" )) || (( ("$year" % 4 == "0") && ("$year" % 100 != "0") )); then
+#  echo "$year is a leap year."
+#else
+#  echo "This is not a leap year."
+#fi
+#
+## -n example
+#echo -n "Enter your name and press [ENTER]: "
+#read name
+#echo -n "Enter your gender and press [ENTER]: "
+#read -n 1 gender
+#echo
+
+# input / output redirection
+# stdin = file descriptor 0
+# stdout = file descriptor 1 
+# stderr =  file descriptor 2
+
+# devices and file descriptors:
+# /dev/stdin is the device, 0 is the fd number
+
+# each process has its own view of file descriptors:
+# ls -l /dev/std*
+# lrwxrwxrwx  1 root    root     17 Oct  2 07:46 /dev/stderr -> ../proc/self/fd/2
+# lrwxrwxrwx  1 root    root     17 Oct  2 07:46 /dev/stdin -> ../proc/self/fd/0
+# lrwxrwxrwx  1 root    root     17 Oct  2 07:46 /dev/stdout -> ../proc/self/fd/1
+# So, each process has its own view of the files under /proc/self, as it is actually a symbolic link to /proc/<process_ID>
+
+#assume a.txt exists and a.txt1 does not exist
+
+#stderr is redirected to /var/tmp/unaccessible-in-spool
+touch a.txt
+echo > /var/tmp/unaccessible-in-spool
+#ls -l a.txt a.txt1 2> /var/tmp/unaccessible-in-spool
+mv /proc/self/fd/1 /proc/self/fd/525240
+#ls -l a.txt a.txt1 > /var/tmp/unaccessible-in-spool 2>&1
+ls -l a.txt a.txt1
+#ls -l a.txt a.txt1 2>&1 > /var/tmp/unaccessible-in-spool
+rm a.txt
+
+#redirect output
+cat /proc/cpuinfo > command.txt
+#redirect input
+wc -l < command.txt
+#redirect error
+lsash /usr/bin 2> commands-error.txt
+#redirect output and error
+ls /usr/bin > command.txt 2>&1
+#redirect output and error
+ls /usr2222/bin &> command.txt
+
+
+
+
+# list of args
