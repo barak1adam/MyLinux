@@ -369,6 +369,11 @@ then, select the code and press '='
 
 %s/\s\+$//e
 
+get rid of trailing ^M:
+======================
+
+%s/\r/\r/g
+
 replace a word in block:
 ========================
 select the code (v) then press :
