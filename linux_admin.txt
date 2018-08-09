@@ -230,6 +230,9 @@ shell reserved chars might be used quoted by 'c' or \c
 
 examples:
 --------
+# Reuven - find string foo in c files:
+find /path -name "*.c" | xargs grep -n "foo"
+
 #find all files and sub directories in the current directory
 find
 find .
