@@ -1,3 +1,6 @@
+link:
+http://www.grymoire.com/Unix/Sed.html#uh-13
+
 format: sed '' file
 operates on lines
 
