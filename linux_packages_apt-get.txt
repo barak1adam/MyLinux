@@ -1,0 +1,15 @@
+Linux packages management:
+==========================
+
+*Each distribution has a default list of repositories, from which it install specific versions of packages.
+When we add a new package, its version and sources are downloaded from one of that repos.
+
+*If we like to add a new repo to the list, we can explicitly do it by "apt-add-repository <repo name>"
+to remove a repo,  "apt-add-repository --remove <repo name>"
+
+*then we can run apt-get update:
+apt-get update updates the list of available packages and their versions, but it does not install or upgrade any packages.
+it like "pull" all latest packages versions into a local cache / list
+After updating the lists, the package manager knows about available updates for the software you have installed.
+
+*apt-get upgrade actually installs newer versions of the packages you have. 
