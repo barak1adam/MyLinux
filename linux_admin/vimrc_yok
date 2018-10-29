@@ -1,0 +1,368 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-sleuth'
+Plugin 'tpope/vim-sensible'
+Plugin 'tpope/vim-obsession'
+Plugin 'tpope/vim-flagship'
+Plugin 'chazy/cscope_maps'
+Plugin 'vim-scripts/ack.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'fatih/vim-go'
+Plugin 'rogpeppe/godef'
+Plugin 'nsf/gocode', {'rtp': 'vim/'}
+Plugin 'vim-scripts/Printer-Dialog'
+Plugin 'vim-scripts/vim-auto-save'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'drmikehenry/vim-fontsize'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'scrooloose/syntastic'
+Plugin 'will133/vim-dirdiff'
+
+Plugin 'ap/vim-css-color'
+Plugin 'mattn/emmet-vim'
+Plugin 'matchit.zip'
+Plugin 'othree/html5.vim'
+Plugin 'sheerun/vim-polyglot'
+
+" http://vimcolors.com
+Plugin 'muellan/am-colors'
+Plugin 'albertorestifo/github.vim'
+
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'shougo/unite.vim'
+
+Plugin 'altercation/vim-colors-solarized'
+
+Plugin 'joeytwiddle/vim-diff-traffic-lights-colors'
+
+" Plugin 'jeetsukumaran/vim-buffergator'
+
+" plugin from http://vim-scripts.org/vim/scripts.html
+" Plugin 'L9'
+
+" Plugin 'git://git.wincent.com/command-t.git'
+" Plugin 'wincent/command-t'
+
+" git repos on your local machine (i.e. when working on your own plugin)
+" Plugin 'file:///home/gmarik/path/to/plugin'
+
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+" Plugin 'ascenator/L9', {'name': 'newL9'}
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Sets how many lines of history VIM has to remember
+set history=700
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = ","
+let g:mapleader = ","
+
+" Fast saving
+nmap <leader>w :w!<cr>
+nmap <leader>c :copen<cr>
+
+" Set 7 lines to the curors - when moving vertical..
+set so=2
+
+set wildmenu "Turn on WiLd menu
+
+set ruler "Always show current position
+
+set cmdheight=1 "The commandbar height
+
+set hid "Change buffer - without saving
+
+" Set backspace config
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+set ignorecase "Ignore case when searching
+set smartcase
+
+set hlsearch "Highlight search things
+
+set incsearch "Make search act like search in modern browsers
+
+set magic "Set magic on, for regular expressions
+
+set showmatch "Show matching bracets when text indicator is over them
+set mat=2 "How many tenths of a second to blink
+
+" No sound on errors
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+
+syntax enable "Enable syntax hl
+
+set encoding=utf8
+try
+    lang en_US
+catch
+endtry
+
+set ffs=unix,dos,mac "Default file types
+
+" Turn backup off, since most stuff is in SVN, git anyway...
+set nobackup
+set nowb
+set noswapfile
+
+"Persistent undo
+set undodir=~/.vim_runtime/undodir
+set undofile
+
+set noexpandtab
+set shiftwidth=8
+set tabstop=8
+set smarttab
+
+set lbr
+set tw=500
+
+set ai "Auto indent
+set si "Smart indet
+set nowrap "Wrap lines
+
+" Close the current buffer
+map <leader>bd :bd<cr>
+
+" Close all the buffers
+map <leader>ba :1,300 bd!<cr>
+
+" Use the arrows to something usefull
+map <right> :tabn<cr>
+map <left> :tabp<cr>
+
+" Tab configuration
+" map <leader>tn :tabnew<cr>
+" map <leader>te :tabedit
+" map <leader>tc :tabclose<cr>
+" map <leader>tm :tabmove
+"
+:unmap tn
+:map tn :tabnew <C-R>* <CR> 
+
+" When pressing <leader>cd switch to the directory of the open buffer
+map <leader>cd :cd %:p:h<cr>
+
+" Always hide the statusline
+set laststatus=2
+
+" Remove the Windows ^M - when the encodings gets messed up
+noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+
+set listchars=tab:>-
+set nolist
+
+" highlight word on double click
+" http://stackoverflow.com/questions/6876850/how-to-highlight-all-occurrences-of-a-word-in-vim-on-double-clicking
+" map <2-LeftMouse> #*
+" imap <2-LeftMouse> <c-o>*
+
+" https://stackoverflow.com/questions/6876850/how-to-highlight-all-occurrences-of-a-word-in-vim-on-double-clicking
+nnoremap <silent> <2-LeftMouse> :let @/='\V\<'.escape(expand('<cword>'), '\').'\>'<cr>:set hls<cr>
+" nnoremap <silent> <LeftMouse> <LeftMouse>:let @/='\V\<'.escape(expand('<cword>'), '\').'\>'<cr>:set hls<cr>
+
+map <F9> :set list!<CR>
+
+set printoptions=paper:A4
+
+set number
+
+set mouse=a
+nmap <leader>va :set mouse=a<cr>
+nmap <leader>vv :set mouse=v<cr>
+
+" nnoremap <silent> <Esc><Esc> :qa<CR>
+" nnoremap <silent> <Esc><Esc><Esc> :qa!<CR>
+
+set guifont=Ubuntu\ Mono\ 15
+" set guioptions+=b " Horizontal scripts bar
+" set guioptions=agilrv " Default agimrLtT
+set guioptions=agimrLtT
+colorscheme default
+
+set linespace=0
+set nospell
+
+map <C-n> :NERDTreeToggle<CR>
+" NERDTress File highlighting
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+ exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+ exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+endfunction
+
+call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
+call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
+call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
+call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
+call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
+
+" set colorcolumn=80
+highlight ColorColumn ctermbg=darkgray
+
+"Here are some settings for diff mode, the colors are troublesome.
+if &diff
+    set diffopt=filler,iwhite,icase,context:6
+    set guifont=Ubuntu\ Mono\ 12
+    colorscheme peachpuff
+endif
+
+let NERDTreeShowHidden=1
+
+if exists(":Tabularize")
+    nmap <leader>a= :Tabularize /=<cr>
+    vmap <leader>a= :Tabularize /=<cr>
+    nmap <leader>a: :Tabularize /:\zs<cr>
+    vmap <leader>a: :Tabularize /:\zs<cr>
+endif
+
+" https://gist.github.com/tpope/287147
+" tpope/cucumbertables.vim
+" http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+
+function! s:align()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
+
+" https://github.com/vim-scripts/vim-auto-save
+let g:auto_save = 1
+let g:auto_save_no_updatetime = 1
+let g:auto_save_silent = 0
+let g:auto_save_in_insert_mode = 0
+au FocusLost * :wa
+set autowriteall
+
+set cursorline   " highlight current line
+" set cursorcolumn " highlight current column
+
+" autocmd CursorMoved * exe printf('match IncSearch /\V\c\<%s\>/', escape(expand('<cword>'), '/\'))
+" autocmd CursorHold * exe printf('match IncSearch /\V\c\<%s\>/', escape(expand('<cword>'), '/\'))
+set updatetime=1000
+" 'ignorecase' does not apply, use |/\c| in the pattern to
+" ignore case.  Otherwise case is not ignored.
+
+" FZF keys
+map <leader>f :Files .<CR>
+map <leader>b :Unite buffer<CR>
+
+nmap <leader>g :Ack <c-r>=expand("<cword>")<cr><CR>
+nmap <leader>a :Ag <c-r>=expand("<cword>")<cr><CR>
+
+nmap <F8> :TagbarToggle<CR>
+
+nmap <F6> :set wrap!<cr>
+
+let g:tagbar_type_cpp = {
+    \ 'kinds' : [
+        \ 'f:functions'
+    \ ]
+\ }
+
+" http://vim.wikia.com/wiki/Saving_a_file
+nmap <c-s> :w<CR>
+vmap <c-s> <Esc><c-s>gv
+imap <c-s> <Esc><c-s>
+
+" Highlight sensible words
+" https://stackoverflow.com/questions/6577579/task-tags-in-vim
+if has("autocmd")
+	" Highlight TODO, FIXME, NOTE, etc.
+	if v:version > 701
+		autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|XXX\|BUG\|HACK\)')
+		autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
+	endif
+endif
+
+map <F5> :!cscope -Rbk<CR>:cs reset<CR><CR>
+
+" Map Control-Backspace to delete previous word
+" http://vim.wikia.com/wiki/Map_Ctrl-Backspace_to_delete_previous_word
+imap <C-BS> <C-W>
+
+" ******************************************************************************
+" Copy-Paste like in main stream applications
+"
+" http://vim.wikia.com/wiki/Cut/copy_and_paste_using_visual_selection
+map <C-c> "+y<CR>
+
+" Select all text
+nmap <C-a> ggVG
+
+" ******************************************************************************
+" Copy file name, file path to system clipboard
+" https://stackoverflow.com/questions/916875/yank-file-name-path-of-current-buffer-in-vim
+
+" copy current file name (relative/absolute) to system clipboard (Linux version)
+" using `@+` register and to vim clipboard using `@"` register
+
+if has("gui_gtk") || has("gui_gtk2") || has("gui_gnome") || has("unix")
+    " relative path (src/foo.txt)
+    nnoremap <leader>cf :let @+=expand("%")<CR>:let @"=expand("%")<CR>
+
+    " absolute path (/something/src/foo.txt)
+    nnoremap <leader>cF :let @+=expand("%:p")<CR>
+
+    " filename (foo.txt)
+    nnoremap <leader>ct :let @+=expand("%:t")<CR>
+
+    " directory name (/something/src)
+    nnoremap <leader>ch :let @+=expand("%:p:h")<CR>
+endif
