@@ -1,0 +1,1092 @@
+barak@barak-OptiPlex-7020:~/Desktop/keepalived$ cat sample_config_mrv.txt
+hostname DUT-1
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.1/24
+ports 1,13-14
+!
+ip route 0.0.0.0/0 192.168.133.2
+
+
+::::::::::::::::::DUT2:::::::::::::::
+
+hostname DUT-2
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.1/24
+ports 32
+management
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.2/24
+ports 33
+vrrp
+  enable
+  virtual-router 1
+   virtual-ip 192.168.133.2
+   enable
+!
+router ospf
+ospf router-id 2.2.2.2
+redistribute connected
+network 192.168.136.0/24 area 0
+
+::::::::::::::::::DUT3:::::::::::::::
+
+hostname DUT-3
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.2/24
+ports 12
+management
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.3/24
+ports 13
+vrrp
+  enable
+  virtual-router 1
+   virtual-ip 192.168.133.2
+   enable
+!
+router ospf
+ospf router-id 1.1.1.1
+redistribute connected
+network 192.168.136.0/24 area 0
+
+::::::::::::::::::DUT4:::::::::::::::
+
+
+hostname DUT-4
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.3/24
+ports 1-6
+!
+router ospf
+ospf router-id 3.3.3.3
+redistribute connected
+network 192.168.136.0/24 area 0
+
+:::::::::::::::::::DUT1::::::::::::::::::::::::
+rsyslog 194.90.136.192
+!
+line vty
+ no exec-timeout global
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.1/24
+ ports 32
+management ssh 0.0.0.0/0
+ management telnet 0.0.0.0/0
+ management tftp 0.0.0.0/0
+ management snmp 0.0.0.0/0
+!
+interface vlan vif2
+tag 20
+ ip 192.168.133.2/24
+ ports 33
+vrrp
+  enable
+  virtual-router 1
+   priority 200
+   track-interface vif1
+   virtual-ip 192.168.133.5
+   enable
+no multicast
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 2.2.2.2
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+
+:::::::::::::::::::DUT2::::::::::::::::::::::::
+
+!
+line vty
+ no exec-timeout global
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.2/24
+ ports 12
+management ssh 0.0.0.0/0
+ management telnet 0.0.0.0/0
+ management tftp 0.0.0.0/0
+ management snmp 0.0.0.0/0
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.3/24
+ ports 13
+vrrp
+  enable
+  virtual-router 1
+   track-interface vif1
+   virtual-ip 192.168.133.5
+   enable
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 1.1.1.1
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+OS940#
+:::::::::::::::::::DUT4::::::::::::::::::::::::
+
+OS940# wr t
+Building configuration...
+
+Current configuration:
+! version main-DK05-03-14-1141
+!
+rsyslog 194.90.136.192
+!
+line vty
+ no exec-timeout global
+!
+! Interfaces configuration
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.1/24
+ ports 1,13-14
+!
+ip route 0.0.0.0/0 192.168.133.5
+!
+OS940#
+
+:::::::::::::::::::DUT6::::::::::::::::::::::::
+
+
+
+Current configuration:
+! version main-D05-03-14-1137
+!
+rsyslog 194.90.136.192
+!
+line vty
+ no exec-timeout global
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.3/24
+ ports 1-6
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 3.3.3.3
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+OS912C#
+
+::::::::::::::::::::::::::::::::::::::::::DUT1::::::::::::::::::::::
+
+
+OS9244(config-ip-sla)# wr t
+Building configuration...
+
+Current configuration:
+! version main-DD05-03-14-1143
+!
+rsyslog 194.90.136.192
+!
+line vty
+ no exec-timeout global
+!
+! Access-list extended configuration
+!
+access-list extended VRRP
+default policy permit
+rule 10
+  action redirect port fpga
+  protocol eq icmp
+  source-ip eq 192.168.136.10/32
+!
+! Port acl-binding-mode configuration
+port acl-binding-mode by-port 32-33
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.1/24
+ ports 32
+ip sla
+fpga-membership
+management ssh 0.0.0.0/0
+ management telnet 0.0.0.0/0
+ management tftp 0.0.0.0/0
+ management snmp 0.0.0.0/0
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.2/24
+ ports 33
+vrrp
+  enable
+  virtual-router 1
+   priority 200
+   track-interface vif1
+   track-ip VRRP *
+   virtual-ip 192.168.133.5
+   enable
+!
+! ACL to port bindings
+port access-group VRRP 32
+!
+ip sla monitor VRRP *
+dest-ip  192.168.136.10
+burst-number unlimited
+burst-interval 5
+trap packetLoss
+notify packetLoss
+threshold packet-loss rise 98 fall 2
+enable
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 2.2.2.2
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+OS9244(config-ip-sla)#
+
+::::::::::::::::::::::::::::::::::::::::::DUT2 ::::::::::::::::::::::
+
+
+
+line vty
+ no exec-timeout global
+!
+! Access-list extended configuration
+!
+access-list extended VRRP
+default policy permit
+rule 10
+  action redirect port fpga
+  source-ip eq 192.168.136.10/32
+  no enable
+!
+! Port acl-binding-mode configuration
+port acl-binding-mode by-port 12-13
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.2/24
+ ports 12
+ip sla
+fpga-membership
+management ssh 0.0.0.0/0
+ management telnet 0.0.0.0/0
+ management tftp 0.0.0.0/0
+ management snmp 0.0.0.0/0
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.3/24
+ ports 13
+vrrp
+  enable
+  virtual-router 1
+   track-interface vif1
+   track-ip VRRP *
+   virtual-ip 192.168.133.5
+   enable
+!
+! ACL to port bindings
+port access-group VRRP 12
+!
+ip sla monitor VRRP *
+dest-ip  192.168.136.10
+burst-number unlimited
+burst-interval 5
+trap packetLoss
+notify packetLoss
+threshold packet-loss rise 98 fall 2
+enable
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 1.1.1.1
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+
+
+
+:::::::::::::::::DUT6::::::::::::::::::::::
+
+Building configuration...
+
+Current configuration:
+! version main-D05-03-14-1137
+!
+rsyslog 194.90.136.192
+!
+line vty
+ no exec-timeout global
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.3/24
+ ports 1-6
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 3.3.3.3
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+
+
+:::::::::::::::::::::::::::::DUT8:::::::::::::::
+
+
+!
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.10/24
+ ports 1-3
+!
+OS906C#
+
+
+::::::::::::::::::DUT1:::::::::::::::
+hostname DUT-1
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.1/24
+ports 1-3
+!
+ip route 0.0.0.0/0 192.168.133.2
+
+
+::::::::::::::::::DUT2:::::::::::::::
+
+hostname DUT-2
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.1/24
+ports 1
+management
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.2/24
+ports 2
+vrrp
+  enable
+  virtual-router 1
+   virtual-ip 192.168.133.2
+   enable
+!
+router ospf
+ospf router-id 2.2.2.2
+redistribute connected
+network 192.168.136.0/24 area 0
+
+::::::::::::::::::DUT3:::::::::::::::
+
+hostname DUT-3
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.2/24
+ports 1
+management
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.3/24
+ports 2
+vrrp
+  enable
+  virtual-router 1
+   virtual-ip 192.168.133.2
+   enable
+!
+router ospf
+ospf router-id 1.1.1.1
+redistribute connected
+network 192.168.136.0/24 area 0
+
+::::::::::::::::::DUT4:::::::::::::::
+
+
+hostname DUT-4
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.3/24
+ports 1-3
+!
+router ospf
+ospf router-id 3.3.3.3
+redistribute connected
+network 192.168.136.0/24 area 0
+
+::::::::::::::::::::::::::DUT1::::::::::::::::::::
+
+
+Current configuration:
+! version 2_1_5C
+!
+rsyslog 100.51.4.223
+!
+hostname R08001ANEW
+!
+enable password 8 VhNkeZkvsLxPA
+service advanced-vty
+service password-encryption
+!
+port trunk t1 1-2
+port trunk t1 lacp
+port trunk t2 3-4
+port trunk t2 lacp
+!
+port description 5 sw08001hnew 1/28
+port description 9 R08001BNEW/9 L2
+port description 10 R08001BNEW/10 L3
+port description 12 RMI1 G2/5
+port description t1 sw08001anew 1/25-26
+!
+port tag-outbound-mode tagged 5-6,9,t1,t2
+!interface vlan vif7
+tag 7
+ip 11.1.0.1/24
+ports 7
+management telnet 0.0.0.0/0
+!
+interface vlan vif10
+tag 10
+ip 10.178.252.173/30
+ports 10
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif11
+tag 11
+ports 11
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif12
+tag 12
+ip 10.178.2.170/24
+ports 12
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif111
+tag 111
+ip 10.179.4.1/24
+ports 5-6,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 10
+   virtual-ip 10.179.4.251
+   enable
+!
+interface vlan vif112
+description vlan TELECAMERE,IMPIANTI
+tag 112
+ip 10.179.5.1/25
+ip 10.179.5.130/25
+ports 5-6,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 20
+   virtual-ip 10.179.5.1
+   enable
+  virtual-router 21
+   priority 254
+   virtual-ip 10.179.5.129
+   enable
+!
+interface vlan vif113
+description vlan VOIP
+tag 113
+ip 10.179.6.1/27
+ports 5-6,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 30
+   virtual-ip 10.179.6.1
+   enable
+!
+interface vlan vif114
+description vlan PC,PBLU tag 114
+tag 114
+ip 10.179.7.1/25
+ip 10.179.7.130/25
+ports 5,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 40
+   virtual-ip 10.179.7.1
+   enable
+  virtual-router 41
+   priority 254
+   virtual-ip 10.179.7.129
+   enable
+!
+interface vlan vif115
+description vlan MGTRETE
+tag 115
+ip 10.179.6.225/27
+ports 5-6,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 50
+   virtual-ip 10.179.6.225
+   enable
+!
+interface dummy dummy1
+ip 10.178.254.39/32
+!
+ntp
+server 100.51.3.85    prefer
+server 100.52.4.161
+server 100.61.1.185
+server 100.32.1.170
+server 100.33.2.214
+enable
+!
+router ospf 172
+ospf router-id 10.178.254.39
+auto-cost reference-bandwidth 40000
+redistribute connected
+network 10.178.252.0 0.0.0.255 area 21
+network 10.178.254.0 0.0.0.255 area 21
+area 21 nssa
+!
+tacacs-server key 1q2w3e4r5t6y7u8i9o0p
+tacacs-server host 100.1.1.7
+tacacs-server host 100.51.1.9
+!
+aaa
+authentication login default tacacs+ local
+!
+snmp
+contact sricciardi@autostrade.it
+location Milano Nord Stazione (ANEW)
+community 10 read-only 100.0.0.0/8 TCPIP
+trapsess 100.51.1.12 1 TCPIP
+link-trap-parameters all
+!
+spanning-tree
+port 10-12 non-stp
+enable
+!
+
+::::::::::::::::::::::::::DUT2::::::::::::::::::::
+
+
+Current configuration:
+! version 2_1_5C
+!
+rsyslog 100.51.4.223
+!
+hostname R08001BNEW
+!
+enable password 8 a4xDYO3kfIPC.
+service advanced-vty
+service password-encryption
+!
+port trunk t1 1-2
+port trunk t1 lacp
+port trunk t2 3-4
+port trunk t2 lacp
+!
+port description 5 sw08001hnew 1/27
+port description 9 R08001ANEW/9 L2
+port description 10 R08001ANEW/10 L3
+port description 11 R08002BNEW/12 LAINATE
+port description t1 sw08001bnew
+port description t2 sw08001fnew
+port state disable 11
+!
+port tag-outbound-mode tagged 5,9,t1,t2
+!
+interface vlan vif10
+tag 10
+ip 10.178.252.174/30
+ports 10
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif11
+tag 11
+ip 10.178.252.177/30
+ports 11
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif12
+tag 12
+ports 12
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif111
+tag 111
+ip 10.179.4.2/24
+ports 5,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 10
+   virtual-ip 10.179.4.251
+   enable
+!
+interface vlan vif112
+description vlan TELECAMERE,IMPIANTI
+tag 112
+ip 10.179.5.2/25
+ip 10.179.5.131/25
+ports 9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 20
+   virtual-ip 10.179.5.1
+   enable
+  virtual-router 21
+   virtual-ip 10.179.5.129
+   enable
+!
+interface vlan vif113
+description vlan VOIP
+tag 113
+ip 10.179.6.2/27
+ports 9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 30
+   virtual-ip 10.179.6.1
+   enable
+!
+interface vlan vif114
+description vlan PC,PBLU
+tag 114
+ip 10.179.7.2/25
+ip 10.179.7.131/25
+ports 5,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 40
+   virtual-ip 10.179.7.1
+   enable
+  virtual-router 41
+   virtual-ip 10.179.7.129
+   enable
+!
+interface vlan vif115
+description vlan MGTRETE
+tag 115
+ip 10.179.6.226/27
+ports 5,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 50
+   virtual-ip 10.179.6.225
+   enable
+!
+interface dummy dummy1
+ip 10.178.254.40/32
+!
+ntp
+server 100.51.3.85    prefer
+server 100.52.4.161
+server 100.61.1.185
+server 100.32.1.170
+server 100.33.2.214
+enable
+!
+router ospf 172
+ospf router-id 10.178.254.40
+auto-cost reference-bandwidth 40000
+redistribute connected
+network 10.178.252.0 0.0.0.255 area 21
+network 10.178.254.0 0.0.0.255 area 21
+area 21 nssa
+!
+tacacs-server key 1q2w3e4r5t6y7u8i9o0p
+tacacs-server host 100.51.1.7
+tacacs-server host 100.51.1.9
+!
+aaa
+authentication login default tacacs+ local
+!
+snmp
+contact sricciardi@autostrade.it
+location Milano Nord Stazione (BNEW)
+community 10 read-only 100.0.0.0/8 TCPIP
+trapsess 100.51.1.12 1 TCPIP
+link-trap-parameters all
+!
+spanning-tree
+port 10-12 non-stp
+enable
+!
+R08001BNEW#
+
+::::::::::::::::::::::::::DUT3::::::::::::::::::::
+
+R08002BNEW# sh run
+Building configuration...
+
+Current configuration:
+! version 2_1_6C
+!
+rsyslog 100.51.4.223
+!
+hostname R08002BNEW
+!
+enable password 8 QKlq0XtUrdUDI
+service advanced-vty
+service password-encryption
+!
+clock timezone  ftp Rome
+!
+port trunk t1 1-2
+port trunk t1 lacp
+!
+port description 9 TAGGED
+port description 10 TO R08002ANEW/10
+port description 12 TO R08001BNEW/11(MilanoNord)
+port description t1 TAGGED
+!
+port tag-outbound-mode tagged 9,t1
+!
+interface vlan vif7
+tag 7
+ip 12.1.0.1/24
+ports 7
+management telnet 0.0.0.0/0
+!
+interface vlan vif10
+tag 10
+ip 10.178.252.234/30
+ports 10
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif11
+tag 11
+ports 11
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif12
+tag 12
+ip 10.178.252.178/30
+ports 12
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif111
+tag 111
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif112
+description vlan TELECAMERE,IMPIANTI
+tag 112
+ip 10.179.37.2/25
+ip 10.179.37.129/25
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 20
+   virtual-ip 10.179.37.1
+   enable
+  virtual-router 21
+   virtual-ip 10.179.37.129
+   enable
+!
+interface vlan vif113
+description vlan VOIP
+tag 113
+ip 10.179.38.2/27
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 30
+   virtual-ip 10.179.38.1
+   enable
+!
+interface vlan vif114
+description vlan PC,PBLU
+tag 114
+ip 10.179.39.2/25
+ip 10.179.39.129/25
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 40
+   virtual-ip 10.179.39.1
+   enable
+  virtual-router 41
+   virtual-ip 10.179.39.129
+   enable
+!
+interface vlan vif115
+description vlan MGTRETE
+tag 115
+ip 10.179.38.226/27
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 50
+   virtual-ip 10.179.38.225
+   enable
+!
+interface dummy dummy1
+ip 10.178.254.50/32
+!
+ntp
+server 100.51.3.85    prefer
+server 100.52.4.161
+server 100.61.1.185
+server 100.32.1.170
+server 100.33.2.214
+enable
+!
+router ospf 172
+ospf router-id 10.178.254.50
+auto-cost reference-bandwidth 40000
+redistribute connected
+network 10.178.252.0 0.0.0.255 area 21
+network 10.178.254.0 0.0.0.255 area 21
+area 21 nssa
+!
+tacacs-server key 1q2w3e4r5t6y7u8i9o0p
+tacacs-server host 100.51.1.7
+tacacs-server host 100.51.1.9
+!
+aaa
+authentication login default tacacs+ local
+!
+snmp
+contact sricciardi@autostrade.it
+location Lainate (BNEW)
+community 10 read-only 100.0.0.0/8 TCPIP
+trapsess 100.51.1.12 1 TCPIP
+link-trap-parameters all
+!
+spanning-tree
+port 10-12 non-stp
+enable
+!
+
+::::::::::::::::::::::::::DUT4::::::::::::::::::::
+
+
+Current configuration:
+! version 2_1_6C
+!
+rsyslog 100.51.4.223
+!
+hostname R08002ANEW
+!
+enable password 8 tLFYguNxyyAX2
+service advanced-vty
+service password-encryption
+!
+clock timezone  ftp Rome
+!
+port trunk t1 1-2
+port trunk t1 lacp
+!
+port description 9 TAGGED
+port description 10 TO R08002BNEW/10
+port description 11 TO R08006BNEW/12
+port description t1 TAGGED
+!
+port tag-outbound-mode tagged 9,t1
+!
+interface vlan vif10
+tag 10
+ip 10.178.252.233/30
+ports 10
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif11
+tag 11
+ip 10.178.2.171/24
+ports 11
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif12
+tag 12
+ports 12
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif111
+tag 111
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif112
+description vlan TELECAMERE,IMPIANTI
+tag 112
+ip 10.179.37.1/25
+ip 10.179.37.130/25
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 20
+   virtual-ip 10.179.37.1
+   enable
+  virtual-router 21
+   virtual-ip 10.179.37.129
+   enable
+!
+interface vlan vif113
+description vlan VOIP
+tag 113
+ip 10.179.38.1/27
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 30
+   virtual-ip 10.179.38.1
+   enable
+!
+interface vlan vif114
+description vlan PC,PBLU
+tag 114
+ip 10.179.39.1/25
+ip 10.179.39.130/25
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 40
+   virtual-ip 10.179.39.1
+   enable
+  virtual-router 41
+   virtual-ip 10.179.39.129
+   enable
+!
+interface vlan vif115
+description vlan MGTRETE
+tag 115
+ip 10.179.38.225/27
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 50
+   virtual-ip 10.179.38.225
+   enable
+!
+interface dummy dummy1
+ip 10.178.254.49/32
+!
+ntp
+server 100.51.3.85    prefer
+server 100.52.4.161
+server 100.61.1.185
+server 100.32.1.170
+server 100.33.2.214
+enable
+!
+router ospf 172
+ospf router-id 10.178.254.49
+auto-cost reference-bandwidth 40000
+redistribute connected
+network 10.178.252.0 0.0.0.255 area 21
+network 10.178.254.0 0.0.0.255 area 21
+network 10.179.36.0 0.0.3.255 area 21
+area 21 nssa
+!
+tacacs-server key 1q2w3e4r5t6y7u8i9o0p
+tacacs-server host 100.51.1.7
+tacacs-server host 100.51.1.9
+!
+aaa
+authentication login default tacacs+ local
+!
+snmp
+contact sricciardi@autostrade.it
+location Lainate (ANEW)
+community 10 read-only 100.0.0.0/8 TCPIP
+trapsess 100.51.1.12 1 TCPIP
+link-trap-parameters all
+!
+spanning-tree
+port 10-12 non-stp
+enable
+!

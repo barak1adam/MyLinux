@@ -1,0 +1,84 @@
+autnetication ?
+siggest keepalived more options: groups
+
+
+CLI mapping for Keepalived:
+===========================
+
+#configure
+interface vlan vif2
+tag 20
+ ip 192.168.133.2/24
+ ports 33
+vrrp
+  enable ------------------------------> add vrrp multicast MAC entry
+  virtual-router 1 --------------------> create a new node vrrp_instance name(STRING) {} node, name = "VI_+vif name + virtual router number"
+										 add "virtual_router_id 1"
+										 add default entries:
+										 -------------------
+										 initial STATE BACKUP
+										 advert_int 1
+   [priority 200] ------------------------> add "priority 200"
+   [track-interface vif1] ----------------> add "track_interface {			# Interfaces state we monitor
+											  <STRING>
+											  <STRING>
+											  <STRING> weight <INTEGER:-254..254>
+											  ...
+											}"
+   [track-priority <1-254>|default] ------> try "track_interface" weight (signed int). weight = (tracking pr - current pr).
+										  if "default" - w = 1;
+										  if track_interface not working, use tracking script.
+   virtual-ip 192.168.133.5 -------------> add "virtual_ipaddress {
+												  10.1.1.5/24 brd 10.1.1.255
+												}
+   [advertisement-interval <1-65535>] -----> add "advert_int <1-65535>". 
+   [preemption]----------------------------> add "nopreempt" only if preempt set to "off". otherwise, if not set, default is on.												
+   enable ----> make CLI sanity, add VRID mac entry !
+
+
+make sure of CLI sanity: (steps 6 to 8 in UM)
+if owner, set priority by default to 255
+if owner, don't allow priority configuration
+if not owner, set priority by default to 100
+if not owner, allow priority configuration.
+
+if owner track-interface and track-priority are not allowed.
+
+upon "enalbe", if CLI sanity is OK:
+add entries to instance: initial state BACKUP, default authentication.
+
+if (tp > cp) then w = (tp - cp);
+if (tp < cp) then w = (tp - cp); // w  is signed int.
+
+
+
+! Configuration File for keepalived
+
+ 
+
+vrrp_instance VI_1 {
+
+state BACKUP
+
+interface vif10
+
+virtual_router_id 1
+
+priority 50
+
+authentication {
+
+  auth_type PASS
+
+  auth_pass password
+
+}
+
+virtual_ipaddress {
+
+  10.1.1.5/24 brd 10.1.1.255 dev vif10
+
+}
+
+}
+

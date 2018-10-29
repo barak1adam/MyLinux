@@ -1,3 +1,4 @@
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -223,12 +224,18 @@ function gc
 
 function gh
 {
-  find $PWD \( -name "*.h" \) -print -follow  | xargs grep --color=auto --color=always -H -n -e "$1" | sed 's/:/ /g'
+  find $PWD \( -name "*.h" \) -print -follow  | xargs grep --color=auto --color=always -H -n -e "$1" | sed 's/:/ /g':q
+
 }
 
 function gsh
 {
   find $PWD \( -name "*.sh" \) -o \( -name "*.py" \)  | xargs grep --color=auto --color=always -H -e "$1" | sed 's/:/ /g'
+}
+
+function gas
+{
+  find $PWD \( -name "*.S" \) -print -follow  | xargs grep --color=auto --color=always -H -n -e "$1" | sed 's/:/ /g'
 }
 
 function c()
@@ -238,6 +245,27 @@ ls --color=auto
 pwd
 }
 export LC_ALL="en_US.UTF-8"
+function buildone {
+        ./buildone.sh $1 $2
+}
+function pkginstall {
+        ./pkginstall.sh $1 $2
+}
+
+function setup {
+	./setup.sh $1 $2 $3
+}
+
+
+alias setsource='source config && export SCRIPTS_DIR=$SCRIPTS_DIR'
+alias cdbuild='source $SCRIPTS_DIR/config && cd $BUILD_DIR'
+alias cdscript='source $SCRIPTS_DIR/config && cd $SCRIPTS_DIR'
+alias cddst='source $SCRIPTS_DIR/config && cd $DST_DIR'
+alias cdkern='source $SCRIPTS_DIR/config && cd $KERNEL_DIR'
+alias cdbase='source $SCRIPTS_DIR/config && cd $BASE_DIR'
+alias cdplastic='cd ~/work/plastic/optiswitch/'
+
+
 function buildone {
         ./buildone.sh $1 $2
 }

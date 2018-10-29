@@ -1,0 +1,260 @@
+2. VRRP configuration
+
+This block is divided in 3 sub-block :
+
+	* VRRP scripts
+	* VRRP synchronization group
+	* VRRP gratuitous ARP/NA intervals
+	* VRRP instance
+
+	2.1. VRRP scripts
+
+	The configuration block looks like :
+
+vrrp_script <STRING> {          # VRRP script declaration
+    script <QUOTED_STRING>      # script to run periodically
+    interval <INTEGER>          # run the script this every seconds
+    timeout <INTEGER>           # script considered failed after 'timeout' seconds
+    weight <INTEGER:-254..254>  # adjust priority by this weight
+    fall <INTEGER>              # required number of failures for KO switch
+    rise <INTEGER>              # required number of successes for OK switch
+    user USERNAME [GROUPNAME]	# specify user/group to run script under
+    init_fail                   # assume script initially is in failed state
+}
+
+The script will be executed periodically, every <interval> seconds. Its exit
+code will be recorded for all VRRP instances which monitor it.
+Note that the script will only be executed if at least one VRRP instance
+monitors.
+
+The default weight equals 0, which means that any VRRP instance monitoring
+the script will transition to the fault state after <fall> consecutive failures
+of the script. After that, <rise> consecutive successes will cause VRRP instances to
+leave the fault state, unless they are also in the fault state due to other scripts
+or interfaces that they are tracking.
+
+A positive weight means that <rise> successes will add <weight> to the priority of all
+VRRP instances which monitor it. On the opposite, a negative weight will be subtracted
+from the initial priority in case of <fall> failures.
+
+	2.2. VRRP synchronization group
+
+	The configuration block looks like :
+
+vrrp_sync_group <STRING> {	# VRRP sync group declaration
+    group {			# group of instance to sync together
+      <STRING>			#   a
+      <STRING>			#       set
+      ...			#             of VRRP_Instance string
+    }
+
+				# The username and groupname specify the user and group
+				# under which the scripts should be run. If username is
+				# specified, the group defaults to the group of the user.
+				# If username is not specified, they default to the
+				# global script_user and script_group
+    notify_master <STRING>|<QUOTED-STRING> [username [groupname]]
+				# Script to run during MASTER transit
+    notify_backup <STRING>|<QUOTED-STRING> [username [groupname]]
+				# Script to run during BACKUP transit
+    notify_fault <STRING>|<QUOTED-STRING> [username [groupname]]
+				# Script to run during FAULT transit
+    notify <STRING>|<QUOTED-STRING> [username [groupname]]
+				# Script to run during ANY state transit (1)
+    smtp_alert		 # Send email notification during state transit
+}
+
+(1) The "notify" script is called AFTER the corresponding notify_* script has
+    been called, and is given exactly 4 arguments (the whole string is interpreted
+    as a literal filename so don't add parameters!):
+
+    $1 = A string indicating whether it's a "GROUP" or an "INSTANCE"
+    $2 = The name of said group or instance
+    $3 = The state it's transitioning to ("MASTER", "BACKUP" or "FAULT")
+    $4 = The priority value
+
+    $1 and $3 are ALWAYS sent in uppercase, and the possible strings sent are the
+    same ones listed above ("GROUP"/"INSTANCE", "MASTER"/"BACKUP"/"FAULT").
+
+Important: for a SYNC group to run reliably, it is vital that all instances in
+	   the group are MASTER or that they are all either BACKUP or FAULT. A
+	   situation with half instances having higher priority on machine A
+	   half others with higher priority on machine B will lead to constant
+	   re-elections. For this reason, when instances are grouped, their
+	   tracking weights are automatically set to zero, in order to avoid
+	   inconsistent priorities across instances.
+
+	2.3. VRRP gratuitous ARP/NA intervals
+
+	This section allows the setting of delays between sending gratuitous ARPs
+	and unsolicited neighbour advertisements. This is intended for when an
+	upstream switch is unable to handle being flooded with ARPs/NAs.
+
+	Use interface when the limits apply on the single physical interface.
+	Use interfaces when a group of interfaces are linked to the same switch
+	and the limits apply to the switch as a whole.
+
+	Note: Only one of interface or interfaces should be used per block.
+
+garp_group {
+    garp_interval <DECIMAL>		   # Sets the interval between Gratuitous ARP
+					   #   (in seconds, resolution microseconds)
+    gna_interval <DECIMAL>		   # Sets the default interval between unsolicited NA
+					   #   (in seconds, resolution microseconds)
+    interface <STRING>			   # The physical interface to which the intervals apply
+    interfaces {			   # A list of interfaces across which the delays are
+	<STRING>			   #   aggregated.
+	<STRING>
+	...
+    }
+}
+
+	If the global vrrp_garp_interval and/or vrrp_gna_interval are set, any
+	interfaces that aren't specified in a garp_group will inherit the global
+	settings.
+
+	2.4. VRRP instance
+
+	The configuration block looks like :
+
+vrrp_instance <STRING> {		# VRRP instance declaration
+    use_vmac [<NAME>]			# Use VRRP Virtual MAC, optional NAME of interface
+    version <INTEGER:2..3>              # VRRP version to use
+    vmac_xmit_base			# Send/Recv VRRP messages from base
+					#  interface instead of VMAC interface
+    native_ipv6				# Force instance to use IPv6
+					#  when using mixed IPv4&IPv6 conf
+    state MASTER|BACKUP			# Start-up default state
+    interface <STRING>			# Binding interface
+    accept				# Allow a non address-owner to process packets
+					# destined to VIPs and eVIPs. This is the default
+					# unless strict mode is set.
+    no_accept				# Set non-accept mode (default if strict mode)
+					#
+    track_interface {			# Interfaces state we monitor
+      <STRING>
+      <STRING>
+      <STRING> weight <INTEGER:-254..254>
+      ...
+    }
+    track_script {                     # Scripts state we monitor
+      <STRING>
+      <STRING> weight <INTEGER:-254..254>
+      ...
+    }
+    dont_track_primary                  # (default unset) ignore VRRP interface faults.
+                                        #  useful for cross-connect VRRP config.
+    mcast_src_ip <IP ADDRESS>		# src_ip to use into the VRRP packets
+    unicast_src_ip <IP ADDRESS>		# src_ip to use into the VRRP packets (alias to mcast_src_ip)
+    unicast_peer {			# Do not use multicast, instead send VRRP
+      <IP ADDRESS>			#  adverts to following list of ip address
+      ...				#  in unicast design fashion
+    }
+
+    # The following garp parameters take their defaults from the global config for vrrp_garp_...
+    # See their descriptions for the meaning of the parameters.
+    garp_master_delay <INTEGER>
+    garp_master_repeat <INTEGER>
+    garp_lower_priority_delay <INTEGER>
+    garp_lower_priority_repeat <INTEGER>
+    garp_master_refresh <INTEGER>
+    garp_master_refresh_repeat <INTEGER>
+
+    virtual_router_id <INTEGER-1..255>	# VRRP VRID
+    priority <INTEGER-1..255>		# VRRP PRIO
+    advert_int <FLOAT>			# VRRP Advert interval (use default)
+
+    lower_prio_no_advert		# If a lower priority advert is received, don't
+					# don't send another advert. This causes adherence
+					# to the RFCs (defaults to global
+					# vrrp_lower_priority_dont_send_advert).
+
+    # Note: authentication was removed from the VRRPv2 specification by RFC3768 in 2004.
+    #   Use of this option is non-compliant and can cause problems; avoid using if possible,
+    #   except when using unicast, when it can be helpful.
+    authentication {			# Authentication block
+        auth_type PASS|AH		# Simple password or IPSEC AH
+        auth_pass <STRING>		# Password string (up to 8 characters)
+    }
+    virtual_ipaddress {			# VRRP IP addres block
+        <IP ADDRESS>/<MASK> brd <IP ADDRESS> dev <STRING> scope <SCOPE> label <LABEL>
+        <IP ADDRESS>/<MASK> brd <IP ADDRESS> dev <STRING> scope <SCOPE> label <LABEL>
+        ...
+    }
+    virtual_ipaddress_excluded {       	# VRRP IP excluded from VRRP
+        <IP ADDRESS>/<MASK> brd <IP ADDRESS> dev <STRING> scope <SCOPE>	# packets
+        <IP ADDRESS>/<MASK> brd <IP ADDRESS> dev <STRING> scope <SCOPE>
+        ...
+    }
+    prompte_secondaries			# Set the promote_secondaries flag on the interface to stop other
+					# addresses in the same CIDR being removed when 1 of them is removed
+    virtual_routes {			# VRRP virtual routes
+					# The syntax is the same as static_routes
+    }
+    virtual_rules {			# VRRP virtual rules
+					# The syntax is the same as static_rules
+    }
+
+    nopreempt					# Override VRRP RFC preemption default
+    preempt_delay				# Seconds after startup or seeing a lower priority master
+						#  until preemption. 0 (default) to 1,000
+    strict_mode [<BOOL>]			# See description of global vrrp_strict
+						# If vrrp_strict is not specified, it takes the value of vrrp_strict
+						# If strict_mode without a parameter is specified, it defaults to on
+    debug <LEVEL>				# Debug level. LEVEL is a number in the range 0 to 4.
+    notify_master <STRING>|<QUOTED-STRING> [username [groupname]]
+						# Same as vrrp_sync_group
+    notify_backup <STRING>|<QUOTED-STRING> [username [groupname]]
+						# Same as vrrp_sync_group
+    notify_fault <STRING>|<QUOTED-STRING> [username [groupname]]
+						# Same as vrrp_sync_group
+    notify_stop <STRING>|<QUOTED-STRING> [username [groupname]]
+						# Script to launch when stopping vrrp
+    notify <STRING>|<QUOTED-STRING> [username [groupname]]
+						# Same as vrrp_sync_group
+    smtp_alert					# Same as vrrp_sync_group
+}
+
+SCOPE can take the following values :
+	* site
+	* link
+	* host
+	* nowhere
+	* global
+
+LABEL is optional and creates a name for the alias. For compatibility with
+"ifconfig", it should be of the form <realdev>:<anytext>, for example
+eth0:1 for an alias on eth0.
+
+METRIC is optional and specify a route priority.
+
+When a weight is specified in track_interface, instead of setting the vrrp
+instance to the FAULT state in case of failure, its priority will be
+increased by the weight when the interface is up (for positive weights),
+or decreased by the weight's absolute value when the interface is down
+(for negative weights). The weight must be comprised between -254 and +254
+inclusive. 0 is the default behaviour which means that a failure implies a
+FAULT state. The common practice is to use positive weights to count a
+limited number of good services so that the server with the highest count
+becomes master. Negative weights are better to count unexpected failures
+among a high number of interfaces, as it will not saturate even with high
+number of interfaces.
+
+The same principle can be applied to track_script entries, except that an
+unspecified weight means that the default weight declared in the script
+will be used (which itself defaults to 0).
+
+
+3. LVS configuration
+
+This block is divided in 2 sub-block :
+
+	* Virtual server group
+	* Virtual server
+
+	3.1. Virtual server group
+
+	The configuration block looks like :
+
+
+

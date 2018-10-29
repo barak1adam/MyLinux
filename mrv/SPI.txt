@@ -1,0 +1,139 @@
+SPI
+
+cotroller driver:
+================
+it is an SPI master implementation
+use an SPI bus for low level queueuing of messages to SPI devices (slaves)
+is represented by the struct spi_master
+an example is spi-orion.c
+
+protocol driver:
+================
+one level on top of the controller driver
+uses the controller driver to send messages to a specific device (slave)
+is represented by the struct spi_driver
+an example is spidev.c, audio interfaces, touchscreen interfaces, flash devices, etc... all sharing the same controller.
+
+
+most SOCs have several SPI-capable controllers, and only the ones actually usable on a given board should normally be set up and registered.
+linux platform bus is a general bus used to connect the SPI master (spi_master) to the specific controller driver.
+
+Initiate the correct controller with its data is done by linux platform bus infrastructure:
+===========================================================================================
+
+SPI controller’s will usually be platform devices, 
+and the controller may need some platform_data in order to operate properly.
+
+Initiating the correct controller is done my matching of a platform device (including it platform specific data and
+a specific name) and the driver name.
+-- so first we need to register the SPI controller platform device with linux platform bus. 
+(done on board init file if DTS is not used, or by DTS if used)
+
+On the driver’s side, the registration with the platform bus is achieved by
+populating a structure platform_driver and passing it to the macro module_platform_driver() as argument.
+--so second write in the driver the macro module_platform_driver()
+
+The platform bus simply compares the driver.name member against the name of each device (as defined in the platform_device data structure);
+if they are the same the device matches the platform driver, and this driver probe function is called with this device data.
+
+usually the probe function of the controller includes:
+------------------------------------------------------
+.
+.
+.
+Set up the struct spi_master and register the master controller driver with the SPI core: spi_register_master(master);
+
+
+Initiate the correct protocol driver for a specific device:
+===========================================================
+SPI Protocol driver’s deal with the spi chip attached to the SPI controller.
+These drivers are responsible to send/receive to/from the device.
+These device drivers expose user-level API (like spidev does) or kernel-level API that can be used by another subsystem.
+
+Initiating the correct protocol driver is done again by matching of a platform device (including its specific data and
+a specific name) and the driver name.
+
+-- so first we need to register the SPI device along with its data. 
+(done on board init file if DTS is not used, or by DTS if used)
+
+devices data array of type spi_board_info is initialzed with on-board devices specific data.
+this array is then registered for a specific SPI bus using the spi_register_board_info function:
+static struct spi_board_info mysoc_spi_devices [] __initdata = {
+8 {
+9 .modalias = “ads7846”,
+10 .platform_data = &ads_info,
+11 .mode = SPI_MODE_0,
+12 .irq = GPIO_IRQ(31),
+13 .max_speed_hz = 120000,
+14 .bus_num = 1,
+15 .chip_select = 0,
+16 }
+18 static void __init mysoc_platform_init ( void )
+19 {
+20 …
+21 /* Register SPI devices on bus #0 */
+22 spi_register_board_info (mysoc_spi_devices, ARRAY_SIZE ( mysoc_spi_devices ));
+23 …
+24 }
+
+During boot the kernel looks for any SPI driver that has registered a matching device name(for example “ads7846”).
+Upon finding such a driver, the kernel invokes its probe() function passing a pointer to the device as a parameter. This process is called probing.
+
+in the drive probe function:
+---------------------------
+Allocate memory for spi_transfer and spi_message data structure.
+Load the device settings.
+Configure the device hardware.
+Create the per-device sysfs nodes.
+If the device interrupt feature is enabled, request the interrupt and register the IRQ.
+If the device polling feature is enabled, register the device with the input subsystem.
+
+
+
+
+
+
+
+
+phy-brcm-sata.c
+mips-r2-to-r6-emul.c
+
+spi send message:
+================
+/drivers/nfc/trf7970a.c - buffers are allocated globaly
+spidev test example or sTapi_spi
+check malloc (memory is allocated to buffers and to xfers...) and print xfers
+try to swap bus numbers
+
+A @spi_message is used to execute an atomic sequence of data transfers,
+each represented by a struct spi_transfer.  The sequence is "atomic"
+in the sense that no other spi_message may use that SPI bus until that
+sequence completes.  On some systems, many such sequences can execute as
+as single programmed DMA transfer.  On all systems, these messages are
+queued, and might complete after transactions to other devices.  Messages
+sent to a given spi_device are always executed in FIFO order.
+
+*
+644  * I/O INTERFACE between SPI controller and protocol drivers
+645  *
+646  * Protocol drivers use a queue of spi_messages, each transferring data
+647  * between the controller and memory buffers.
+648  *
+649  * The spi_messages themselves consist of a series of read+write transfer
+650  * segments.  Those segments always read the same number of bits as they
+651  * write; but one or the other is easily ignored by passing a null buffer
+652  * pointer.  (This is unlike most types of I/O API, because SPI hardware
+653  * is full duplex.)
+654  *
+655  * NOTE:  Allocation of spi_transfer and spi_message memory is entirely
+656  * up to the protocol driver, which guarantees the integrity of both (as
+657  * well as the data buffers) for as long as the message is queued.
+658  */
+659 
+660 /**
+661  * struct spi_transfer - a read/write buffer pair
+ * SPI transfers always write the same number of bytes as they read.
+684  * Protocol drivers should always provide @rx_buf and/or @tx_buf.
+685  * In some cases, they may also want to provide DMA addresses for
+686  * the data being transferred; that may reduce overhead, when the
+687  * underlying driver uses dma.
