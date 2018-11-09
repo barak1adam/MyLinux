@@ -1,0 +1,32 @@
+#source yocto
+source ~/yocto/2.5.1/esdk/poky_sdk/environment-setup-i586-poky-linux
+
+# find the object file
+ff xxx.o
+
+#find the lib that contains this object file
+find . -name "*.a" | xargs grep HALA_HqosDebugFileDump
+
+#objdump
+objdump -D /home/barak/mrv_dev/z4806/platform/open_clovis/OP9500/target/i586/linux/lib/libHalAgent.a | vim -
+i586-poky-linux-objdump -D /home/barak/mrv_dev/z4806/platform/open_clovis/OP9500/target/i586/linux/lib/libHalAgent.a | vim -
+
+#nm
+nm -nlA ~/.../libHalAgent.a | grep foo
+
+#strings
+strings ~/.../libHalAgent.a | grep foo
+
+#yocto c++ compiler
+$CXX -c mainxxx.c
+$CXX -g -O0 -c mainxxx.c
+
+#yocto c compiler
+$CC -c ./mainxxx.c 
+
+#size of bcm folder
+cd workspace/sources/bcm-sdk/
+du -sh .
+
+#replace hal main file with new mainxxx in linkage
+/tmp/hal.bin_cmd 
