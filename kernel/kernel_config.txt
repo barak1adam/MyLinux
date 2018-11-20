@@ -1,0 +1,77 @@
+Kernel configuration:
+====================
+
+#All config symbol values are saved in a special file called .config.
+#include all default and non-default settings
+
+#to change configuration and save it to .config
+make menuconfig
+
+#use Y, N, M
+M = module. not statically linked into kernel image, but rather as .ko
+will be linked when needed.
+
+#to normalize config into a minimized defconfig file
+#in defconfig we can only specify options with non-default values (i.e. options we changed for our board).
+make savedefconfig
+#now defconfig file is created
+
+#our defconig file is "arch/arm/configs/mvebu_lsp_defconfig"
+
+#change it:
+cp defconfig arch/arm/configs/mvebu_lsp_defconfig
+
+#to generate .config out of defconfig
+make arch/arm/configs/mvebu_lsp_defconfig
+
+#to generate a default arch .config
+make ARCH=arm .config
+
+#make clean
+clean object files and other temp files but keeps config files
+#make mrproper
+clean all generated files include config and backup files, exactly like fresh kernel download.
+
+#make modules
+compile and install *.ko modules
+
+#make modules_install
+move / install the new modules into /lib/modules or to a specified path
+
+
+#so, to build our kernel, we usually:
+====================================
+export ARCH=arm
+export CROSS_COMPILE=../toolchain/bin/arm-marvell-linux-gnueabi-
+
+#clean
+#make mrporper: returns the kernel source tree to its unconfigured state. This means you loose your .config file
+make mrproper
+
+#build .config again, and savedefconfig
+make mvebu_lsp_defconfig ; make savedefconfig ; cp defconfig arch/arm/configs/mvebu_lsp_defconfig
+
+#now build
+time make -s -j 11 uImage LOADADDR=0x02080000
+#cp uImage
+sudo cp arch/arm/boot/uImage ../../arm_msys_root/
+
+make msys-bobk-mrv-cetus.dtb
+sudo cp ./arch/arm/boot/dts/msys-bobk-mrv-cetus.dtb ../../arm_msys_root/
+
+make msys-bobk-mrv-caelum.dtb
+sudo cp ./arch/arm/boot/dts/msys-bobk-mrv-caelum.dtb ../../arm_msys_root/
+
+#build the modules
+time make -s -j 11 modules
+rm -rf kosta_modules/
+mkdir kosta_modules
+#install / move the modules
+make INSTALL_MOD_PATH=kosta_modules/tmp DEPMOD=/bin/true modules_install
+
+cp ../../../scripts/depmod.pl .
+#generate a list of of kernel module dependancies (modules.dep)
+perl depmod.pl -b kosta_modules/tmp/lib/modules -F System.map -k vmlinux
+
+sudo rm -rf ../../arm_msys_root/lib/modules/*
+sudo cp -R kosta_modules/tmp/lib/modules/* ../../arm_msys_root/lib/modules/
