@@ -1,6 +1,10 @@
 GVIM tips:
 ++++++++++
 
+how to clear highlights:
+========================
+:noh - no highlights.
+
 pipe output into vim:
 ====================
 ls -la | vim -
