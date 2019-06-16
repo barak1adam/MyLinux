@@ -1,3 +1,6 @@
+#cat fall files in a directory:
+for f in etc/keepalived; do echo -n "$f "; cat $f; done
+
 #how to pen a newtwork drive:
 smb://172.21.9.4
 
