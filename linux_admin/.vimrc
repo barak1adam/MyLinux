@@ -424,4 +424,7 @@ endif
 " inside gvim, I can always use Y and P. 
 " use the windows like mappings out of vim.
 
+" This way, whenever you type % you jump to the matching object, and you visually select all the text in between.
+:noremap % v%
+
 
