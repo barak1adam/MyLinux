@@ -1,0 +1,16 @@
+FETCH_HEAD is a short-lived ref, to keep track of what has just been fetched from the remote repository.
+
+git checkout master
+git fetch // FETCH_HEAD is now pointing to origin/master
+git merge FETCH_HEAD
+
+
+remote tracking branch = remote branch = /origin/master
+it is the remote branch for the local master
+
+
+merge:
+git checkout my_feature
+git merge master
+
+will merge master into 

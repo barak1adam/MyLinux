@@ -1,0 +1,42 @@
+full file = ELF file icludes both debug symbols and code itself.
+
+What is the difference between ELF file including debug symbols only and a full file ?
+======================================================================================
+
+1. size: the full size is bigger.
+
+2. readelf - symbols file contain only debug section.
+
+# use readelf -w for the full file
+readelf -w ./2.1.0-r0/build/src/.libs/libfixbuf.so.6.1.0 | vim -
+
+It is starting with code sections: "Contents of the .eh_frame section:"
+
+# use readelf -w for the symbols only file
+readelf -w ./2.1.0-r0/packages-split/libfixbuf-dbg/usr/lib/.debug/libfixbuf.so.6.1.0  | vim -
+
+.eh_frame is empty and it starts with .debug_aranges section:
+
+"section '.eh_frame' has the NOBITS type - its contents are unreliable.                                                                      
+    2 Contents of the .debug_aranges sectio.debug_aranges sectionn:"
+
+In the full file we will find later on the .debug_aranges section and it is exactly identical
+to the content of the symbols file.
+
+
+comment:
+========
+
+file ./2.1.0-r0/packages-split/libfixbuf-dbg/usr/lib/.debug/libfixbuf.so.6.1.0
+./2.1.0-r0/packages-split/libfixbuf-dbg/usr/lib/.debug/libfixbuf.so.6.1.0: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked, BuildID[sha1]=0c317ba8baa4ee2b792c5b7693a36fad65eba3f6, with debug_info, not stripped
+'file' output is very similar. Not reliable for detecting which is which.
+
+'file' output of full file:
+file ./2.1.0-r0/build/src/.libs/libfixbuf.so.6.1.0
+./2.1.0-r0/build/src/.libs/libfixbuf.so.6.1.0: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked, BuildID[sha1]=0c317ba8baa4ee2b792c5b7693a36fad65eba3f6, with debug_info, not stripped
+
+'file' output of symbols file:
+file ./2.1.0-r0/packages-split/libfixbuf-dbg/usr/lib/.debug/libfixbuf.so.6.1.0
+./2.1.0-r0/packages-split/libfixbuf-dbg/usr/lib/.debug/libfixbuf.so.6.1.0: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked, BuildID[sha1]=0c317ba8baa4ee2b792c5b7693a36fad65eba3f6, with debug_info, not stripped
+
+

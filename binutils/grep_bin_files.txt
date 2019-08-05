@@ -30,3 +30,4 @@ du -sh .
 
 #replace hal main file with new mainxxx in linkage
 /tmp/hal.bin_cmd 
+:q
