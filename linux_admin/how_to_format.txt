@@ -1,0 +1,108 @@
+How to format a disc in Linux:
+=============================
+
+to delete / create  partitions:
+
+#list the partitions
+fdisk -l /dev/sdb
+
+#enter fdisk
+fdisk /dev/sdb
+
+#fdisk options
+m – print help
+p – print the partition table
+n – create a new partition
+d – delete a partition
+q – quit without saving changes
+w – write the new partition table and exit
+
+
+#I used:
+'d' to delete patitions
+then 'g' to create a new empty partition table
+then 'w' to save changes
+
+#to mount a pritition
+mkdir /disk1
+mount /dev/sdb1 /disk1
+df -H
+
+# toggle 'a' to make a partition bootable, then 'w'
+
+# to do it permanently, use /etc/fstab
+
+# to format a partition, for exmaple for ext3:
+mkfs.ext3 /dev/sdb1
+
+
+sgdisk
+======
+#examples in z4806/onie-tools/onie-installer_yocto
+
+
+diskdev="/dev/sda"
+
+if [ -z "${diskdev}" ] ; then
+    echo "Please provide disk device (e.g.: /dev/sda). Exiting..."
+    exit 1
+fi
+
+echo "Unmount NOS partitions..."
+umount /dev/sda4  &> /dev/null
+umount /dev/sda5  &> /dev/null
+umount /dev/sda6  &> /dev/null
+umount /dev/sda7  &> /dev/null
+umount /dev/sda8  &> /dev/null
+umount /dev/sda8  &> /dev/null
+umount /dev/sda9  &> /dev/null
+umount /dev/sda10 &> /dev/null
+umount /dev/sda11 &> /dev/null
+umount /dev/sda12 &> /dev/null
+umount /dev/sda13 &> /dev/null
+
+echo "Deleting NOS partitions..."
+sgdisk -d 4 -d 5 -d 6 -d 7 -d 8 -d 10 -d 11 -d 12 -d 13 -g ${diskdev}
+
+echo
+echo "================================================"
+echo "Creating disk partitions for Yocto-based bundle:"
+echo "================================================"
+sgdisk -n  4:4983000:5165057   -c  4:"NOS-A-Kernel"      -t 4:8300      -g ${diskdev}
+sgdisk -n  5:5165058:13551621  -c  5:"NOS-A-RootFS"      -t 5:8300      -g ${diskdev}
+sgdisk -n  6:13551722:14550186 -c  6:"NOS-Shared-Config" -t 6:8300      -g ${diskdev}
+sgdisk -n  7:14550190:18744494 -c  7:"NOS-A-Log"         -t 7:8300      -g ${diskdev}
+sgdisk -n  8:18744498:35517620 -c  8:"NOS-Shared-Ver"    -t 8:8300      -g ${diskdev}
+sgdisk -n 10:35517620:35700000 -c 10:"NOS-B-Kernel"      -t 10:8300     -g ${diskdev}
+sgdisk -n 11:35700004:39894308 -c 11:"NOS-B-Log"         -t 11:8300     -g ${diskdev}
+sgdisk -n 12:39894312:48278829 -c 12:"NOS-B-RootFS"      -t 12:8300     -g ${diskdev}
+sgdisk -n 13:48278850:56662639 -c 13:"NOS-Rescue"        -t 13:8300     -g ${diskdev}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~
+# Activate NOS partitions
+# ~~~~~~~~~~~~~~~~~~~~~~~
+partprobe
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Make file system on NOS partitions
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mkfs.ext4 -F /dev/sda4
+mkfs.ext4 -F /dev/sda5
+mkfs.ext4 -F /dev/sda6
+mkfs.ext4 -F /dev/sda7
+mkfs.ext4 -F /dev/sda8
+mkfs.ext4 -F /dev/sda10
+mkfs.ext4 -F /dev/sda11
+mkfs.ext4 -F /dev/sda12
+mkfs.ext4 -F /dev/sda13
+
+
+ddrescue:
+=========
+sudo ddrescue -D --force onie-recovery-x86_64-delta_agcv208s-r0.iso /dev/sdc
+sudo ddrescue --force /dev/sdc1 /dev/sdc2  /img.iso
+sudo ddrescue -D --force ubuntu-16.04.4-server-amd64.iso /dev/sdc1
+
+dd:
+==
+sudo dd if=./ubuntu-16.04.3-desktop-amd64.iso of=/dev/sdg1
