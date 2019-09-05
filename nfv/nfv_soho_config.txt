@@ -1,0 +1,94 @@
+osvm-extend-smi <Port address> <Reg address> <Hex value>
+osvm-extend-smi show <Port address> <Reg address>
+
+-----------------------------------------------------------------------------------------------------------------
+Reg address - 6 (Port based VLAN map)
+
+PHY address:
+Port 0   address decimal - 16
+Port 1   address decimal - 17
+Port 2   address decimal - 18
+Port 3   address decimal - 19
+Port 4   address decimal - 20
+Port 5   address decimal - 21
+Port 6   address decimal - 22
+
+Hex value - Hex value contain port bit map 
+
+ 
+-----------------------------------------------------------------------------------------------------------------
+
+ 
+i.e if we want port 1 to send frame only to port 4 we need to set:
+
+stapiExtSpi_set_module_smi_register(17, 6, 0x10)
+
+since 0x10 = 0001000 bit index 4 is turned on.
+
+
+
+
+status after startup:
+====================
+initator(hw-debug)# osvm-extend-smi show 16 6
+ PHY: 16, Address:  6 = 0x007E
+initator(hw-debug)# osvm-extend-smi show 17 6
+ PHY: 17, Address:  6 = 0x007D
+initator(hw-debug)# osvm-extend-smi show 18 6
+ PHY: 18, Address:  6 = 0x007B
+initator(hw-debug)# osvm-extend-smi show 19 6
+ PHY: 19, Address:  6 = 0x0077
+initator(hw-debug)# osvm-extend-smi show 20 6
+ PHY: 20, Address:  6 = 0x006F
+initator(hw-debug)# osvm-extend-smi show 21 6
+ PHY: 21, Address:  6 = 0x005F
+initator(hw-debug)# osvm-extend-smi show 22 6
+ PHY: 22, Address:  6 = 0x003F
+initator(hw-debug)# 
+
+osvm-extend-smi 16 6 0x007E
+osvm-extend-smi 17 6 0x007D
+osvm-extend-smi 18 6 0x007B
+osvm-extend-smi 19 6 0x0077
+osvm-extend-smi 20 6 0x006F
+osvm-extend-smi 21 6 0x005F
+osvm-extend-smi 22 6 0x003F
+
+osvm-extend-smi 16 6 0x00
+osvm-extend-smi 17 6 0x00
+osvm-extend-smi 18 6 0x00
+osvm-extend-smi 19 6 0x00
+osvm-extend-smi 20 6 0x00
+osvm-extend-smi 21 6 0x00
+osvm-extend-smi 22 6 0x00
+
+
+osvm-extend-smi 16 8 0x2000
+osvm-extend-smi 17 8 0x2000
+osvm-extend-smi 18 8 0x2000
+osvm-extend-smi 19 8 0x2000
+osvm-extend-smi 20 8 0x2000
+osvm-extend-smi 21 8 0x2000
+osvm-extend-smi 22 8 0x2000
+
+
+1) disconnect ports 0,1,4,6
+osvm-extend-smi 16 6 0x00
+osvm-extend-smi 17 6 0x00
+osvm-extend-smi 20 6 0x00
+osvm-extend-smi 22 6 0x00
+
+
+2) connect 3 only to 5
+osvm-extend-smi 19 6 0x20
+
+3) connect 2 only to 5
+osvm-extend-smi 18 6 0x20
+
+4) connect 5 only to 2,3
+osvm-extend-smi 21 6 0x0C
+
+5)connect 5 only to 2
+osvm-extend-smi 21 6 0x04
+
+

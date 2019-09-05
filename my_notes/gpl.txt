@@ -1,0 +1,4 @@
+GPL is free software license, which guarantees end users the freedom to run, study, share and modify the software.
+Any derivative work (modified SW based on the original) can only be distributed under the same license terms !
+The idea is to assure the open source community that the free SW would not be only exploited by sw companies to earn money, 
+but would remain free and keep being contributed both by the community and the companies as well.

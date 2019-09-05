@@ -1,0 +1,63 @@
+Christof:
+=========
+
+Team responsibilites
+====================
+
+Build systems and distributions (and kernels)
+Bringups of new HW for both XG300 and Z
+Infrastructures features: SW upgrades, initial installations, etc
+Git and source control (rebase policy as example)
+TeamCity
+Features: pw policy, VRRP, flexera
+NFV infra and NiD side
+Upgrades: Kernel, CPSS, BCM, ...
+Kernel patches / fixes
+Support IT with Linux
+Support R&D
+Customer critical bugs (Axia, Centracom, RMAs)
+
+XG300:
+======
+bring-ups (312, OSV LC, )
+u-boot
+build system
+customers - axia (upgrade), telstra - memory leaks
+RMAs
+
+NFV:
+====
+infrastructure installations for both linux / connector
+NiD configurations
+Full support and traffic tests for PE
+Bringups all flavours
+Support Eyal's team
+
+Features:
+=========
+CPSS upgrade
+VRRP - IPv6 + VRF
+SFP autodetect
+Flexera by Kosta to Z
+
+Z4806:
+======
+Yocto
+Adding packages (web gui, ipmi)
+Agema and EdgeCore bringups
+
+
+TO DO:
+======
+Flexera XG300
+Fix VRRP for 19.2.1
+VRRP IPv6 and VRF for Z4806
+Passwords policy for Z4806
+Improve TC and BB for quality
+BlackDuck
+Move XG300 to Yocto
+Expect more features
+Expect new HWs
+
+
+

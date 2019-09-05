@@ -1,0 +1,77 @@
+Final - Barak:
+=============
+
+Current configuration:
+! version DK04-10-18-1029 ()
+!
+!
+hostname initator
+!
+line vty 
+ no exec-timeout global
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1,9
+!
+! Interfaces configuration
+!
+interface vlan vif100
+ tag 100
+ ports 1
+ ip 10.10.10.1/24 
+ ip sla
+!
+interface vlan vif110
+ tag 110
+ ports 9
+ ip 1.1.1.1/24 
+ ip sla  
+!        
+interface vlan vif200
+ tag 200 
+ ports 1 
+ ip 20.20.20.1/24 
+!        
+interface vlan vif210
+ tag 210 
+ ports 9 
+ ip 2.2.2.1/24 
+!        
+interface out-of-band eth0
+ ip 172.21.13.75/24 
+!        
+rfc2544 tester t1 *
+ dest-ip  1.1.1.2
+ rate 50m
+ duration 10
+ length 1518
+!        
+rfc2544 tester t2 *
+ dest-ip  10.10.10.2
+ rate 150m
+ duration 10
+ length 1518
+!        
+ip route default 172.21.14.254
+
+
+Linux side:
+===========
+
+ip link add link enp3s0f0 name enp3s0f0.110 type vlan id 110
+ip addr add 1.1.1.2/24 brd 1.1.1.255 dev enp3s0f0.110
+ip link set dev enp3s0f0.110 up
+ip -d link show enp3s0f0.110
+
+ip link add link enp6s0 name enp6s0.100 type vlan id 100
+ip addr add 10.10.10.2/24 brd 10.10.10.255 dev enp6s0.100
+ip link set dev enp6s0.100 up
+ip -d link show enp6s0.100
+
+
+ip link add link enp7s0 name enp7s0.200 type vlan id 200
+ip addr add 20.20.20.2/24 brd 20.20.20.255 dev enp7s0.200
+ip link set dev enp7s0.200 up
+ip -d link show enp7s0.200
+
+echo 1 > /proc/sys/net/ipv4/ip_forward

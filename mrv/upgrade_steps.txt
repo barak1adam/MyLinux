@@ -1,0 +1,54 @@
+upgrade summary:
+================
+
+/dev/mtdblock1 - current partition, mounted to /
+/dev/mtdblock5 - backup partition, moiunted to /tmp/backup
+
+
+if ftp / scp:
+-------------
+	IncreaseTmpDirectorySize:
+	-------------------------
+	    remount backup partition as rw (by calling mount_backup)
+	    reomount current partition as rw
+	    mkdir /flash_tmp_dir
+	    save tmp current size as TMPDIR_DEFAULT_SIZE (grep the size in /etc/fstab)
+	    remount /tmp to size 45M in case of legacy and 60M in case of NG (TMPDIR_NEW_SIZE)
+	    (for KW - TMPDIR_DEFAULT_SIZE = TMPDIR_NEW_SIZE = 45M)
+
+	ftp get to /tmp/backup (backup part)
+
+	if KW, untar to /tmp_flash_dir (current part)
+	my fix:
+	for kw, if enough room in /tmp, untar to /tmp.
+	else, if NG - untar to /tmp
+
+	remove ver file from /tmp/backup
+
+	RestoreDefaultTmpDirectorySize:
+	------------------------------
+	    for KW - do nothing
+
+	CheckTarStatus
+
+	CheckTarStatusString
+
+	cd to untar directory (/tmp_flash_dir or /tmp)
+
+	callint the new SW untarred mupgrade_p.sh:
+	------------------------------------------
+	(new SW includes mupgrade, NAND erase & write utils)
+	mupgrade erase and write the new SW to backup partition
+	unmount it before erase / write
+
+
+	check_new_firm_for_multi_sys_conf
+
+	now merge configuration files to backup partition:
+	./merge_p.sh
+	/sbin/flconfig save $LOCAL_ETC_DIR local_etc
+
+	rm -rf untar directory (/flash_tmp_dir or /tmp/tmp_dir)
+
+
+	exit successfully and ask the user for reboot

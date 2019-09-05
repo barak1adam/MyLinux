@@ -1,0 +1,24 @@
+How to read core file:
+=====================
+
+1.scp the core file to the host PC.
+
+2.unzip: gunzip core.svrrp.gz
+
+3. run <gdb> <process-bin-file-that-was-crashed> <core-dump file>
+
+./build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/bin/arm-marvell-linux-gnueabi-gdb	 ./arm_msys_root/usr/local/nbase/sbin/svrrp 	/tmp/core.svrrp
+
+4. in gdb: list, bt
+
+comments
+=========
+#the relevant package must be compiled with symbols (-g) and installed without stripping the symbols (pkginstall 1)
+#now create the crash and generate the core files with symbols...
+
+#to read the core file, to understand if it is complete or not:
+1. readelf:
+./arm-marvell-linux-gnueabi-readelf -a core
+
+2. objdump:
+./arm-marvell-linux-gnueabi-objdump -s core

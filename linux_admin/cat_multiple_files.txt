@@ -1,0 +1,49 @@
+# for f in /etc/keepalived/*; do echo -e "cat $f"; cat $f; echo -e; done
+cat /etc/keepalived/VI_vif100_1.conf
+
+vrrp_instance VI_vif100_1 {
+        state BACKUP
+        interface vif100
+        use_vmac
+        virtual_router_id 1
+        virtual_ipaddress {
+                1.1.1.3/32 brd 1.1.1.0
+        }
+        priority 99
+        advert_int 1
+        notify /usr/local/nbase/sbin/svrrp_notify
+}
+cat /etc/keepalived/VI_vif100_2.conf
+
+vrrp_instance VI_vif100_2 {
+        state BACKUP
+        interface vif100
+        use_vmac
+        virtual_router_id 2
+        virtual_ipaddress {
+                1.1.1.4/32 brd 1.1.1.0
+        }
+        priority 101
+        advert_int 1
+        notify /usr/local/nbase/sbin/svrrp_notify
+}
+cat /etc/keepalived/VI_vif100_3.conf
+
+vrrp_instance VI_vif100_3 {
+        state BACKUP
+        interface vif100
+        use_vmac
+        virtual_router_id 3
+        virtual_ipaddress {
+                1.1.1.5/32 brd 1.1.1.0
+        }
+        priority 100
+        advert_int 1
+        notify /usr/local/nbase/sbin/svrrp_notify
+}
+cat /etc/keepalived/keepalived.conf
+include /etc/keepalived/VI_vif100_1.conf
+include /etc/keepalived/VI_vif100_2.conf
+include /etc/keepalived/VI_vif100_3.conf
+
+

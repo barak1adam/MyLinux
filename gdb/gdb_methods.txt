@@ -1,0 +1,45 @@
+Method 1:
+=========
+
+on target:
+---------
+1. bastille-netfilter stop
+
+2. ps -aux | grep vtysh
+gdbserver :12345 --attach svrrp-PID &
+
+on host:
+--------
+1. run gdb client on the same bin
+../dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/bin/arm-linux-gnueabi-gdb 	../dist/arm_msys_root/usr/local/nbase/sbin/svrrp
+
+2. set break points, target remote (to OOB IP) and continue
+
+(gdb) b VRRP_vr_mng
+(gdb) target remote 172.21.13.75:12345 
+(gdb) cont
+
+
+
+
+Method 2:
+=========
+
+Use optiswitch scripts.
+
+on target:
+----------
+gdbserver --multi :12345
+
+on host:
+--------
+run /scripts/start_dbg.sh with process name and target ip:
+
+chmod 777 ./start_dbg.sh
+./start_dbg.sh -P /usr/sbin/fw_printenv -A 172.21.13.38
+
+will create .dgbinit file with the correct setting and will open a terminal directed to
+<$BUILD_DIR>/toolchain/bin
+
+
+

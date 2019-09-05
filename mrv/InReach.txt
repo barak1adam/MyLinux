@@ -1,0 +1,12 @@
+InReach
+access
+
+enable
+system
+
+InReach:0 >>
+InReach:0 >>config
+InReach:0 >>configuration 
+Config:0 >>por
+Config:0 >>port as
+Config:0 >>port async 6 speed 115200

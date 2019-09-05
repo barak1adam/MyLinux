@@ -1,0 +1,8 @@
+Events recieved on startup for VRRP interface:
+=============================================
+
+vif10: UID_IF_EVENT_IF_ADDED, state of intf: 2 (nothing is done,vrrp not yet set)
+vif10: UID_IF_EVENT_IF_MODIFIED (nothing is done,vrrp not yet set)
+vif10: UID_VRRP_ENABLE_IF
+VRRP_if_mng: Try to activate VRRP IF vif10
+vif10: UID_IF_EVENT_IF_STATE_CHANGED - nothin is done here

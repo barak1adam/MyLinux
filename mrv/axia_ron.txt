@@ -1,0 +1,53 @@
+1) ./mupgrade_p.sh: line 1: /usr/sbin/fw_printenv: No such file or directory
+1 of 10
+MOS 2.2.2G to 4.5.91
+
+Hardware
+--------
+Board serial number   : 1628100655
+Unit serial number    : 1627102737
+ 
+CPU: FERO6281, 800Mhz and 256MB Dram memory
+NAND device: Manufacturer ID: 0xc2, Chip ID: 0xdc (Macronix NAND 512MiB 3,3V 8-bit)
+ 
+Device Hardware version: 4
+
+2)
+FTP issues, not sure any problem !
+
+edtnab73cpswt002
+1 of 32
+The MOS image file transfer is terminating before it reaches 100%
+MOS 4.5.5(18967) , FPGA 0x11 to 4.5.91
+
+arrived from field with backup version of 4_5_7 and missig config lines
+that explaing why mgmt connection was lost
+
+successfully file transfer in the lab + successful upgrade to 4.5.91
+backup partition was missing configuration
+Ron:
+config is copied to backup or maunally by the command "copy startup-config backup-partition"
+or it is done automatically on upgrade.
+but since upgrade failed, it was not coppied.
+
+Hardware
+--------
+Board serial number   : 1731100186
+Unit serial number    : 1735100745
+ 
+CPU: FERO6281, 800Mhz and 256MB Dram memory
+CPU Hardware: id 1, version 1
+NAND device: Manufacturer ID: 0x2c, Chip ID: 0xdc (Micron MT29F4G08ABADAWP)
+ 
+Device Hardware version: 4
+
+replaced with other device by the technician
+no file system corruption (none...)
+
+we compared to other devices and found that from version above 4_3_2, it's OK to have none
+
+ardrabbtcpswt002# sh ver | i MasterOS
+MasterOS version: 4_3_2H
+
+lcmbabaccpswt001# sh ver | i MasterOS
+MasterOS version: 2_2_2G

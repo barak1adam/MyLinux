@@ -1,0 +1,34 @@
+ssh mrv@10.32.23.8
+123456
+
+set db and run mysql:
+=====================
+
+sudo vim /etc/mysql/my.cnf - set the DB IP to the local ip: 10.32.23.8
+sudo service mysql start
+
+to make sure it is started:
+mrv@mrvscm:~$ sudo service mysql start
+start: Job is already running: mysql
+
+set server ip and run plastic server:
+======================================
+
+cd /opt/plasticscm5/server
+set db.conf:
+<ConnectionString>Server=10.32.23.8;User ID=root;Password=123456;
+
+sudo /opt/plasticscm5/server/plasticsd restart
+
+check:
+/etc/init.d/plasticsd status
+
+logs:
+====
+
+tail -f plastic.server.log
+
+
+utility for server config:
+==========================
+clconfigureserver

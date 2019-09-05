@@ -1,0 +1,19 @@
+install Linux PC
+first meeting: 
+Barak: Labs, TC, BB, Harmony, Persis, SAP, Polarion
+Barak: Git, our rebase policy, Kosta's scripts
+what to read ? Optiswitch, Linux
+devices installations
+Barak: optiswitch build, insall version, nfs
+Eyal / Egon - the product
+Yaniv - SW tree
+Reuven - SW tree
+
+
+Tasks:
+Debugging - Eclipse + comand line
+Git
+U-boot ?
+
+
+

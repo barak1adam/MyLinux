@@ -1,0 +1,465 @@
+>>> libfcgi 2.4.0 Downloading
+mkdir -p /home/barak/mrv_dev/buildroot/dl/libfcgi
+PATH="/home/barak/mrv_dev/buildroot/output/host/bin:/home/barak/mrv_dev/buildroot/output/host/sbin:/home/barak/.local/bin:/usr/local/bin:/usr/bin:/bin:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/barak/go/bin:/home/barak/.fzf/bin" BR2_DL_DIR="/home/barak/mrv_dev/buildroot/dl" BUILD_DIR=/home/barak/mrv_dev/buildroot/output/build O=/home/barak/mrv_dev/buildroot/output flock /home/barak/mrv_dev/buildroot/dl/libfcgi/ support/download/dl-wrapper -c '2.4.0' -d '/home/barak/mrv_dev/buildroot/dl/libfcgi' -D '/home/barak/mrv_dev/buildroot/dl' -f 'fcgi-2.4.0.tar.gz' -H 'package/libfcgi//libfcgi.hash' -n 'libfcgi-2.4.0' -N 'libfcgi' -o '/home/barak/mrv_dev/buildroot/dl/libfcgi/fcgi-2.4.0.tar.gz'  -u http+http://www.fastcgi.com/dist -u http\|urlencode+http://sources.buildroot.net/libfcgi -u http\|urlencode+http://sources.buildroot.net  -- 
+--2018-08-14 19:10:11--  http://www.fastcgi.com/dist/fcgi-2.4.0.tar.gz
+Resolving www.fastcgi.com (www.fastcgi.com)... 216.213.99.150
+Connecting to www.fastcgi.com (www.fastcgi.com)|216.213.99.150|:80... failed: Connection refused.
+--2018-08-14 19:11:14--  http://sources.buildroot.net/libfcgi/fcgi-2.4.0.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.25.211.19, 104.25.210.19, 2400:cb00:2048:1::6819:d313, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|104.25.211.19|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 468682 (458K) [application/x-gtar-compressed]
+Saving to: ‘/home/barak/mrv_dev/buildroot/output/build/.fcgi-2.4.0.tar.gz.hjuQQS/output’
+
+/home/barak/mrv_dev/buildroot/output 100%[====================================================================>] 457.70K   892KB/s    in 0.5s    
+
+2018-08-14 19:11:15 (892 KB/s) - ‘/home/barak/mrv_dev/buildroot/output/build/.fcgi-2.4.0.tar.gz.hjuQQS/output’ saved [468682/468682]
+
+fcgi-2.4.0.tar.gz: OK (sha256: 66fc45c6b36a21bf2fbbb68e90f780cc21a9da1fffbae75e76d2b4402d3f05b9)
+mkdir -p /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0
+touch /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/.stamp_downloaded
+>>> libfcgi 2.4.0 Extracting
+mkdir -p /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0
+gzip -d -c /home/barak/mrv_dev/buildroot/dl/libfcgi/fcgi-2.4.0.tar.gz | tar --strip-components=1 -C /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0   -xf -
+chmod -R +rw /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0
+touch /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/.stamp_extracted
+>>> libfcgi 2.4.0 Patching
+( \
+for D in package/libfcgi/ ; do \
+  if test -d ${D}; then \
+    if test -d ${D}/2.4.0; then \
+      PATH=/home/barak/mrv_dev/buildroot/output/host/bin:$PATH support/scripts/apply-patches.sh  /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0 ${D}/2.4.0 \*.patch \*.patch.arm || exit 1; \
+    else \
+      PATH=/home/barak/mrv_dev/buildroot/output/host/bin:$PATH support/scripts/apply-patches.sh  /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0 ${D} \*.patch \*.patch.arm || exit 1; \
+    fi; \
+  fi; \
+done; \
+)
+
+Applying 0001-eof.patch using patch: 
+patching file libfcgi/fcgio.cpp
+
+Applying 0002-link-against-libfcgi-la.patch using patch: 
+patching file libfcgi/Makefile.am
+
+Applying 0003-link-against-math.patch using patch: 
+patching file libfcgi/Makefile.am
+
+Applying 0004-make-autoreconfable.patch using patch: 
+patching file cgi-fcgi/Makefile.am
+patching file configure.in
+patching file examples/Makefile.am
+patching file libfcgi/Makefile.am
+
+Applying 0005-disable-examples.patch using patch: 
+patching file Makefile.am
+
+Applying 0006-fix-CVE-2012-6687.patch using patch: 
+patching file libfcgi/os_unix.c
+patching file examples/Makefile.am
+>>> libfcgi 2.4.0 Updating config.sub and config.guess
+for file in config.guess config.sub; do for i in $(find /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0 -name $file); do cp support/gnuconfig/$file $i; done; done
+touch /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/.stamp_patched
+>>> libfcgi 2.4.0 Configuring
+>>> libfcgi 2.4.0 Autoreconfiguring
+cd /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/ &&  PATH="/home/barak/mrv_dev/buildroot/output/host/bin:/home/barak/mrv_dev/buildroot/output/host/sbin:/home/barak/.local/bin:/usr/local/bin:/usr/bin:/bin:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/barak/go/bin:/home/barak/.fzf/bin" PKG_CONFIG="/home/barak/mrv_dev/buildroot/output/host/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG_LIBDIR="/home/barak/mrv_dev/buildroot/output/host/lib/pkgconfig:/home/barak/mrv_dev/buildroot/output/host/share/pkgconfig" AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld" NM="/usr/bin/nm" CC="/home/barak/mrv_dev/buildroot/output/host/bin/ccache /usr/bin/gcc" GCC="/home/barak/mrv_dev/buildroot/output/host/bin/ccache /usr/bin/gcc" CXX="/home/barak/mrv_dev/buildroot/output/host/bin/ccache /usr/bin/g++" CPP="/usr/bin/cpp" OBJCOPY="/usr/bin/objcopy" RANLIB="/usr/bin/ranlib" CPPFLAGS="-I/home/barak/mrv_dev/buildroot/output/host/include" CFLAGS="-O2 -I/home/barak/mrv_dev/buildroot/output/host/include" CXXFLAGS="-O2 -I/home/barak/mrv_dev/buildroot/output/host/include" LDFLAGS="-L/home/barak/mrv_dev/buildroot/output/host/lib -Wl,-rpath,/home/barak/mrv_dev/buildroot/output/host/lib" INTLTOOL_PERL=/usr/bin/perl ACLOCAL="/home/barak/mrv_dev/buildroot/output/host/bin/aclocal -I /home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/aclocal" AUTOCONF="/home/barak/mrv_dev/buildroot/output/host/bin/autoconf" AUTOHEADER="/home/barak/mrv_dev/buildroot/output/host/bin/autoheader" AUTOMAKE="/home/barak/mrv_dev/buildroot/output/host/bin/automake" AUTOPOINT=/bin/true /home/barak/mrv_dev/buildroot/output/host/bin/autoreconf -f -i -I "/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/aclocal" -I "/home/barak/mrv_dev/buildroot/output/host/share/aclocal" 
+aclocal: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+acinclude.m4:3: warning: underquoted definition of FCGI_COMMON_CHECKS
+acinclude.m4:3:   run info Automake 'Extending aclocal'
+acinclude.m4:3:   or see http://www.gnu.org/software/automake/manual/automake.html#Extending-aclocal
+libtoolize: putting auxiliary files in '.'.
+libtoolize: copying file './ltmain.sh'
+libtoolize: Consider adding 'AC_CONFIG_MACRO_DIRS([m4])' to configure.in,
+libtoolize: and rerunning libtoolize and aclocal.
+libtoolize: Consider adding '-I m4' to ACLOCAL_AMFLAGS in Makefile.am.
+aclocal: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+acinclude.m4:3: warning: underquoted definition of FCGI_COMMON_CHECKS
+acinclude.m4:3:   run info Automake 'Extending aclocal'
+acinclude.m4:3:   or see http://www.gnu.org/software/automake/manual/automake.html#Extending-aclocal
+automake: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+configure.in:12: installing './compile'
+configure.in:8: installing './missing'
+cgi-fcgi/Makefile.am: installing './depcomp'
+automake: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+>>> libfcgi 2.4.0 Patching libtool
+for i in `find /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0 -name ltmain.sh`; do ltmain_version=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $i | sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e 's/\"//'`; ltmain_patchlevel=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $i | sed -e 's/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'`; if test ${ltmain_version} = '1.5'; then patch -i support/libtool/buildroot-libtool-v1.5.patch ${i}; elif test ${ltmain_version} = "2.2"; then patch -i support/libtool/buildroot-libtool-v2.2.patch ${i}; elif test ${ltmain_version} = "2.4"; then if test ${ltmain_patchlevel:-0} -gt 2; then patch -i support/libtool/buildroot-libtool-v2.4.4.patch ${i}; else patch -i support/libtool/buildroot-libtool-v2.4.patch ${i}; fi fi done
+patching file /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/ltmain.sh
+Hunk #1 succeeded at 2694 (offset 7 lines).
+Hunk #2 succeeded at 4284 (offset 7 lines).
+Hunk #3 succeeded at 6579 (offset 25 lines).
+Hunk #4 succeeded at 6589 (offset 25 lines).
+Hunk #5 succeeded at 6882 (offset 25 lines).
+Hunk #6 succeeded at 7174 (offset 25 lines).
+Hunk #7 succeeded at 8140 (offset 28 lines).
+Hunk #8 succeeded at 10769 (offset 59 lines).
+(cd /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/ && rm -rf config.cache && PATH="/home/barak/mrv_dev/buildroot/output/host/bin:/home/barak/mrv_dev/buildroot/output/host/sbin:/home/barak/.local/bin:/usr/local/bin:/usr/bin:/bin:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/barak/go/bin:/home/barak/.fzf/bin" AR="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-ar" AS="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-as" LD="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-ld" NM="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-nm" CC="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc" GCC="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc" CPP="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-cpp" CXX="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-g++" FC="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gfortran" F77="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gfortran" RANLIB="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-ranlib" READELF="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-readelf" STRIP="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-strip" OBJCOPY="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-objcopy" OBJDUMP="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-objdump" AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as" CC_FOR_BUILD="/home/barak/mrv_dev/buildroot/output/host/bin/ccache /usr/bin/gcc" GCC_FOR_BUILD="/home/barak/mrv_dev/buildroot/output/host/bin/ccache /usr/bin/gcc" CXX_FOR_BUILD="/home/barak/mrv_dev/buildroot/output/host/bin/ccache /usr/bin/g++" LD_FOR_BUILD="/usr/bin/ld" CPPFLAGS_FOR_BUILD="-I/home/barak/mrv_dev/buildroot/output/host/include" CFLAGS_FOR_BUILD="-O2 -I/home/barak/mrv_dev/buildroot/output/host/include" CXXFLAGS_FOR_BUILD="-O2 -I/home/barak/mrv_dev/buildroot/output/host/include" LDFLAGS_FOR_BUILD="-L/home/barak/mrv_dev/buildroot/output/host/lib -Wl,-rpath,/home/barak/mrv_dev/buildroot/output/host/lib" FCFLAGS_FOR_BUILD="" DEFAULT_ASSEMBLER="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-as" DEFAULT_LINKER="/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-ld" CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os " CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os " LDFLAGS="" FCFLAGS=" -Os " FFLAGS=" -Os " PKG_CONFIG="/home/barak/mrv_dev/buildroot/output/host/bin/pkg-config" STAGING_DIR="/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot" INTLTOOL_PERL=/usr/bin/perl CXX=no ac_cv_lbl_unaligned_fail=yes ac_cv_func_mmap_fixed_mapped=yes ac_cv_func_memcmp_working=yes ac_cv_have_decl_malloc=yes gl_cv_func_malloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes ac_cv_func_calloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes lt_cv_sys_lib_search_path_spec="" ac_cv_c_bigendian=no   CONFIG_SITE=/dev/null ./configure --target=arm-buildroot-linux-gnueabi --host=arm-buildroot-linux-gnueabi --build=x86_64-pc-linux-gnu --prefix=/usr --exec-prefix=/usr --sysconfdir=/etc --localstatedir=/var --program-prefix="" --disable-gtk-doc --disable-gtk-doc-html --disable-doc --disable-docs --disable-documentation --with-xmlto=no --with-fop=no --disable-dependency-tracking --enable-ipv6 --disable-nls --disable-static --enable-shared   )
+configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --disable-nls
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for arm-buildroot-linux-gnueabi-strip... /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-strip
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking for arm-buildroot-linux-gnueabi-gcc... /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... yes
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc accepts -g... yes
+checking for /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc option to accept ISO C89... none needed
+checking whether /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc understands -c and -o together... yes
+checking for style of include used by make... GNU
+checking dependency style of /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc... none
+checking whether /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc and cc understand -c and -o together... yes
+checking how to run the C preprocessor... /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-cpp
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... arm-buildroot-linux-gnueabi
+checking how to print strings... printf
+checking for a sed that does not truncate output... /bin/sed
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for fgrep... /bin/grep -F
+checking for ld used by /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc... /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-ld
+checking if the linker (/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-nm
+checking the name lister (/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-nm) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to arm-buildroot-linux-gnueabi format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-ld option to reload object files... -r
+checking for arm-buildroot-linux-gnueabi-objdump... /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-objdump
+checking how to recognize dependent libraries... pass_all
+checking for arm-buildroot-linux-gnueabi-dlltool... no
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for arm-buildroot-linux-gnueabi-ar... /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-ar
+checking for archiver @FILE support... @
+checking for arm-buildroot-linux-gnueabi-strip... (cached) /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-strip
+checking for arm-buildroot-linux-gnueabi-ranlib... /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-ranlib
+checking command to parse /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-nm output from /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for arm-buildroot-linux-gnueabi-mt... no
+checking for mt... mt
+configure: WARNING: using cross tools not prefixed with host triplet
+checking if mt is a manifest tool... no
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc supports -fno-rtti -fno-exceptions... no
+checking for /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc option to produce PIC... -fPIC -DPIC
+checking if /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc PIC flag -fPIC -DPIC works... yes
+checking if /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc static flag -static works... yes
+checking if /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc supports -c -o file.o... yes
+checking if /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc supports -c -o file.o... (cached) yes
+checking whether the /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc linker (/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-ld) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... no
+checking whether we are using the GNU C++ compiler... no
+checking whether no accepts -g... no
+checking dependency style of no... none
+checking whether no works... no
+checking for gethostbyname in -lnsl... yes
+checking for socket in -lsocket... no
+checking pthread.h usability... yes
+checking pthread.h presence... yes
+checking for pthread.h... yes
+checking for the pthreads library -lpthreads... no
+checking whether pthreads work without any flags... no
+checking whether pthreads work with -Kthread... no
+checking whether pthreads work with -kthread... no
+checking for the pthreads library -llthread... no
+checking whether pthreads work with -pthread... yes
+checking for joinable pthread attribute... PTHREAD_CREATE_JOINABLE
+checking if more special flags are required for pthreads... no
+checking for cc_r... /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc
+checking for ssize_t... yes
+checking for sun_len in sys/un.h... no
+checking for fpos_t in stdio.h... yes
+checking sys/socket.h usability... yes
+checking sys/socket.h presence... yes
+checking for sys/socket.h... yes
+checking netdb.h usability... yes
+checking netdb.h presence... yes
+checking for netdb.h... yes
+checking netinet/in.h usability... yes
+checking netinet/in.h presence... yes
+checking for netinet/in.h... yes
+checking arpa/inet.h usability... yes
+checking arpa/inet.h presence... yes
+checking for arpa/inet.h... yes
+checking sys/time.h usability... yes
+checking sys/time.h presence... yes
+checking for sys/time.h... yes
+checking limits.h usability... yes
+checking limits.h presence... yes
+checking for limits.h... yes
+checking sys/param.h usability... yes
+checking sys/param.h presence... yes
+checking for sys/param.h... yes
+checking for unistd.h... (cached) yes
+checking for a fileno() prototype in stdio.h... yes
+checking whether cross-process locking is required by accept()... no
+checking whether va_arg(arg, long double) crashes the compiler... no
+checking for an ANSI C-conforming const... yes
+checking for strerror... yes
+checking for inline... inline
+checking for C compiler warning flags... -Wall
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating cgi-fcgi/Makefile
+config.status: creating include/Makefile
+config.status: creating libfcgi/Makefile
+config.status: creating examples/Makefile
+config.status: creating fcgi_config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --disable-nls
+touch /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/.stamp_configured
+>>> libfcgi 2.4.0 Building
+PATH="/home/barak/mrv_dev/buildroot/output/host/bin:/home/barak/mrv_dev/buildroot/output/host/sbin:/home/barak/.local/bin:/usr/local/bin:/usr/bin:/bin:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/barak/go/bin:/home/barak/.fzf/bin"  /usr/bin/make -j9  -C /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/
+/usr/bin/make  all-recursive
+Making all in libfcgi
+/bin/bash ../libtool  --tag=CC   --mode=compile /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc -DHAVE_CONFIG_H -I. -I..  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o libfcgi_la-fcgiapp.lo `test -f 'fcgiapp.c' || echo './'`fcgiapp.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc -DHAVE_CONFIG_H -I. -I..  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o libfcgi_la-fcgi_stdio.lo `test -f 'fcgi_stdio.c' || echo './'`fcgi_stdio.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc -DHAVE_CONFIG_H -I. -I..  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o libfcgi_la-os_unix.lo `test -f 'os_unix.c' || echo './'`os_unix.c
+libtool: compile:  /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc -DHAVE_CONFIG_H -I. -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -Wall -c os_unix.c  -fPIC -DPIC -o .libs/libfcgi_la-os_unix.o
+libtool: compile:  /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc -DHAVE_CONFIG_H -I. -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -Wall -c fcgiapp.c  -fPIC -DPIC -o .libs/libfcgi_la-fcgiapp.o
+libtool: compile:  /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc -DHAVE_CONFIG_H -I. -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -Wall -c fcgi_stdio.c  -fPIC -DPIC -o .libs/libfcgi_la-fcgi_stdio.o
+os_unix.c: In function 'OS_Accept':
+os_unix.c:1175:54: warning: pointer targets in passing argument 3 of 'accept' differ in signedness [-Wpointer-sign]
+                 socket = accept(listen_sock, (struct sockaddr *)&sa, &len);
+                                                      ^
+In file included from ../../../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/./netinet/in.h:23:0,
+                 from os_unix.c:28:
+../../../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/./sys/socket.h:243:12: note: expected 'socklen_t * __restrict__' but argument is of type 'int *'
+ extern int accept (int __fd, __SOCKADDR_ARG __addr,
+            ^
+os_unix.c: In function 'OS_IsFcgi':
+os_unix.c:1275:35: warning: pointer targets in passing argument 3 of 'getpeername' differ in signedness [-Wpointer-sign]
+     if (getpeername(sock, (struct sockaddr *)&sa, &len) != 0 && errno == ENOTCONN) {
+                                   ^
+In file included from ../../../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/./netinet/in.h:23:0,
+                 from os_unix.c:28:
+../../../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/./sys/socket.h:141:12: note: expected 'socklen_t * __restrict__' but argument is of type 'int *'
+ extern int getpeername (int __fd, __SOCKADDR_ARG __addr,
+            ^
+fcgiapp.c: In function 'ProcessManagementRecord':
+fcgiapp.c:1490:13: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
+             = MakeHeader(FCGI_GET_VALUES_RESULT, FCGI_NULL_REQUEST_ID,
+             ^
+fcgiapp.c:1495:9: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
+         ((FCGI_UnknownTypeRecord *) response)->header
+         ^
+fcgiapp.c:1498:9: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
+         ((FCGI_UnknownTypeRecord *) response)->body
+         ^
+/bin/bash ../libtool  --tag=CC   --mode=link /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Wall   -o libfcgi.la -rpath /usr/lib  libfcgi_la-fcgiapp.lo libfcgi_la-fcgi_stdio.lo libfcgi_la-os_unix.lo -lm -lnsl 
+libtool: link: /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc -shared  -fPIC -DPIC  .libs/libfcgi_la-fcgiapp.o .libs/libfcgi_la-fcgi_stdio.o .libs/libfcgi_la-os_unix.o   -lm -lnsl  -pthread -Os   -pthread -Wl,-soname -Wl,libfcgi.so.0 -o .libs/libfcgi.so.0.0.0
+libtool: link: (cd ".libs" && rm -f "libfcgi.so.0" && ln -s "libfcgi.so.0.0.0" "libfcgi.so.0")
+libtool: link: (cd ".libs" && rm -f "libfcgi.so" && ln -s "libfcgi.so.0.0.0" "libfcgi.so")
+libtool: link: ( cd ".libs" && rm -f "libfcgi.la" && ln -s "../libfcgi.la" "libfcgi.la" )
+Making all in cgi-fcgi
+/home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc -DHAVE_CONFIG_H -I. -I..  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o cgi-fcgi.o cgi-fcgi.c
+cgi-fcgi.c: In function 'WebServerReadHandler':
+cgi-fcgi.c:390:13: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
+             = MakeHeader(FCGI_STDIN, requestId, bytesRead, 0);
+             ^
+cgi-fcgi.c: In function 'main':
+cgi-fcgi.c:725:9: warning: variable 'numFDs' set but not used [-Wunused-but-set-variable]
+     int numFDs;
+         ^
+/bin/bash ../libtool  --tag=CC   --mode=link /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Wall   -o cgi-fcgi  cgi-fcgi.o ../libfcgi/libfcgi.la -lnsl 
+libtool: link: /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -Wall -o cgi-fcgi cgi-fcgi.o  ../libfcgi/.libs/libfcgi.so -lm -lnsl -pthread -Wl,-rpath -Wl,/home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/libfcgi/.libs
+Making all in include
+make[4]: Nothing to be done for 'all'.
+touch /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/.stamp_built
+>>> libfcgi 2.4.0 Installing to staging directory
+PATH="/home/barak/mrv_dev/buildroot/output/host/bin:/home/barak/mrv_dev/buildroot/output/host/sbin:/home/barak/.local/bin:/usr/local/bin:/usr/bin:/bin:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/barak/go/bin:/home/barak/.fzf/bin"  /usr/bin/make -j9 DESTDIR=/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot install -C /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/
+Making install in libfcgi
+make[4]: Nothing to be done for 'install-data-am'.
+ /bin/mkdir -p '/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib'
+ /bin/bash ../libtool   --mode=install /usr/bin/install -c   libfcgi.la '/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib'
+libtool: install: /usr/bin/install -c .libs/libfcgi.so.0.0.0 /home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libfcgi.so.0.0.0
+libtool: install: (cd /home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib && { ln -s -f libfcgi.so.0.0.0 libfcgi.so.0 || { rm -f libfcgi.so.0 && ln -s libfcgi.so.0.0.0 libfcgi.so.0; }; })
+libtool: install: (cd /home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib && { ln -s -f libfcgi.so.0.0.0 libfcgi.so || { rm -f libfcgi.so && ln -s libfcgi.so.0.0.0 libfcgi.so; }; })
+libtool: install: /usr/bin/install -c .libs/libfcgi.lai /home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libfcgi.la
+libtool: warning: remember to run 'libtool --finish /usr/lib'
+Making install in cgi-fcgi
+make[4]: Nothing to be done for 'install-data-am'.
+ /bin/mkdir -p '/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/bin'
+  /bin/bash ../libtool   --mode=install /usr/bin/install -c cgi-fcgi '/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/bin'
+libtool: install: /usr/bin/install -c cgi-fcgi /home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/bin/cgi-fcgi
+Making install in include
+make[4]: Nothing to be done for 'install-exec-am'.
+ /bin/mkdir -p '/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/include'
+ /usr/bin/install -c -m 644 fastcgi.h fcgi_stdio.h fcgiapp.h fcgimisc.h fcgio.h fcgios.h '/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/include'
+make[4]: Nothing to be done for 'install-exec-am'.
+ /bin/mkdir -p '/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/include'
+ /usr/bin/install -c -m 644 fcgi_config.h '/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/include'
+if test -n "" ; then \
+	echo ">>> libfcgi 2.4.0 Fixing package configuration files" ;\
+		/bin/sed -i -e  "s,/home/barak/mrv_dev/buildroot/output,@BASE_DIR@,g" \
+			-e "s,/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot,@STAGING_DIR@,g" \
+			-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
+			-e "s,-I/usr/,-I@STAGING_DIR@/usr/,g" \
+			-e "s,-L/usr/,-L@STAGING_DIR@/usr/,g" \
+			-e "s,@STAGING_DIR@,/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot,g" \
+			-e "s,@BASE_DIR@,/home/barak/mrv_dev/buildroot/output,g" \
+			 ;\
+fi
+>>> libfcgi 2.4.0 Fixing libtool files
+find /home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+	/bin/sed -i -e "s:/home/barak/mrv_dev/buildroot/output:@BASE_DIR@:g" \
+		-e "s:/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot:@STAGING_DIR@:g" \
+		 -e "s:/opt/armv7-marvell-linux-gnueabi-softfp-4.8.5_i686_20160307:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g" \
+		-e "s:\(['= ]\)/usr:\\1@STAGING_DIR@/usr:g" \
+		 -e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:/opt/armv7-marvell-linux-gnueabi-softfp-4.8.5_i686_20160307:g" \
+		-e "s:@STAGING_DIR@:/home/barak/mrv_dev/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot:g" \
+		-e "s:@BASE_DIR@:/home/barak/mrv_dev/buildroot/output:g"
+touch /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/.stamp_staging_installed
+>>> libfcgi 2.4.0 Installing to target
+PATH="/home/barak/mrv_dev/buildroot/output/host/bin:/home/barak/mrv_dev/buildroot/output/host/sbin:/home/barak/.local/bin:/usr/local/bin:/usr/bin:/bin:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/barak/go/bin:/home/barak/.fzf/bin"  /usr/bin/make -j9 DESTDIR=/home/barak/mrv_dev/buildroot/output/target install -C /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/
+Making install in libfcgi
+make[4]: Nothing to be done for 'install-data-am'.
+ /bin/mkdir -p '/home/barak/mrv_dev/buildroot/output/target/usr/lib'
+ /bin/bash ../libtool   --mode=install /usr/bin/install -c   libfcgi.la '/home/barak/mrv_dev/buildroot/output/target/usr/lib'
+libtool: install: /usr/bin/install -c .libs/libfcgi.so.0.0.0 /home/barak/mrv_dev/buildroot/output/target/usr/lib/libfcgi.so.0.0.0
+libtool: install: (cd /home/barak/mrv_dev/buildroot/output/target/usr/lib && { ln -s -f libfcgi.so.0.0.0 libfcgi.so.0 || { rm -f libfcgi.so.0 && ln -s libfcgi.so.0.0.0 libfcgi.so.0; }; })
+libtool: install: (cd /home/barak/mrv_dev/buildroot/output/target/usr/lib && { ln -s -f libfcgi.so.0.0.0 libfcgi.so || { rm -f libfcgi.so && ln -s libfcgi.so.0.0.0 libfcgi.so; }; })
+libtool: install: /usr/bin/install -c .libs/libfcgi.lai /home/barak/mrv_dev/buildroot/output/target/usr/lib/libfcgi.la
+libtool: warning: remember to run 'libtool --finish /usr/lib'
+Making install in cgi-fcgi
+make[4]: Nothing to be done for 'install-data-am'.
+ /bin/mkdir -p '/home/barak/mrv_dev/buildroot/output/target/usr/bin'
+  /bin/bash ../libtool   --mode=install /usr/bin/install -c cgi-fcgi '/home/barak/mrv_dev/buildroot/output/target/usr/bin'
+libtool: install: /usr/bin/install -c cgi-fcgi /home/barak/mrv_dev/buildroot/output/target/usr/bin/cgi-fcgi
+Making install in include
+make[4]: Nothing to be done for 'install-exec-am'.
+ /bin/mkdir -p '/home/barak/mrv_dev/buildroot/output/target/usr/include'
+ /usr/bin/install -c -m 644 fastcgi.h fcgi_stdio.h fcgiapp.h fcgimisc.h fcgio.h fcgios.h '/home/barak/mrv_dev/buildroot/output/target/usr/include'
+make[4]: Nothing to be done for 'install-exec-am'.
+ /bin/mkdir -p '/home/barak/mrv_dev/buildroot/output/target/usr/include'
+ /usr/bin/install -c -m 644 fcgi_config.h '/home/barak/mrv_dev/buildroot/output/target/usr/include'
+if test -n "" ; then \
+	rm -f -f  ; \
+fi
+touch /home/barak/mrv_dev/buildroot/output/build/libfcgi-2.4.0/.stamp_target_installed
+>>>   Finalizing target directory
+# Check files that are touched by more than one package
+./support/scripts/check-uniq-files -t target /home/barak/mrv_dev/buildroot/output/build/packages-file-list.txt
+./support/scripts/check-uniq-files -t staging /home/barak/mrv_dev/buildroot/output/build/packages-file-list-staging.txt
+Warning: staging file "./usr/lib/libpng16.la" is touched by more than one package: [u'libpng', u'gd', u'libopenssl', u'libxml2', u'libxslt', u'pcre', u'libfcgi']
+Warning: staging file "./usr/lib/libpcre.la" is touched by more than one package: [u'pcre', u'libfcgi']
+Warning: staging file "./usr/lib/libexslt.la" is touched by more than one package: [u'libxslt', u'pcre', u'libfcgi']
+Warning: staging file "./usr/lib/libgd.la" is touched by more than one package: [u'gd', u'libopenssl', u'libxml2', u'libxslt', u'pcre', u'libfcgi']
+Warning: staging file "./usr/lib/libpng.la" is touched by more than one package: [u'libpng', u'gd', u'libopenssl', u'libxml2', u'libxslt', u'pcre', u'libfcgi']
+Warning: staging file "./usr/lib/libxslt.la" is touched by more than one package: [u'libxslt', u'pcre', u'libfcgi']
+Warning: staging file "./usr/lib/libpcreposix.la" is touched by more than one package: [u'pcre', u'libfcgi']
+Warning: staging file "./usr/lib/libjpeg.la" is touched by more than one package: [u'libjpeg', u'libzlib', u'libpng', u'gd', u'libopenssl', u'libxml2', u'libxslt', u'pcre', u'libfcgi']
+Warning: staging file "./usr/lib/libexpat.la" is touched by more than one package: [u'expat', u'libjpeg', u'libzlib', u'libpng', u'gd', u'libopenssl', u'libxml2', u'libxslt', u'pcre', u'libfcgi']
+Warning: staging file "./usr/lib/libxml2.la" is touched by more than one package: [u'libxml2', u'libxslt', u'pcre', u'libfcgi']
+./support/scripts/check-uniq-files -t host /home/barak/mrv_dev/buildroot/output/build/packages-file-list-host.txt
+Warning: host file "./share/info/dir" is touched by more than one package: [u'host-lzip', u'host-m4', u'host-libtool', u'host-autoconf', u'host-automake']
+if [ ! -f "/home/barak/mrv_dev/buildroot/output/target/etc/nsswitch.conf" ]; then /usr/bin/install -D -m 0644 package/glibc/nsswitch.conf /home/barak/mrv_dev/buildroot/output/target/etc/nsswitch.conf ; fi
+/bin/sed -i -e '/# GENERIC_SERIAL$/s~^.*#~console::respawn:/sbin/getty -L  console 0 vt100 #~' /home/barak/mrv_dev/buildroot/output/target/etc/inittab
+/bin/sed -i -e '/^#.*-o remount,rw \/$/s~^#\+~~' /home/barak/mrv_dev/buildroot/output/target/etc/inittab
+if grep -q CONFIG_ASH=y ./.config; then grep -qsE '^/bin/ash$' /home/barak/mrv_dev/buildroot/output/target/etc/shells || echo "/bin/ash" >> /home/barak/mrv_dev/buildroot/output/target/etc/shells; fi
+if grep -q CONFIG_HUSH=y ./.config; then grep -qsE '^/bin/hush$' /home/barak/mrv_dev/buildroot/output/target/etc/shells || echo "/bin/hush" >> /home/barak/mrv_dev/buildroot/output/target/etc/shells; fi
+mkdir -p /home/barak/mrv_dev/buildroot/output/target/etc
+echo "buildroot" > /home/barak/mrv_dev/buildroot/output/target/etc/hostname
+/bin/sed -i -e '$a \127.0.1.1\tbuildroot' -e '/^127.0.1.1/d' /home/barak/mrv_dev/buildroot/output/target/etc/hosts
+mkdir -p /home/barak/mrv_dev/buildroot/output/target/etc
+echo "Welcome to Buildroot" > /home/barak/mrv_dev/buildroot/output/target/etc/issue
+/bin/sed -i -e s,^root:[^:]*:,root:"`/home/barak/mrv_dev/buildroot/output/host/bin/mkpasswd -m "md5" "12345t"`":, /home/barak/mrv_dev/buildroot/output/target/etc/shadow
+grep -qsE '^/bin/sh$' /home/barak/mrv_dev/buildroot/output/target/etc/shells || echo "/bin/sh" >> /home/barak/mrv_dev/buildroot/output/target/etc/shells
+rm -f /home/barak/mrv_dev/buildroot/output/build/locales.nopurge
+for i in C en_US locale-archive; do echo $i >> /home/barak/mrv_dev/buildroot/output/build/locales.nopurge; done
+for dir in ; do for langdir in $dir/*; do if [ -e "${langdir}" ]; then grep -qx "${langdir##*/}" /home/barak/mrv_dev/buildroot/output/build/locales.nopurge || rm -rf $langdir; fi done; done
+if [ -d /home/barak/mrv_dev/buildroot/output/target/usr/share/X11/locale ]; then for lang in C en_US; do if [ -f /home/barak/mrv_dev/buildroot/output/target/usr/share/X11/locale/$lang/XLC_LOCALE ]; then echo "$lang/XLC_LOCALE: $lang"; fi done > /home/barak/mrv_dev/buildroot/output/target/usr/share/X11/locale/locale.dir; fi
+rm -rf /home/barak/mrv_dev/buildroot/output/target/usr/include /home/barak/mrv_dev/buildroot/output/target/usr/share/aclocal \
+	/home/barak/mrv_dev/buildroot/output/target/usr/lib/pkgconfig /home/barak/mrv_dev/buildroot/output/target/usr/share/pkgconfig \
+	/home/barak/mrv_dev/buildroot/output/target/usr/lib/cmake /home/barak/mrv_dev/buildroot/output/target/usr/share/cmake
+find /home/barak/mrv_dev/buildroot/output/target/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
+find /home/barak/mrv_dev/buildroot/output/target/lib/ /home/barak/mrv_dev/buildroot/output/target/usr/lib/ /home/barak/mrv_dev/buildroot/output/target/usr/libexec/ \
+	\( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+find: ‘/home/barak/mrv_dev/buildroot/output/target/usr/libexec/’: No such file or directory
+rm -rf /home/barak/mrv_dev/buildroot/output/target/usr/share/gdb
+rm -rf /home/barak/mrv_dev/buildroot/output/target/usr/share/bash-completion
+rm -rf /home/barak/mrv_dev/buildroot/output/target/usr/share/zsh
+rm -rf /home/barak/mrv_dev/buildroot/output/target/usr/man /home/barak/mrv_dev/buildroot/output/target/usr/share/man
+rm -rf /home/barak/mrv_dev/buildroot/output/target/usr/info /home/barak/mrv_dev/buildroot/output/target/usr/share/info
+rm -rf /home/barak/mrv_dev/buildroot/output/target/usr/doc /home/barak/mrv_dev/buildroot/output/target/usr/share/doc
+rm -rf /home/barak/mrv_dev/buildroot/output/target/usr/share/gtk-doc
+rmdir /home/barak/mrv_dev/buildroot/output/target/usr/share 2>/dev/null || true
+find /home/barak/mrv_dev/buildroot/output/target -type f \( -perm /111 -o -name '*.so*' \) -not \( -name 'libpthread*.so*' -o -name 'ld-*.so*' -o -name '*.ko' \) -print0 | xargs -0 /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-strip --remove-section=.comment --remove-section=.note 2>/dev/null || true
+find /home/barak/mrv_dev/buildroot/output/target/lib/ -type f -name 'libpthread*.so*' | \
+	xargs -r /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-strip --remove-section=.comment --remove-section=.note --strip-debug
+find /home/barak/mrv_dev/buildroot/output/target/lib/ -type f -name 'ld-*.so*' | \
+	xargs -r /home/barak/mrv_dev/buildroot/output/host/bin/arm-marvell-linux-gnueabi-strip --remove-section=.comment --remove-section=.note --strip-debug
+test -f /home/barak/mrv_dev/buildroot/output/target/etc/ld.so.conf && \
+	{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
+test -d /home/barak/mrv_dev/buildroot/output/target/etc/ld.so.conf.d && \
+	{ echo "ERROR: we shouldn't have a /etc/ld.so.conf.d directory"; exit 1; } || true
+mkdir -p /home/barak/mrv_dev/buildroot/output/target/etc
+( \
+	echo "NAME=Buildroot"; \
+	echo "VERSION=2018.05-00002-g84a4aed"; \
+	echo "ID=buildroot"; \
+	echo "VERSION_ID=2018.05"; \
+	echo "PRETTY_NAME=\"Buildroot 2018.05\"" \
+) >  /home/barak/mrv_dev/buildroot/output/target/usr/lib/os-release
+ln -sf ../usr/lib/os-release /home/barak/mrv_dev/buildroot/output/target/etc
+>>>   Sanitizing RPATH in target tree
+/home/barak/mrv_dev/buildroot/support/scripts/fix-rpath target
+touch /home/barak/mrv_dev/buildroot/output/target/usr
+>>>   Generating common rootfs tarball
+rm -rf /home/barak/mrv_dev/buildroot/output/build/buildroot-fs
+mkdir -p /home/barak/mrv_dev/buildroot/output/build/buildroot-fs
+rsync -auH /home/barak/mrv_dev/buildroot/output/target/ /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/target
+echo '#!/bin/sh' > /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/fakeroot.fs
+echo "set -e" >> /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/fakeroot.fs
+echo "chown -h -R 0:0 /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/target" >> /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/fakeroot.fs
+printf '   \n' >> /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/users_table.txt
+PATH="/home/barak/mrv_dev/buildroot/output/host/bin:/home/barak/mrv_dev/buildroot/output/host/sbin:/home/barak/.local/bin:/usr/local/bin:/usr/bin:/bin:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/barak/go/bin:/home/barak/.fzf/bin" /home/barak/mrv_dev/buildroot/support/scripts/mkusers /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/users_table.txt /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/target >> /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/fakeroot.fs
+cat system/device_table.txt > /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/device_table.txt
+printf '   	/bin/busybox                     f 4755 0  0 - - - - -\n 	/var/lib/nginx d 755 33 33 - - - - -\n\n' >> /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/device_table.txt
+echo "/home/barak/mrv_dev/buildroot/output/host/bin/makedevs -d /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/device_table.txt /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/target" >> /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/fakeroot.fs
+printf '   	tar cf /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/rootfs.common.tar --numeric-owner --exclude=THIS_IS_NOT_YOUR_ROOT_FILESYSTEM -C /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/target .\n' >> /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/fakeroot.fs
+chmod a+x /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/fakeroot.fs
+PATH="/home/barak/mrv_dev/buildroot/output/host/bin:/home/barak/mrv_dev/buildroot/output/host/sbin:/home/barak/.local/bin:/usr/local/bin:/usr/bin:/bin:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/barak/go/bin:/home/barak/.fzf/bin" /home/barak/mrv_dev/buildroot/output/host/bin/fakeroot -- /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/fakeroot.fs
+rootdir=/home/barak/mrv_dev/buildroot/output/build/buildroot-fs/target
+table='/home/barak/mrv_dev/buildroot/output/build/buildroot-fs/device_table.txt'
+rm -rf /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/target
+>>>   Generating root filesystem image rootfs.tar
+rm -rf /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar
+mkdir -p /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar
+echo '#!/bin/sh' > /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar/fakeroot
+echo "set -e" >> /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar/fakeroot
+printf '   	mkdir -p /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar/target\n	tar xf /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/rootfs.common.tar -C /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar/target\n' >> /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar/fakeroot
+printf '   \n' >> /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar/fakeroot
+printf '   	(cd /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar/target; find -print0 | LC_ALL=C sort -z | tar  -cf /home/barak/mrv_dev/buildroot/output/images/rootfs.tar --null --no-recursion -T - --numeric-owner)\n' >> /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar/fakeroot
+chmod a+x /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar/fakeroot
+PATH="/home/barak/mrv_dev/buildroot/output/host/bin:/home/barak/mrv_dev/buildroot/output/host/sbin:/home/barak/.local/bin:/usr/local/bin:/usr/bin:/bin:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/barak/go/bin:/home/barak/.fzf/bin" /home/barak/mrv_dev/buildroot/output/host/bin/fakeroot -- /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar/fakeroot
+rm -rf /home/barak/mrv_dev/buildroot/output/build/buildroot-fs/tar/target
+barak@barak-OptiPlex-7020:~/mrv_dev/buildroot$ 

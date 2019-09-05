@@ -1,0 +1,169 @@
+Kosta - Yocto:
+==============
+
+first, we clone git init-kconfig
+it includes build scripts, defconfigs and "make menuconfig" implementation
+
+
+
+
+cp defconfigs/agema_yocto-2.5.2_bcm-sdk-6.5.15 .config
+
+#example defconfig:
+CONFIG_BCM_SDK_6_5_15=y
+CONFIG_KEEPALIVED_2_0_12=y
+CONFIG_YOCTO_2_5_2=y
+CONFIG_BUILD_DIR="ybld"
+CONFIG_LOG_FILE="ylog"
+
+#convert menu configs to our config format
+./build_yocto_step_01_configure.sh
+
+#rm -rf previous ybld - MUST in TC, not recommended in local build
+./build_yocto_step_02_remove_previous.sh
+
+#repo clone for all manifests
+./build_yocto_step_03_clone.sh
+
+#checkout branches mentioned in menu-configs (this let us support multiple menuconfigs like yocto-2.5.1, yocto-2.5.2, etc...)
+./build_yocto_step_04_checkout_branches.sh
+
+#source oe-init-build-env ../build, create build dir with basic Yocto configurations.
+# copy all configs from local.conf (yocto-cust-temp)
+# TO DO: move local.conf to meta.agema
+./build_yocto_step_05_customize_yocto_build_conf.sh
+
+# add layers
+./build_yocto_step_06_add_layers.sh
+
+# run bitbake commands:
+#run_cmd 'bitbake ${bbflags} core-image-full-cmdline // root-fs build
+#run_cmd 'bitbake ${bbflags} core-image-full-cmdline -c populate_sdk_ext'
+./build_yocto_step_07_yocto_build.sh
+
+# upload esdk to servers
+./build_yocto_step_08_upload.sh
+
+
+#init - first time only:
+scripts 1 to 6
+#dev iteration :
+script 7
+#upload, usually by TC:
+script 8
+
+
+
+
+Yocto vanilla:
+===============
+Can be used as a reerence an as a build environment for testing changes
+without affecting our yocto.
+mkdir yocto_toi
+cd yocto_toi/
+git clone git://git.yoctoproject.org/poky
+cd poky/
+source oe-init-build-env ../build
+bitbake -k core-image-full-cmdline
+
+When adding a new package to yocto:
+==================================
+first we should decide if it deserves a separate layer or not (by size and modularity)
+If a new layer is required, then use a bitbake to create the layer:
+
+bitbake-layers create-layer ~/mrv_dev/init-kconfig/ybld/poky/meta-mylayer
+
+note: it is used with full path.
+
+Once you create your general layer, you must add it to your bblayers.conf file. 
+Adding the layer to this configuration file makes the OpenEmbedded build system aware of your layer so that it can search it for metadata.
+
+bitbake-layers add-layer ~/mrv_dev/init-kconfig/ybld/poky/meta-mylayer
+
+make sure it is added successfully:
+bitbake-layers show-layers
+or check bblayers.conf
+
+After the layer is adde successfully, it can be built using devtool modify.
+
+
+recipes in workspace:
+--------------------
+devtool modify - to import a package that is already exists in yocto/poky
+devtool add recipe xxx - to add a new recipe to the workspace which is not exist in poky
+
+now I can upload the new layer under poky to BitBucket as a new layer repo.
+
+Update manifest repository with the new layer for the repo tool.
+
+Then update init-kconfig/browse/build_yocto_step_06_add_layers.sh to add this new layer to bblayers.conf
+Importnant note: bblayers.conf is built by a our script because it cannot be saved in git.
+it cannot be saved in git because layers are always added to bblayers.conf with a full path (which might change among machines)
+
+In case I built a new package under build/workspace, then I can copy its stuff to yocto poky using devtool:
+devtool finish libfixbuffff <layer to add it to>
+
+if the layer doesn't exist, we need to create and add it first with bitbake:
+bitbake-layers create-layer ~/mrv_dev/yocto_toi/poky/meta-mylayer
+bitbake-layers add-layer ~/mrv_dev/yocto_toi/poky/meta-mylayer
+
+make sure it is added successfully:
+bitbake-layers show-layers
+or check bblayers.conf
+
+
+
+Building one package in Yocto:
+==============================
+scripts are provided in z4806/yocto/devtool
+these scripts are running under eSDK, not under Yocto.
+
+In the last script for example devtool build-image is used to update the rootfs under eSDK,
+which is correspoding to:
+#run_cmd 'bitbake ${bbflags} core-image-full-cmdline // root-fs build
+#run_cmd 'bitbake ${bbflags} core-image-full-cmdline -c populate_sdk_ext'
+under Yocto...
+
+
+If running from yocto (and not from z4806), it is recommended to run from build dir (for example ~/mrv_dev/init-kconfig/ybld/build)
+in z4806, the first script "cd" to the correct dir to run.
+
+devtool modif package:
+copy bbapend and sources for the package
+recipe is not copied
+
+change sources
+
+commit changes and create a patch file using git format-patch
+
+copy the patch into the appropriate layer under poky
+
+clear my working workspace by: "devtool reset -a" or ""devtool reset keepalived"
+
+rm -rf workspace/sources/keepalived
+
+check my patch, by running "bitbake keepalived"
+
+check under build/tmp/work/i586-poky-linux that the sources are updated with my new patch
+
+if it was built OK, apply a commit to appropriate yocto layer repository.
+
+Now, to complete the work and check a bunle:
+
+1. update rootfs under yocto build directory. it will seek all
+packages-split dirs and update rootfs with identified new packages.
+
+#run_cmd 'bitbake ${bbflags} core-image-full-cmdline // root-fs build
+
+2. now create a new eSDK installer file:
+#run_cmd 'bitbake ${bbflags} core-image-full-cmdline -c populate_sdk_ext'
+
+Now install the new eSDK:
+cp new eSDK to some accessible location
+update agema_dev_install script to take the new eSDK
+
+build the bundle with build_agema.py
+(-b just for packing the bundle again with new rootfs (including my new keepalived bin)
+ -q for incremental build + packing)
+
+

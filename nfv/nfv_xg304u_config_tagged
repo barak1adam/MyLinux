@@ -1,0 +1,37 @@
+a short configuration needed for OS-V connectivity to NFV server:
+=================================================================
+# example ports 2, 8 are tagged.
+
+1G port connection towards NFV with VLAN 4092. (OS-V port 1)
+1G tagged connection towards the network  using OS-V port 2 with VLAN 4092.
+
+10G port connection towards NFV with VLAN 4093. (OS-V port 9)
+10G tagged connection towards the network using OS-V port 8 with VLAN 4093.
+
+!
+hostname XG304
+!
+line vty 
+ no exec-timeout global
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1,2,8,9
+!
+! Interfaces configuration
+interface vlan vif4092
+ tag 4092
+ ports 1,2
+ ip 169.254.3.2/24
+!
+interface vlan vif4093
+ tag 4093
+ ports 8,9
+!
+
+
+#test connectivity to NFV server
+# do ping 169.254.3.1
+
+#test nfv nidAgent info:
+# do show module nfv0 info
+# do show module nfv0 version

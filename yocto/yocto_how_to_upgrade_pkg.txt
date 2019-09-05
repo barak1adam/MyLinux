@@ -1,0 +1,29 @@
+new terminal:
+=============
+cd <Yocto_eSDK_dir>
+source environment-setup-i586-poky-linux
+
+# reset workspace, rm current sources
+devtool reset --all
+rm -rf workspace/sources/keepalived/
+
+# add a new version. a recipe will be added automatically
+devtool add keepalived http://www.keepalived.org/software/keepalived-2.0.12.tar.gz
+
+merge reciepe:
+==============
+
+#compare to previous recipe. Actually I copied the previous one + took only new check sums from the new one
+bcompare /home/barak/yocto/2.5.1_bcm-sdk-6.5.15/esdk/poky_sdk/workspace/recipes/keepalived/keepalived_2.0.12.bb ~/mrv_dev/meta-agema/recipes-daemons/keepalived/keepalived_2.0.10.bb &
+
+#update yocto-cust-temp
+change package version in local.conf
+
+#compile
+devtool build keepalived - make sure new sources are compiled
+
+#adapt changes to meta-agema repository:
+add recipes-daemons/keepalived/keepalived_2.0.10.bb and patch files
+
+#update init-kconfig repository
+kconfig

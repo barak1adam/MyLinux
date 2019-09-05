@@ -1,0 +1,13 @@
+Kosta, Yocto trouble shoot:
+==========================
+*.ko are built with 32 bit compile settings only by step 1 and not by step 3
+
+how to swtich to another branch - 
+change bcm-sdk_git.bb file ? if I do it, fetch always fails with connection error to BB
+checkout to the other branch locally?
+
+I tried to rm bcm_sdk under workspace/sources
+then I fail to build: source tree for recipe bcm-sdk not found
+
+
+

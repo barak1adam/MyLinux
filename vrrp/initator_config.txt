@@ -1,0 +1,113 @@
+initator# wr t
+Building configuration...
+
+Current configuration:
+! version DK29-01-19-1014 ()
+!
+!
+!Waiting for you core file /config/core.svrrp.gz
+!
+boot
+ ipv6 enable
+ support-sshd-legacy-kex
+!
+!
+hostname initator
+!
+line vty 
+ no exec-timeout global
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1-2,9
+!
+! Interfaces configuration
+!
+interface vlan vif10
+ tag 10
+ ports 4
+ ip 100.100.100.1/24 
+ vrrp
+  enable 
+  virtual-router 1
+   virtual-ip 100.100.100.5 
+   enable
+!        
+interface vlan vif20
+ tag 20  
+ ports 3 
+ ipv6 2001::1/120
+ ipv6 link-local
+ vrrp    
+  enable 
+  virtual-router 1
+   virtual-ip 2001::1 
+   enable
+!        
+interface vlan vif100
+ tag 100 
+ ports 1 
+ ip 10.10.10.1/24 
+ ip sla  
+!        
+interface vlan vif110
+ tag 110 
+ ports 9 
+ ip 1.1.1.1/24 
+ ip sla  
+!        
+interface vlan vif200
+ tag 200 
+ ports 2 
+ ip 20.20.20.1/24 
+ ip sla  
+!        
+interface vlan vif4092
+ tag 4092
+ ports 1 
+ ip 169.254.3.2/24 
+ management ssh 0.0.0.0/0 
+ management telnet 0.0.0.0/0 
+ management syslog 0.0.0.0/0 
+!        
+interface vlan vif4093
+ tag 4093
+ ports 9 
+ management ssh 0.0.0.0/0 
+ management telnet 0.0.0.0/0 
+ management syslog 0.0.0.0/0 
+!        
+interface out-of-band eth0
+ ip 172.21.13.75/20 
+ management ssh 0.0.0.0/0 
+ management telnet 0.0.0.0/0 
+!        
+rfc2544 tester t1 *
+ dest-ip  1.1.1.2
+ rate 50m
+ duration 10
+ length 1518
+!        
+rfc2544 tester t2 *
+ dest-ip  10.10.10.2
+ rate 150m
+ duration 10
+ length 1518
+!        
+rfc2544 tester t3 *
+ dest-ip  20.20.20.2
+ rate 1m 
+ duration 10
+ length 1518
+!        
+ip route default 172.21.14.254
+!        
+! Global ethernet oam configuration
+no ethernet oam trace-ccm-fault
+!        
+initator# 
+initator# 
+initator# 
+initator# 
+initator# 
+initator# 
+CTRL-A Z for help | 115200 8N1 | NOR | Minicom 2.7 | VT102 | Offline | ttyS0                                                                                                                 

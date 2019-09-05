@@ -1,0 +1,24 @@
+1G port connection towards NFV with VLAN 4092. (OS-V port 1)
+1G NNI untagged connection towards the network  using OS-V port 2.
+ 
+10G port connection towards NFV with VLAN 4093. (OS-V port 9)
+10G NNI untagged connection towards the network using OS-V port 8.
+
+!
+hostname XG304
+!
+line vty 
+ no exec-timeout global
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1,9
+!
+! Interfaces configuration
+interface vlan vif4092
+ tag 4092
+ ports 1,2
+!
+interface vlan vif4093
+ tag 4093
+ ports 8,9
+!

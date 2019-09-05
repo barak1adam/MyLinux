@@ -1,0 +1,50 @@
+#before installation make sure DNS is OK, try to ping atlas, foxtrot, etc
+#if NOK, set MRV prefix to DNS:
+# for example:
+==============
+#nmcli c show
+#nmcli c modify "Wired connection 1" ipv4.dns-search "example.com"
+#nmcli c down "Wired connection 1" && nmcli c up "Wired connection 1"
+
+sudo nmcli c modify "Wired connection 1" ipv4.dns-search yok.int.mrv.com
+sudo nmcli c modify "Wired connection 1" ipv4.dns 172.21.9.22
+reboot
+ping foxtrot
+ping bitbucket.mrv.co.il
+
+
+=================================================
+#agent installation
+=================================================
+
+apt-add-repository ppa:openjdk-r/ppa
+java -version
+cd /usr/lib/jvm/
+ls
+cat /etc/environment 
+vim /etc/environment 
+sudo vim /etc/environment 
+source /etc/environment 
+echo $JAVA_HOME
+scp mrv@172.21.10.181:~/Downloads/buildAgent.zip .
+mkdir buildAgent
+unzip buildAgent.zip -d buildAgent
+cd buildAgent/
+ls
+mv buildAgent.dist.properties buildAgent.properties
+ls
+cd conf/
+ls
+mv buildAgent.dist.properties buildAgent.properties
+vim buildAgent.properties 
+mkdir -p /home/mrv/ssd/work
+mkdir -p /home/mrv/ssd/temp
+sudo apt-get install sshpass
+./buildAgent/bin/agent.sh start
+git config --global ssh.variant ssh
+cd buildAgent/logs
+ls -lrt
+tail -f teamcity-agent.log
+
+
+

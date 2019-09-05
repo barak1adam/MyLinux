@@ -1,0 +1,169 @@
+A branch in Git is simply a pointer to one specific commit.
+A key point to understand is that: when creating a branch - actually 3 branches are involved:
+--one branch on a remote machine (named ""origin" by default): master, my_feature
+--one branch on the local machine, which is a "copy" of the branch on the remote machine: remotes/origin/master, remotes/origin/my_feature
+(these are called "remote tracking branches". So remotes/origin/master is a remote tracking branch for master in the origin repo.)
+--one branch on your local machine: e.g. master, my_featue
+
+
+BitBucket is Web based tool running on our remote machine only (on the "server").
+
+
+STEP 1: update your remote tracking branches on your local machine (including remotes/origin/master)
+====================================================================================================
+git fetch [--all]
+
+STEP 2: you can also update your local master by
+================================================
+git checkout master
+git merge FETCH_HEAD
+
+STEP 2: create your user branch (feature or bugfix)
+====================================================
+A branch can be created in 2 ways:
+1. create it on the server by bitcucket and then make "git fetch" on our local mahcine
+OR
+2. create the branch on the local machine (and later push it to the server)
+git branch <new-branch>
+note: there many options in git command line for creating a branch
+keep in mind that the new branch will point the current commit (HEAD)
+
+
+STEP 3: developing your feature
+================================
+git checkout my_feature
+
+for every time, some source files are updated and ready:
+git add ...
+git commit ...
+
+
+during your development, usually master branch is updated on the server by other developers.
+So, you need to update your feature branch so it contains the latest code from master.
+
+STEP 4: UPDATE your local branch:
+===================================================
+4.1: update your local master branch like in STEP 2:
+---------------------------------------------------
+git checkout master
+git fetch origin master (#update origin/master)
+git merge FETCH_HEAD
+
+4.2: merge changes from the updated local master into your local feature branch
+-------------------------------------------------------------------------------
+git checkout my_feature
+git rebase master #rebase your local branch on top of the updated master
+
+
+STEP 5 - PUSH: push you local branch to "server"
+=================================================
+push your local branch to "server" (if it is already exist on the "server" ,it will be updated)
+git push origin my_feature:my_feature
+
+
+MERGE: merge your updated branch on the server into the master branch:
+======================================================================
+open a Pull Request on BitBucket from your branch to master branch
+review cycles + merge it
+
+TO DO: Handle pull requests comments:
+====================================
+repeate STEPS 3 to 5
+Note: if this is not our first "push", --force is used !
+git push --force origin my_feature:my_feature
+
+
+Kosta - ideas to backup git:
+===========================
+peridoic clones in TC
+delete branch after merge
+default settings for push - push only current branch
+why there was a crisis ?
+
+rebase vs merge
+===============
+
+merge:
+1. If I merge my feature to master locally many times during development before push, I will have many merge commits.
+
+advantages:
+history of commits is saved, nothing is re-written. non-destructive action.
+
+rebase:
+1. instead of using a merge commit, rebasing re-writes the project history by creating brand new commits for each commit in the original branch
+
+advantages:
+1. it eliminates the unnecessary merge commits required by git merge
+2. project history is linear, easy to maintain
+3. git rebase -i gives an option to control/unify the commits before pushing. No option like that in git merge (local clean)
+4. if someone else start working on my branch. e.g. making it "public" (cloning it from the server after my first P.R), and I am doing later
+a rebase, then if am forcing my branch again into the server, he will have his local branch diverged and will need to merge them.
+
+Golden Rule of rebase:
+Never rebase public branches !!!
+
+use case 1: public branches (no just me)
+But how can I know somebody started working on my branch??
+
+use case 2: somebody rebased on my branch but afterward I've rewriten my branch with rebase
+If somebody rebased his branch on top of my branch
+
+Anytime I push / pull request - then my branch can be "public", used / reviewed by others.
+To avoid that:
+-create branches locally
+pull request review process:
+----------------------------
+-If you use pull requests as part of your code review process, you need to avoid using git rebase after creating the pull request!
+-handling pull requests reviews must be done with git merge and not with git rebase !
+
+pull request approved:
+----------------------
+rebase the feature after approved before merge it to master ! 
+1. we can do it on bitbucket
+(it requires us to somehow force pull back to local machine - not a good idea..)
+2. just before merging it to master: git rebase --force.
+
+so do not rebase after a feature is published on bitucket.
+
+
+
+
+ 
+Any changes from other developers need to be incorporated with git merge instead of git rebase
+
+Kosta - I suggest:
+if rebase - create branches just locally. after merge in BB, branch is automatically deleted in BB.
+	during P.R review - git merge. after approved, rebase before merge (rebase, push --force and merge on BB )
+	never rebase public branches on BB and locally
+otherwise - use git merge.
+
+Kosta:
+need to understand unneeded line, lines initial state vs merge without rebase
+FF flag in BB - after rebase it should be alwasy linear, shouldn't it ?
+
+
+create branch my_feature on BB
+git clone ...
+git checkout my_feature
+
+create branch on git command line:
+---------------------------------
+git clone
+git branch my_feature
+git checkout 
+
+work on your feature
+(git add, git commit)
+
+
+update local master
+-------------------
+git checkout master
+git fetch
+git merge FETCH_HEAD
+
+merge master to my_feature:
+---------------------------
+git checkout my_feature
+git merge master
+

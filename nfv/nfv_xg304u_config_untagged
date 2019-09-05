@@ -1,0 +1,30 @@
+a short configuration needed for OS-V connectivity to NFV server:
+=================================================================
+
+#example ports 2, 8 are untagged.
+
+#1G port connection towards NFV with VLAN 4092. (OS-V port 1)
+#1G untagged connection towards the network  using OS-V port 2.
+
+#10G port connection towards NFV with VLAN 4093. (OS-V port 9)
+#10G untagged connection towards the network using OS-V port 8.
+
+!
+hostname XG304
+!
+line vty 
+ no exec-timeout global
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1,9
+!
+! Interfaces configuration
+interface vlan vif4092
+ tag 4092
+ ports 1,2
+ ip 169.254.3.2/24
+!
+interface vlan vif4093
+ tag 4093
+ ports 8,9
+!

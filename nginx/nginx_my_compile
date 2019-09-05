@@ -1,0 +1,88 @@
+CC=${CROSS_PATH}/arm-marvell-linux-gnueabi-gcc
+export -n CC LD CPPFLAGS CFLAGS LDFLAGS L_LIB L_INCL
+#./configure --prefix=/usr && make
+./configure --prefix=${BUILD_DIR}/usr \
+--with-cc-opt="-Wno-error -I${BUILD_DIR}/include -I${BUILD_DIR}/openssl-0.9.8k/include" \
+--with-ld-opt=-L${BUILD_DIR}/lib \
+--sbin-path=/usr/local/nginx/nginx \
+--conf-path=/usr/local/nginx/nginx.conf \
+--pid-path=/usr/local/nginx/nginx.pid \
+--with-file-aio \
+--with-threads \
+--with-http_ssl_module \
+--with-http_v2_module \
+--with-http_addition_module \
+--with-http_sub_module \
+--with-http_dav_module \
+--with-http_flv_module \
+--with-http_mp4_module \
+--with-http_gunzip_module \
+--with-http_gzip_static_module \
+--with-http_auth_request_module \
+--with-http_random_index_module \
+--with-http_secure_link_module \
+--with-http_degradation_module \
+--with-http_stub_status_module \
+--with-stream \
+--with-stream_ssl_module \
+--with-debug \
+--with-select_module \
+--with-poll_module \
+
+#
+#
+#xterm
+#
+#
+#--with-pcre=../pcre-8.41 \
+--with-pcre=${BUILD_DIR}/pcre-8.30 \
+#--with-zlib=../zlib-1.2.11 \
+#
+#CFLAGS=$(filter-out -Werror,$(CFLAGS))
+make CC=${CROSS_PATH}/arm-marvell-linux-gnueabi-gcc
+sudo make install
+
+
+# Ilja:
+#--without-http-cache
+#--without-http_gzip_module
+#--without-http_rewrite_module
+#--without-http_charset_module
+#--without-http_ssi_module
+#--without-http_userid_module
+#--without-http_access_module
+#--without-http_auth_basic_module
+#--without-http_autoindex_module
+#--without-http_geo_module
+#--without-http_map_module
+#--without-http_split_clients_module
+#--without-http_referer_module
+#--without-http_proxy_module
+#--without-http_fastcgi_module
+#--without-http_uwsgi_module
+#--without-http_scgi_module
+#--without-http_memcached_module
+#--without-http_limit_conn_module
+#--without-http_limit_req_module
+#--without-http_empty_gif_module
+#--without-http_browser_module
+#--without-http_upstream_ip_hash_module
+#--without-http_upstream_least_conn_module
+#--without-http_upstream_keepalive_module
+#src/event/ngx_event_connect.c: In function 'ngx_event_connect_peer':
+#src/event/ngx_event_connect.c:103:47: error: 'IP_BIND_ADDRESS_NO_PORT' undeclared (first use in this function)
+#                 if (setsockopt(s, IPPROTO_IP, IP_BIND_ADDRESS_NO_PORT,
+#
+#--with-http_realip_module          enable ngx_http_realip_module
+#--with-http_addition_module        enable ngx_http_addition_module
+#--with-http_xslt_module            enable ngx_http_xslt_module
+#--with-http_xslt_module=dynamic    enable dynamic ngx_http_xslt_module
+#--with-http_image_filter_module    enable ngx_http_image_filter_module
+#--with-http_image_filter_module=dynamic
+#                                   enable dynamic ngx_http_image_filter_module
+#--with-http_geoip_module           enable ngx_http_geoip_module
+#--with-http_geoip_module=dynamic   enable dynamic ngx_http_geoip_module
+#--with-http_slice_module           enable ngx_http_slice_module
+#
+# do we need to specify pcre
+# do we need to specifgy zlib

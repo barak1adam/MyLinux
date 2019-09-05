@@ -1,0 +1,26 @@
+samba:
+mrv, 123456
+172.21.9.222
+./buildAgent/bin/agent.sh start
+
+
+tango:
+mrv, 123456
+172.21.9.226
+./buildAgent/bin/agent.sh start
+
+
+roomba:
+mrvci, 1234qwer
+172.21.9.220
+./TeamCity/buildAgent/bin/agent.sh start
+
+foxtrot:
+mrv, 123456
+172.21.9.223
+server is located under ~/TeamCity
+buid agent is located under ~/buildAgent
+To run the server including all agents:
+~/TeamCity/bin/runAll.sh start
+To run just the foxtrot agent:
+~/buildAgent/bin/agent.sh start

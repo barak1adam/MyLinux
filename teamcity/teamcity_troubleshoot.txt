@@ -1,0 +1,75 @@
+TeamCity trouble-shooting:
+=========================
+
+how to debug the server:
+ssh to foxtrot, then "tail -f teamcity-server.log"
+ssh from another terminal and start the service, watch the log for errors
+
+
+how to debug the agent:
+ssh to foxtrot, then "~/buildAgent/logs$ tail -f teamcity-agent.log"
+ssh from another terminal and start the agent service, watch the log for errors
+
+I had errors with permissions:
+sudo chown mrv:mrv /home/mrv/temp -R
+
+same issue I had in foxtrot as agent:
+mrv@Foxtrot:~/buildAgent$ sudo chown mrv:mrv -R .
+
+~/buildAgent - the agent directory
+~/TeamCity - the server directory
+~/.buildServer - the server settings
+
+agents - they keep the latest build sources and objects
+but the final artifacts are saved on the server - foxtrot
+
+So, if I remove agent, I am not loosing the artifacts.
+
+
+server settings:
+mrv@Foxtrot:~/.BuildServer$ find . -name "database.properties"
+./config/database.properties
+
+agent settings:
+buildAgent.properties in mrv@Foxtrot:~/buildAgent/conf
+
+it is possible to pool out an agent: unauthorized agent or disable agent
+
+it is possible to pool out build config by: Actions --- >Archive project...
+
+License upgrade is done automatically
+
+TeamCity Upgrade is recommended
+
+Agent Cloud - create new cloud profile - to add a new Amazon agent
+URL should be added as we did with nginx proxy...
+
+
+TeamCity SSH keys for bitbucket:
+================================
+In general when you make SSH connection, then you use private key (id_rsa) and the public key is used by the remote server I try to connect to (id_rsa.pub).
+so TC is using a private SSH key and in BitBucket there is the public key.
+A key is a property of the user not of a machine, so one key can be used on different machines owned by the same user.
+TC is using it private key that we configured for all projects. it is set as an uploaded key on the VCS Root project and inherited for all sub-projects.
+In bitbucket the public key is added for that user (mrv)
+
+But when projects like the Distribution is built by TC on one agent, then sub projects are built by our ../install/<project>/build/compile script
+In this script a clone is done, but it is not under TC context, so the ssh key on the agent is used instead.
+This is the reason we had to copy some agent keys to some specific projects...
+The good practice is to copy the same private key of the mrv user,as used by TC, to all agents and then the same key will be used
+and we don't have to add other keys for projects. --- I did it - I copied it from foxtrot:/home/mrv/.ssh/...
+
+
+Teamcity sources in BitBucket:
+==============================
+
+I cloned all sources to my pc under ~/mrv_dev/teamcity
+from here I can pull and push (--force) changes
+
+Legacy build number:
+===================
+Need to investigate:
+1) go back with teamcity sources to work with SVN, and look what was configured for build.vcs.number.Os_OptiSwitchSvn parameter
+2) try to understand $app_ver
+
+

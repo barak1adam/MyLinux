@@ -1,0 +1,284 @@
+tcpdump -i vif100 arp -e -vvv
+
+50:
+==
+xg-c7-50# wr t
+Building configuration...
+
+Current configuration:
+! version DK05-03-19-1327 ()
+!
+!
+boot
+ ipv6 enable
+!
+!
+hostname xg-c7-50
+!
+line vty 
+ no exec-timeout global
+!
+clock timezone sweden
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1,9
+!
+! Interfaces configuration
+!
+interface vlan vif100
+ tag 100
+ ports 1
+ ipv6 2010:10::1/64
+ ipv6 link-local
+ ip 10.10.10.1/24 
+ vrrp
+  enable
+  virtual-router 1
+   virtual-ip 10.10.10.5 
+   enable
+!
+interface vlan vif4092
+ description MOS to Modem Comms
+ tag 4092
+ ports 9 
+ ip 169.254.1.2/24 
+ ip 169.254.2.2/24 
+ management ssh 0.0.0.0/0 
+ management syslog 0.0.0.0/0 
+!        
+interface out-of-band eth0
+ ip 172.21.13.50/21 
+ management ssh 0.0.0.0/0 
+ management telnet 0.0.0.0/0 
+ management tftp 0.0.0.0/0 
+ management snmp 0.0.0.0/0 
+ management netconf 0.0.0.0/0 
+!        
+ip route default 172.21.14.254
+!        
+ip route 172.16.200.4/30 10.10.10.10
+!        
+! Global ethernet oam configuration
+no ethernet oam trace-ccm-fault
+!        
+! Virtual Routing/Forwarding instance
+vrf 7 7  
+ interface vlan vif700
+  tag 700
+  ports 1
+  ipv6 2010:7::1/64
+  ipv6 link-local
+  ip 10.10.7.1/24 
+!        
+ vrrp    
+  enable 
+  virtual-router 1
+   virtual-ip 10.10.7.5 
+   enable
+!        
+xg-c7-50# 
+
+
+
+143:
+===
+xg-sf-143# wr t
+Building configuration...
+
+Current configuration:
+! version DK05-03-19-1327 ()
+!
+!
+boot
+ ipv6 enable
+!
+!
+hostname xg-sf-143
+!
+line vty 
+ no exec-timeout global
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1
+!
+! Interfaces configuration
+!
+interface vlan vif100
+ tag 100
+ ports 1
+ ipv6 2010:10::2/64
+ ipv6 link-local
+ ip 10.10.10.2/24 
+ vrrp
+  enable
+  virtual-router 1
+   priority 150
+   virtual-ip 10.10.10.5 
+   enable
+!
+interface out-of-band eth0
+ ip 172.21.10.143/21 
+ management ssh 0.0.0.0/0 
+ management telnet 0.0.0.0/0 
+ management tftp 0.0.0.0/0 
+ management snmp 0.0.0.0/0 
+ management netconf 0.0.0.0/0 
+!        
+ip route default 172.21.14.254
+!        
+ip route 172.16.200.4/30 10.10.10.10
+!        
+! Virtual Routing/Forwarding instance
+vrf 7 7  
+ interface vlan vif700
+  tag 700
+  ports 1
+  ipv6 2010:7::2/64
+  ipv6 link-local
+  ip 10.10.7.2/24 
+!        
+ vrrp    
+  enable 
+  virtual-router 1
+   priority 150
+   virtual-ip 10.10.7.5 
+   enableputs "running iteranion: $iter"
+!        
+xg-sf-143# 
+
+
+
+22:
+===
+xg-slc-22(debug)# wr t
+Building configuration...
+
+Current configuration:
+! version 19_1_1 (14768)
+!
+!
+!Waiting for you core file /config/core.sfib.gz
+!
+boot
+ ipv6 enable
+!
+!
+hostname xg-slc-22
+!
+line vty 
+ no exec-timeout global
+router-id 10.177.0.1
+!
+! MPLS debug configuration
+debug mpls log
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1-3
+!
+! Interfaces configuration
+!
+interface vlan vif100
+ tag 100
+ ports 2-3
+ ipv6 2010:10::10/64on 192 clear the arp entries
+on 192 disable link 2
+on 143 (the master) - "no enable" and then "enable" the real vif. It recreates the vif and vrrp interfaces in Linux.
+[optional step]: change the net flags for the interfaces (/proc/sys/net/ipv4/conf)
+on 192 enable link 2
+on 192 ping to virtual IP
+on 192 show arp table - check if real MAC or VMAC is learned for the virtual IP entry. The bug is that real MAC is learned for the first time.
+ ipv6 link-local
+ ip 10.10.10.10/24 
+!        
+interface vlan vif4000
+ tag 4000
+ ports 1 
+ ip 172.16.200.5/30 
+!        
+interface out-of-band eth0
+ ip 172.21.11.22/21 
+ management ssh 0.0.0.0/0 
+ management telnet 0.0.0.0/0 
+ management tftp 0.0.0.0/0 
+ management snmp 0.0.0.0/0 
+ management netconf 0.0.0.0/0 
+!        
+interface dummy dummy1
+ ip 10.177.0.1/32 
+!        
+ip route default 172.21.14.254
+!        
+! Global ethernet oam configuration
+no ethernet oam trace-ccm-fault
+!        
+! Virtual Routing/Forwarding instance
+vrf 7 7  
+ interface vlan vif700
+  tag 700
+  ports 2-3
+  ipv6 2010:7::10/64
+  ipv6 link-local
+  ip 10.10.7.10/24 
+!        
+xg-slc-22(debug)# 
+
+
+
+192:
+===puts "running iteranion: $iter"
+
+xg-af-192# wr t
+Building configuration...
+
+Current configuration:on 192 clear the arp entries
+on 192 disable link 2
+on 143 (the master) - "no enable" and then "enable" the real vif. It recreates the vif and vrrp interfaces in Linux.
+[optional step]: change the net flags for the interfaces (/proc/sys/net/ipv4/conf)
+on 192 enable lputs "running iteranion: $iter"ink 2
+on 192 ping to virtual IP
+on 192 show arp table - check if real MAC or VMAC is learned for the virtual IP entry. The bug is that real MAC is learned for the first time.
+! version 19_1_1 (14768)
+!
+!
+boot
+ tunnel-entries 2048
+ ipv6 enable
+!
+!
+hostname xg-af-192
+!
+line vty 
+ no exec-timeout global
+router-id 10.15.0.1
+!
+! MPLS debug configuration
+debug mpls log
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1-3
+!
+! Interfaces configuration
+!
+interface vlan vif4000
+ tag 4000
+ ports 2
+ ip 172.16.200.6/30 
+!
+interface out-of-band eth0
+ ip 172.21.10.192/21 
+ management ssh 0.0.0.0/0 
+ management telnet 0.0.0.0/0 
+ management tftp 0.0.0.0/0 
+ management snmp 0.0.0.0/0 
+ management netconf 0.0.0.0/0 
+!        
+interface dummy dummy1
+ ip 10.15.0.1/32 
+ ip isis 
+!        
+ip route default 172.21.14.254
+!        
+ip route 10.10.10.0/24 172.16.200.5
+!        
+xg-af-192# 
+

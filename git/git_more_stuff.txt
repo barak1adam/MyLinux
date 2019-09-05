@@ -1,0 +1,35 @@
+Creating new branch
+================
+> To create local branch I just use "-b" flag, without "git branch":
+> git checkout -b my_feature
+ 
+This command format is absolutely misleading, because there is
+an implicit parameter <from_commit_id> that is not stated in the
+command.
+ 
+The full command is:
+$ git checkout -b my_feature <from_commit_id>
+or:
+$ git checkout -b my_feature <from_branch_name>
+In case the "from" parameter is missing, the current "HEAD" commit id
+is used. This is wrong in many cases.
+ 
+I suggest the full command that is always correct:
+```
+$ git checkout -b my_feature <from_commit_id>
+$ git checkout -b my_feature <from_branch_name>
+```
+For example,
+```
+$ git checkout -b my_feature origin/master
+$ git checkout -b my_feature origin/release_2.7.4
+
+```
+
+
+I used git rebase not just to change commit message but to rollback 
+changes in file.
+In the process while ammending in the relevant commit, if I want
+to compare a file the its previous version, in order to rollback a change,
+I can do it with :
+git difftool HEAD~1..HEAD install/nginx/post

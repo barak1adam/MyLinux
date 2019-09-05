@@ -1,0 +1,16 @@
+Yocto init-kconfig
+==================
+
+how to generate new defconfigs for Yocto:
+-----------------------------------------
+for example: agema_yocto-2.5.1_bcm-sdk-6.5.15
+
+cp agema_yocto-2.5.1_bcm-sdk-6.5.15 to .config
+make menuconfig
+do the settings and save
+cp .config to agema_yocto-2.5.1_bcm-sdk-6.5.15
+
+
+build_yocto_step_01_configure.sh is called by TC
+it is doing the job of connecting all the defconfig setting into Yocto
+conf file.

@@ -1,0 +1,14 @@
+str=/home/barak/wkspaces/opx/main/platform/open_clovis/target/OP9500/images/i686/linux-4.4.131/bin/osmd
+scp barak@172.21.11.14:$str /home/admin
+mv /usr/deploy-cc/bin/osmd /usr/deploy-cc/bin/osmd.ORIG
+cp /home/admin/osmd /usr/deploy-cc/bin/osmd
+
+
+str=/home/barak/wkspaces/opx/main/platform/open_clovis/target/OP9500/images/i686/linux-4.4.131/bin/vrrp_mgr
+scp barak@172.21.11.14:$str /home/admin
+mv /usr/deploy-cc/bin/vrrp_mgr /usr/deploy-cc/bin/vrrp_mgr.ORIG
+cp /home/admin/vrrp_mgr /usr/deploy-cc/bin/vrrp_mgr
+
+
+nm ./platform/open_clovis/target/OP9500/images/i686/linux-4.4.131/bin/osmd | grep foo
+

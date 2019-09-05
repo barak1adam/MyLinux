@@ -1,0 +1,46 @@
+How to configure IP address in Ubuntu:
+======================================
+
+How to get my Ubuntu release:
+-----------------------------
+lsb_release -a
+
+cat /etc/issue
+
+cat /etc/os-release
+
+hostnamectl
+
+
+Ubuntu  <= 16.04
+-----------------
+
+Vi /etc/network/interfaces:
+
+auto ens160
+iface ens160 inet static
+address 192.168.1.33
+netmask 255.255.255.0
+network 192.168.1.0
+broadcast 192.168.1.255
+gateway 192.168.1.1
+dns-nameservers 192.168.1.1
+
+
+Ubuntu >= 18.04
+-----------------
+
+use netplan: 
+https://www.techrepublic.com/article/how-to-configure-a-static-ip-address-in-ubuntu-server-18-04/
+
+
+cd /etc/netplan. 
+Issue the command ls and you should see a file named 50-cloud-init.yaml.
+If you don't also see a file named 01-netcfg.yaml, create it with the command sudo touch 01-netcfg.yaml.
+
+
+sudo nano 01-netcfg.yaml
+
+sudo netplan apply
+
+sudo netplan --debug apply

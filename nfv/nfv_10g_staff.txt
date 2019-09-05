@@ -1,6 +1,8 @@
 nfv instllations:
 ================
 
+exit redirected minicom: ctrl a a x (num of 'a = recursive depth...)
+
 Linux on flash: mrv, 123456
 
 Linux on USB: admin, 12345t. root, 123456
@@ -67,7 +69,7 @@ email from Eitan:
 
 10G KR backplane driver installation:
  
-1.   BIOS->BOOT->BOOT OPT #1 – USB disk
+1.   Push USB 10G drivers installation in NFV module front panel usBIOS->BOOT->BOOT OPT #1 – USB disk
 2.   Enter to Main->CSM
 3.   CSM->storage:  uefi
 4.   CSM->boot option: uefi only

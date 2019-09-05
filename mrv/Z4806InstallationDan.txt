@@ -1,0 +1,15 @@
+agema installations with Dan:
+=============================
+
+Need to have connectivity to 10.100.1.x
+boot (ONIE Install OS)
+
+
+MAC addresses if needed:
+------------------------
+server 10.100.1.6
+need to change dir name
+
+mrv
+1234qwer
+sudo

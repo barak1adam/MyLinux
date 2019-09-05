@@ -1,0 +1,20 @@
+
+In Agema - add build configuration for static analysis
+last step of running "parse_kw_results_for_tc.py" is not MUST - its purpose is to
+import the kw results into TC HTML screens
+for now, I will add just 4 steps that build the KW report in the KW server.
+
+It is important because client kw analysis are running now compared to OPX db.
+
+Add it with scheduler trigger
+
+In application incremental builds:
+Kw is running on the step of Code Inspection and runs 
+kw_utils/parse_local_results.py
+this script retrive latest analysis results from server, compare client
+analysis to this server and db and show the results in TC.
+
+
+AI:
+1. get from Ziki list of file by KW - I will run git log -p for each
+2. Integrate parse_kw_results_for_tc.py

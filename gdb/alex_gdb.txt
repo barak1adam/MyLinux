@@ -1,0 +1,42 @@
+
+ 
+0. To debug CPSS:
+  0.1. In file /home/alexr/work/MyClone/buildEnv/install/cpss/build/compile
+  (or /home/alexr/work/Shipit/buildEnv/install/cpss/build/compile)
+         uncomment line "export DEBUG_INFO=D_ON"
+  0.2. Rebuild CPSS
+  
+  
+  
+  
+  
+  
+  
+  
+ 
+1. lunch gdbserver on target as sudo :
+ 
+gdbserver --multi :12345 &
+
+
+ps | grep svrrp
+ 
+ 
+2. run /scripts/start_dbg.sh with process name and target ip
+ 
+./start_dbg.sh -P /usr/local/nbase/sbin/svrrp -A 10.32.8.76
+ 
+will create .dgbinit file with the correct setting and will open a terminal directed to
+<$BUILD_DIR>/toolchain/bin
+ 
+3. execute
+ 
+./arm-marvell-linux-gnueabi-gdb
+ 
+to start gdb
+ 
+5. to attach to a running process, type
+>(gdb) attach <pid to attach to>
+ 
+4. in the above example, set breakpoint at main :
+>(gdb)b kuku_func

@@ -1,0 +1,31 @@
+DevOps tasks:
+=============
+backup foxtrot
+backup BB and test the backup once in a week
+
+locate u-boot and images on the same location on HAL
+organize HAL
+
+Klockwork for Agema
+
+licenses
+
+Move BB USA to YOK
+
+rebuild of previous versions: given a version exact name/ number - reproduce it full build.
+mark all components of a full build with the same tag for reproduction
+
+
+gdb and eclipse for ops, opx, agema
+
+mirroring all repositories on GitLab, GitHub
+
+Clean TC agents
+
+Legacy builds - why it fails on some of the agents
+
+Try to build on cloud
+
+agema gitignore files
+
+

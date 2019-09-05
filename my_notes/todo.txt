@@ -1,0 +1,17 @@
+Next:
+TeamCity - BlackDuck integration
+TeamCity - KW for OS-V: successfully running only on Foxtrot.
+TeamCity - support build for specific branch of XG 312
+
+Z4806 - handle git ignore
+Z4806 - Review and merge Oleg scripts for GDB in Z4806
+Z4806 - passwords security
+Z4806 - ssh keys algorithm for 19.1
+Z4806 - console disable ?
+
+OS-V - XG312 lsp and u-boot tasks
+OS-V - VRRP - IPv6 for XG300
+OS-V - check interrupts toggling for SFPs
+
+Other - Valgrind - build a demo session for Z4806 / OS-V
+

@@ -1,0 +1,171 @@
+A2:
+==
+
+
+a2(config-vr)# wr t
+Building configuration...
+
+Current configuration:
+!
+line vty
+ no exec-timeout
+hostname a2
+!
+profile tag-manipulation pv-qiniq
+ ingress remove outer-tag  
+ egress add outer-tag  
+!
+port eth-1/0/2
+ mef-role nni
+port eth-1/0/5
+ enable
+port eth-1/0/6
+ enable
+!
+interface out-of-band eth0
+ ip address 10.100.1.244/24
+ enable
+!
+interface inet eth-1/0/5.1
+ ipv6 address 2001::3/120
+ outer-tags 30
+ vrrp
+  virtual-router 1
+   priority 230
+   virtual-ip 2001::5
+   vr-enable
+  vrrp-if-enable
+ enable
+!
+interface inet eth-1/0/6.1
+ ipv6 address 2002::3/120
+ outer-tags 40
+ vrrp
+  virtual-router 1
+   virtual-ip 2002::5
+   vr-enable
+  vrrp-if-enable
+ enable
+!
+interface ac eth-1/0/1.1
+ outer-tags 3
+ oam md MD_Name md-level 1 ma MA-1
+  mep-id 101
+  ccm-priority 1
+  pm
+  ccm-activate
+  dm dm-test
+   destination rmep-id 102
+   test-enable
+  mep-enable
+ enable
+!
+interface ac eth-1/0/2.1
+ outer-tags 2
+ bind-profile tag-manipulation  pv-qiniq
+ enable
+!
+ip route default 10.100.1.254
+!
+ip filtering 
+ allow service ssh
+ allow service telnet
+ allow service netconf
+ allow service snmp source 172.21.10.161
+!
+snmp
+ community    10 read-only default public 
+ community    20 write-read localhost private 
+ trapsess 172.21.10.161 2 public
+!
+e-line Service_OAM 2
+ ac eth-1/0/1.1 ac-hairpin eth-1/0/2.1
+ ac eth-1/0/2.1 ac-hairpin eth-1/0/1.1
+ enable
+!
+performance-monitoring
+ enable
+!
+ethernet oam
+ md MD_Name md-level 1
+  ma MA-1 ma-id 1
+   ccm-interval 100msec
+ profile dm DM_Profile
+  tx-interval 10msec
+ enable
+!
+a2(config-vr)# 
+
+
+
+OS-V:
+=====
+initator(config-if-vif40-vrrp-vr-1)# wr t
+Building configuration...
+
+Current configuration:
+! version main-DK05-11-14-1321
+!
+!
+boot
+ ipv6 enable
+ support-sshd-legacy-kex
+!
+!
+hostname initator
+!
+line vty 
+ no exec-timeout global
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1-2,5-9
+!
+! Interfaces configuration
+!
+interface vlan vif10
+ tag 10
+ ports 5-8
+ ip 100.100.100.1/24 
+ vrrp
+  enable
+  virtual-router 1
+   priority 150
+   virtual-ip 100.100.100.5 
+   enable
+!        
+interface vlan vif30
+ tag 30  
+ ports 5-8
+ ipv6 2001::2/120
+ ipv6 link-local
+ vrrp    
+  enable 
+  virtual-router 1
+   priority 200
+   virtual-ip 2001::5 
+   enable
+!        
+interface vlan vif40
+ tag 40  
+ ports 5-8
+ ipv6 2002::2/120
+ ipv6 link-local
+ vrrp    
+  enable 
+  virtual-router 1
+   priority 50
+   virtual-ip 2002::5 
+   enable
+!        
+interface out-of-band eth0
+ ip 10.100.1.202/24 
+ management ssh 0.0.0.0/0 
+ management telnet 0.0.0.0/0 
+!        
+ip route default 10.100.1.254
+!        
+! Global ethernet oam configuration
+no ethernet oam trace-ccm-fault
+!        
+initator(config-if-vif40-vrrp-vr-1)# 
+

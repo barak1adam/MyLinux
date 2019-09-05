@@ -1,0 +1,58 @@
+mkdir `pwd`/output
+OUT=`pwd`/output
+CC=${CROSS_PATH}/arm-marvell-linux-gnueabi-gcc
+/bin/sed -i -e 's/-Werror//g' -i /home/barak/mrv_dev/buildroot/output/build/nginx-1.12.2/auto/cc/*
+
+ngx_force_c_compiler=yes \
+ngx_force_c99_have_variadic_macros=yes \
+ngx_force_gcc_have_variadic_macros=yes \
+ngx_force_gcc_have_atomic=yes \
+ngx_force_have_epoll=yes \
+ngx_force_have_sendfile=yes \
+ngx_force_have_sendfile64=yes \
+ngx_force_have_pr_set_dumpable=yes \
+ngx_force_have_timer_event=yes \
+ngx_force_have_map_anon=yes \
+ngx_force_have_map_devzero=yes \
+ngx_force_have_sysvshm=yes \
+ngx_force_have_posix_sem=yes \
+ngx_force_have_libatomic=no \
+./configure --prefix=$OUT --crossbuild=Linux::${ARCH} \
+--with-cc=$CC \
+--with-cc-opt="-I${BUILD_DIR}/include -I${BUILD_DIR}/openssl-0.9.8k/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os" \
+--with-ld-opt=-L${BUILD_DIR}/lib \
+--with-ipv6 \
+--conf-path=$OUT/etc/nginx/nginx.conf \
+--sbin-path=$OUT/usr/sbin/nginx \
+--pid-path=$OUT/var/run/nginx.pid \
+--lock-path=$OUT/var/run/lock/nginx.lock \
+--error-log-path=$OUT/var/log/nginx/error.log \
+--http-log-path=$OUT/var/log/nginx/access.log \
+--http-client-body-temp-path=$OUT/var/tmp/nginx/client-body \
+--http-proxy-temp-path=$OUT/var/tmp/nginx/proxy \
+--http-fastcgi-temp-path=$OUT/var/tmp/nginx/fastcgi \
+--http-scgi-temp-path=$OUT/var/tmp/nginx/scgi \
+--http-uwsgi-temp-path=$OUT/var/tmp/nginx/uwsgi \
+--with-pcre \
+--with-zlib=${BUILD_DIR}/zlib-1.2.3.4 \
+--with-http_ssl_module \
+--with-http_v2_module \
+--with-http_addition_module \
+--with-http_sub_module \
+--with-http_dav_module \
+--with-http_flv_module \
+--with-http_mp4_module \
+--with-http_gunzip_module \
+--with-http_gzip_static_module \
+--with-http_auth_request_module \
+--with-http_random_index_module \
+--with-http_secure_link_module \
+--with-http_realip_module \
+--with-http_addition_module \
+--with-http_degradation_module \
+--with-http_stub_status_module \
+--with-select_module \
+--with-poll_module
+
+make
+sudo make install

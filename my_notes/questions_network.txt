@@ -1,0 +1,18 @@
+subnet overlapping
+
+to send a packet, the network address part is testet using the mask
+2 addresses which have the same network address part, cannot be defined over 
+different interfaces - we will not be able to decide what interface to use for TX.
+
+
+Reuven,
+
+ip forwarding - assume 10.10.10.10 and 20.20.20.20 are defined on the same
+machine but on different interfaces
+sending a ping from network 10.10.10.x towards 20.20.20.20, will it succeed?
+
+
+Pavel
+FIB, RIB,
+what is in the packet processor what in Linux ?
+MAC / PHY

@@ -1,0 +1,86 @@
+mrv@lte:~$ lte-mgr.sh info
+Manufacturer: Sierra Wireless, Incorporated
+Model: EM7455
+Revision: SWI9X30C_02.20.03.00 r6691 CARMD-EV-FRMWR2 2016/06/30 10:54:05
+MEID: 35907306224428
+IMEI: 359073062244284
+IMEI SV:  6
+FSN: LF902692020310
++GCAP: +CGSM
+IMSI: 425020176242334
+PRI Part Number: 9906689
+Revision: 001.003
+Customer: Generic-M2M
+Carrier PRI: 9999999_9904609_SWI9X30C_02.20.03.00_00_GENERIC_002.017_000
++CPIN: READY
++COPS: 0
++CSCA: "+972521100059",145
+Current Time:  47               Temperature: 21
+Reset Counter: 3                Mode:        ONLINE         
+System mode:   LTE              PS state:    Not attached 
+LTE band:      No band          LTE bw:      1.4 MHz 
+LTE Rx chan:   0                LTE Tx chan: 4294967295
+LTE CA state:  NOT ASSIGNED
+EMM state:     Deregistered     No Cell        
+RRC state:     RRC Idle       
+IMS reg state: No Srv  
+PCC RxM RSSI:  0                RSRP (dBm):  0
+PCC RxD RSSI:  0                RSRP (dBm):  0
+Tx Power:      0                TAC:         0000 (0)
+RSRQ (dB):     0.0              Cell ID:     00000000 (0)
+SINR (dB):     0
+Band: Index, Name
+09, LTE ALL
+Networks: +WS46: (12,22,25,28,29)
++CREG: 0,0
+Power Control State: Online
+LPM voters - Temp:0, Volt:0, User:0, W_DISABLE:0, IMSWITCH:0, BIOS:0, LWM2M:0, OMADM:0, FOTA:0
+LPM persistence - None
+Temp state: Normal
+Temperature: 22.00 C
+Volt state: Normal
+Power supply voltage: 3297 mV (ADC: 35934)
+IP address : +CGDATA: ("PPP")
+^SYSINFO: 4,0,0,0,1
+!CUSTOM: 
+             GPSENABLE          0x01
+             GPSLPM             0x01
+             IPV6ENABLE         0x01
+             UIM2ENABLE         0x01
+             SIMLPM             0x01
+             USBSERIALENABLE    0x01
+             SINGLEAPNSWITCH    0x01
+P: /devices/pci0000:00/0000:00:14.0/usb2/2-1/2-1:1.8/net/enp0s20u1i8
+E: DEVPATH=/devices/pci0000:00/0000:00:14.0/usb2/2-1/2-1:1.8/net/enp0s20u1i8
+E: ID_BUS=usb
+E: ID_MODEL=Sierra_Wireless_EM7455_Qualcomm��_Snapdragon�.X7_LTE-A
+E: ID_MODEL_ENC=Sierra\x20Wireless\x20EM7455\x20Qualcomm��\x20Snapdragon�.x20X7\x20LTE-A
+E: ID_MODEL_ID=9071
+E: ID_NET_DRIVER=GobiNet
+E: ID_NET_LINK_FILE=/lib/systemd/network/99-default.link
+E: ID_NET_NAME=enp0s20u1i8
+E: ID_NET_NAME_PATH=enp0s20u1i8
+E: ID_PATH=pci-0000:00:14.0-usb-0:1:1.8
+E: ID_PATH_TAG=pci-0000_00_14_0-usb-0_1_1_8
+E: ID_REVISION=0006
+E: ID_SERIAL=Sierra_Wireless__Incorporated_Sierra_Wireless_EM7455_Qualcomm��_Snapdragon�.X7_LTE-A_LF90269202031027
+E: ID_SERIAL_SHORT=LF90269202031027
+E: ID_TYPE=generic
+E: ID_USB_DRIVER=GobiNet
+E: ID_USB_INTERFACES=:ffffff:ff0000:
+E: ID_USB_INTERFACE_NUM=08
+E: ID_VENDOR=Sierra_Wireless__Incorporated
+E: ID_VENDOR_ENC=Sierra\x20Wireless\x2c\x20Incorporated
+E: ID_VENDOR_FROM_DATABASE=Sierra Wireless, Inc.
+E: ID_VENDOR_ID=1199
+E: IFINDEX=10
+E: INTERFACE=enp0s20u1i8
+E: SUBSYSTEM=net
+E: SYSTEMD_ALIAS=/sys/subsystem/net/devices/enp0s20u1i8 /sys/subsystem/net/devices/enp0s20u1i8
+E: TAGS=:systemd:
+E: USEC_INITIALIZED=212548226
+
+mrv@lte:~$ 
+mrv@lte:~$ lte-mgr.sh pin
++CPIN: READY
+mrv@lte:~$ 

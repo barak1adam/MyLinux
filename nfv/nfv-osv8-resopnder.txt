@@ -1,0 +1,34 @@
+Current configuration:
+! version DK11-07-18-1752 ()
+!
+!
+!Waiting for you core file /config/core.pssRxAutoTun.gz
+!
+line vty 
+ no exec-timeout global
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1
+!
+! Interfaces configuration
+!
+interface vlan vif110
+ tag 110
+ ports 1
+ ip 1.1.1.1/24 
+ ip sla
+!
+ethernet oam domain 1
+ service 1
+    primary-vlan 110
+    vlans 110
+    remote-meps all
+    mep 1 outward port 1
+    mep 1 primary-vlan 110
+    mep 1 activate
+    mep 1 ccm-activate
+!        
+! Global ethernet oam configuration
+ethernet oam enable
+!        
+OS-V8-F# 

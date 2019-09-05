@@ -1,0 +1,9 @@
+SFIB
+
+ARP entries in SFIB
+===================
+
+if you look for an ARP entry with Key = ip/mask, you get {d.mac, d.port, tag} + hw id
+
+
+if you look for a route entry with Key = ip/mask, you get ptr to ecmp (arp group)

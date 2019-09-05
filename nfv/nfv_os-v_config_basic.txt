@@ -1,0 +1,32 @@
+#nfv managment setting for XG 304:
+enable
+
+configure
+
+port tag-outbound-mode tagged 1
+
+interface vlan vif4092
+tag 4092
+ports 1
+ip 169.254.3.2/24
+
+do ping 169.254.3.1
+
+#test
+show module nfv0 info
+show module nfv0 version
+
+
+We can add later very short settings:
+============================
+to enable NTP server on the NiD
+to set IP address for NiD agent monitoring
+
+Please let me know if any further settings are required.
+
+Thanks,
+Barak
+
+
+
+

@@ -1,0 +1,18 @@
+grub default:
+
+Last login: Fri Dec 31 19:00:50 on ttyS0
+Welcome to the Adva Connector
+[root@MaestrOS ~]# 
+[root@MaestrOS ~]# 
+[root@MaestrOS ~]# 
+[root@MaestrOS ~]# cat /etc/default/grub 
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL="serial console"
+GRUB_SERIAL_COMMAND="serial --speed=115200"
+GRUB_CMDLINE_LINUX=" vconsole.keymap=us console=ttyS0,115200n8 vconsole.font=latarcyrheb-sun16 isolcpus=1,2,3,4,5,6,7 c"
+GRUB_DISABLE_RECOVERY="true"
+[root@MaestrOS ~]#
+

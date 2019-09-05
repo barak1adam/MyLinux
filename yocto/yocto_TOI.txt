@@ -1,0 +1,32 @@
+# use the scripts as a reference:
+vim build_yocto_step_07_yocto_build.sh
+
+source oe-init-build-env ../build
+# list all possible single commands
+bitbake keepalived -c listtasks
+bitbake keepalived -c cleanall
+
+cd tmp/work/i586-poky-linux/keepalived
+cd 2.0.7-r0
+cd temp
+#always use log.task_order to see what happened
+vim log.task_order
+
+cd /home/yocto/dev/190106_yagm_2.5.1_6.5.15/init-kconfig/ybld/build
+rm -rf tmp/work/i586-poky-linux/keepalived
+bitbake keepalived -c cleanall
+bitbake keepalived -c listtasks
+
+
+# run only configure phase for example and try to run the related script manaully
+vim log.task_order
+vim log.do_configure.17351
+
+bitbake keepalived -c do_configure
+./run.do_configure.17351
+vim ./run.do_configure.17351
+cp  ./run.do_configure.17351 ./run.do_configure.17351.barak
+vim ./run.do_configure.17351.barak
+./run.do_configure.17351.barak
+ 
+

@@ -1,0 +1,32 @@
+Eran:
+====
+OS-V8M-F-EXT(debug)# wr t
+Building configuration...
+ 
+Current configuration:
+! version 4_8_11 (14728)
+!
+!
+line vty
+no exec-timeout global
+!
+! System configuration
+no fpga-tests-scheduler
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 4,9
+!
+! Interfaces configuration
+!
+interface vlan vif200
+tag 200
+ports 3-4,9
+!
+interface out-of-band eth0
+ip 10.100.1.37/24
+management ssh 0.0.0.0/0
+management telnet 0.0.0.0/0
+management tftp 0.0.0.0/0
+management snmp 0.0.0.0/0
+management netconf 0.0.0.0/0
+OS-V8M-F-EXT(debug)#

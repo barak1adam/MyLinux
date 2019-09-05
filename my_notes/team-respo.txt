@@ -1,0 +1,20 @@
+Linux Kernel team responsiblities:
+==================================
+webui infra
+yocto 
+builds
+nfv
+u-boot
+bring ups (xg312)
+agema support
+bugs (legacy flash, dhcp)
+features (vrrp, security)
+Tools: BB, TC, KW
+security alerts
+
+
+future:
+=======
+nfv dockers
+google repo
+os builds - buildroot

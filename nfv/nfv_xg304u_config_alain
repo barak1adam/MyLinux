@@ -1,0 +1,41 @@
+#nfv by Alain:
+=============
+Current configuration:
+! version 4_7_50 (14240)
+!
+!
+hostname OWF-CPE
+!
+line vty
+ no exec-timeout global
+router-id 1.1.1.2
+!
+! Port media select configuration
+port media-select copper 3-4
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode hybrid 4 104
+port tag-outbound-mode tagged 5
+!
+! Interfaces configuration
+!
+interface vlan vif100
+ tag 100
+ ports 1-2
+ ip 192.168.170.71/24
+ management ssh 0.0.0.0/0
+ management telnet 0.0.0.0/0
+ management tftp 0.0.0.0/0
+ management snmp 0.0.0.0/0
+ management netconf 0.0.0.0/0
+!
+interface vlan vif103
+ tag 103
+ ports 3,9
+!
+interface dummy dummy1
+ ip 1.1.1.2/32
+!
+ip route default 192.168.170.1
+!
+

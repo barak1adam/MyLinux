@@ -1,0 +1,61 @@
+tasks in MRV:
+
+build env
+
+kernel:
+	rtc driver - driver was not compiled, not registered
+	lattice driver
+	dg driver
+	vrrp vmac
+	mdio driver and R/W routines
+	hot swap module
+dist:
+	add valgrind pkg and support + training
+	add minicom
+	fix aufs
+	keepalived
+	i2c tools
+	
+u-boot:
+	i2c read/write all eeprom
+	add new board ids and support new hw like OD, V20. load new dtb files to RAM.
+	tftp retries
+user space OS-V:
+	lattice interrupts
+	vrrp
+	spi fixes
+	i2c fixes
+	signals bugs: RFC starvation, seg fualts(block signals in UiD_SubscribeEventsWithCallback thread, to avoid seg fault)
+	handle core dump files - save permanently and training.
+user space OPX:
+	serial redirection to LC
+	critical bug fixes
+	add valgrind
+
+tools:
+	git + training
+	bitbucket + training
+	TC
+	valgrind
+	gdb
+	Jira
+
+aws / x86, python
+
+sdn/nfv, openstack
+
+marvell support and new lsp
+	
+learn my fpga driver:
+	kernel space - kernel config + build as part of the kernel, driver work flow, dts, platform devices
+	user space - interrupts tree
+
+at kernel:
+alternatives for notifying the user space:
+	sysfs: events or poll (supported by gpio)
+	shared mem
+	wait q
+	sys v semaphore ?
+	sockets ?
+
+	

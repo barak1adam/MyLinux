@@ -1,0 +1,22 @@
+!
+hostname XG304
+!
+line vty 
+ no exec-timeout global
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode tagged 1,9
+!
+! Interfaces configuration
+interface vlan vif4092
+ tag 4092
+ ports 1,2
+ ip 169.254.3.2/24
+!
+interface vlan vif4093
+ tag 4093
+ ports 8,9
+!
+ntp
+ local-server enable
+!
