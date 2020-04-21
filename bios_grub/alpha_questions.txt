@@ -1,0 +1,91 @@
+UEFI FW vs BIOS FW
+
+EFI can be configured outside by the uppper OS layers
+
+
+What I’m going to describe is native UEFI booting. If you have a UEFI-based system whose firmware has the BIOS compatibility feature, and you decide to use it, and you apply this decision consistently, then as far as booting is concerned, you can pretend your system is BIOS-based, and just do everything the way you did with BIOS-style booting. If you’re going to do this, though, just make sure you do apply it consistently. I really can’t recommend strongly enough that you do not attempt to mix UEFI-native and BIOS-compatible booting of permanently-installed operating systems on the same computer, and especially not on the same disk. It is a terrible terrible idea and will cause you heartache and pain. If you decide to do it, don’t come crying to me.
+
+
+this is why the EFI system partition concept is so important: it gives you (at least in theory) 100% confidence that you can put an EFI executable on a partition formatted with the UEFI FAT implementation and the correct GPT partition type, and the system firmware will be able to read it.
+
+
+So now we have three important bits of groundwork the UEFI spec provides: thanks to these requirements, any other layer can confidently rely on the fact that the firmware:
+
+Can read a partition table
+Can access files in some specific filesystems
+Can execute code in a particular format
+
+
+This is the mechanism the UEFI spec provides for operating systems to make themselves available for booting: the operating system is intended to install a bootloader which loads the OS kernel and so on to an EFI system partition, and add an entry to the UEFI boot manager configuration with a name – obviously, this will usually be derived from the operating system’s name – and the location of the bootloader (in EFI executable format) that is intended for loading that operating system.
+
+
+Linux distributions use the efibootmgr tool to deal with the UEFI boot manager. What a Linux distribution actually does, so far as bootloading is concerned, when you do a UEFI native install is really pretty simple: it creates an EFI system partition if one does not already exist, installs an EFI boot loader with an appropriate configuration – often grub2-efi, but there are others – into a correct path in the EFI system partition, and calls efibootmgr to add an appropriately-named UEFI boot manager entry pointing to its boot loader. Most distros will use an existing EFI system partition if there is one, though it’s perfectly valid to create a new one and use that instead: as we’ve noted, UEFI is a permissive spec, and if you follow the design logically, there’s really no problem with having just as many EFI system partitions as you want.
+
+
+unlike in the BIOS world, you can actually configure the UEFI boot process from the operating system level.
+
+
+You can use the efibootmgr tool mentioned earlier to add, delete and modify entries in the UEFI boot manager configuration, and actually do quite a lot of other stuff with it too
+
+
+Alpha:
+
+Delta boxes are running BIOS, we are running a UEFI FW.
+
+Don’t panic! It’s pretty easy to find out which, in a few different ways. One of the easiest is just to try and talk to the UEFI boot manager. If what you have booted is a Linux installer or environment, and you can get to a shell (ctrl-alt-f2 in the Fedora installer, for instance), run efibootmgr -v. If you’re booted in UEFI native mode, you’ll get your UEFI boot manager configuration, as shown above.
+If you’re booted in BIOS compatibility mode, you’ll get something like this:
+
+
+Question to Alpha:
+==================
+The disk in our STX box is GPT formatted.
+(same as our Delta boxes)
+
+
+ONIE:/ # parted /dev/sda
+GNU Parted 3.1
+Using /dev/sda
+Welcome to GNU Parted! Type 'help' to view a list of commands.
+(parted) p                                                                
+p
+Model: ATA 32GB ArmourDrive (scsi)
+Disk /dev/sda: 32.0GB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+Disk Flags: pmbr_boot
+
+Number  Start   End     Size    File system  Name               Flags
+ 1      1049kB  3146kB  2097kB               GRUB-BOOT          hidden, bios_grub
+ 2      3146kB  137MB   134MB   ext4         ONIE-BOOT          hidden
+ 4      2551MB  2645MB  93.3MB  ext4         NOS-A-Kernel
+ 5      2646MB  6938MB  4293MB  ext4         NOS-A-RootFS
+ 6      6939MB  7450MB  510MB   ext4         NOS-Shared-Config
+ 7      7450MB  9597MB  2147MB  ext4         NOS-A-Log
+ 8      9598MB  18.2GB  8587MB  ext4         NOS-Shared-Ver
+10      18.2GB  18.3GB  92.9MB  ext4         NOS-B-Kernel
+11      18.3GB  20.4GB  2147MB  ext4         NOS-B-Log
+12      20.4GB  24.7GB  4293MB  ext4         NOS-B-RootFS
+13      24.7GB  29.0GB  4292MB  ext4         NOS-Rescue
+
+(parted)  
+
+
+2. The FW is a UEFI compatible FW, not a BIOS compatible FW as in Delta.
+But, it supports BIOS compatible boot entries (MBR).
+Since the FW is UEFI compatible, but since no output for efibootmgr -v is shown, we conclude that the ONIE was booted in BIOS compatiblity mode.
+otherwise the output of efibootmgr -v should be something like:
+
+[root@system directory]# efibootmgr -v
+BootCurrent: 0002
+Timeout: 3 seconds
+BootOrder: 0003,0002,0000,0004
+Boot0000* CD/DVD Drive  BIOS(3,0,00)
+Boot0001* Hard Drive    HD(2,0,00)
+Boot0002* Fedora        HD(1,800,61800,6d98f360-cb3e-4727-8fed-5ce0c040365d)File(\EFI\fedora\grubx64.efi)
+Boot0003* opensuse      HD(1,800,61800,6d98f360-cb3e-4727-8fed-5ce0c040365d)File(\EFI\opensuse\grubx64.efi)
+Boot0004* Hard Drive    BIOS(2,0,00)P0: ST1500DM003-9YN16G        .
+[root@system directory]#
+
+
+
+print the entries of the GPT table

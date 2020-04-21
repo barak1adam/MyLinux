@@ -1,0 +1,87 @@
+Agema how to:
+=============
+
+#Install Yocto eSDK
+cd ~/mrv_dev/z4806
+./agema_install_dev_env.sh
+
+#full build + create the bundle
+cd ~/mrv_dev/z4806
+./build_agema.py
+
+#Incremental Z4806 build
+cd ~/mrv_dev/z4806
+./build_agema.py -q # quick
+
+#Compile without bundle creation:
+cd ~/mrv_dev/z4806/platform/open_clovis
+./SAFplus_build.sh
+
+#Create bundle (only)
+cd ~/z4806
+./build_agema.py -b
+
+#Incremental build using build_version.sh
+cd ~/mrv_dev/z4806/platform/open_clovis/OP9500/scripts$ ./build_version.sh
+ 
+#full clean & build
+~/mrv_dev/z4806/platform/open_clovis/OP9500/scripts$ ./build_version.sh  all
+
+#Partial routing apps build
+#first perform a full build using build_agema.py script or 'SAFplus_build.sh' script.
+cd ~/z4806
+cd platform/open_clovis
+source OP9500/scripts/environment-setup-SAFplus-build
+
+#Now perform a partial build, for example:
+cd ~/mrv_dev/z4806
+cd app/acl_mgr/build
+make clean
+make
+
+#bundle location
+~/mrv_dev/tmp_local_build
+
+#to get a bundle
+on device, enter linux:
+get_bundle.py <bundle tag in teamcity>
+
+#copy bundles to target:
+scp barak@10.32.8.76:~/mrv_dev/tmp_local_build/19.1.1.1471.bundle /ver; chmod +x /ver/*bundle
+
+#install the bundle from linux
+on target: /ver/19.1.1.1471.bundle auto
+
+#install the bundle from CLI
+A26# upgrade-bundle 19.1.1.1471.bundle
+
+#install force-all, if it fails due to same bundle version:
+A26# upgrade-bundle 5.3.1.37.bundle force-all
+
+
+#copy to root-fs
+sudo ./do_make.sh set_nfs
+
+
+#Inna, build after change cli
+#1.clean zebos
+cd ~/mrv_dev/z4806/3rd_party/zebos/platform/linux/
+make clean
+#2.incremental build
+cd  /mrv_dev/platform/open_clovis/OP9500/scripts
+./build_version.sh
+#3.scp new osmd to target, on target, enter linux:
+cd /usr/deploy-cc/bin
+mv osmd osmd.old
+scp barak@10.32.8.76:~/mrv_dev/z4806/platform/open_clovis/OP9500/target/i586/linux/bin/osmd /home/admin
+mv /home/admin/osmd .
+sync
+
+
+#how to recover out of SW crash:
+boot from backup
+mount the other partition, replace the crash binary with the old one and boot again from that partition.
+
+#how to boot linux only, disable init of clovis
+on target, enter linux
+edit /usr/deploy-cc/agema.sh, comment ./OP9500_debug (e.g. #./OP9500_debug)

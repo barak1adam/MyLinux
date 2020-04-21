@@ -1,0 +1,47 @@
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048            6143   2.0 MiB     EF02  GRUB-BOOT
+   2            6144          268287   128.0 MiB   3000  ONIE-BOOT
+   4         4982784         5165057   89.0 MiB    8300  NOS-A-Kernel
+
+
+sgdisk -n  3:268288:270336   -c  3:"Other-EFI"    -t 3:8300      -g /dev/sda
+
+#mount the desired root fs (NOS-Rescue) on /mnt
+mount -t ext4 /dev/sda13 /mnt
+
+#mount onie-boot partition to /mnt/boot
+mount /dev/sda2 /mnt/boot
+
+#mount EFI-BOOT partition to /mnt/boot/efi
+mount /dev/sda1 /mnt/boot/efi
+
+# mount --bind /sys /mnt/sys
+# mount --bind /proc /mnt/proc
+# mount --bind /dev /mnt/dev
+# mount --bind /dev/pts /mnt/dev/pts
+
+
+#For internet access inside chroot:
+cp /etc/resolv.conf /mnt/etc/resolv.conf
+
+#edit /etc/fstab
+ONIE:/ # blkid
+/dev/sdb1: UUID="7E10-46BC" TYPE="vfat"
+/dev/sda13: UUID="637adb33-b536-4dc2-8a96-382122930bc6" TYPE="ext4"
+/dev/sda12: UUID="1d02488a-1a69-4649-86b9-7ba1ff72c22f" TYPE="ext4"
+/dev/sda11: UUID="c82ae167-73a7-4c7a-ab68-ef5d71095b62" TYPE="ext4"
+/dev/sda10: UUID="dee19df8-87d8-4035-88e7-17affddf918e" TYPE="ext4"
+/dev/sda8: UUID="5dd6bdb4-2b9e-4f02-8d75-8a905f439d26" TYPE="ext4"
+/dev/sda7: UUID="4292797c-6915-4077-9ffc-08a073530173" TYPE="ext4"
+/dev/sda6: UUID="05f1c103-d009-4c88-980a-08c6560cb65e" TYPE="ext4"
+/dev/sda5: UUID="55442089-c68b-49f0-aa40-bb44d9ebb5ca" TYPE="ext4"
+/dev/sda4: UUID="c9c26bb3-61c1-46dd-b44b-c367e20c35f5" TYPE="ext4"
+/dev/sda2: LABEL="ONIE-BOOT" UUID="cd447931-8424-4f0a-885b-429c31a033da" TYPE="ext4"
+
+
+#inside chroot
+chroot /mnt
+
+mount /tmp - failed, not in fstab
+mount /run
+mount /var/lock - failed, not in fstab

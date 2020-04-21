@@ -1,0 +1,47 @@
+
+
+
+
+First, the user application program sets up the arguments for the system call.
+After the arguments are all set up, the program executes the "system call" instruction.
+This instruction causes an exception: an event that causes the processor to jump to a new address and start executing the code there.
+The instructions at the new address save your user program's state, figure out what system call you want, call the function in the kernel that implements that system call, restores your user program state, and returns control back to the user program.
+
+The interrupt switches the context to kernel mode and executes the kernel code (actual system call) on the user's behalf. Once the call is completed, control is returned to the user code.
+
+
+When event occurs OS executes
+– If executing user process, privilege changes from low to high
+– If already in OS no privilege change
+• Why switch stack?
+– OS cannot trust stack (SS and ESP) of user process
+– Therefore stack switch needed only when moving from user to
+kernel mode
+
+• How to switch stack?
+– CPU should know locations of the new SS and ESP.
+– Done by task segment descriptor
+
+A kernel code snippet is run on request of a user process. This code runs in ring 0 (with current privilege level -CPL- 0), which is the highest level of privilege in x86 architecture. All user processes run in ring 3 (CPL 3).
+
+So, to implement system call mechanism, what we need is
+
+1) a way to call ring 0 code from ring 3.
+
+2) some kernel code to service the request.
+Good old way of doing it
+Until some time back, linux used to implement system calls on all x86 platforms using software interrupts.
+To execute a system call, user process will copy desired system call number to %eax and will execute 'int 0x80'. This will generate interrupt 0x80 and an interrupt service routine will be called. For interrupt 0x80, this routine is an "all system calls handling" routine. This routine will execute in ring 0. This routine, as defined in the file /usr/src/linux/arch/i386/kernel/entry.S, will save the current state and call appropriate system call handler based on the value in %eax.
+
+
+Vastly simplified, but what happens is an interrupt occurs when you try to access a reserved memory address. The interrupt switches the context to kernel mode and executes the kernel code (actual system call) on the user's behalf. Once the call is completed, control is returned to the user code.
+
+system calls are sleepable and can be interrupted. 
+hw interrupts are not sleepable but are nested.
+
+each process has 2 stacks:
+1. a user space stack, located in the user space memory for that process (shrinking in size, max size is defined in rlimit)
+2. a kernel space stack, located in the kernel memory (fixed size). user stack pointer is saved.
+
+user stack is accessible both for the usr and for the kernel
+kernel stack is accessible just for the kernel.

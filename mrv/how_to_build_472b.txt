@@ -1,0 +1,14 @@
+mkdir build_472b
+cd build_472b
+git clone ssh://git@10.32.130.224:7999/ops/distribution.git
+git clone ssh://git@hfa-vs-bitbucket.advaoptical.com:7999/ops/os-v.git
+git clone ssh://git@hfa-vs-bitbucket.advaoptical.com:7999/ops/oam.git
+cd os-v
+git checkout release/4.7.2b
+cd ../oam
+git checkout release/4.7.2b
+cd ../distribution/
+git checkout -b 4.7.2b e183e16
+./setup.sh msys_bobk_472.ini -i ~/mrv_dev/build_472b/build
+cd ../build/scripts/
+./mkall.sh -N -L ../../os-v/ -O ../../oam/

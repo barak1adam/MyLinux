@@ -1,0 +1,70 @@
+XG-300:
+=======
+Telstra: 
+Critical kernel OOPS crash in DHCP
+Resolve Zero Touch issues with boot commands.
+RMAs including memory issues in 9244 and NG missing config patitions.
+
+Axia high scale deployment of 4.5.90 - support all field upgrade issues.
+
+Euro-fiber upgrades from 4.7.50 to 19.1.1
+
+VRRP to 19.2.1:
+porting improvements and bug fixes from Z4806.
+upgrade keepalived package.
+Support IPv6 (EuroFiber)
+Support VRRP over VRF (EuroFiber)
+VRRP IPv6 SVT tests - First time of integation with Gdyina.
+SFS for 19.2.1 with Egon.
+
+XG312 critical issues: NAND and Eth0.
+
+NFV:
+=====
+Connector profiles for our NFV flavors.
+Check and enhance 10G OAM traffic tests - <= 4Gbs rate is acieved.
+Resolve traffic issues raised by Eyal's team.
+New boards installations for all POCs and BIOS upgrades.
+Support SVT tests in Gdynia.
+Support temprature polling.
+
+TeamCity:
+=========
+New agents installations.
+New build configurations for XG312.
+KW static code analysis for XG312 (Work with KW support).
+Z4806 builds support + integration of new BCM SDK builds.
+Support Legacy build issues.
+
+Z4806:
+======
+Enable VRRP over Yocto in 19.x.
+VRRP bug fixes for IPv4 and IPv6 and Keepalived upgrade.
+Fix GRUB issues and re-installation of ONIE and Diag partitions.
+Support to upgrade Sysrepo and LibYang packages in Yocto.
+Alpha white boxes bring up.
+Linux Kernel upgrade in Yocto.
+Linux Kernel pathces for timing.
+
+
+Infrastructures:
+===============
+Move all R&D development tool to the new building:
+TeamCity, TeamCity agents, BitBucket, Klockwork and Jira plugins.
+Legacy Bina server and a new Mambo ftp machine for SW images.
+
+Tasks led by me:
+================
+XG312 FPGA interrupts support, including Design implemenataion and EVT.
+GDB documentation and debug symbols for production SW.
+Flexera Licensing for XG 300: SFS, DR and implemenataion.
+Flexera licesnig for Z4806 by Kosta.
+Add 9600 UART baud rate support for Orange.
+Z4806 bundle upgrades and downgrades from 18.x to 19.x.
+
+Others:
+=======
+Recruting Chen Carniel.
+Interviews for another candidate.
+Support Aricent with Yocto env.
+Trainig Yoni.

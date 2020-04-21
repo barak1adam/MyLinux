@@ -1,0 +1,26 @@
+BIOS
+BIOS knows nothing about partitions
+BIOS knows just to jump to bootloade code in MBR
+MBR includes also partitions table, ends with a signature of 55AA
+
+UEFI
+Can read a partition table
+Can access files in some specific filesystems
+EFI can be configured outside by the uppper OS layers
+
+
+GPT disk:
+disks to be formatted as expected by the UEFI FW:
+FAT partitions
+EFI part table
+
+
+Alpha: UEFI FW
+Delta: BIOS
+
+Both disks are GPT formatted
+
+ONIE booted in BIOS compatible mode, not UEFI, e.g. with MBR --- > then grub
+
+Alpha USB stick:
+fallback UEFI entries

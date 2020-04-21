@@ -1,0 +1,43 @@
+mrv@lte:~$ ifconfig
+br1       Link encap:Ethernet  HWaddr 00:30:64:1d:7c:f6  
+          UP BROADCAST RUNNING MULTICAST  MTU:9008  Metric:1
+          RX packets:121082 errors:0 dropped:44772 overruns:0 frame:0
+          TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:15044847 (15.0 MB)  TX bytes:508 (508.0 B)
+
+br4092    Link encap:Ethernet  HWaddr 00:30:64:1d:7c:f6  
+          inet addr:169.254.1.1  Bcast:0.0.0.0  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:6857442 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6352428 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:1108737319 (1.1 GB)  TX bytes:1212128574 (1.2 GB)
+
+enp3s0    Link encap:Ethernet  HWaddr 00:30:64:1d:7c:f6  
+          inet6 addr: fe80::230:64ff:fe1d:7cf6/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:9008  Metric:1
+          RX packets:7229875 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6352437 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:1251698771 (1.2 GB)  TX bytes:1212129792 (1.2 GB)
+          Memory:81b00000-81b1ffff 
+
+enp3s0.4092 Link encap:Ethernet  HWaddr 00:30:64:1d:7c:f6  
+          inet6 addr: fe80::230:64ff:fe1d:7cf6/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:6857442 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6352430 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:1108737319 (1.1 GB)  TX bytes:1212128974 (1.2 GB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:256 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:256 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1 
+          RX bytes:20736 (20.7 KB)  TX bytes:20736 (20.7 KB)
+
+mrv@lte:~$ ifcnofig

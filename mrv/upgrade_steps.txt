@@ -2,8 +2,12 @@ upgrade summary:
 ================
 
 /dev/mtdblock1 - current partition, mounted to /
-/dev/mtdblock5 - backup partition, moiunted to /tmp/backup
+/dev/mtdblock5 - backup partition, mounted to /tmp/backup
 
+#############################################################
+local router/scripts/pupgrade_p.sh
+router/scripts/pupgrade_p.sh is running on current partition !
+#############################################################
 
 if ftp / scp:
 -------------
@@ -35,9 +39,10 @@ if ftp / scp:
 
 	cd to untar directory (/tmp_flash_dir or /tmp)
 
+#####################################################	
 	callint the new SW untarred mupgrade_p.sh:
-	------------------------------------------
-	(new SW includes mupgrade, NAND erase & write utils)
+######################################################
+	(new SW includes mupgrade_p, NAND erase & write utils)
 	mupgrade erase and write the new SW to backup partition
 	unmount it before erase / write
 
