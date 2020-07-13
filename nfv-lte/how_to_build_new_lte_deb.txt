@@ -1,0 +1,86 @@
+Final steps:
+
+==========
+
+ 
+
+sudo apt-get install linux-headers-4.4.0-174-generic
+
+cd os-v/router/module/x86-lte
+
+vim Makefile – set kernel to 4.4.0-174-generic
+
+make gobi
+
+git status
+
+Incerment the version of the DEB in its control file
+
+make all
+
+Then we will have a new *.deb package for installation
+
+Delete the old deb !!!
+
+Git status
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The gobi kernel modules ( the binaries) are part of the deb package
+
+ 
+
+To make the gobi kernel modules, we should do the following on the build machine:
+
+You have to install corresponding kernel headers package first, like:
+
+#    sudo apt-get install linux-headers-4.4.0-51-generic
+
+Then build the kernel modules:
+
+os-v/router/module/x86-lte/Makefile –
+
+run make gobi
+
+Then integrate the new kernel bin files in a new DEB package:
+
+Incerment the version of the DEB in its control file
+
+Run make all
+
+Then we will have a new *.deb package for installation
+
+ 
+
+NOTE:
+
+Target machine (the target Ubuntu machine MUST run the same kernel version in which the gobi modules were built for. It must match 1:1 !!!
+
+ 
+
+Build machine must be X86, 64 bit
+
+ 
+
+Upon MOS upgrade, if a new Debian pkg is available, it will be installed automatically
+
+ 
+
+Dan – what is the /etc/mrv-release for ??
+
+ 
+
+Barak

@@ -1,0 +1,3 @@
+date | awk '{print $(NF-1)" "$NF}'
+init date str in gen_log_initialize
+init date str in restart syslog

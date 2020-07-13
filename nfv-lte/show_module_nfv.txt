@@ -1,0 +1,182 @@
+OS-V8M# show module nfv0
+=========================
+
+Module State Information:
+
+                Type: NFV
+
+                Name: nfv0
+
+    Module Installed: yes
+
+        Module State: enabled
+
+        Module Power: on
+
+        Module is up: yes, up time 4 days 05:57:18
+
+       Management IP: 169.254.3.1
+
+                LEDs: power:green
+                
+OS-V8M# show module nfv0 info
+=============================
+
+CPU_temp=59.0
+
+HW_Version=A3
+
+Manufacturer=Adlink Technology Inc.
+
+Serial=IC83NB1001
+
+Firmware_Revision=1.09.10.AO02
+
+Hypervisor_Version=QEMU 2.12.0
+
+HWTreadsTotal=32
+
+VirtualCpuAlloc=0
+
+MemTotal=32666136
+
+MemFree=5252112
+
+StorageTotal=503050
+
+StorageFree=338400
+
+VM_number=0
+
+SW_Version=XG304u-Rel.19.1.1
+
+ 
+
+OS-V8M# show module nfv0 version
+=================================
+
+                Slot: 2
+
+             Present: yes
+
+                Type: NFV
+OS-V8M# show module nfv0 info
+
+CPU_temp=59.0
+
+HW_Version=A3
+
+Manufacturer=Adlink Technology Inc.
+
+Serial=IC83NB1001
+
+Firmware_Revision=1.09.10.AO02
+
+Hypervisor_Version=QEMU 2.12.0
+
+HWTreadsTotal=32
+
+VirtualCpuAlloc=0
+
+MemTotal=32666136
+
+MemFree=5252112
+
+StorageTotal=503050
+
+StorageFree=338400
+
+VM_number=0
+
+SW_Version=XG304u-Rel.19.1.1
+
+ 
+
+OS-V8M# show module nfv0 version
+
+                Slot: 2
+
+             Present: yes
+
+                Type: NFV
+
+                  SN: 1908101501
+
+         HW Revision: 4.01
+
+          HW Version: A3
+
+        Manufacturer: Adlink Technology Inc.
+
+              Serial: IC83NB1001
+
+   Firmware Revision: 1.09.10.AO02
+
+  Hypervisor Version: QEMU 2.12.0
+
+          SW Version: XG304u-Rel.19.1.1
+
+CPU_temp=59.0
+
+HW_Version=A3
+
+Manufacturer=Adlink Technology Inc.
+
+Serial=IC83NB1001
+
+Firmware_Revision=1.09.10.AO02
+
+Hypervisor_Version=QEMU 2.12.0
+
+HWTreadsTotal=32
+
+ 
+
+OS-V8M# show module nfv0
+
+Module State Information:
+
+                Type: NFV
+
+                Name: nfv0
+
+    Module Installed: yes
+
+        Module State: enabled
+
+        Module Power: on
+
+        Module is up: yes, up time 4 days 05:57:18
+
+       Management IP: 169.254.3.1
+
+                LEDs: power:green
+                  SN: 1908101501
+
+         HW Revision: 4.01
+
+          HW Version: A3
+
+        Manufacturer: Adlink Technology Inc.
+
+              Serial: IC83NB1001
+
+   Firmware Revision: 1.09.10.AO02
+
+  Hypervisor Version: QEMU 2.12.0
+
+          SW Version: XG304u-Rel.19.1.1
+
+CPU_temp=59.0
+
+HW_Version=A3
+
+Manufacturer=Adlink Technology Inc.
+
+Serial=IC83NB1001
+
+Firmware_Revision=1.09.10.AO02
+
+Hypervisor_Version=QEMU 2.12.0
+
+HWTreadsTotal=32

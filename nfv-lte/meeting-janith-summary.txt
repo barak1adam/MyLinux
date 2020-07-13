@@ -1,0 +1,27 @@
+Meeting with Janith
+
+LTE is used not just for backup, but for regular / internet traffic by the customers.
+
+IP through -
+On server side you get one IP dynamically from the LTE network
+For each sim card you get one IP
+we want to share one IP between the VNFs -
+because both regular traffic and customer traffic (S-VLAN) have to go out with one source IP
+so we use NAT for that purpose which is CPU expensive or "IP through" which
+is a feature given by the Connector.
+
+C-tag is ususally replaced with an S-tag towards the noraml NNI S-port
+NNI is layer 2, only going via LTE in the backup scenario, then L3 is involved with GRE
+(it is configurable - S tag might be also added to C tag - QinQ, not just replace)
+
+Same configuration about the S-Vlan should be set by the user on the sd-wan vnf,
+to enable the backup setup to be like the normal.
+
+GRE is secured way to go over the L3 cloud
+
+Fragmentation:
+because LTE network is limited to ~1500 byte frames
+Telstra allows customer jumbo frames
+it cannot be done on the packet processor on the nid side because it is layer3
+it can be done on the ARM on nid side, but better on the server CPU.
+

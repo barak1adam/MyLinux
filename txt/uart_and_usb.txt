@@ -1,0 +1,12 @@
+UART is generic  Universal Asynchronous serial protocol, can be usually used with underlying RS232 interface.
+
+https://www.circuitbasics.com/basics-uart-communication/ 
+
+https://stackoverflow.com/questions/18459505/uart-controller-or-rs232-controller-is-uart-a-general-word
+
+https://electronics.stackexchange.com/questions/31358/reasons-using-rs232-instead-of-usb 
+
+USB-serial comm in linux - USB can be used for serial:
+https://www.linuxjournal.com/article/6573 
+
+https://www.kernel.org/doc/Documentation/usb/usb-serial.txt

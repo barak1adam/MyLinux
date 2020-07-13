@@ -1,0 +1,24 @@
+
+Hi, Barak.
+This is what I tested for Telstra (LTE).... See Attach Setup....and see info below for how to connect to the Devices.......
+And please don’t change the configurations on the devices…..
+ 
+Device-1 (XG304): InReach: 10.35.102.253 port 2122 (SSH connection).
+Telnet/SSH: 10.35.102.31/14
+ 
+Device-2 (XG304u): InReach: 10.35.102.253 port 2522 (SSH connection).
+Telnet/SSH: 10.35.102.32/14
+ 
+Device-3 (OS912C): InReach: 10.35.102.253 port 2622 (SSH connection).
+Telnet/SSH: 10.35.102.33/14
+ 
+Device-4 (OS9244): InReach: 10.35.102.253 port 2722 (SSH connection).
+Telnet/SSH: 10.35.102.34/14
+ 
+Device-5 (OS9244): InReach: 10.35.102.253 port 2822 (SSH connection).
+ 
+Device-6 (OS9244): InReach: 10.35.102.253 port 2922 (SSH connection).
+ 
+Device-7 (OS9124): InReach: 10.35.101.253 port 3522 (SSH connection).
+ 
+LNS (Juniper MX 104): InReach: 10.35.108.253 port 2422 (SSH Connection)

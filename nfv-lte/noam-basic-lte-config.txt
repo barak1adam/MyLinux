@@ -1,0 +1,31 @@
+
+Noam Shefer
+Mon 4/6, 2:36 PM Mark Alon; Barak Adam
+!
+! Link protection and reflection configuration
+link-protection primary 4 backup module-lte
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode q-in-q 3 1000
+port tag-outbound-mode tagged 4,9
+!
+! Interfaces configuration
+!
+interface vlan vif4092
+tag 4092
+ports 9
+ip 169.254.1.2/24
+management
+!
+service GRE
+  node-type vlan-based uni
+  s-vlan 1000
+  c-vlans 10
+  s-ports 4,9
+  c-ports 3
+  enable
+!
+module lte lte0
+module-gre tunnel GRE
+  enable
+!
