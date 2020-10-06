@@ -1,0 +1,5 @@
+
+1. please run both files concurrently
+2. use the following command from the command line to see in "Real Time" :)) the file content
+ tail -f /tmp/a.txt
+3. Can you explain what's going on ?

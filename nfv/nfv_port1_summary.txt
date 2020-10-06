@@ -1,0 +1,28 @@
+summary nfv port 1:
+===================
+
+why not changing the nid layout:
+even if naftali suggested to keep the server unchanged and identify which nid is used,
+we don't won't to reach a situation in which you have good and bad nids
+
+for smooth imgration also needed extra configs like bellow.
+
+so why to change server and not nid ?
+
+The ultimate solution is to go with data + control for port 9 in the short term,
+in the long term add another 1G port on the server connected to the NiD.
+1. Only the server card layout will be changed. The NiD HW won't be affected.
+2. Think in advance for the day of adding the new port - the cusomters like Telstra 
+must not have any change in configuratrions (NiD & Connectory), it must be backward compatible to the current
+unification of port 9.
+
+we will add 2 vlan interfaces in advance both on nid side and on Connector side
+nid agent will use one of the active interfaces, depends on the server card revision.
+
+nid agent code will be changed
+
+vlan 4092 can't be cahnged, used in other modules
+
+will not impace other customers like orange - they use 4092/ port 1. they will have extra interface too.
+
+nafatli - pci current port -  to be moved ?

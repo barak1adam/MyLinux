@@ -1,0 +1,12 @@
+NFV ZTP:
+========
+
+splash screen (web page) is used to get user and password for mano
+then ztp is connecting to MANO to get day1
+
+connection to MANO - tagged or untagged - depends on the customer
+
+using lapton - untagged.
+
+we like to eliminate the "no attach" requirement for the ZTP port.
+

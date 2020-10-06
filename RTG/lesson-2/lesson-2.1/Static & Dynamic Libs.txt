@@ -1,0 +1,28 @@
+Static and Dynamic Libraries
+----------------------------
+
+
+creating Static Libraries and linking against Static Libraries
+---------------------------------------------------------------
+gcc -c file1.c
+gcc -c file2.c
+ar cr libfile.a file1.o file2.o
+
+gcc -o main  main.c libfile.a 
+gcc -o main main.c -L. libfile.a
+gcc -o main main.c -L. -lfile   // no prefix lib
+                                // no postfix .a or .so
+
+
+
+
+
+creating Dynamic Libraries and linking against Dynamic Libraries
+---------------------------------------------------------------
+gcc -c -fPIC file1.c
+gcc -c -fPIC file2.c
+gcc -shared -fPIC -o libfile.so file1.o file2.o
+gcc -o main main.c -L. -lfile 
+export LD_LIBRARY_PATH=/home/benny/RTE/Embedded-Linux/emb_linux/class/Lesson-2/lesson-2.1:$LD_LIBRARY_PATH
+----------------------------------------------------------------
+

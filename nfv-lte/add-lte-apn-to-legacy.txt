@@ -1,0 +1,87 @@
+default profiles:
+================
+
+identifier   priority  		apn            	ip   		band 	territory
+
+mainland     	1     	ethernet.net.au 	ipv4v6 		09 
+
+adva_rnd     	2     	internetg      		ipv4v6 		09
+
+
+
+
+Algorithm assumptions:
+======================
+
+1. entry is identified by its identifier: 
+if a new entry is given an existing identifier, then if it is a legal entry it will overwrite the existing one.
+
+2. APN functional parameters for the LTE modem are the tupple <apn, ip, band>
+APN tupples for entries are considered different if at least one of the three values is different.
+If a new entry is given a new identifier, but its APN tupple already exists in the table, it is considered duplicated and is rejected.
+
+3. entries should be ordererd ascendigly by their priority
+
+4. different entries might have the same priority.
+
+5. legality of the values of each new entry is validated on the CLI / Netconf level.
+
+
+Algorithm:
+==========
+
+1. scp runtime-profile-table from LTE server.
+If NULL file is returned, copy default-profile-table to a new runtime-profile-table.
+
+2. start merging new entries from the user
+
+for each new & legal entry recieved from CLI config:
+------------------------------------------------------
+
+	2.1 if identifier found in the table - overwrite the existing one.
+	
+	2.2 else (if identifier not found in table, e.g. a new one):
+			
+			if its APN tupple is found in the table - 
+				reject the entry - return a duplication error.
+			else
+				accept it and append it to the table (for simplicity - no need to sort upon addition)
+				
+3. re-sort the entries by priority in ascending order.
+
+4. scp the runtime-profile-table to the LTE server.
+
+5. rm runtime-profile-table
+
+			
+delete - using sed (indentifier)
+add - append to the end
+sort using linux sort -k (priority)
+search tupple:
+
+with spaces - 
+for each entry in the table:
+	sscanf current entry into fileds: sscanf(line, "%s %d %s %s %s", curr.identifier, curr.pri, curr.apn, curr.ip, curr.band);
+	if strcmp(new apn, curr.apn) & strcmp(new ip, curr.ip ) & strcmp(new band, curr.band)
+		found = true;
+		
+with ; delimitier - 
+for each entry in the table:
+	if strstr(;new apn;new ip;new band;)
+		found = true;
+
+
+APN entry struct:
+identifer - string
+priority - int
+apn - string
+ip - string
+band - string
+territory - string
+
+UID CMD - 
+array of 16 APN entries.
+
+
+Egon - return me NULL if  runtime-profile-table not exist or empty
+Chen - send my legal entries in UID

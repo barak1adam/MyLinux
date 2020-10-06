@@ -1,0 +1,67 @@
+upgrade of *.deb: On Init, enable, hotswap (present)
+md_lte_apply
+md_lte_update (..., TRUE)
+md_lte_get_state --- upgrade *.deb if needed
+
+
+ubuntu server 16.04.1 LTS
+
+MRV LTE solution on top:
+
+Sierra modem "gobi" drivers - The modem is a USB device for LTE.
+GobiSerial is used to control USB part of device and GobiNet for managing network side.
+kernel modules are loaded automatically by Linux Udev subsystem upon hW detection.
+Networking settings for the backplane interface
+lte scrtips to manage the modem by all AT commands- start, stop, polling, pre-defined set of AT commands, default APN profile, etc
+udev and systemd rules
+ssh public keys
+rsyslog
+
+
+module config instance - holds updated confs & state of the module
+It is polled with a timer of 5s because part of the data might be updated or changed on the card itself.
+
+
+
+md_lte_update - when it is called?
+sub functions
+
+the right function for enabled - do we need it?
+gre tunnels are updated directly by md_ssh_nopw
+
+why not to integrate into the big module struct?
+
+why not to integrate into the update mechanism?
+
+
+
+gre tunnules over lte:
+======================
+data structure is updated on the NiD
+uids are sent separated to the module Uid - 
+upon a uid the data structure is updated and ssh command is sent to the module to update tund conf file
+
+so it is seperated from the module struct but it not related directly to LTE
+
+gre tunnels and lte wan info, are shown upon "show module lte0 info"
+====================================================================
+module_lte_show_exec is called
+	module_get_lte_req_str
+		strings of calling commands on the module (like tund_api.sh) with args for show
+		
+it is getting a dump of file as output and show it on the screen.
+
+it is called directly by CLI which is not good.
+
+we can add apns to "show module lte0 info" by adding a command to "cat /tmp/.runtime-profile-table"
+
+Chen,
+
+look again in md_present_event under moduled.c - it is called upon hot swap of the module.
+e.g. - if you insert a new module card into a running 304, then this function is called and responsible to apply to it all the configuration that was set.
+so it is calling md_lte_apply(&md_conf_lte_) which in turn will call md_lte_update()
+both md_lte_appy and md_lte_update are configuring the card based on the info updated in the lte UID_MSG_MODULE_INSTANCE_T data structure.
+So if we want the apn profiles to be set upon module present event, we must be somehow part of that UID_MSG_MODULE_INSTANCE_T.
+maybe we can hold there a pointer to our profiles file, and upon md_lte_update() just copy it to the module.
+
+

@@ -1,0 +1,127 @@
+mrv@lte:/$ dpkg --content ./home/mrv/mrv-lte_20190310-9_amd64.deb
+dpkg: error: unknown option --content
+
+Type dpkg --help for help about installing and deinstalling packages [*];
+Use 'apt' or 'aptitude' for user-friendly package management;
+Type dpkg -Dhelp for a list of dpkg debug flag values;
+Type dpkg --force-help for a list of forcing options;
+Type dpkg-deb --help for help about manipulating *.deb files;
+
+Options marked [*] produce a lot of output - pipe it through 'less' or 'more' !
+mrv@lte:/$ dpkg -c ./home/mrv/mrv-lte_20190310-9_amd64.deb
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./
+drwxr-xr-x root/root         0 2019-03-10 09:57 ./etc/
+-rw-r--r-- root/root         4 2018-08-23 16:34 ./etc/hostname
+-rw-r--r-- root/root       217 2018-08-23 16:34 ./etc/hosts
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./etc/modprobe.d/
+-rw-r--r-- root/root        38 2018-08-23 16:34 ./etc/modprobe.d/blacklist-modem.conf
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./etc/network/
+-rw-r--r-- root/root       394 2018-08-23 16:34 ./etc/network/interfaces
+-rwxr-xr-x root/root       361 2018-08-23 16:34 ./etc/rc.local
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./etc/rsyslog.d/
+-rw-r--r-- root/root       110 2018-08-23 16:34 ./etc/rsyslog.d/50-default.conf
+-rw-r--r-- root/root       332 2018-08-23 16:34 ./etc/rsyslog.d/98-mrv-lte.conf
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./etc/sudoers.d/
+-r--r----- root/root        57 2018-08-23 16:34 ./etc/sudoers.d/98-mrv-lte
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./etc/sysctl.d/
+-rw-r--r-- root/root       153 2018-08-23 16:34 ./etc/sysctl.d/98-mrv-lte.conf
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./etc/systemd/
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./etc/systemd/timesyncd.conf.d/
+-rw-r--r-- root/root        76 2018-08-23 16:34 ./etc/systemd/timesyncd.conf.d/98-mrv.conf
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./home/
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./home/mrv/
+drwx------ root/root         0 2019-03-10 13:11 ./home/mrv/.ssh/
+-rw------- root/root       393 2019-03-10 13:11 ./home/mrv/.ssh/authorized_keys
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./lib/
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./lib/modules/
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./lib/modules/4.4.0-51-generic/
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./lib/modules/4.4.0-51-generic/kernel/
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./lib/modules/4.4.0-51-generic/kernel/drivers/
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./lib/modules/4.4.0-51-generic/kernel/drivers/net/
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./lib/modules/4.4.0-51-generic/kernel/drivers/net/usb/
+-rw-r--r-- root/root    159176 2019-03-10 13:11 ./lib/modules/4.4.0-51-generic/kernel/drivers/net/usb/GobiNet.ko
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./lib/modules/4.4.0-51-generic/kernel/drivers/usb/
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./lib/modules/4.4.0-51-generic/kernel/drivers/usb/serial/
+-rw-r--r-- root/root     31944 2019-03-10 13:11 ./lib/modules/4.4.0-51-generic/kernel/drivers/usb/serial/GobiSerial.ko
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./lib/systemd/
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./lib/systemd/system/
+-rw-r--r-- root/root       163 2018-08-23 16:34 ./lib/systemd/system/lte.service
+-rw-r--r-- root/root       188 2019-03-10 13:11 ./lib/systemd/system/tund.service
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./lib/udev/
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./lib/udev/rules.d/
+-rw-r--r-- root/root       161 2018-08-23 16:34 ./lib/udev/rules.d/95-ltedaemon.rules
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./usr/
+drwxr-xr-x root/root         0 2018-08-23 16:34 ./usr/local/
+drwxr-xr-x root/root         0 2019-03-10 13:11 ./usr/local/bin/
+-rw-r--r-- root/root    217040 2019-03-10 13:11 ./usr/local/bin/bridge.ko
+drwxr-xr-x root/root         0 2019-02-21 11:14 ./usr/local/bin/commands/
+-rwxr-xr-x root/root        15 2019-02-21 11:14 ./usr/local/bin/commands/band
+-rwxr-xr-x root/root        17 2019-02-21 11:14 ./usr/local/bin/commands/band_lte
+-rwxr-xr-x root/root        30 2018-08-23 16:34 ./usr/local/bin/commands/cfun
+-rwxr-xr-x root/root        50 2018-08-23 16:34 ./usr/local/bin/commands/config
+-rwxr-xr-x root/root        33 2018-08-23 16:34 ./usr/local/bin/commands/connect
+-rwxr-xr-x root/root        93 2018-08-23 16:34 ./usr/local/bin/commands/diag
+-rwxr-xr-x root/root        45 2018-08-23 16:34 ./usr/local/bin/commands/disconnect
+-rwxr-xr-x root/root        18 2019-01-17 10:23 ./usr/local/bin/commands/imsi
+-rwxr-xr-x root/root       248 2019-02-21 11:14 ./usr/local/bin/commands/info
+-rwxr-xr-x root/root        32 2018-08-23 16:34 ./usr/local/bin/commands/info_state
+-rwxr-xr-x root/root        18 2018-08-23 16:34 ./usr/local/bin/commands/pdp
+-rwxr-xr-x root/root        15 2018-08-23 16:34 ./usr/local/bin/commands/pdp_connect
+-rwxr-xr-x root/root        15 2018-08-23 16:34 ./usr/local/bin/commands/pdp_disconnect
+-rwxr-xr-x root/root        14 2018-08-23 16:34 ./usr/local/bin/commands/pin
+-rwxr-xr-x root/root        32 2018-08-23 16:34 ./usr/local/bin/commands/profile
+-rwxr-xr-x root/root        67 2018-08-23 16:34 ./usr/local/bin/commands/profile_create.mrv_test
+-rwxr-xr-x root/root        73 2018-08-23 16:34 ./usr/local/bin/commands/profile_create.telstra
+-rwxr-xr-x root/root        46 2018-08-23 16:34 ./usr/local/bin/commands/profile_delete
+-rwxr-xr-x root/root        29 2018-08-23 16:34 ./usr/local/bin/commands/reset
+-rwxr-xr-x root/root        30 2018-08-23 16:34 ./usr/local/bin/commands/scact
+-rwxr-xr-x root/root        18 2018-08-23 16:34 ./usr/local/bin/commands/support
+-rwxr-xr-x root/root       540 2018-08-23 16:34 ./usr/local/bin/firewall.sh
+-rwxr-xr-x root/root        54 2018-08-23 16:34 ./usr/local/bin/log_syslog_rotate.sh
+-rwxr-xr-x root/root      2555 2019-02-21 11:14 ./usr/local/bin/lte-daemon.sh
+-rwxr-xr-x root/root       620 2018-08-23 16:34 ./usr/local/bin/lte-mgr.sh
+-rwxr-xr-x root/root        49 2018-08-23 16:34 ./usr/local/bin/lte-start.sh
+-rwxr-xr-x root/root        47 2018-08-23 16:34 ./usr/local/bin/lte-stop.sh
+-rwxr-xr-x root/root       425 2019-03-10 13:11 ./usr/local/bin/mod_api.sh
+-rwxr-xr-x root/root      2399 2019-03-10 12:55 ./usr/local/bin/netsetup.sh
+-rwxr-xr-x root/root     18952 2019-03-10 13:11 ./usr/local/bin/send-at
+-rwxr-xr-x root/root    364312 2019-03-10 13:11 ./usr/local/bin/tund
+-rwxr-xr-x root/root       230 2019-03-10 13:11 ./usr/local/bin/tund.sh
+-rwxr-xr-x root/root      3300 2019-03-10 13:11 ./usr/local/bin/tund_api.sh
+mrv@lte:/$ 
+
+
+
+OS-V8M_LTE_Device-2(config-module-lte0)# list recursive 
+  (enable|watchdog|config-pull LINE)
+  module-gre tunnel NAME (ipv6-source X:X::X:X|) (ipv6-destination X:X::X:X|)
+  module-gre tunnel NAME (source A.B.C.D|) (destination A.B.C.D|)
+  {submode module-gre tunnel NAME (source A.B.C.D|) (destination A.B.C.D|)}
+    description LINE
+    dscp <0-63>
+    enable
+    hold-timer <0-30>
+    no description
+    no enable
+    no passenger-exclude-svlan
+    passenger-exclude-svlan
+    revertive <5-300>
+
+  no (enable|watchdog|config-pull)
+  no module-gre tunnel NAME
+  show configuration
+OS-V8M_LTE_Device-2(config-module-lte0)# exit
+OS-V8M_LTE_Device-2(config)# list recursive | grep module
+  link-protection primary PORT (backup module-lte | wtr-delay <1-300> | hold-off-delay <1-300> | to-primary-trap-delay <1-300> | to-backup-trap-delay <1-300> | poll-delay <1-300>)
+  link-protection primary PORT active (PORT|primary|module-lte|unlock)
+  link-protection primary PORT rmep-lte <0-7> SRV_NUMBER1 <1-4095> backup module-lte vid <1-4095>
+  link-protection primary PORT rmep-lte <0-7> SRV_NUMBER1 <1-4095> rmep-lte <0-7> SRV_NUMBER2 <1-4095> backup module-lte vid <1-4095>
+  module ((vdsl (vdsl0))|(lte (lte0))|(nfv (nfv0)))
+  {submode module ((vdsl (vdsl0))|(lte (lte0))|(nfv (nfv0)))}
+    module-gre tunnel NAME (ipv6-source X:X::X:X|) (ipv6-destination X:X::X:X|)
+    module-gre tunnel NAME (source A.B.C.D|) (destination A.B.C.D|)
+    {submode module-gre tunnel NAME (source A.B.C.D|) (destination A.B.C.D|)}
+    no module-gre tunnel NAME
+OS-V8M_LTE_Device-2(config)# 
+
+

@@ -1,0 +1,26 @@
+64 bit support, meeting with Dan, Ilja, Andrejs, 22.09.2020
+============================================================
+
+Dan, reasons for upgrade:
+BIOS is usually 64bit
+prividers env and diag are 64 - when we have an issue we don't know it is because the different arch or not
+32 bit have the limit of 4G memory pages for routing
+
+what was done:
+yocto
+bcm
+clovis
+poky
+
+still working on application layer
+
+master branch will be 64 bit and will support the option in install dev script to build 32 bit
+
+no issue with uploads since 32 bit and 64 bit sdks are differnent names
+
+will shcedule another meeting when the app layer is done, to sync about:
+I want all the yocto build to be automatically backward compatible to 32.
+to be able build yocto for 32
+
+they are saying that they addes flags etc... no changes to the code for BCM, clovis, etc for 64
+e.g. if I build for 32 then I get the binaries as for today.

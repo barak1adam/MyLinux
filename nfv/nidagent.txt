@@ -1,0 +1,13 @@
+Nid Agent, explained by Andrew:
+===============================
+internal interface only
+ProVM purpose:
+1)on provme,NiD is polling the agent for keepalive. if not alive it will wd reset the server.
+2) server card reporting all info for the NiD to publish it as SNMP mibs outside
+
+Rest API
+Flask web server
+http on 304, https on provm
+uses smartsys and libvirt to control and report about the server storage and interfaces
+
+for security, internal channel should be blocked on connector firewall

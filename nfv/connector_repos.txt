@@ -1,0 +1,12 @@
+NFV repositories:
+================= 
+1) OS Connector - main SVN + external SVN repos like DPDK into 3rdParty
+
+
+
+
+
+
+Notes:
+======
+Gidi is using smart SVN.
