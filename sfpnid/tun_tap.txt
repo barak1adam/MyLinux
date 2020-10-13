@@ -1,0 +1,11 @@
+tun/ tap ref:
+
+OS:
+===
+
+
+Z:
+===
+linuxtuntap.c
+hal_packet_tx_thread - rx from linux, write to hal
+hal_packet_rx - rx from hal, write to linux
