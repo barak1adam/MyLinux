@@ -1,0 +1,78 @@
+the error printed on panic:
+===========================
+UBIFS error (pid 1): ubifs_scan: corrupt empty space at LEB 3:7571
+UBIFS error (pid 1): ubifs_scanned_corruption: corruption at LEB 3:7571
+UBIFS error (pid 1): ubifs_scanned_corruption: first 8192 bytes from LEB 3:7571
+UBIFS error (pid 1): ubifs_scan: LEB 3 scanning failed
+VFS: Cannot open root device "ubi0:root" or unknown-block(0,0): error -117
+Please append a correct "root=" boot option; here are the available partitions:
+Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
+
+
+info printed by the kernel on boot:
+====================================
+armada-nand f10d0000.nand-flash: Initialize HAL based NFC in 8bit mode with DMA Disabled using BCH 8bit ECC
+NAND device: Manufacturer ID: 0x2c, Chip ID: 0xd3 (Micron NAND 1GiB 3,3V 8-bit), 1024MiB, page size: 4096, OOB size: 128
+Bad block table found at page 262080, version 0x01
+Bad block table found at page 262016, version 0x01
+4 cmdlinepart partitions found on MTD device armada-nand
+Creating 4 MTD partitions on "armada-nand":
+0x000000000000-0x000000800000 : "boot1"
+0x000000800000-0x00001fc00000 : "ver_a_part"
+0x00001fc00000-0x00003f000000 : "ver_b_part"
+0x00003f000000-0x000040000000 : "internal_db"
+
+investigation:
+==============
+linux mount ---> ubifs_read_master(struct ubifs_info *c)
+ splits into 2 scenarios:
+ 
+1) 
+scan_for_master
+
+2) if err is returned by scan_for_master, start ubifs_recover_master_node
+chen - keep investigate later, complete functions stack
+
+
+1) scan_for_master (fs/ubifs)
+--> ubifs_scan (fs/ubifs) to scan a leb. This function prints all empty courruption errors and return err pointer instead of sleb.
+--> it calls ubifs_start_scan (fs/ubifs) to make the actual reads
+--> ubifs_leb_read (fs/ubifs)
+--> ubi_read (mtd/ubi.h)
+--> ubi_leb_read (mtd/ubi)
+--> ubi_eba_read_leb (mtd/ubi)
+--> ubi_io_read_data (mtd/ubi)
+--> ubi_io_read (mtd/ubi)
+--> mtd_read (mtd)
+--> mtd->_read (mtd)
+--> nand_read (mtd) (mtd/nand/nand_base)
+--> nand_do_read_ops (mtd) ---> chip->ecc.read_page or chip->ecc.read_page_raw or chip->ecc.read_subpage
+
+
+(mtd/nand)
+
+nand_scan (mtd..)
+nand_scan_tail (mtd..)
+	set 	chip->ecc.layout
+	depends on chip->ecc.mode, set :
+		chip->ecc.read_page = nand_read_page_hwecc; ---> include the bugfix
+		chip->ecc.read_page_raw = nand_read_page_raw; ---> NOT includeing the bugfix
+		chip->ecc.read_oob = nand_read_oob_std; ---> NOT includeing the bugfix
+		chip->ecc.read_subpage = nand_read_subpage; --> include the bugfix
+		mtd->_read = nand_read;
+		mtd->_write = nand_write;
+		mtd->_read_oob = nand_read_oob;
+
+debug:
+=======
+-print assignments of lower layer read functions in nand_scan_tail
+-dump stack on lower layer read functions
+-try printouts on the other partition
+-how to add printk level on boot command (like dmesg -n7)
+
+
+solutions:
+==========
+-what other pathches was mainlined to kernel
+-max bitflips
+-retrun OK instead of ERR
