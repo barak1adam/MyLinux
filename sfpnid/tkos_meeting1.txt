@@ -1,0 +1,31 @@
+meeting with baruch:
+--------------------
+introduction to the new board / project - optics, fpga, cpu.
+
+yocto / buildroot
+
+recommendations for bringup steps
+
+recommendations for nand preparations
+
+
+packets to cpu - a critical path:
+---------------------------------
+POC
+
+reuse as much code as possible, use dts.
+
+fpga sends a packet ---> spi --- >  dma ---> ram ----> tun/tap into kernel networking stack
+
+is it possible to have the cpu as spi slave? to save the interrupt overhead for rx packet
+
+
+kernel space:
+=============
+stm32dma driver ----> kernel dmaengine ---> masterspi-stm32.c (dma slave?)
+
+
+user space:
+===========
+get the buffers from spi like spidev and use tun / tap
+
