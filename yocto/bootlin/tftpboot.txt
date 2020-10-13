@@ -1,0 +1,27 @@
+tftpboot:
+=========
+kernel and dtb are by default booted from sd card
+to update kernel and dtb easily, tftp is used.
+
+
+original u-boot settings:
+-------------------------
+bootcmd=run bootcmd_stm32mp
+bootcmd_stm32mp=echo "Boot over ${boot_device}${boot_instance}!";if test ${boot_device} = serial || test ${boot_device} = usb;then stm32prog ${boot_device} ${boot_instance};
+
+ethaddr=00:80:e1:42:67:6d
+fdt_addr_r=0xc4000000
+fdt_high=0xffffffff
+fdtcontroladdr=ddc2c1f8
+initrd_high=0xffffffff
+kernel_addr_r=0xc2000000
+
+
+my settings to enable tftpboot:
+--------------------------------
+setenv bootargs 'root=/dev/nfs rw console=ttySTM0,115200 nfsroot=10.0.0.26:/nfs,vers=3,tcp ip=10.0.0.29:::::eth0'
+setenv bootcmd_tftp 'tftp 0xc2000000 uImage; tftp 0xc4000000 stm32mp157c-dk2.dtb; bootm 0xc2000000 - 0xc4000000'
+setenv bootcmd run bootcmd_tftp
+saveenv
+reset
+

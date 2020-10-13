@@ -1,0 +1,79 @@
+ninvaders
+===========
+
+
+cd meta
+cd recipes-extended/
+mkdir ninvaders
+cd ninvaders/
+vi ninvaders_0.1.1.bb
+vi ninvaders.inc
+bitbake ninvaders
+vi ninvaders.inc
+bitbake ninvaders
+vi ninvaders_0.1.1.bb 
+bitbake ninvaders
+cd /home/alexandre/yocto-stm32-labs/build/tmp/work/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi/ninvaders/0.1.1-r0/ninvaders-0.1.1/
+cat gpl.txt
+cd -
+vi ninvaders_0.1.1.bb 
+cd ../..
+git grep SOURCEFORGE_MIRROR 
+less conf/bitbake.conf 
+cd -
+vi ninvaders.inc 
+bitbake ninvaders
+md5sum /home/alexandre/yocto-stm32-labs/build/tmp/work/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi/ninvaders/0.1.1-r0/ninvaders-0.1.1/gpl.txt 
+vi ninvaders.inc 
+bitbake ninvaders
+cd $BUILDDIR
+vi conf/local.conf 
+bitbake core-image-minimal
+cd /home/alexandre/yocto-stm32-labs/build/tmp/work/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi/ninvaders/0.1.1-r0
+cd package
+cd ../packages-split/
+tree
+cd yocto-stm32-labs/poky/meta/recipes-extended/ninvaders/
+vi ninvaders.inc 
+ ~/yocto-stm32-labs/build/tmp/work/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi/ninvaders/0.1.1-r0/ninvaders-0.1.1/
+less ~/yocto-stm32-labs/build/tmp/work/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi/ninvaders/0.1.1-r0/ninvaders-0.1.1/Makefile 
+vi ninvaders
+vi ninvaders.inc 
+bitbake core-image-minimal
+vi ninvaders.inc 
+bitbake core-image-minimal
+file /home/alexandre/yocto-stm32-labs/build/tmp/work/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi/ninvaders/0.1.1-r0/package/usr/bin/ninvaders
+less ~/yocto-stm32-labs/build/tmp/work/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi/ninvaders/0.1.1-r0/ninvaders-0.1.1/Makefile 
+vi ninvaders.inc 
+bitbake core-image-minimal
+file /home/alexandre/yocto-stm32-labs/build/tmp/work/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi/ninvaders/0.1.1-r0/package/usr/bin/ninvaders
+cd /home/alexandre/yocto-stm32-labs/build/tmp/work/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi/ninvaders/0.1.1-r0/
+cd packages-split/
+tree -a
+cd ../temp/
+less log.do_compile
+less log.do_compile.1252113 
+less log.do_compile
+less run.do_compile
+less log.do_compile
+less run.do_compile
+less log.do_install.1253418 
+less log.do_install.1253331 
+less run.do_install.1253331 
+cd $BUILDDIR
+cd tmp/deploy/
+cd licenses/
+cd ninvaders/
+less gpl.txt 
+cd -
+cd ../../
+cd work/cortexa7t2hf-neon-vfpv4-poky-linux-gnueabi/
+cd ninvaders/0.1.1-r0/
+ ninvaders-0.1.1
+cd packages-split/
+tree -a
+cd ../ninvaders-0.1.1
+vi nInvaders.c 
+bitbake ninvaders
+bitbake -f -c compile ninvaders
+

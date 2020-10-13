@@ -1,0 +1,12 @@
+How to boot nfs on the st card:
+===============================
+
+update the extlinux.conf on the u-boot partition:
+-------------------------------------------------
+APPEND root=/dev/nfs rw console=ttySTM0,115200 nfsroot=10.0.0.26:/nfs,vers=3,tcp ip=10.0.0.29:::::eth0
+
+update the nfs server on the PC:
+---------------------------------
+/nfs *(rw,sync,no_root_squash,subtree_check)
+
+sudo service nfs-kernel-server restart

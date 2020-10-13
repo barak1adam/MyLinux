@@ -1,0 +1,105 @@
+
+Flashing the SD card:
+=====================
+the script create_sdcard_from_flashlayout.sh is provided by ST layer.
+it is parsing the tsv file and generate the raw image file for flashing.
+the tsv file is just a text foramt to describe all partitions.
+the script parse it and create & write with dd each of the needed partitions into the raw file
+the raw file will be flashed as is to the sd card.
+
+running the script:
+-------------------
+mrv@mrv-HP-Compaq-8000-Elite-Convertible-MT:~/yocto-stm32-labs/build/tmp/deploy/images/stm32mp1/scripts$ sudo ./create_sdcard_from_flashlayout.sh ../flashlayout_core-image-minimal/FlashLayout_sdcard_stm32mp157c-dk2-basic.tsv 
+
+[WARNING]: A previous raw image are present on this directory
+[WARNING]:    ../flashlayout_core-image-minimal/../flashlayout_core-image-minimal_FlashLayout_sdcard_stm32mp157c-dk2-basic.raw
+[WARNING]: would you like to erase it: [Y/n]
+y
+Create Raw empty image: ../flashlayout_core-image-minimal/../flashlayout_core-image-minimal_FlashLayout_sdcard_stm32mp157c-dk2-basic.raw of 1536MB
+Create partition table:
+[CREATED] part 1:    fsbl1 [partition size 256.0 KiB]
+[CREATED] part 2:    fsbl2 [partition size 256.0 KiB]
+[CREATED] part 3:     ssbl [partition size 2.0 MiB]
+[CREATED] part 4:   bootfs [partition size 64.0 MiB]
+[CREATED] part 5: vendorfs [partition size 16.0 MiB]
+[CREATED] part 6:   rootfs [partition size 750.4 MiB]
+[CREATED] part 7:   userfs [partition size 703.0 MiB]
+
+Partition table from ../flashlayout_core-image-minimal/../flashlayout_core-image-minimal_FlashLayout_sdcard_stm32mp157c-dk2-basic.raw
+Disk ../flashlayout_core-image-minimal/../flashlayout_core-image-minimal_FlashLayout_sdcard_stm32mp157c-dk2-basic.raw: 3145728 sectors, 1.5 GiB
+Sector size (logical): 512 bytes
+Disk identifier (GUID): 24220393-F450-4E91-8064-6F0507B8AF5F
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 3145694
+Partitions will be aligned on 2-sector boundaries
+Total free space is 0 sectors (0 bytes)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1              34             545   256.0 KiB   8301  fsbl1
+   2             546            1057   256.0 KiB   8301  fsbl2
+   3            1058            5153   2.0 MiB     8301  ssbl
+   4            5154          136225   64.0 MiB    8300  bootfs
+   5          136226          168993   16.0 MiB    8300  vendorfs
+   6          168994         1705857   750.4 MiB   8300  rootfs
+   7         1705858         3145694   703.0 MiB   8300  userfs
+
+Populate raw image with image content:
+[ FILLED ] part 1:    fsbl1, image: u-boot-spl.stm32-stm32mp157c-dk2-basic 
+[ FILLED ] part 2:    fsbl2, image: u-boot-spl.stm32-stm32mp157c-dk2-basic 
+[ FILLED ] part 3:     ssbl, image: u-boot-stm32mp157c-dk2-basic.img 
+[ FILLED ] part 4:   bootfs, image: st-image-bootfs-poky-stm32mp1.ext4 
+[ FILLED ] part 5: vendorfs, image: st-image-vendorfs-poky-stm32mp1.ext4 
+[ FILLED ] part 6:   rootfs, image: core-image-minimal-stm32mp1.ext4 
+[ FILLED ] part 7:   userfs, image: st-image-userfs-poky-stm32mp1.ext4 
+
+###########################################################################
+###########################################################################
+
+RAW IMAGE generated: ../flashlayout_core-image-minimal/../flashlayout_core-image-minimal_FlashLayout_sdcard_stm32mp157c-dk2-basic.raw
+
+WARNING: before to use the command dd, please umount all the partitions
+	associated to SDCARD.
+    sudo umount `lsblk --list | grep mmcblk0 | grep part | gawk '{ print $7 }' | tr '\n' ' '`
+
+To put this raw image on sdcard:
+    sudo dd if=../flashlayout_core-image-minimal/../flashlayout_core-image-minimal_FlashLayout_sdcard_stm32mp157c-dk2-basic.raw of=/dev/mmcblk0 bs=8M conv=fdatasync status=progress
+
+(mmcblk0 can be replaced by:
+     sdX if it's a device dedicated to receive the raw image 
+          (where X can be a, b, c, d, e)
+
+###########################################################################
+###########################################################################
+mrv@mrv-HP-Compaq-8000-Elite-Convertible-MT:~/yocto-stm32-labs/build/tmp/deploy/images/stm32mp1/scripts$ 
+
+to flash the raw file:
+----------------------
+insert the sd card into my pc, let it be identified
+sudo dd if=../flashlayout_core-image-minimal/../flashlayout_core-image-minimal_FlashLayout_sdcard_stm32mp157c-dk2-basic.raw of=/dev/sdb bs=8M conv=fdatasync status=progress
+
+to flash a specific partition I used:
+--------------------------------------
+insert the sd card into my pc, let it be identified
+sudo dd if=st-image-bootfs-poky-stm32mp1.ext4 of=/dev/sdb4 bs=1M conv=fdatasync status=progress
+
+to update a specifc file on the sd card:
+----------------------------------------
+insert the sd card into my pc, let it be identified
+I mounted that desired partition, for example u-boot
+then updated extlinux.conf file.
+
+
+/dev/mmcblk vs /dev/sdX
+------------------------
+To summarize: ${card} and ${card}${p}1 mean /dev/sdb and /dev/sdb1 on a USB connected SD card, and /dev/mmcblk0, /dev/mmcblk0p1 on an mmc controller connected device
+
+https://sunxi.org/Bootable_SD_card
+
+for a card connected via a PCI card reader
+
+DISK=/dev/mmcblk0
+
+for a card connected via a USB card reader,
+
+DISK=/dev/sdX
