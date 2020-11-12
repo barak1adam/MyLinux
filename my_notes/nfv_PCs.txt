@@ -1,0 +1,15 @@
+Elad's PC:
+=========
+
+is running ESX - a dedicated server OS, good for MANO cloud.
+
+Gidi' PC:
+========
+reference
+smart git
+smart svn
+
+Laptop in Eyal's office:
+========================
+client for Spirent
+connected to Spirent in floor -1
