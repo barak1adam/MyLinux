@@ -1,8 +1,50 @@
-printouts on init:
-==================	
-armada-nand f10d0000.nand-flash: Initialize HAL based NFC in 8bit mode with DMA Disabled using BCH 8bit ECC
-NAND device: Manufacturer ID: 0x2c, Chip ID: 0xd3 (Micron NAND 1GiB 3,3V 8-bit), 1024MiB, page size: 4096, OOB size: 128
+printouts on probe:
 
+	orion_nfc_init_nand(nand, info);
+
+
+	/*barak*/
+	pr_err("print info params:");
+	pr_err("==================");
+	pr_err("info.ecc_type: %d", info->ecc_type);
+	pr_err("info.page_size: %d", info->page_size);
+	nand_ecc_modes_t mode;
+	int steps;
+	int size;
+	int bytes;
+	int total;
+	int strength;
+
+	pr_err("print nand params:");
+	pr_err("==================");
+	pr_err("nand ecc steps : %d", nand->ecc.steps);
+	pr_err("nand ecc size : %d", nand->ecc.size);
+	pr_err("nand ecc strength : %d", nand->ecc.strength);
+	pr_err("nand ecc layout: %d", nand->ecc.layout);
+
+	if (nand->ecc.layout == NULL) {
+		dev_err(&pdev->dev, "Undefined ECC layout for selected nand device\n");
+		ret = -ENXIO;
+		goto fail_free_irq;
+	}
+
+	platform_set_drvdata(pdev, mtd);
+
+	if (nand_scan(mtd, info->num_cs)) {
+		dev_err(&pdev->dev, "failed to scan nand\n");
+		ret = -ENXIO;
+		goto fail_free_irq;
+	}
+
+	pr_err("print mtd params:");
+	pr_err("==================");
+	pr_err("erase size: %d", mtd->erasesize);
+	pr_err("write size: %d", mtd->writesize);
+	pr_err("oobsize size: %d", mtd->oobsize);
+	pr_err("bitflip threshold: %d", mtd->bitflip_threshold);
+	pr_err("ecc strrength : %d", mtd->ecc_strength);
+	
+	
 print info params:
 ==================
 info.ecc_type: 2 // MV_NFC_ECC_BCH_1K
@@ -30,38 +72,16 @@ mtd //mtd_info
 mtd->nand (mtd -> priv) //nand_chip
 mtd->nand->chip (nand -> priv) //orion_nfc_info
 
-data buffers allocated once upon nfc_nand probing in orion_nfc_init_buff()
+printouts on init
+==================
+armada-nand f10d0000.nand-flash: Initialize HAL based NFC in 8bit mode with DMA Disabled using BCH 8bit ECC
 
+NAND device: Manufacturer ID: 0x2c, Chip ID: 0xd3 (Micron NAND 1GiB 3,3V 8-bit), 1024MiB, page size: 4096, OOB size: 128
+Bad block table found at page 262080, version 0x01
+Bad block table found at page 262016, version 0x01
+nand_read_bbt: bad block at 0x00003df40000
 
-there is also a buffers pointer in mtd->nand sturct: 
-	struct nand_buffers *buffers;
-
-
-struct nand_buffers {
-	uint8_t	ecccalc[NAND_MAX_OOBSIZE];
-	uint8_t	ecccode[NAND_MAX_OOBSIZE];
-	uint8_t databuf[NAND_MAX_PAGESIZE + NAND_MAX_OOBSIZE];
-};
-
-/**
- * struct mtd_ecc_stats - error correction stats
- *
- * @corrected:	number of corrected bits
- * @failed:	number of uncorrectable errors
- * @badblocks:	number of bad blocks in this partition
- * @bbtblocks:	number of blocks reserved for bad block tables
- */
-struct mtd_ecc_stats {
-	__u32 corrected;
-	__u32 failed;
-	__u32 badblocks;
-	__u32 bbtblocks;
-};
 
 _read ---> nand_read ----> nand_do_read_ops:
 
-chen: 
-latest patch not running - eccsteps = 1, correct not returning -EBADMSG
-
-raz:
-disable hw ecc upon write ?
+raz - need to disable hw ecc on write ?
