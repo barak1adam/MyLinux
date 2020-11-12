@@ -1,0 +1,76 @@
+Flash:
+======
+pages are inegrated into blocks.
+
+data is programmed in page units (read, write)
+
+data is erased in block units.
+
+to write data, the area must be erased first.
+
+NOR Flash normally does not need ECC (Error-Correcting Code).
+
+Each page have spare area, OOB.  
+
+On the other hand, NAND requires ECC to ensure data integrity. NAND Flash includes extra storage on each page to store ECC code as well as other
+information for wear-leveling, logical to physical block mapping, and other software overhead functions. The
+size of extra storage (spare area) is normally 16 byte per 512 byte sector but other sizes are also used. 
+
+ECC algorithm correction strength (number of bit errors that can be corrected) depends on the ECC algorithm used
+to correct the errors (these algorithms may be implemented in either hardware or software). 
+
+in our system:
+SLC NAND.
+page size: 4096 Bytes of data (4KB), OOB size: 128 Bytes (it is 16 bytes of OOB per 512 bytes of data)
+block size: 64 pages ---> 256KB of data, 8KB of OOB
+Marvell NFC is used, 8bit mode with DMA Disabled using BCH 8bit ECC
+NAND device: Manufacturer ID: 0x2c, Chip ID: 0xd3 (Micron NAND 1GiB 3,3V 8-bit), 1024MiB, page size: 4096, OOB size: 128
+
+Bad Blocks:
+===========
+A bad block - contains at least one page with more bit errors than ecc strength.
+
+Each NAND Flash die (LUN) is specified to have a minimum number of valid blocks
+(NVB) of the total available blocks. This means the die (LUNs) could have blocks that
+are invalid when shipped from the factory. An invalid block is one that contains at least
+one page that has more bad bits than can be corrected by the minimum required ECC.
+Additional blocks can develop with use. However, the total number of available blocks
+per die (LUN) will not fall below NVB during the endurance life of the product.
+
+NAND - SLC and MLC:
+===================
+There are two different memory cell technologies used in NAND Flash devices. The first one is the traditional
+implementation, where each memory cell stores a single bit of data. This approach is categorized as single
+level cell (SLC). The second approach uses multi level cell (MLC) to store two bits of data in one cell. The
+data integrity in MLC requires a more sophisticated error correction than SLC NAND Flash devices.
+
+according to TKOS - SLC is more reliable, longer EOL in the market
+MLC - cheaper, more space but EOL is short
+
+Error correction codes:
+=======================
+
+Hamming
+
+Reed Solomon
+
+BCH
+
+conclusion:
+-------------
+Hamming based block codes are the most commonly used ECC for SLC. Hamming codes are relatively
+straightforward and simple to be implemented in either software or hardware. The disadvantage of Hamming
+codes is its limited error correction capabilities, with two bit errors detection and only one bit error correction.
+Therefore, it is mainly used on SLC NAND flash application.
+Both Reed-Solomon and BCH are able to handle multiple errors and are widely used on MLC flash. Both
+codes are powerful and able to handle both random and burst errors. Reed-Solomon code is a subset of the
+BCH. However, BCH is simpler than Reed-Solomon to decode and implement. On the other hand, ReedSolomon code is more suitable for concatenated codes.
+
+Marvell - Raz:
+--------------
+-there were patches to 3.10 for those issues - we will try to get them
+-for empty space -  it might be that ECC is not even calculated, all 0xFF
+-maybe to check the length of the errors in UBIFS and if it is less than ecc strength just ignore it.
+	>> what if it is more than ecc?
+
+

@@ -1,0 +1,10 @@
+Marvell>> phyWrite 0 16 12
+Marvell>> phyWrite 0 12 4 
+Marvell>> phyRead 0 11
+0x0
+Marvell>> ping 10.32.8.76 
+Using egiga1 device
+host 10.32.8.76 is alive
+Marvell>> phyRead 0 11   
+0x200
+Marvell>> 

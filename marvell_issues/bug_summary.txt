@@ -1,0 +1,161 @@
+	pr_info("PRINT PROBE DATA:");
+	pr_info("================");
+	pr_info("plat_data.tclk = %d", plat_data->tclk);
+	pr_info("plat_data.pclk = %d", plat_data->pclk);
+	pr_info("plat_data.max_port = %d", plat_data->max_port);
+	pr_info("plat_data.max_cpu = %d", plat_data->max_cpu);
+	pr_info("plat_data.ctrl_model = %d", plat_data->ctrl_model);
+	pr_info("plat_data.ctrl_rev = %d", plat_data->ctrl_rev);
+	pr_info("plat_data.cpu_mask = %d", plat_data->cpu_mask);
+	pr_info("plat_data.mtu = %d", plat_data->mtu);
+	pr_info("plat_data.phy_addr = %d", plat_data->phy_addr);
+	pr_info("plat_data.is_oob_phy = %d", plat_data->is_oob_phy);
+	pr_info("plat_data.oob_phy_smi_base = %d", plat_data->oob_phy_smi_base);
+	pr_info("plat_data.oob_phy_smi_remap_size = %d", plat_data->oob_phy_smi_remap_size);
+	pr_info("plat_data.tx_csum_limit = %d", plat_data->tx_csum_limit);
+	pr_info("plat_data.speed = %d", plat_data->speed);
+	pr_info("plat_data.duplex = %d", plat_data->duplex);
+	pr_info("plat_data.lb_enable = %d", plat_data->lb_enable);
+	pr_info("plat_data.is_sgmii = %d", plat_data->is_sgmii);
+	pr_info("plat_data.is_rgmii = %d", plat_data->is_rgmii);
+	pr_info("plat_data.irq = %d", plat_data->irq);
+	pr_info("plat_data.rx_queue_count = %d", plat_data->rx_queue_count);
+	pr_info("plat_data.tx_queue_count = %d", plat_data->tx_queue_count);
+	pr_info("plat_data.rx_queue_size = %d", plat_data->rx_queue_size);
+	pr_info("plat_data.tx_queue_size = %d", plat_data->tx_queue_size);
+	pr_info("plat_data.pnc_tcam_size = %d", plat_data->pnc_tcam_size);
+	pr_info("plat_data.MAC_ADDR = %X%X%X%X%X%X", plat_data->mac_addr[0], plat_data->mac_addr[1], plat_data->mac_addr[2], plat_data->mac_addr[3], plat_data->mac_addr[4], plat_data->mac_addr[5]);
+
+
+
+in soc:
+PRINT PROBE DATA:
+================
+plat_data.tclk = 166666667
+plat_data.pclk = 0
+plat_data.max_port = 2
+plat_data.max_cpu = 0
+plat_data.ctrl_model = 64512
+plat_data.ctrl_rev = 1
+plat_data.cpu_mask = 1
+plat_data.mtu = 1500
+plat_data.phy_addr = 0
+plat_data.is_oob_phy = 1
+plat_data.oob_phy_smi_base = -1
+plat_data.oob_phy_smi_remap_size = 8
+plat_data.tx_csum_limit = 9800
+plat_data.speed = 0
+plat_data.duplex = 1
+plat_data.lb_enable = 0is_oob_phy
+plat_data.is_sgmii = 1
+plat_data.is_rgmii = 0
+plat_data.irq = 24
+plat_data.rx_queue_count = 0
+plat_data.tx_queue_count = 0
+plat_data.rx_queue_size = 0
+plat_data.tx_queue_size = 0
+plat_data.pnc_tcam_size = 0
+plat_data.MAC_ADDR = 4437801618
+
+out of soc:
+PRINT PROBE DATA:
+================
+plat_data.tclk = 166666667
+plat_data.pclk = 0
+plat_data.max_port = 2
+plat_data.max_cpu = 0
+plat_data.ctrl_model = 64512
+plat_data.ctrl_rev = 1
+plat_data.cpu_mask = 1
+plat_data.mtu = 1500
+plat_data.phy_addr = 0
+plat_data.is_oob_phy = 1
+plat_data.oob_phy_smi_base = 1426063360
+plat_data.oob_phy_smi_remap_size = 8
+plat_data.tx_csum_limit = 9800
+plat_data.speed = 0
+plat_data.duplex = 1
+plat_data.lb_enable = 0
+plat_data.is_sgmii = 1
+plat_data.is_rgmii = 0
+plat_data.irq = 24
+plat_data.rx_queue_count = 0
+plat_data.tx_queue_count = 0
+plat_data.rx_queue_size = 0
+plat_data.tx_queue_size = 0
+plat_data.pnc_tcam_size = 0
+plat_data.MAC_ADDR = 4437801618
+
+
+Bug status:
+===========
+312 (as described in Marvell case):
+
+1) If switch is in soc section in dts, smi base address is -1, no port 12 bug, and we disabled sw polling to avoid syslog errors
+Now I am trying to stop sw polling just for 312, e.g. ctrl_model is 0xFC00.
+
+2) If the switch section is out of the soc, address is correct, port 12 bug happens, no syslog errors - sw polling still exist
+If I disabled the HW polling, all issues including port 12 are resolved.
+
+Eyal prefer option (1): to keep HW polling enabled and disable SW polling just for 312.
+
+for V8 - it is out of the soc, but port 12 bug is not relevant.
+
+
+
+Marvel Description as provided by me:
+=====================================
+
+The issue:
+========
+When lport 15 (connected to bus SMI 1 (M1_MDIO/MDC)) is disabled by the user, 
+the CPU_MAC1 port is mistakenly getting down in Linux ifconfig too. 
+
+System Description:
+===================
+
+Our XG-312 new board is based on Marvell BobCat2, 98X4521.
+Linux kernel 3.10
+CPSS 2018.2
+
+
+All ports are connected by SMI to Marvell 88E1548 qphys as shown in the block diagram bellow.
+BobCat2 MAC-1 port is our OOB port and is connected by SMI to 88E1512 phy.
+ 
+ 
+
+ 
+SMI0 (M0_MDIO)-we have today 3 qphy's
+SMI1 (M1_MDIO)-we have today 3 qphy's
+SMI2 (M2_MDIO)-we have today 3 qphy's
+SMI3 (M3_MDIO)-we have today 1 qphy's
+SLV_MDIO-OOB PHY
+
+ 
+Bug description:
+================
+When lport 15 (connected to bus SMI 1 (M1_MDIO/MDC)) is disabled by the user, 
+the CPU_MAC1 port is mistakenly getting down in Linux ifconfig too. 
+88E1512 phy is connected to CPU_MAC1 in SGMII on one side and with Copper to front panel RJ45 on the other side.
+On the copper side 88E512 still shows link up but on the SGMII side the link is down, so if you run on the CPU side
+ifconfig, yoiu get state down for Eth0 (CPU MAC1): "UP BROADCAST PROMISC" instead of "UP BROADCAST RUNNING".
+
+
+
+Important Notes:
+================
+Our board DTS file is attached.
+The OOB marvell driver is attached too.
+
+If the switch/mdio section is moved to be under the "soc" section in the dts
+file, then the bug with lport 15 is resolved, but then we get syslog error 
+messages like: "mvEthPhyRegRead: SMI read-valid timeout"
+Those messages are sent because the driver fails to read an SMI register during its SW
+polling thread. The root cause for this failure is that after the probe function the drive has
+a value of "-1" in plat_data.oob_phy_smi_base instead of 0x55000000.
+SW polling thread is trying to read SMI registers every 1 second.
+
+If the switch/mdio is moved back out to the DTS root node, then 
+plat_data.oob_phy_smi_base has a correct value of 0x55000000 and syslog
+messages are not logged anymore, e.g. SW polling is OK.
+But then the lport 15 bug is reproduced.

@@ -1,0 +1,70 @@
+From c73e9651b106e3d0d8c121542d3c9a030b7ff5cc Mon Sep 17 00:00:00 2001
+From: Ofer Heifetz <oferh@marvell.com>
+Date: Mon, 16 Jul 2018 16:54:47 +0300
+Subject: [PATCH 1/1] mtd: nfc: handle bitflip in erased page
+
+check the bitflips in erased pages when read operation returns
+an error, if bitflips are below the correctable level report the
+page as erased and fix the flipped bits, otherwise report uncorrectable
+page
+
+Change-Id: I7da3c5d79fdd3d21450fcb7d061d0cd9aaa2f0d5
+Signed-off-by: Ofer Heifetz <oferh@marvell.com>
+Reviewed-on: http://vgitil04.il.marvell.com:8080/58042
+Tested-by: iSoC Platform CI <ykjenk@marvell.com>
+---
+ board/mv_ebu/common/USP/nand_nfc.c | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
+
+diff --git a/board/mv_ebu/common/USP/nand_nfc.c b/board/mv_ebu/common/USP/nand_nfc.c
+index e1b68e6..3e955a0 100644
+--- a/board/mv_ebu/common/USP/nand_nfc.c
++++ b/board/mv_ebu/common/USP/nand_nfc.c
+@@ -1027,11 +1027,31 @@ static int orion_nfc_dev_ready(struct mtd_info *mtd)
+ 	return (MV_REG_READ(NFC_STATUS_REG) & (NFC_SR_RDY0_MASK | NFC_SR_RDY1_MASK)) ? 1 : 0;
+ }
+ 
+-static inline int is_buf_blank(uint8_t *buf, size_t len)
++static inline int is_buf_blank(uint8_t *buf, size_t len, struct mtd_info *mtd)
+ {
+-	for (; len > 0; len--)
+-		if (*buf++ != 0xff)
+-			return 0;
++	struct nand_chip *nand = (struct nand_chip *)mtd->priv;
++	int flip_bits, i, j;
++	uint8_t *data;
++
++	for (i = 0; i < nand->ecc.steps; i++) {
++		flip_bits = 0;
++
++		data = &buf[nand->ecc.size * i];
++		for (j = 0; j < nand->ecc.size; j++) {
++			flip_bits += hweight8(~data[j]);
++			/* NFC uses ecc strength of 16 for all ecc size */
++			if (flip_bits > 16)
++				return 0;
++		}
++
++		/* Bit flips falls in correctable level.
++		 * Fill data area with 0xFF
++		 */
++		if (flip_bits) {
++			memset(data, 0xFF, nand->ecc.size);
++		}
++	}
++
+ 	return 1;
+ }
+ 
+@@ -1096,7 +1116,7 @@ static void orion_nfc_cmdfunc(struct mtd_info *mtd, unsigned command,
+ 			 * 0, which is different from the ECC information within
+ 			 * OOB, ignore such double bit errors
+ 			 */
+-			if (is_buf_blank(info->data_buff, mtd->writesize))
++			if (is_buf_blank(info->data_buff, mtd->writesize, mtd))
+ 				info->retcode = ERR_NONE;
+ 			else
+ 				printk(PRINT_LVL "%s: retCode == ERR_DBERR\n", __FUNCTION__);
+-- 
+1.9.1
+

@@ -1,0 +1,40 @@
+PRINT PROBE DATA:
+
+================
+plat_data.tclk = 166666667
+
+plat_data.pclk = 0
+plat_data.max_port = 2
+
+plat_data.max_cpu = 0
+plat_data.ctrl_model = 64512
+
+plat_data.ctrl_rev = 1
+plat_data.cpu_mask = 1
+
+plat_data.mtu = 1500
+plat_data.phy_addr = -1
+
+plat_data.is_oob_phy = 0
+plat_data.oob_phy_smi_base = 0
+
+plat_data.oob_phy_smi_remap_size = 0
+plat_data.tx_csum_limit = 9800
+
+plat_data.speed = 1000
+plat_data.duplex = 1
+
+plat_data.lb_enable = 0
+plat_data.is_sgmii = 1
+
+plat_data.is_rgmii = 0
+plat_data.irq = 24
+
+plat_data.rx_queue_count = 0
+plat_data.tx_queue_count = 0
+
+plat_data.rx_queue_size = 0
+plat_data.tx_queue_size = 0
+
+plat_data.pnc_tcam_size = 0
+plat_data.MAC_ADDR = 4437801616

@@ -1,0 +1,41 @@
++#include <signal.h>
++#include <execinfo.h>
++
+ char integrate_default[] ="/usr/local/etc/System.conf";
+ 
+ char current_default[COMMAND_SIZE];
+@@ -66,6 +69,34 @@ extern BOOL mmc_hw_diag_mode;
+ 
+ static pid_t main_pid = 0;
+ 
++/* add a signal handler for debug purpose !!! */
++/* it print the stack trace of the crashing process, but also generate a linux core dump file */
++static void custom_signal_handler(int sig) {
++
++	void *trace[32];
++	size_t size, i;
++	char **strings;
++	
++	fprintf(stderr, "Process %d got signal %d\n", getpid(), sig);
++	fprintf( stderr, "\n********* SEGMENTATION FAULT!! *********\n\n" );
++
++	size    = backtrace( trace, 32 );
++	strings = backtrace_symbols( trace, size );
++
++	fprintf( stderr, "\nBACKTRACE:\n\n" );
++
++	for( i = 0; i < size; i++ ){
++	  fprintf( stderr, "  %s\n", strings[i] );
++	}
++
++	fprintf( stderr, "\n***************************************\n" );
++
++	signal(sig, SIG_DFL);
++	kill(getpid(), sig);
++	 
++	//exit(-1);
++}
++
+
+
+dump_stack()

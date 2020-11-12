@@ -28,4 +28,20 @@ Try to build on cloud
 
 agema gitignore files
 
+more:
+======
+
+black duck - migrate to Z, analyze and handle all risk reports - full time job
+
+coverity instead of KW
+
+replace roomba for TC DB
+
+XG300 to Yocto
+
+build legacy versions for XG300
+
+day by day support: licenses, backups, maintainance issues.
+
+
 

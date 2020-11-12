@@ -48,6 +48,28 @@ chen - keep investigate later, complete functions stack
 --> nand_read (mtd) (mtd/nand/nand_base)
 --> nand_do_read_ops (mtd) ---> chip->ecc.read_page or chip->ecc.read_page_raw or chip->ecc.read_subpage
 
+*
+ * This function reads data from offset @offset of logical eraseblock @lnum and
+ * stores the data at @buf. When reading from static volumes, @check specifies
+ * whether the data has to be checked or not. If yes, the whole logical
+ * eraseblock will be read and its CRC checksum will be checked (i.e., the CRC
+ * checksum is per-eraseblock). So checking may substantially slow down the
+ * read speed. The @check argument is ignored for dynamic volumes.
+ *
+ * In case of success, this function returns zero. In case of failure, this
+ * function returns a negative error code.
+ *
+ * %-EBADMSG error code is returned:
+ * o for both static and dynamic volumes if MTD driver has detected a data
+ *   integrity problem (unrecoverable ECC checksum mismatch in case of NAND);
+ * o for static volumes in case of data CRC mismatch.
+ *
+ * If the volume is damaged because of an interrupted update this function just
+ * returns immediately with %-EBADF error code.
+ */
+int ubi_leb_read(struct ubi_volume_desc *desc, int lnum, char *buf, int offset,
+		 int len, int check)
+
 
 (mtd/nand)
 
@@ -76,3 +98,67 @@ solutions:
 -what other pathches was mainlined to kernel
 -max bitflips
 -retrun OK instead of ERR
+
+
+debug:
+change pr_debug to pr_info
+try to erase the corrupted area on u-boot
+
+lease, provide all messages. UBIFS prints much more of them when
+debugging is enabled. It prints them with KERN_DEBUG level, which
+means they do not go to your console by default. You should use
+'ignore_loglevel' boot option to make kernel print everything to the
+serial console, see here:
+
+http://www.linux-mtd.infradead.org/doc/ubifs.html#L_how_send_bugreport
+
+But we have mtdram. You could simulate various patterns by
+creating various images on you host FS. Then you may do:
+
+dd if=my_simulated_file of=/dev/mtd0
+
+Probably it makes sense to create an UBIFS FS first. Then
+dump /deve/mtd0 to a file, and start abusing this file differently.
+
+
+http://www.linux-mtd.infradead.org/faq/ubifs.html#L_how_debug
+Documentation/dynamic-debug-howto.txt
+
+Power-cut recovery testing
+
+http://lists.infradead.org/pipermail/linux-mtd/2012-January/039303.html
+
+Debug messages during boot process
+==================================
+
+To be able to activate debug messages during the boot process,
+even before userspace and debugfs exists, use the boot parameter:
+ddebug_query="QUERY"
+
+mtd-tests
+https://stackoverflow.com/questions/27744402/enable-dynamic-debug-for-multiple-files-at-boot
+set the driver to protect empty space
+or patch the ubifs
+
+Some more information about our setup in case it's useful:
+- ARM SoC: Zynq
+- NAND controller - ARM Primecell PL353 Static Memory Controller (Zynq peripheral)
+- Driver currently out-of-tree, see [1]
+- NAND chip - Micron 8GB, on-die 4-bit ECC
+- Kernel: 3.2.35-rt52, with vendor patches
+- u-boot 2012.10, with vendor patches
+
+
+
+
+ubifs_debugging_init
+
+
+
+chen:
+flow of the code, what is happening
+why patch is not wroking
+how to debug ubifs, how to debug from u-boot
+how to simulate - nand simulator
+
+

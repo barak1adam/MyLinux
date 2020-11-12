@@ -1,0 +1,18 @@
+tkos second meeting:
+====================
+
+try to connect uart pins to SFP connector - I checked with Yotam, not possible
+but i have good uart option on the eval board.
+
+STMP151AA - no secure boot
+
+SPI
+---
+an example how to enable spi and spidev in dts
+no need to mknod /dev/spidev, it is done automatically
+I will get SPI master driver enabled & DMA inlcuded
+
+can use buxy box utils for first tests.
+
+
+next meeting - talk about u-boot efforts.

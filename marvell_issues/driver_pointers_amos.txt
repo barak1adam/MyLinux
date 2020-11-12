@@ -1,0 +1,136 @@
+from mv_netdev.c:
+=================
+
+This is the SW polling thread.
+The main function inside is mv_eth_adjust_link.
+Please see the thread and the function bellow.
+
+/* This function is the pp SMI SW polling threadfn of kthread_run() in mv_eth_start_link_polling_thread() */
+/* it calls mv_eth_adjust_link every second for oob PHY connected ports to sychronize link, speed and duplex */
+static int mv_eth_link_polling_thread(void *data)
+{
+	wait_queue_head_t timeout_wq;
+	struct eth_port *pp;
+	int port;
+
+	pr_info("Ethernet link polling thread starts up\n");
+
+	init_waitqueue_head(&timeout_wq);
+
+	while (mv_eth_link_polling) {
+		for (port = 0; port < mv_eth_ports_num; port++) {
+			pp = mv_eth_port_by_id(port);
+			if (pp && pp->dev && pp->plat_data->is_oob_phy)
+				mv_eth_adjust_link(pp);
+		}
+		sleep_on_timeout(&timeout_wq, HZ);
+
+		if (kthread_should_stop()) {
+			pr_err("receive stop event!\n");
+			break;
+		}
+	}
+
+	return 0;
+}
+
+
+/*sychronize ethernet port's link, speed and duplex with phy setting*/
+static void mv_eth_adjust_link(struct eth_port *pp)
+{
+	MV_BOOL			phy_link;
+	int			speed, duplex;	/*follow speed and duplex definition in ethtool.h*/
+	MV_ETH_PORT_SPEED	phy_speed;
+	MV_ETH_PORT_DUPLEX	phy_duplex;
+	int			status_change = 0;
+
+
+	/*read out phy's link*/
+	phy_link = mvEthPhyCheckLink(pp->plat_data->phy_addr);
+
+	if (phy_link) {
+		/*read out phy's speed and duplex*/
+		if (MV_OK != mvEthPhySpeedDuplexGet(pp->plat_data->phy_addr, &speed, &duplex)) {
+			pr_err("%s %d: Port %d mvEthPhySpeedDuplexGet fail\n", __func__, __LINE__, pp->port);
+			return;
+		}
+
+		/*transfer ethtool speed definition to mv_eth speed definition*/
+		switch (speed) {
+		case SPEED_10:
+			phy_speed = MV_ETH_SPEED_10;
+			break;
+		case SPEED_100:
+			phy_speed = MV_ETH_SPEED_100;
+			break;
+		case SPEED_1000:
+			phy_speed = MV_ETH_SPEED_1000;
+			break;
+		default:
+			pr_err("%s %d: Port %d read wrong phy speed %d\n", __func__, __LINE__, pp->port, speed);
+			return;
+		}
+
+		/*transfer ethtool speed definition to mv_eth speed definition*/
+		switch (duplex) {
+		case DUPLEX_HALF:
+			phy_duplex = MV_ETH_SPEED_10;
+			break;
+		case DUPLEX_FULL:
+			phy_duplex = MV_ETH_SPEED_100;
+			break;
+		default:
+			pr_err("%s %d: Port %d read wrong phy duplex %d\n", __func__, __LINE__, pp->port, duplex);
+			return;
+		}
+		/*if link up, check autoneg result change and update autoneg results to eth port*/
+		if ((pp->speed != phy_speed) ||
+		    (pp->duplex != phy_duplex)) {
+			mvNetaSpeedDuplexSet(pp->port, phy_speed, phy_duplex);
+			pp->duplex = phy_duplex;
+			pp->speed  = phy_speed;
+		}
+	}
+
+	if (phy_link != pp->link) {
+		/*if phy link is down, set duplex and speed to abnormal value for next configuration*/
+		if (!phy_link) {
+			pp->duplex = -1;
+			pp->speed = 0;
+		}
+
+		/*synchronize phy link status and eth port link status*/
+		pp->link = phy_link;
+		status_change = 1;
+	}
+
+	if (status_change) {
+		/*Check PHY link status change, force eth port link up or down on link status change*/
+		if (phy_link)
+			mvNetaForceLinkModeSet(pp->port, 1, 0);
+		else
+			mvNetaForceLinkModeSet(pp->port, 0, 1);
+
+		if (pp->flags & MV_ETH_F_STARTED) {
+			pp->link_event_suppressed = 0;
+			mv_eth_link_event(pp, 1);
+		} else
+			pp->link_event_suppressed = 1;
+	} else if (pp->link_event_suppressed && (pp->flags & MV_ETH_F_STARTED)) {
+		pp->link_event_suppressed = 0;
+		mv_eth_link_event(pp, 1);
+	}
+}
+
+In addition SW polling is enabled only if is_oob_phy flag is set.
+Can you please explain what is the purpose of this flag?
+
+	/* pp SMI : external SMI unit is used with SW polling method */
+	/*              if there a eth port is in pp smi mode, then we need to create a SW polling thread, */
+	/*              now set the SW polling flag, requires ADdr/Compl and init SMI register */
+	/* internal SMI: used with HW polling via Gbe MAC */
+	/* indirect smi should be initialized(requires ADdr/Compl and init SMI register) only once, */
+	/* so once mv_eth_link_polling is set to true, indirect smi will not be initialized again*/
+
+	if (plat_data->is_oob_phy && (mv_eth_link_polling == false)) {
+		mv_eth_link_polling = true;

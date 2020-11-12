@@ -1,0 +1,8 @@
+probe:
+	mv_plat_data_get
+	mv_eth_load_network_interfaces
+	mv_eth_hal_init
+	(print probe data here)
+	
+mv_eth_start_link_polling_thread
+mv_eth_start_internals

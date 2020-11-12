@@ -1,0 +1,22 @@
+312:
+
+if V20 dts, is_oob_phy is 0 and phy_addr = -1 ------> no hw polling, no sw polling
+link is up
+but had issues after reboot
+
+aligned dts like V8:
+sw polling and hw polling are enabled
+
+hw polling + sw polling
+(address is correct)
+port 12 bug
+remove hw polling resolve port 12 bug
+
+hw polling, not sw polling
+(sw polling not working because wrong address)
+had no port 12 bug and disable sw polling to avoid syslog read errors
+
+
+in V8 we had also SW+HW polling
+but wrong remap size leading to wrong readings in SW polling
+

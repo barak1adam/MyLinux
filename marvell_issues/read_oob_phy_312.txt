@@ -1,0 +1,209 @@
+Hw debug:
+
+Read reset status
+
+show dev-spi direct 01070000000
+
+'1'=de asset reset
+
+'0'=reset
+
+Default stateof reg ="1ff"
+
+ 
+
+To set oob reset:
+
+show dev-spi direct 0007000001f7
+
+bit[3]=is the phy reset
+
+bit[3]='0' phy is in reset state
+
+
+
+
+
+Hi Barak,
+
+Below you can find OOB PHY,in the past it was connected to Marvell SOHO switch, today we don’t have the soho any more !!
+
+ 
+
+#For accessing the PHY, must disable SOHO Polling unit
+
+phyWrite 1b 4 8081
+
+ 
+
+#============
+
+#Set Phy Leds (nominal) without blnk on ACT
+
+ 
+
+phyWrite 0 16 3
+
+phyWrite 0 10 30
+
+phyRead 0 10
+
+phyWrite 0 16 0
+
+ 
+
+ 
+
+#============
+
+#Set Phy Leds (nominal) with blnk on ACT
+
+ 
+
+phyWrite 0 16 3
+
+phyWrite 0 10 40
+
+phyRead 0 10
+
+phyWrite 0 16 0
+
+ 
+
+#============
+
+ 
+
+#check mode[2:0]
+
+phyWrite 0 16 12
+
+phyRead 0 14
+
+ 
+
+ 
+
+#============
+
+#enable and reset  counter on Copper side
+
+phyWrite 0 16 12
+
+phyRead 0 16
+
+phyWrite 0 12 12
+
+phyRead 0 12
+
+#==================
+
+ 
+
+ 
+
+#==================
+
+#Read Counter
+
+phyWrite 0 16 12
+
+phyRead 0 11
+
+#==================
+
+ 
+
+#==================
+
+#Check link up
+
+phyWrite 0 16 0
+
+phyRead 0 1
+
+ 
+
+#==================
+
+#Read Streach Register
+
+phyWrite 0 16 3
+
+phyRead 0 12
+
+#==================
+
+ 
+
+ 
+
+#Disable MGMII on SOHO
+
+phyWrite 10 0 84
+
+ 
+
+ 
+
+ 
+
+#==================
+
+#Enable PU on SOHO
+
+phyWrite 1b 4 c081
+
+ 
+
+#==================
+
+ 
+
+ 
+
+#==================
+
+# check in SOHO if link is up
+
+phyRead 10 0
+
+ 
+
+#==================
+
+ 
+
+ 
+
+#For debuging
+
+ 
+
+ 
+
+#Set Phy Led0 = TX ; LED1 = RX
+phyWrite 0 16 3
+
+
+The following reads CRC from SGMII
+#enable and reset  counter on sgmii  side
+phyWrite 0 16 12
+phyRead 0 16
+phyWrite 0 12 14
+phyRead 0 12
+#==================
+ 
+ 
+#==================
+#Read Counter
+phyWrite 0 16 12
+phyRead 0 11
+#==================
+
+
+phyWrite 0 10 05
+
+phyRead 0 10
+
+phyWrite 0 16 0

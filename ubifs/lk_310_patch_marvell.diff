@@ -1,0 +1,88 @@
+From 515874da1518cd66de78037f18a79fc7967d47f9 Mon Sep 17 00:00:00 2001
+From: blueh <blueh@marvell.com>
+Date: Tue, 04 Dec 2018 11:52:44 +0800
+Subject: [PATCH] nand_nfc.c WA for page bit-flip issue.
+
+    1. in nand_nfc.c found is_buf_blank() in READ0: never excute,
+        even on easily bit-flipp nand chip will not trigger correction.
+    2. found reg 0xd0014 bit[4] uncorrectable_err never trigger.
+    3. Compared LK44120 marvell_nand.c, marvell_nfc_hw_ecc_bch_read_page()
+        marvell_nfc_hw_ecc_bch_read_page() {
+            marvell_nfc_enable_hw_ecc()
+                do something ...
+            marvell_nfc_disable_hw_ecc()
+            for (chunk = 0; chunk < lt->nchunks; chunk++) {
+                do something ...
+                marvell_nfc_check_empty_chunk()
+            }
+        }
+        Found LK310 did not disable ecc then correct blank page like LK44120 did.
+    4. adding ecc dis api before READ0 operation.
+        found reg 0xd0014 value became meaningful.
+
+Change-Id: I9a610edad50fa56035f65bb11307a3501538c886
+Signed-off-by: blueh <blueh@marvell.com>
+---
+
+diff --git a/drivers/mtd/nand/mvebu_nfc/nand_nfc.c b/drivers/mtd/nand/mvebu_nfc/nand_nfc.c
+index 257884c..c6da4e5 100644
+--- a/drivers/mtd/nand/mvebu_nfc/nand_nfc.c
++++ b/drivers/mtd/nand/mvebu_nfc/nand_nfc.c
+@@ -461,6 +461,37 @@
+ 									MV_NFC_PIO_NONE}, /* WRITE_DISPATCH_END */
+ };
+ 
++void nfc_disable_hw_ecc(struct orion_nfc_info *info)
++{
++        int regval=0;
++
++        regval = MV_REG_READ(NFC_CONTROL_REG);
++        if (regval & NFC_CTRL_ECC_EN_MASK) {
++                MV_REG_WRITE(NFC_CONTROL_REG, (regval & ~NFC_CTRL_ECC_EN_MASK ));
++        }
++
++        /*check ECC algo, ex: hamming or bch or none.*/
++        switch(info->nfcCtrl.eccMode) {
++                case MV_NFC_ECC_BCH_2K:
++                case MV_NFC_ECC_BCH_1K:
++                case MV_NFC_ECC_BCH_704B:
++                case MV_NFC_ECC_BCH_512B:
++                        MV_REG_WRITE(NFC_ECC_CONTROL_REG, 0);
++                        break;
++
++                default:
++                       /* case MV_NFC_ECC_HAMMING:
++                          case MV_NFC_ECC_DISABLE:
++                          case MV_NFC_ECC_MAX_CNT: */
++                        break;
++        }
++
++        /*update 0xd0014 after ecc off*/
++        info->dscr = MV_REG_READ(NFC_STATUS_REG);
++        if (info->dscr & MV_NFC_UNCORR_ERR_INT)
++                info->retcode = ERR_DBERR;
++}
++
+ static int prepare_read_prog_cmd(struct orion_nfc_info *info,
+ 			int column, int page_addr)
+ {
+@@ -996,10 +1027,10 @@
+ 				goto fail_stop;
+ 			}
+ 		}
+-
+ 		/* Fallback - in case the NFC did not reach the idle state */
+ 		ndcr = MV_REG_READ(NFC_CONTROL_REG);
+ 		if (ndcr & NFC_CTRL_ND_RUN_MASK) {
++                        /*mvOsUDelay(10);*/ /*WA for SYSTEMSW-295, Toshiba NAND "TH58NVG3S0HTAI0". */
+ 			NFC_DPRINT((PRINT_LVL "WRONG NFC STAUS: command %d, NDCR=0x%08x, NDSR=0x%08x, NDECCCTRL=0x%08x)\n",
+ 				   info->cmd, MV_REG_READ(NFC_CONTROL_REG), MV_REG_READ(NFC_STATUS_REG),
+ 				   MV_REG_READ(NFC_ECC_CONTROL_REG)));
+@@ -1115,6 +1146,7 @@
+ 		else
+ 			orion_nfc_do_cmd_pio(info);
+ 
++		nfc_disable_hw_ecc(info);
+ 		if (info->retcode == ERR_DBERR) {
+ 			/* for blank page (all 0xff), HW will calculate its ECC as
+ 			 * 0, which is different from the ECC information within

@@ -1,0 +1,128 @@
+
+V8 Cetus
+========
+
+probe:
+------
+
+phy_addr = 0
+
+
+/*if eth port is connect to switch, then we should force its speed to 1gps and force it linked up*/
+if (plat_data->phy_addr == -1)
+	plat_data->speed = MV_ETH_SPEED_1000;
+else
+	plat_data->speed = MV_ETH_SPEED_AN; /* equals '0' */
+
+if (plat_data->phy_addr != -1) {
+		mdio_node = of_get_parent(phy_node);
+		/* whether oob-phy is used or not is up to the neta port associated mdio node which contains the phy*/
+		if (mdio_node && of_find_property(mdio_node, "smi-indirect-access", NULL)) {
+			plat_data->is_oob_phy = 1;
+			if (0 != mv_eth_indirect_smi_plat_data_get(mdio_node, plat_data)) { -----------------------> here the smi address is set correctly where is_oob_phy is set !!!
+				pr_err("%s: get indirect smi plat data failed\n", __func__);
+				return NULL;
+			}
+		}
+}
+
+is_oob_phy = 1
+
+if (is_oob_phy)
+	mvEthPhySmiAddrSet(ETH_SMI_REG(port))
+
+if (plat_data->is_oob_phy && (mv_eth_link_polling == false)) 
+		mv_eth_link_polling = true; //sw-polling
+
+else
+	mv_eth_indirect_smi_init(struct mv_neta_pdata *plat_data) 
+	-----------> here the smi address is set correctly where is_oob_phy is not set !!! for example V20 or 312 before the change in DTS
+	(before the change it was like V20 DTS)
+
+init:
+-----
+mv_eth_indirect_smi_plat_data_get
+#kosta start
+if (!is_oob_phy)
+	mvNetaPhyAddrPollingDisable(pp->port); //disable hw polling
+else
+	mvNetaPhyAddrSet(pp->port, phyAddr); //enable hw polling
+#kosta end
+
+mv_eth_start_internals:
+------------------------
+
+/* for pp SMI, when eth port is started, we can call mv_eth_adjust_link() to sychronize */
+/* ethernet port's link, speed and duplex with phy setting immediately */
+if (pp->plat_data->is_oob_phy)
+	mv_eth_adjust_link(pp);
+
+polling:
+--------
+if (mv_eth_link_polling)
+	mv_eth_link_polling_thread is running every second	:
+		if (is_oob_phy)
+			mv_eth_link_polling()..
+		
+
+
+
+
+
+History:
+========
+
+0) Original behavior of driver:
+------------------------------
+on probe - is_oob_phy = 1 for all CPUs.
+on mv_eth_hal_init - 
+	if (is_oob_phy ) 
+		disableHWPolling;
+	else
+		/*HW polling is enabled*/
+		mvNetaPhyAddrSet(pp->port, phyAddr);
+
+1) support SOHO for V20 (kosta)
+on probe: 
+	phy_addr = -1
+	speed is set to 1000
+	is_oob_phy = 0; 
+	/*(is_oob_phy = 1) is skipped */
+	/* mv_eth_indirect_smi_plat_data_get is skipped */
+
+2) support SOHO for V20 (kosta)
+if V20, mv_plat_data_get - speed 1000 is returned.
+
+3) Fix: OOB link down bug in OSV8 - enable HW SMI polling of PHY
+on mv_eth_hal_init:
+if (is_oob_phy == 0)
+	disableHWPolling
+else
+	/*HW polling is enabled*/
+	mvNetaPhyAddrSet(pp->port, phyAddr);
+	
+--------------> this change cause BC2 to enable HW polling too. Not just OSV8...
+
+4) support V20 CR (Barak)
+only if SOHO is present, keep mv_plat_data_get - speed 1000 is returned.
+
+
+Fix:
+=====
+
+3) 
+
+keep HW polling just for OSV8, not for 312.
+	if (is_oob_phy ) 
+		if (OSV8)
+			/*HW polling is enabled*/
+			mvNetaPhyAddrSet(pp->port, phyAddr);
+		else
+			disableHWPolling;
+	else
+		if (OSV8)
+			disableHWPolling;
+		else
+			/*HW polling is enabled*/
+			mvNetaPhyAddrSet(pp->port, phyAddr);
+

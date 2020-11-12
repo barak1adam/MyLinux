@@ -1,0 +1,28 @@
+int mv_eth_hal_init(struct eth_port *pp){
+...
+...
+...
+
+
+	if (!MV_PON_PORT(pp->port)) {
+		int phyAddr;
+
+		/* Set the board information regarding PHY address */
+		phyAddr = pp->plat_data->phy_addr;
+		/* pp SMI : external SMI unit is used with SW polling method, need to disable HW PHY polling */
+		/* internal SMI: used with HW polling via Gbe MAC, need to enable HW PHY polling */
+		if (pp->plat_data->is_oob_phy) {
+			pr_info("Neta port %d: Disable HW SMI polling of PHY\n", pp->port);
+			/* If not OOB port, do not poll PHY via SMI. */
+			mvNetaPhyAddrPollingDisable(pp->port);
+		} else {
+			pr_info("Neta port %d: Enable HW SMI polling of PHY at 0x%08x\n",
+				pp->port, phyAddr);
+			mvNetaPhyAddrSet(pp->port, phyAddr);
+		}
+	}
+...
+...
+...
+	
+}

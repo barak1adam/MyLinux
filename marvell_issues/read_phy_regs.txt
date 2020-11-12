@@ -1,0 +1,39 @@
+#read reg 18
+get-oob-register 0 12
+
+#set page to 18
+set-oob-register 0 16 12
+
+#set reg 18 to 6
+set-oob-register 0 12 6
+#set reg 18 to 6
+set-oob-register 0 12 2
+
+#read reg 18
+get-oob-register 0 12
+
+#set page to 18 and read counters in reg 17
+set-oob-register 0 16 12
+get-oob-register 0 11
+
+do ping 10.32.8.76
+
+
+#read status page 0 reg 1
+set-oob-register 0 16 0
+get-oob-register 0 1
+
+phy=0x0, reg=0x1: 0x7949
+
+
+
+
+#u-boot status reg
+Marvell>> phyWrite 0 16 0
+Marvell>> phyRead 0 1
+0x796d
+
+
+#read directly from linux:
+echo 0 16 0 > /sys/devices/platform/mv_phy/write_reg
+echo 0 1 > /sys/devices/platform/mv_phy/read_reg
