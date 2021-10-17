@@ -1,0 +1,48 @@
+https://www.linuxtechi.com/check-hard-drive-for-bad-sector-linux/
+https://www.linuxtechi.com/check-hard-drive-for-bad-sector-linux/
+
+parted - dump the partitions
+
+1) reproduce
+open selfextractor and bundle_install scripts with -x
+add tar -v
+
+2) resolve
+upon reproduction of 0 bytes files, do:
+look for bad sectors in the relevant partition.
+if bad sectors found, umonunt the partition and instruct the FS not to use them for write.
+
+fdisk -l
+
+
+https://linux.101hacks.com/unix/badblocks/
+sudo badblocks -v /dev/sda10 > badsectors.txt
+
+if bad sectors found, umonunt the partition and instruct the FS not to use them for write.
+
+sudo fsck.ext4 -l badsectors.txt /dev/sda10
+
+fsck
+
+Make sure to execute the fsck on an unmounted file systems to avoid any data corruption issues.
+https://www.thegeekstuff.com/2012/08/fsck-command-examples/
+
+https://linux.101hacks.com/unix/badblocks/
+
+
+note:
+smartctl  can be used too.
+
+
+#/bin/bash
+
+files=$(find /usr/deploy-cc/bin -size 0)
+if [[ $? != 0 ]]; then
+    echo "Find Command for empty files failed."
+elif [[ $files ]]; then
+    echo "Empty Files found."
+    echo $files
+    exit 0
+else
+    echo "No Empty files found."
+fi

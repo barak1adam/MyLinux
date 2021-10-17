@@ -73,4 +73,11 @@ Marvell - Raz:
 -maybe to check the length of the errors in UBIFS and if it is less than ecc strength just ignore it.
 	>> what if it is more than ecc?
 
-
+Debug techniques and leftovers:
+===============================
+- how to mount root fs as RO (boot command? fstab?)
+- understand ubifs recovery
+- work with nand sim
+- how to debug UBIFS, by enable kernel dynamic debug
+- how to backport a new driver by Miquel to kernel 3.10? e.g. what is the formal way to backport?
+- understand Ran's volumes. how comes that booting from the other partition resolved the issue / affected the current partition?

@@ -1,0 +1,139 @@
+Before Bring up:
+================
+learn u-boot progamming
+complete NFS task - saveenv, predefined boot commands, readme file
+
+tap interface programming - rx and tx programs.
+
+RX performance test with Shay
+
+enable ETH over USB
+
+debugger over ETH/USB - Chen
+
+
+
+I2C programming of PMIC.
+
+
+Bring up tasks:
+================
+
+1. successfully load first boot loader from UART to internal RAM
+
+BOOT MODE:
+
+Note that on empty Flash,
+
+the boot code automatically switches to UART/USB connection
+
+we are going to use UART 4.
+
+in the boot modes table - our mode is 1 1 0 and not 0 0 0.
+
+2. program the first boot loader to configure the PMIC1 via I2C
+PMIC is an ST power control device, it knows all about the order of boot in ST32MP15x, all we need is to configure some values.
+PMIC is contorolling the power lines for LPDDR2
+
+
+Lpddr2:
+
+LPDDR2 PWR UP SEQ
+
+The Boot loader initializes the DDR then loads and executes the Kernel:
+
+a. LDO3 (VDD1_DDR) is enabled in bypass mode. The software waits at least for a further 100 us.
+
+b. DDR_VREF (VREF_DDR) is enabled.
+
+c. BUCK2 (VDD2_DDR) is enabled at 1.2 V. The software waits for at least 1.4 ms for BUCK2 ready.
+
+Then:
+d. The software initializes the STM32MP15x DDR controller and lpDDR device.
+keep Frequency low for low power
+
+
+3. Then try to boo the second boot loader via uart and also the kernel.
+if it is not too much long, then we can wait with the USB programming.
+
+e. the Boot loader loads and executes the kernel. The kernel initializes.
+f. System is now running.
+
+4. Learn how to enable the NAND driver and burn the SW to NAND from u-boot 
+
+5. enable the USB - it is must for debug and connectivity and NFS, but not relevant for the first time bringup of 
+u-boot into the RAM and not for burning the flash.
+
+here is the input by Yotam for USB. The clock must be enabled for the USB, it is coonnected to PWR_ON pin of the CPU
+USB is working in "Perpherial mode"
+
+USB:
+
+OTG_VBUS pin can
+
+optional
+
+(but with a fix in Uboot)
+
+when connected --->USB HOST option is on
+
+ 
+
+VBUS sensing can deactivated in
+
+Uboot in the stm32mp1.c source file in board_usb_init()
+
+by setting
+
+tm32mp_otg_data.usb_gotgctl =
+
+DWC2_GOTGCTL_BVALIDOVEN |  DWC2_GOTGCTL_BVALIDOVVAL;
+
+ 
+
+With a fix in Uboot (on V1.2.0 OpenSTLinux release)
+
+VBUS sensing can deactivated in Uboot in the stm32mp1.c
+
+source file in board_usb_init() by setting
+
+tm32mp_otg_data.usb_gotgctl = DWC2_GOTGCTL_BVALIDOVEN | DWC2_GOTGCTL_BVALIDOVVAL
+
+  
+
+24MHZ CLK:
+
+HighSpeedExternal CLK
+
+When Bypass is used, the external clock generator could be enabled by PWR_ON to save
+
+power (i.e. disabled in Standby). In that case, the OSC_IN clock input should be stable
+
+within 10 ms after the PWR_ON rising edge occurs.
+PMIC1(POWER management) :
+
+
+6. in the final product, needs to set PMIC1 voltage to 3.3 instead of 3.3
+
+For 3.3 VIN application :
+
+- reprogram PMIC NVM with :
+
+o             STPMIC1B.VINOK_Rise = 3.1V (else product never start )
+
+o             STPMIC1B.VINOK_Hyst = 300mV ou 400mV (else not enough time between VINOK_fall and VIN_POR_fall to initiate power-down sequence)
+
+LPDDR2 HAS INT TEMP SENS
+
+READ FROM MR4
+
+ 
+
+ 
+
+
+
+ 
+
+ 
+

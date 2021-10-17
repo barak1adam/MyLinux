@@ -1,0 +1,15 @@
+tkos meeting 6:
+==============
+
+spi (10 frames, dynamic buffer - 10 frames or x seconds), kernel driver  ----------> user space app //10 frames per cont. switch
+
+user app ----------> kernel driver virtual ETH tun/tap -------> user space ?
+
+
+tx (user space) --------> kernel ETH driver ---------> spi kernel
+
+Questions to Baruch - 
+
+partitions
+changes to the enc28j60 net driver
+fd read and write - how many context switches?

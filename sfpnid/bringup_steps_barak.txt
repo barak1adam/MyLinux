@@ -1,0 +1,14 @@
+FSBL (ARM trusted FW):
+======================
+
+take DDR2 DTS settings from Cube
+
+compile DTS and change DTB file in main boot-loaders menu
+
+change other params in DTS like board name, etc, if needed
+
+check I2C to PMIC is enabled and power to DDR
+
+why PMIC is not marked with dm-pre-reloc
+
+how to connect with GDB?

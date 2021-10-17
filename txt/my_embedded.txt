@@ -1,0 +1,30 @@
+thomase boot chain
+sram / external ram. retram
+vector table
+
+m4 and A7
+m4 doesnt have mmu, thus linux cannot run on it. OS like linux needs virtual addresses, it is based on virtual address space for each process.
+rtos can run without mmu.
+
+https://www.freertos.org/FreeRTOS_Support_Forum_Archive/November_2016/freertos_Free_RTOS_Memory_Management_59ed41adj.html
+
+
+An MMU is commonly deployed to support “process model”. This is a way to organize tasks in an operating system and is the one used by most “heavyweight” operating systems. 
+In the world of embedded systems, this means Linux. Most desktop operating systems also employ process model. 
+The idea is simple: each task [we will now call them processes] uses memory from address zero upwards, as if it were running by itself on the CPU. 
+The MMU maps the addresses onto a specific area of real, physical memory. Each time there is a context switch – i.e. a different process takes control – the MMU mapping is changed. 
+This simplifies the development of each process and provides a high level of safety and security as each process cannot access the memory that “belongs” to other processes. 
+The downside of this approach is that each context switch includes an additional overhead: MMU remapping. If you want to use Linux, you need to have an MMU.
+
+Most real-time operating systems [RTOSes] do not use process model. They use thread model, where logical and physical addresses are identical. So, an MMU is not required. This has the advantage of quicker context swap, but less safety and security as all memory is accessible to all tasks.
+
+https://blogs.sw.siemens.com/embedded-software/2019/09/16/do-you-need-a-memory-management-unit/
+
+SystemWorkbench IDE for STM32 with STM32-CoPro-MPU plugin
+debug the M4:
+https://www.st.com/en/development-tools/st-link-v2.html
+
+Baruch:
+M4 why not OS? it has less memory.
+
+BTW: Linux has also mode to work withou MMU.

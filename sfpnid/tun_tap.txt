@@ -9,3 +9,29 @@ Z:
 linuxtuntap.c
 hal_packet_tx_thread - rx from linux, write to hal
 hal_packet_rx - rx from hal, write to linux
+
+
+tun / tup interfaces:
+=====================
+
+write to tun/tap intf -----------> kernel rx
+read from tun/tap intf ------------> kernel tx
+
+tap - eth frames
+tun - ip frames, no eth headers
+
+/dev/net/tap
+
+creation by root, or by having CAP_NET_ADMIN permissions
+
+enable persistance - other users (programs owned by other users, rather than the creator) can aatach and use the interface
+ioctl(tap_fd, TUNSETPERSIST, 1)
+
+Set permissions:
+     e.g. chmod 0666 /dev/net/tun
+     There's no harm in allowing the device to be accessible by non-root users,
+     since CAP_NET_ADMIN is required for creating network devices or for 
+     connecting to network devices which aren't owned by the user in question.
+     If you want to create persistent devices and give ownership of them to 
+     unprivileged users, then you need the /dev/net/tun device to be usable by
+     those users.

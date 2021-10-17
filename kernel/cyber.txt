@@ -1,0 +1,8 @@
+linux security:
+============== 
+
+calls to system() 
+
+parameters to processes
+
+config and relaod of processes

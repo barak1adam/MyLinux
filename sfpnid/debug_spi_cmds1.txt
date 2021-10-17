@@ -1,0 +1,68 @@
+last working commands (to get 5A):
+=================================
+spidev_test -D /dev/spidev0.0 -s 10000000 -I 1 -v -8 -H 0 -S 68 //MAX_ETHFRAMES = 1
+spidev_test -D /dev/spidev0.0 -s 10000000 -I 1 -H 0 -S 68
+spidev_test -D /dev/spidev0.0 -s 10000000 -I 1 -S 68
+
+//MAX_ETHFRAMES = 10
+spidev_test -D /dev/spidev0.0 -s 10000000 -I 20 -v -8 -H 0 -S 68 
+
+on target:
+==========
+spidev_test -D /dev/spidev0.0 -s 10000000 -I 0 -S 68; ip link set tap0 up; ip addr add 10.0.0.1/24 dev tap0; ifconfig -a
+# ifconfig -a
+
+
+on xg-300:
+==========
+
+
+//68 bytes
+
+show dev-spi direct 008200000003
+
+show dev-spi direct 008012345678
+show dev-spi direct 00801234e4e7
+show dev-spi direct 008049a028a4
+show dev-spi direct 008008004500
+show dev-spi direct 0080003c1df9 
+show dev-spi direct 008000008001
+show dev-spi direct 008000000a00
+show dev-spi direct 008000050a00
+show dev-spi direct 008000010800
+
+show dev-spi direct 008011111111
+show dev-spi direct 008022222222
+show dev-spi direct 008033333333
+show dev-spi direct 008044444444
+show dev-spi direct 008055555555
+show dev-spi direct 008066666666
+show dev-spi direct 008077777777
+show dev-spi direct 008088888888
+
+on target:
+==========
+tcpdump -i tap0 -ttttt -q -w /tmp/tcpdump.pcap -c 1000 &
+spidev_test -D /dev/spidev0.0 -s 10000000 -I 1000 -v -8 -H 0 -S 68
+tftp -p -l /tmp/tcpdump.pcap -r /tftpboot/tcpdump.pcap 10.32.8.145 69
+
+
+#modprobe -r tun; modprobe tun; ifup tap0
+
+Shay - POC:
+==========
+spidev_test -D /dev/spidev0.0 -s 10000000 -I 100 -v -H 0 -S 68
+
+Shay packet:
+0000000000000040	// TLV header
+a46032fedd43cdef	// DA + SA
+1122334481000064	// SA + S-VLAN
+99aabbccddeeff00	// payload
+fedcba9876543210	// payload
+1111111111111111	// payload
+2222222222222222	// payload
+3333333333333333	// payload
+4444444444444444	// payload
+
+
+

@@ -1,0 +1,73 @@
+
+&spi1 {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&spi1_pins_a>;
+	pinctrl-1 = <&spi1_sleep_pins_a>;
+	cs-gpios = <&gpioz 3 0 &gpioz 4 0>;
+	status = "okay";
+
+        foo@0 {
+                compatible = "spidev";
+                reg = <0>; /* CS #0 */
+                spi-max-frequency = <10000000>; //according to shay
+        };
+        bar@1 {
+                compatible = "spidev";
+                reg = <1>; /* CS #0 */
+                spi-max-frequency = <10000000>;
+        };
+};
+
+	spi2_pins_a: spi2-0 {
+		pins1 {
+			pinmux = <STM32_PINMUX('B', 10, AF5)>, /* SPI1_SCK */
+				 <STM32_PINMUX('I', 3, AF5)>; /* SPI1_MOSI */
+			bias-disable;
+			drive-push-pull;
+			slew-rate = <1>;
+		};
+
+		pins2 {
+			pinmux = <STM32_PINMUX('I', 2, AF5)>; /* SPI1_MISO */
+			bias-disable;
+		};
+	};
+
+
+&spi1 {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&spi1_pins_a>;
+	pinctrl-1 = <&spi1_sleep_pins_a>;
+	cs-gpios = <&gpioz 3 0>;
+	status = "okay";
+
+        fpga@0 {
+                compatible = "spidev";
+                reg = <0>; /* CS #0 */
+                spi-max-frequency = <10000000>;
+        };
+ };
+ 
+tkos:
+=====
+&ecspi1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_ecspi1>;
+	cs-gpios = <
+		&gpio2 30 GPIO_ACTIVE_HIGH
+		&gpio3 19 GPIO_ACTIVE_HIGH
+	>;
+	status = "disabled";
+
+	spidev0: spi@0 {
+		compatible = "spidev";
+		reg = <0>;
+		spi-max-frequency = <54000000>;
+	};
+
+	spidev1: spi@1 {
+		compatible = "spidev";
+		reg = <1>;
+		spi-max-frequency = <54000000>;
+	};
+};

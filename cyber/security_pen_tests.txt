@@ -1,0 +1,5 @@
+security tests:
+
+read bash cheat-sheet
+read articles by Adrian about command bash params - black list (what is not allowed), white list (what is allowed)
+Eyal wants to work with black list, not to breadk CLI for customers.

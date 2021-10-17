@@ -1,0 +1,50 @@
+OS-V8M(config)# w t
+Building configuration...
+
+Current configuration:
+! version DK13-01-21-1054 ()
+!
+!
+line vty 
+ no exec-timeout global
+!
+! Action-lists configuration
+!
+action-list rate8m
+ tc-action
+  account 
+  drop-red
+  rate single-leaky-bucket cir 8m cbs 8K ebs 0 
+!
+! Access-list extended configuration
+!
+access-list extended rate
+ rule 10
+  action list rate8m
+!
+! Port QoS configuration
+port egress-shaping rate 8m burst-size 8K 1
+!
+! Port acl-binding-mode configuration
+port acl-binding-mode by-port 1
+!
+! Interfaces configuration
+!
+interface vlan vif10
+ tag 10
+ ports 1
+ ip 10.32.8.200/24 
+ management ssh 0.0.0.0/0 
+ management telnet 0.0.0.0/0 
+ management tftp 0.0.0.0/0 
+ management http 0.0.0.0/0 
+ management snmp 0.0.0.0/0 
+ management syslog 0.0.0.0/0 
+ management netconf 0.0.0.0/0 
+!        
+! ACL to port bindings
+port access-group rate 1
+!        
+module nfv nfv0
+!        
+OS-V8M(config)# 

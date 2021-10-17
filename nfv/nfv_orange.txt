@@ -1,0 +1,64 @@
+Orange configuration - "Orange 3" for example.
+
+Note:
+=====
+Hybrid means - if untagged recieved on the port, the tag will be pushed on tx.
+if the tag is already recieved, it will be preserved on tx.
+other tags if recieved will be dropped.
+
+for example - for port 2, tag 4004:
+
+any traffic coming from outside net to port 2 - 
+if it is untagged, it will be set with tag  4004 and sent to port 1 to the server
+
+if outside traffic is coming to port 2 already with tag 4004, it will be preserved and sent with that 4004 tag to port 1 to the server
+
+OS-V8M# w t
+Building configuration...
+
+Current configuration:
+! version DK05-08-20-1210 ()
+!
+!
+line vty 
+ no exec-timeout global
+!
+! Port tag-outbound-mode configuration
+port tag-outbound-mode hybrid 2 4004
+port tag-outbound-mode hybrid 5 300
+port tag-outbound-mode hybrid 6 1300
+port tag-outbound-mode tagged 1,9
+!
+! Interfaces configuration
+!
+interface vlan vif300
+ tag 300
+ ports 5,9
+!
+interface vlan vif1300
+ tag 1300
+ ports 6,9
+!
+interface vlan vif4004
+ tag 4004
+ ports 1-2
+!        
+interface vlan vif4092
+ tag 4092
+ ports 1 
+ ip 169.254.3.2/24 
+!        
+interface out-of-band eth0
+ ip 10.34.71.133/24 
+ management ssh 0.0.0.0/0 
+ management telnet 0.0.0.0/0 
+ management tftp 0.0.0.0/0 
+ management http 0.0.0.0/0 
+ management snmp 0.0.0.0/0 
+ management syslog 0.0.0.0/0 
+ management netconf 0.0.0.0/0 
+!        
+ntp      
+ server 211.233.84.186  
+ enable  
+OS-V8M#  

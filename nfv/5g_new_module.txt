@@ -1,0 +1,13 @@
+new NFV module by Naftali:
+=========================
+
+type 7 connector - connect the ComEx, enable 10G connectivity.
+we used it also for Denverton (atom) for NFV+LTE
+
+Q7 connectory - enable only 1G
+we used it for legacy LTE (Celeron)
+good for Denverton and Celeron
+
+NXP can work with both tppe 7 or Q7
+
+Nafatli suggest Q7 as another assembly option for the same design !

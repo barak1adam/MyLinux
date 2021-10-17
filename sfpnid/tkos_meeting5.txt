@@ -1,0 +1,39 @@
+tkos - 19.01.2021:
+==================
+
+I started with SPI master on my ST ARM A7 with Linux, FPGA is the SPI slave. 
+I enabled DMA on my side. but we got to BW less than 3 Mbps for the transferring of small ETH packets, 68Byte long.
+This is NOT good BW for us.
+
+We investigated the SPI traffic with Oscilloscope.
+
+The reason for bad BW is not the SPI transmitting with the DMA, 
+but with the Linux on A7 wasting fixed time frames between the packets on asserting the Chip Select (CS) line and on other actions that should be optimized somehow I guess.
+So I need to do one of the 2 options:
+1. optimize the CPU performance on the SPI master side
+2. move to implement the SPI on the M4 in which there all can be done in HW including the CS asserting and not with a SW driver.
+
+
+Baruch:
+=======
+
+ways to optimize the SPI work on A7:
+1. gather multiple transfer to one SPI message and then issue an IOCTL, it will save a context switch for each packet
+2. I saw that there is a lot of work around the DMA, let's try to work with the DMA only for large size, let's say above 128 or 512B
+
+ssh, ftp, http - all work on top of TCP. they usually use large / jumbo packtes for a file trnasfer.
+tftp is over UDP and use fixed size of packets of 512B.
+
+Shay - why did we suspect the time for asseritng and de-asserting the CS?
+Yotam - why same PIN for CS is allowed for the M4 and not for the A7?
+
+we belive with the M4 we will get more ~50% of the current BW, like 1.5Mbs more. does it worth the effort?
+The effort of writing to M4 (different env) and communicating the M4 and A7 is big !
+
+before optimize:
+================
+68B: 2.8mbps, 3700 pps
+128B: 4.5 mbps
+512B: 6 mpbs
+
+we did the context switch optimization - it worked fine.

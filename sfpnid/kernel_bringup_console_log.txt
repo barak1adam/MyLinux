@@ -1,0 +1,45 @@
+ U-Boot 2020.01-stm32mp-r2 (Mar 16 2021 - 20:44:51 +0200)
+
+CPU: STM32MP151AAD Rev.Z
+Model: STMicroelectronics custom STM32CubeMX board
+Board: stm32mp1 in trusted mode (st,stm32mp151a-sfp+nid-mx)
+DRAM:  128 MiB
+Clocks:
+- MPU : 650 MHz
+- MCU : 208 MHz
+- AXI : 266.500 MHz
+- PER : 24 MHz
+- DDR : 533 MHz
+WDT:   Started with servicing (32s timeout)
+NAND:  128 MiB
+MMC:
+In:    serial
+Out:   serial
+Err:   serial
+invalid MAC address in OTP 00:00:00:00:00:00
+Net:   No ethernet found.
+Hit any key to stop autoboot:  0
+Boot over usb0!
+partitions : done
+DFU alt info setting: using id 'nand0,0'
+using id 'nand0,1'
+using id 'nand0,2'
+using id 'nand0,3'
+done
+Download done
+STM32MP> boot
+Unknown command 'boot' - try 'help'
+STM32MP> mtdparts
+
+device nand0 <nand0>, # parts = 4
+ #: name                size            offset          mask_flags
+ 0: fsbl                0x00200000      0x00000000      0
+ 1: ssbl1               0x00200000      0x00200000      0
+ 2: ssbl2               0x00200000      0x00400000      0
+ 3: UBI                 0x07a00000      0x00600000      0
+
+active partition: nand0,0 - (fsbl) 0x00200000 @ 0x00000000
+
+defaults:
+mtdids  : nand0=nand0
+mtdparts: mtdparts=nand0:2m(fsbl),2m(ssbl1),2m(ssbl2),-(UBI)

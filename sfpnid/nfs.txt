@@ -1,0 +1,56 @@
+host:
+enable nfs on kernel build
+sudo tar -C ~/mrv_dev/sfp_nfs/ -xf output/images/rootfs.tar
+/home/barak/mrv_dev/sfp_nfs 10.32.8.100(rw,no_root_squash,no_subtree_check)
+sudo service nfs-kernel-server restart
+cp  /home/barak/mrv_dev/sfpnid/buildroot/output/images/stm32mp157c-dk2.dtb /tftpboot/
+cp /home/barak/mrv_dev/sfpnid/buildroot/output/images/zImage /tftpboot
+
+
+u-boot:
+#setenv console console=ttyS0,115200
+#how to detect active console to use?
+setenv console console=ttySTM0,115200
+setenv rootpath /home/barak/mrv_dev/sfp_nfs
+setenv gatewayip 10.32.8.145
+setenv netmask 255.255.255.0
+setenv serverip 10.32.8.145
+setenv ipaddr 10.32.8.200
+setenv bootargs $console root=/dev/nfs rootfstype=nfs rw nfsroot=$serverip:$rootpath ip=$ipaddr:$serverip:$gatewayip:$netmask:SFPNID:eth0:none nfsvers=3,tcp
+
+
+tftp 0xc2000000 /tftpboot/zImage
+tftp 0xc3000000 /tftpboot/stm32mp157c-dk2.dtb
+bootz 0xc2000000 - 0xc3000000
+
+ping 10.32.8.145
+
+
+setenv bootargs root=/dev/nfs rw ip=10.32.8.100:::::usb0 console=ttyS0,115200n8
+g_ether.dev_addr=f8:dc:7a:00:00:02 g_ether.host_addr=f8:dc:7a:00:00:01
+nfsroot=10.32.8.145:/home/<user>/linux-kernel-labs/modules/nfsroot,nfsvers=3,tcp
+
+setenv bootargs root=/dev/nfs rw ip=10.32.8.200:::::eth0 console=ttySTM0,115200n8
+g_ether.dev_addr=00:80:E1:42:67:6D g_ether.host_addr=98:90:96:a6:7a:89
+nfsroot=10.32.8.145:/home/barak/mrv_dev/sfp_nfs,nfsvers=3,tcp
+
+
+To boot the same kernel image with a root filesystem over NFS, the following command sequence can be used. 
+This example assumes that your NFS server has the IP address "192.168.1.1" and exports the directory "/opt/eldk-4.2/ppc_4xx" as root filesystem for the target. 
+The target has been assigned the IP address "192.168.100.6" and the hostname "canyonlands". A netmask of "255.255.0.0" is used:
+
+=> setenv bootargs root=/dev/nfs rw nfsroot=10.32.8.145:/home/mrv_dev/sfp_nfs ip=10.32.8.200:10.32.8.145:10.32.8.145:255.255.255.0:SFPNID::off
+
+xg-300:
+bootargs_dflt=$console root=/dev/nfs rw nfsroot=$serverip:$rootpath ip=$ipaddr:$serverip:$gatewayip:$netmask:SFPNID:eth0:none nfsvers=3,tcp
+
+
+#else
+	envSetDefault("nfsboot", "save; "
+				 "nfs 2000000 $rootpath/$image_name; "
+				  "setenv bootargs  $console $nandEcc $mtdparts "
+				 "ubi.mtd=1 " /* Creates /dev/ubi0 and /dev/ubi0_0 */
+				 "$bootargs_root rootdelay=5 nfsroot=$serverip:$rootpath "
+				 "ip=$ipaddr:$serverip:$gatewayip:$netmask:MSYS-BC2:$netdev:none;"
+				 "bootm $loadaddr - $fdtaddr");
+

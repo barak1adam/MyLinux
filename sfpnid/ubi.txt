@@ -1,0 +1,105 @@
+Chen:
+check mtdinfo
+use volumes for each SW pack
+enlarge partitions to maximum
+
+subpage in SLC NAND, usually 4 subpages = one page
+Sub-pages are only used by UBI internally, and only for storing the headers.
+However, even though the NAND chip may support sub-pages, the NAND controller of your SoC might not
+
+mkfs.ubifs
+
+-m - Minimum I/O unit size.
+-e - Logical Erase Block (LEB) size.
+-c - Max LEB count. (vol_size/LEB)
+-x - Compression type: lzo (default), favor_lzo, zlib, none
+-r - Path to root filesystem.
+ubifs.img - Temporary image file.
+
+ubinize
+
+-o - Output file.
+-p - Physical Erase Block (PEB) size.
+-m - Minimum I/O unit size.
+-s - Minimum I/O size for UBI headers, eg. sub-page size.
+-O - VID header offset from start of PEB.
+ubi.ini - UBI image configuration file.
+
+
+https://elinux.org/UBIFS
+
+https://bootlin.com/blog/creating-flashing-ubi-ubifs-images/
+============================================================
+
+use ubinize for using by bootloader in prooduction - raw flashing.
+
+use mtd-utils on a booted linux - can be used on SW upgrade, when linux is already up.
+
+for example:
+# ubiformat /dev/mtdX
+# ubiattach -p /dev/mtdX
+# ubimkvol /dev/ubi0 -N volume_name -s 64MiB
+# ubiupdatevol /dev/ubi0_0 /path/to/ubifs.img
+# mount -t ubifs ubi0:volume_name /mount/point
+
+Use a UBIFS partition as root partition:
+
+rootfs need to be flashed before the kernel is loading, it is given for the kernel as boot arguments
+
+ubi.mtd=<mtd partition number>
+root=<ubi device>:<volume>
+rootfstype=ubifs
+
+For instance, with the previous examples and assuming the UBI device has been created/flashed on /dev/mtd1:
+
+ubi.mtd=1 root=ubi0:rootfs rootfstype=ubifs
+
+
+NAND in DTS:
+============
+you have the nand controller node in the chip dtsi.
+then on the board DTS you have to add s sub node for the specific nand controller.
+usually we have to define the PINs ctrl and fields like ECC in the board DTS.
+
+
+
+exmaple of the node in dtsi:
+		fmc: nand-controller@58002000 {
+			compatible = "st,stm32mp15-fmc2";
+			reg = <0x58002000 0x1000>,
+			      <0x80000000 0x1000>,
+			      <0x88010000 0x1000>,
+			      <0x88020000 0x1000>,
+			      <0x81000000 0x1000>,
+			      <0x89010000 0x1000>,
+			      <0x89020000 0x1000>;
+			interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&mdma1 20 0x10 0x12000a02 0x0 0x0>,
+			       <&mdma1 20 0x10 0x12000a08 0x0 0x0>,
+			       <&mdma1 21 0x10 0x12000a0a 0x0 0x0>;
+			dma-names = "tx", "rx", "ecc";
+			clocks = <&rcc FMC_K>;
+			resets = <&rcc FMC_R>;
+			status = "disabled";
+		};
+
+example for DTS nodes:
+ our XG-300 dts
+ 
+ and stm32mp157c-ev1.dts:
+ 
+ &fmc {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&fmc_pins_a>;
+	pinctrl-1 = <&fmc_sleep_pins_a>;
+	status = "okay";
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	nand@0 {
+		reg = <0>;
+		nand-on-flash-bbt;
+		#address-cells = <1>;
+		#size-cells = <1>;
+	};
+};

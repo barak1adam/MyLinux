@@ -1,0 +1,82 @@
+spidev_test -D /dev/spidev0.0 -p "11" -s 10000000 -H 0 -O 0 -v
+
+spidev_test -D /dev/spidev0.0 -p "11" -s 10000000 -H 0 -O 0 -v -S 64
+
+spitest -D /dev/spidev0.0 -s 10000000 -H 0 -O 0 -v -S 68 -I 1000000
+
+spidev_test -D /dev/spidev0.0 -s 10000000 -H 0 -O 0 -v -S 68 -I 1000000
+
+spidev_test -D /dev/spidev0.0 -s 50000000 -H 0 -O 0 -v -S 68 -I 1000000
+
+
+spidev_test -D /dev/spidev0.0 -s 10000000 -I 1 -v -8 -C 0 -H 0
+spidev_test -D /dev/spidev0.0 -s 10000000 -I 1 -v -8 -H 0
+
+OS-V8M(debug)# hw-debug 
+OS-V8M(hw-debug)# show dev-spi direct 018600000000
+ [0x86]=00 00 00 01 rc[0x0]
+OS-V8M(hw-debug)# show dev-spi direct 008011223344
+
+
+# ip link set tap0 up
+# ip addr add 10.0.0.1/24 dev tap0
+# ifconfig -a
+
+74 bytes:
+==========
+0000   98 90 96 a6 7a 89 e4 e7 49 a0 28 a4 08 00 45 00
+0010   00 3c 1d f9 00 00 80 01 00 00 0a 00 00 01 0a 20
+0020   08 91 08 00 4c ca 00 01 00 91 61 62 63 64 65 66
+0030   67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76
+0040   77 61 62 63 64 65 66 67 68 69
+
+mac:
+7A:B7:C1:5C:92:1E
+
+show dev-spi direct 008200000003
+
+show dev-spi direct 00807ab7c15c
+show dev-spi direct 0080921ee4e7
+show dev-spi direct 008049a028a4
+show dev-spi direct 008008004500
+show dev-spi direct 0080003c1df9 
+show dev-spi direct 008000008001
+show dev-spi direct 008000000a00
+show dev-spi direct 008000050a00
+show dev-spi direct 008000010800
+
+show dev-spi direct 008000000001
+show dev-spi direct 008000916162
+show dev-spi direct 008063646566
+show dev-spi direct 00806768696a
+show dev-spi direct 00806b6c6d6e
+show dev-spi direct 00806f707172
+show dev-spi direct 008073747576
+show dev-spi direct 008077616263
+show dev-spi direct 008064656667
+
+show dev-spi direct 008200000001
+show dev-spi direct 008068690000
+
+
+show dev-spi direct 008200000003
+
+
+//ip
+show dev-spi direct 008200000003
+show dev-spi direct 00804500003c
+show dev-spi direct 00801df90000 
+show dev-spi direct 008080010000
+show dev-spi direct 00800a000005
+show dev-spi direct 00800a000001
+show dev-spi direct 008008000000
+show dev-spi direct 008000010091
+show dev-spi direct 008061626364
+show dev-spi direct 008065666768
+show dev-spi direct 0080696a6b6c
+show dev-spi direct 00806d6e6f70
+show dev-spi direct 008071727374
+show dev-spi direct 008075767761
+show dev-spi direct 008062636465
+show dev-spi direct 008066676869
+

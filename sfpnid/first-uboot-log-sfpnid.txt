@@ -1,0 +1,1745 @@
+	U-Boot 2020.01-stm32mp-r2 (Mar 09 2021 - 12:34:33 +0200)
+
+initcall: c0117bd9
+U-Boot code: C0100000 -> C01CC6A8  BSS: -> C01DB7B4
+initcall: c0117ced
+initcall: c0102139
+OF: ** translation for device nvmem@5c005000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 0050005c
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1543524352
+OF: one level translation: 0050005c
+OF: reached root node
+CPU: STM32MP151AAD Rev.Z
+initcall: c0118329
+Model: STMicroelectronics custom STM32CubeMX board
+Board: stm32mp1 in trusted mode (st,stm32mp151a-sfp+nid-mx)
+initcall: c0117df5
+initcall: c0117b11
+initcall: c0117cdd
+DRAM:  initcall: c01023f9
+STM32MP1 DDR probe
+fdtdec_get_addr_size_fixed: reg: OF: ** translation for device ddr@5a003000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 0030005a
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1509961728
+OF: one level translation: 0030005a
+OF: reached root node
+addr=5a003000, size=550
+fdtdec_get_addr_size_fixed: reg: OF: ** translation for device ddr@5a003000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 0040005a
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1509965824
+OF: one level translation: 0040005a
+OF: reached root node
+addr=5a004000, size=234
+ofnode_read_bool: little-endian: false
+ofnode_read_bool: big-endian: false
+ofnode_read_bool: native-endian: false
+ofnode_read_u32: st,mem-size: 0x8000000 (134217728)
+RAM init base=c0000000, size=8000000
+initcall: c0117b11
+initcall: c0117b11
+initcall: c0117b11
+initcall: c0117f7d
+Monitor len: 000DB7B4
+Ram size: 08000000
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10000000 size=40000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10040000 size=1000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10041000 size=1000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10042000 size=4000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=30000000 size=40000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=38000000 size=10000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=da000000 size=4000000 flags=4
+Ram top: C8000000
+initcall: c0117afd
+initcall: c0117b35
+TLB table from c7ff0000 to c7ff4000
+initcall: c0117cc1
+Video frame buffers from c7ff0000 to c7ff0000
+initcall: c0117ddd
+initcall: c0117b91
+Reserving 877k for U-Boot at: c7f14000
+initcall: c0117e01
+Reserving 32776k for malloc() at: c5f12000
+Reserving 1M for noncached_alloc() at: c5e00000
+initcall: c0117c85
+Reserving 80 Bytes for Board Info at: c5dfffb0
+initcall: c0117de1
+initcall: c0117e61
+Reserving 240 Bytes for Global Data at: c5dffec0
+initcall: c0117ebd
+Reserving 55744 Bytes for FDT at: c5df2500
+initcall: c0117e8d
+Reserving 0x278 Bytes for bootstage at: c5df2280
+initcall: c0117de5
+initcall: c0117df1
+initcall: c0117fd9
+initcall: c0117b1b
+initcall: c0117f19
+
+RAM Configuration:
+Bank #0: c0000000 128 MiB
+
+DRAM:  128 MiB
+initcall: c0117b7d
+New Stack Pointer is: c5df2260
+initcall: c0117b11
+initcall: c0117c59
+initcall: c0117d71
+Copying bootstage from c00fd000 to c5df2280, size 278
+Relocating 3 records
+initcall: c0117de9
+initcall: c0117bfd
+Relocation Offset is: 07e14000
+Relocating to c7f14000, new gd at c5dffec0, sp at c5df2260
+initcall: c7f2c0dd
+initcall: c7f2c0e1
+initcall: c0118299 (relocated to c7f2c299)
+## Current stack ends at 0xc5df2130 fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10000000 size=40000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10040000 size=1000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10041000 size=1000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10042000 size=4000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=30000000 size=40000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=38000000 size=10000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=da000000 size=4000000 flags=4
+dram_bank_mmu_setup: bank: 0
+initcall: c0118261 (relocated to c7f2c261)
+efi_runtime_relocate: Relocating to offset=c7f14000
+efi_runtime_relocate: rel->info=0x17 *p=0xc01008b8 rel->offset=c0100440
+efi_runtime_relocate: Setting c7f14440 to c7f148b8
+efi_runtime_relocate: rel->info=0x17 *p=0xc018c215 rel->offset=c010054c
+efi_runtime_relocate: Setting c7f1454c to c7fa0215
+efi_runtime_relocate: rel->info=0x17 *p=0xc0100798 rel->offset=c0100550
+efi_runtime_relocate: Setting c7f14550 to c7f14798
+efi_runtime_relocate: rel->info=0x17 *p=0xc01007b5 rel->offset=c0100554
+efi_runtime_relocate: Setting c7f14554 to c7f147b5
+efi_runtime_relocate: rel->info=0x17 *p=0xc01007c9 rel->offset=c0100558
+efi_runtime_relocate: Setting c7f14558 to c7f147c9
+efi_runtime_relocate: rel->info=0x17 *p=0xc0100928 rel->offset=c010055c
+efi_runtime_relocate: Setting c7f1455c to c7f14928
+efi_runtime_relocate: rel->info=0x17 *p=0xc01007e2 rel->offset=c0100564
+efi_runtime_relocate: Setting c7f14564 to c7f147e2
+efi_runtime_relocate: rel->info=0x17 *p=0xc01007f7 rel->offset=c0100568
+efi_runtime_relocate: Setting c7f14568 to c7f147f7
+efi_runtime_relocate: rel->info=0x17 *p=0xc0100988 rel->offset=c0100634
+efi_runtime_relocate: Setting c7f14634 to c7f14988
+efi_runtime_relocate: rel->info=0x17 *p=0xc01008c0 rel->offset=c01008c0
+efi_runtime_relocate: Setting c7f148c0 to c7f148c0
+efi_runtime_relocate: rel->info=0x17 *p=0xc01008c0 rel->offset=c01008c4
+efi_runtime_relocate: Setting c7f148c4 to c7f148c0
+efi_runtime_relocate: rel->info=0x17 *p=0xc0100910 rel->offset=c01008e0
+efi_runtime_relocate: Setting c7f148e0 to c7f14910
+efi_runtime_relocate: rel->info=0x17 *p=0xc0100938 rel->offset=c0100900
+efi_runtime_relocate: Setting c7f14900 to c7f14938
+efi_runtime_relocate: rel->info=0x17 *p=0xc0171559 rel->offset=c0100950
+efi_runtime_relocate: Setting c7f14950 to c7f85559
+efi_runtime_relocate: rel->info=0x17 *p=0xc017164d rel->offset=c0100954
+efi_runtime_relocate: Setting c7f14954 to c7f8564d
+efi_runtime_relocate: rel->info=0x17 *p=0xc0100459 rel->offset=c0100958
+efi_runtime_relocate: Setting c7f14958 to c7f14459
+efi_runtime_relocate: rel->info=0x17 *p=0xc0100459 rel->offset=c010095c
+efi_runtime_relocate: Setting c7f1495c to c7f14459
+efi_runtime_relocate: rel->info=0x17 *p=0xc0171749 rel->offset=c0100960
+efi_runtime_relocate: Setting c7f14960 to c7f85749
+efi_runtime_relocate: rel->info=0x17 *p=0xc0100481 rel->offset=c0100964
+efi_runtime_relocate: Setting c7f14964 to c7f14481
+efi_runtime_relocate: rel->info=0x17 *p=0xc0172141 rel->offset=c0100968
+efi_runtime_relocate: Setting c7f14968 to c7f86141
+efi_runtime_relocate: rel->info=0x17 *p=0xc0172445 rel->offset=c010096c
+efi_runtime_relocate: Setting c7f1496c to c7f86445
+efi_runtime_relocate: rel->info=0x17 *p=0xc017270d rel->offset=c0100970
+efi_runtime_relocate: Setting c7f14970 to c7f8670d
+efi_runtime_relocate: rel->info=0x17 *p=0xc0100459 rel->offset=c0100974
+efi_runtime_relocate: Setting c7f14974 to c7f14459
+efi_runtime_relocate: rel->info=0x17 *p=0xc01714c5 rel->offset=c0100978
+efi_runtime_relocate: Setting c7f14978 to c7f854c5
+efi_runtime_relocate: rel->info=0x17 *p=0xc0100471 rel->offset=c010097c
+efi_runtime_relocate: Setting c7f1497c to c7f14471
+efi_runtime_relocate: rel->info=0x17 *p=0xc0100479 rel->offset=c0100980
+efi_runtime_relocate: Setting c7f14980 to c7f14479
+efi_runtime_relocate: rel->info=0x17 *p=0xc01005a1 rel->offset=c0100984
+efi_runtime_relocate: Setting c7f14984 to c7f145a1
+initcall: c01182a7 (relocated to c7f2c2a7)
+initcall: c0118231 (relocated to c7f2c231)
+Pre-reloc malloc() used 0x16f4 bytes (5 KB)
+using memory 0xc5f12000-0xc7f14000 for malloc()
+initcall: c0117add (relocated to c7f2badd)
+initcall: c011821d (relocated to c7f2c21d)
+initcall: c01182ab (relocated to c7f2c2ab)
+initcall: c0118211 (relocated to c7f2c211)
+mapping memory 0xc5e00000-0xc5f00000 non-cached
+mmu_set_region_dcache_behaviour: start=0x00000c5e, size=1048576, option=0x12
+initcall: c01181e1 (relocated to c7f2c1e1)
+clk_set_defaults()
+clk_set_default_parents: could not read assigned-clock-parents for c5f12028
+ofnode_read_u32_array: ranges: fdtdec_get_int_array: ranges
+get_prop_check_min_len: ranges
+Looking for 'serial' at 9080, name serial@40010000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+Found seq 0
+ofnode_read_u32_array: ranges: fdtdec_get_int_array: ranges
+get_prop_check_min_len: ranges
+Looking for 'usb' at 21276, name usb-otg@49000000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+   - gpio9, /soc/pin-controller@50002000/gpio@5000b000
+   - gpio10, /soc/pin-controller@50002000/gpio@5000c000
+   - gpio25, /soc/pin-controller-z@54004000/gpio@54004000
+   - pinctrl0, /soc/pin-controller@50002000
+   - pinctrl1, /soc/pin-controller-z@54004000
+Not found
+stm32_rcc_bind(dev=c5f12660)
+pmic_bind_children for 'pwr@50001000' at node offset: 22652
+* Found child node: 'reg11'
+  - compatible prefix: 'reg'
+  - found child driver: 'stm32mp_pwr_regulator'
+ofnode_read_string: regulator-name: reg11
+  - bound child device: 'reg11'
+  - set 'child->driver_data': 11
+* Found child node: 'reg18'
+  - compatible prefix: 'reg'
+  - found child driver: 'stm32mp_pwr_regulator'
+ofnode_read_string: regulator-name: reg18
+  - bound child device: 'reg18'
+  - set 'child->driver_data': 18
+* Found child node: 'usb33'
+  - compatible prefix: 'reg'
+ofnode_read_string: regulator-name: usb33
+  - compatible prefix: 'usb'
+  - found child driver: 'stm32mp_pwr_regulator'
+ofnode_read_string: regulator-name: usb33
+  - bound child device: 'usb33'
+  - set 'child->driver_data': 33
+Bound: 3 children for PMIC: 'pwr@50001000'
+ofnode_read_string: regulator-name: <not found>
+regulator_post_bind: dev 'vrefbuf@50025000' has no property 'regulator-name'
+Looking for 'usb' at 29224, name usbh-ehci@5800d000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+   - gpio9, /soc/pin-controller@50002000/gpio@5000b000
+   - gpio10, /soc/pin-controller@50002000/gpio@5000c000
+   - gpio25, /soc/pin-controller-z@54004000/gpio@54004000
+   - pinctrl0, /soc/pin-controller@50002000
+   - pinctrl1, /soc/pin-controller-z@54004000
+Not found
+Looking for 'watchdog' at 29656, name watchdog@5a002000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+   - gpio9, /soc/pin-controller@50002000/gpio@5000b000
+   - gpio10, /soc/pin-controller@50002000/gpio@5000c000
+   - gpio25, /soc/pin-controller-z@54004000/gpio@54004000
+   - pinctrl0, /soc/pin-controller@50002000
+   - pinctrl1, /soc/pin-controller-z@54004000
+Not found
+Looking for highest alias id for 'i2c'
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+   - gpio9, /soc/pin-controller@50002000/gpio@5000b000
+   - gpio10, /soc/pin-controller@50002000/gpio@5000c000
+   - gpio25, /soc/pin-controller-z@54004000/gpio@54004000
+   - pinctrl0, /soc/pin-controller@50002000
+   - pinctrl1, /soc/pin-controller-z@54004000
+i2c_uclass_init: highest alias id is -1
+Looking for 'i2c' at 30944, name i2c@5c002000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+   - gpio9, /soc/pin-controller@50002000/gpio@5000b000
+   - gpio10, /soc/pin-controller@50002000/gpio@5000c000
+   - gpio25, /soc/pin-controller-z@54004000/gpio@54004000
+   - pinctrl0, /soc/pin-controller@50002000
+   - pinctrl1, /soc/pin-controller-z@54004000
+Not found
+i2c_post_bind: i2c@5c002000, req_seq=-1
+i2c_post_bind: i2c@5c002000, new req_seq=0
+ofnode_read_u32: u-boot,i2c-offset-len: (not found)
+ofnode_read_u32: reg: 0x33 (51)
+ofnode_find_subnode: regulators: regulators
+pmic_bind_children for 'stpmic@33' at node offset: 31344
+* Found child node: 'buck1'
+  - compatible prefix: 'ldo'
+ofnode_read_string: regulator-name: vddcore
+  - compatible prefix: 'buck'
+  - found child driver: 'stpmic1_buck'
+ofnode_read_string: regulator-name: vddcore
+  - bound child device: 'buck1'
+  - set 'child->driver_data': 1
+* Found child node: 'buck2'
+  - compatible prefix: 'ldo'
+ofnode_read_string: regulator-name: vdd_ddr
+  - compatible prefix: 'buck'
+  - found child driver: 'stpmic1_buck'
+ofnode_read_string: regulator-name: vdd_ddr
+  - bound child device: 'buck2'
+  - set 'child->driver_data': 2
+* Found child node: 'buck3'
+  - compatible prefix: 'ldo'
+ofnode_read_string: regulator-name: vdd
+  - compatible prefix: 'buck'
+  - found child driver: 'stpmic1_buck'
+ofnode_read_string: regulator-name: vdd
+  - bound child device: 'buck3'
+  - set 'child->driver_data': 3
+* Found child node: 'buck4'
+  - compatible prefix: 'ldo'
+ofnode_read_string: regulator-name: v3v3
+  - compatible prefix: 'buck'
+  - found child driver: 'stpmic1_buck'
+ofnode_read_string: regulator-name: v3v3
+  - bound child device: 'buck4'
+  - set 'child->driver_data': 4
+* Found child node: 'ldo3'
+  - compatible prefix: 'ldo'
+  - found child driver: 'stpmic1_ldo'
+ofnode_read_string: regulator-name: vtt_ddr
+  - bound child device: 'ldo3'
+  - set 'child->driver_data': 3
+* Found child node: 'ldo4'
+  - compatible prefix: 'ldo'
+  - found child driver: 'stpmic1_ldo'
+ofnode_read_string: regulator-name: vdd_usb
+  - bound child device: 'ldo4'
+  - set 'child->driver_data': 4
+* Found child node: 'ldo5'
+  - compatible prefix: 'ldo'
+  - found child driver: 'stpmic1_ldo'
+ofnode_read_string: regulator-name: vdda
+  - bound child device: 'ldo5'
+  - set 'child->driver_data': 5
+* Found child node: 'vref_ddr'
+  - compatible prefix: 'ldo'
+ofnode_read_string: regulator-name: vref_ddr
+  - compatible prefix: 'buck'
+ofnode_read_string: regulator-name: vref_ddr
+  - compatible prefix: 'vref_ddr'
+  - found child driver: 'stpmic1_vref_ddr'
+ofnode_read_string: regulator-name: vref_ddr
+  - bound child device: 'vref_ddr'
+  - set 'child->driver_data': 4294967295
+* Found child node: 'boost'
+  - compatible prefix: 'ldo'
+ofnode_read_string: regulator-name: bst_out
+  - compatible prefix: 'buck'
+ofnode_read_string: regulator-name: bst_out
+  - compatible prefix: 'vref_ddr'
+ofnode_read_string: regulator-name: bst_out
+  - compatible prefix: 'pwr_sw'
+ofnode_read_string: regulator-name: bst_out
+  - compatible prefix: 'boost'
+  - found child driver: 'stpmic1_boost'
+ofnode_read_string: regulator-name: bst_out
+  - bound child device: 'boost'
+  - set 'child->driver_data': 4294967295
+* Found child node: 'pwr_sw1'
+  - compatible prefix: 'ldo'
+ofnode_read_string: regulator-name: vbus_otg
+  - compatible prefix: 'buck'
+ofnode_read_string: regulator-name: vbus_otg
+  - compatible prefix: 'vref_ddr'
+ofnode_read_string: regulator-name: vbus_otg
+  - compatible prefix: 'pwr_sw'
+  - found child driver: 'stpmic1_pwr_sw'
+ofnode_read_string: regulator-name: vbus_otg
+  - bound child device: 'pwr_sw1'
+  - set 'child->driver_data': 1
+* Found child node: 'pwr_sw2'
+  - compatible prefix: 'ldo'
+ofnode_read_string: regulator-name: vbus_sw
+  - compatible prefix: 'buck'
+ofnode_read_string: regulator-name: vbus_sw
+  - compatible prefix: 'vref_ddr'
+ofnode_read_string: regulator-name: vbus_sw
+  - compatible prefix: 'pwr_sw'
+  - found child driver: 'stpmic1_pwr_sw'
+ofnode_read_string: regulator-name: vbus_sw
+  - bound child device: 'pwr_sw2'
+  - set 'child->driver_data': 2
+Bound: 11 children for PMIC: 'stpmic@33'
+ofnode_read_u32_array: ranges: fdtdec_get_int_array: ranges
+get_prop_check_min_len: ranges
+Looking for 'pinctrl' at 34188, name pin-controller@50002000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+   - gpio9, /soc/pin-controller@50002000/gpio@5000b000
+   - gpio10, /soc/pin-controller@50002000/gpio@5000c000
+   - gpio25, /soc/pin-controller-z@54004000/gpio@54004000
+   - pinctrl0, /soc/pin-controller@50002000
+Found seq 0
+stm32_pinctrl_bind: bind gpio@50002000
+Looking for 'gpio' at 34428, name gpio@50002000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+Found seq 0
+stm32_pinctrl_bind: bind gpio@50002000
+stm32_pinctrl_bind: bind gpio@50003000
+Looking for 'gpio' at 34660, name gpio@50003000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+Found seq 1
+stm32_pinctrl_bind: bind gpio@50003000
+stm32_pinctrl_bind: bind gpio@50004000
+Looking for 'gpio' at 34876, name gpio@50004000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+Found seq 2
+stm32_pinctrl_bind: bind gpio@50004000
+stm32_pinctrl_bind: bind gpio@50005000
+Looking for 'gpio' at 35108, name gpio@50005000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+Found seq 3
+stm32_pinctrl_bind: bind gpio@50005000
+stm32_pinctrl_bind: bind gpio@50006000
+Looking for 'gpio' at 35324, name gpio@50006000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+Found seq 4
+stm32_pinctrl_bind: bind gpio@50006000
+stm32_pinctrl_bind: bind gpio@50007000
+Looking for 'gpio' at 35540, name gpio@50007000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+Found seq 5
+stm32_pinctrl_bind: bind gpio@50007000
+stm32_pinctrl_bind: bind gpio@50008000
+Looking for 'gpio' at 35756, name gpio@50008000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+Found seq 6
+stm32_pinctrl_bind: bind gpio@50008000
+stm32_pinctrl_bind: bind gpio@50009000
+Looking for 'gpio' at 35972, name gpio@50009000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+Found seq 7
+stm32_pinctrl_bind: bind gpio@50009000
+stm32_pinctrl_bind: bind gpio@5000a000
+Looking for 'gpio' at 36188, name gpio@5000a000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+Found seq 8
+stm32_pinctrl_bind: bind gpio@5000a000
+stm32_pinctrl_bind: bind gpio@5000b000
+Looking for 'gpio' at 36380, name gpio@5000b000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+   - gpio9, /soc/pin-controller@50002000/gpio@5000b000
+Found seq 9
+stm32_pinctrl_bind: bind gpio@5000b000
+stm32_pinctrl_bind: bind gpio@5000c000
+Looking for 'gpio' at 36556, name gpio@5000c000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+   - gpio9, /soc/pin-controller@50002000/gpio@5000b000
+   - gpio10, /soc/pin-controller@50002000/gpio@5000c000
+Found seq 10
+stm32_pinctrl_bind: bind gpio@5000c000
+stm32_pinctrl_bind: bind adc_mx-0
+stm32_pinctrl_bind: bind adc_sleep_mx-0
+stm32_pinctrl_bind: bind i2c4_mx-0
+stm32_pinctrl_bind: bind i2c4_sleep_mx-0
+stm32_pinctrl_bind: bind uart4_mx-0
+stm32_pinctrl_bind: bind uart4_sleep_mx-0
+stm32_pinctrl_bind: bind usb_otg_hs_mx-0
+stm32_pinctrl_bind: bind usb_otg_hs_sleep_mx-0
+ofnode_read_bool: gpio-controller: true
+ofnode_read_bool: gpio-controller: true
+ofnode_read_bool: gpio-controller: true
+ofnode_read_bool: gpio-controller: true
+ofnode_read_bool: gpio-controller: true
+ofnode_read_bool: gpio-controller: true
+ofnode_read_bool: gpio-controller: true
+ofnode_read_bool: gpio-controller: true
+ofnode_read_bool: gpio-controller: true
+ofnode_read_bool: gpio-controller: true
+ofnode_read_bool: gpio-controller: true
+ofnode_read_bool: gpio-controller: false
+ofnode_read_bool: gpio-controller: false
+ofnode_read_bool: gpio-controller: false
+ofnode_read_bool: gpio-controller: false
+ofnode_read_bool: gpio-controller: false
+ofnode_read_bool: gpio-controller: false
+ofnode_read_bool: gpio-controller: false
+ofnode_read_bool: gpio-controller: false
+Looking for 'pinctrl' at 37612, name pin-controller-z@54004000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+   - gpio9, /soc/pin-controller@50002000/gpio@5000b000
+   - gpio10, /soc/pin-controller@50002000/gpio@5000c000
+   - gpio25, /soc/pin-controller-z@54004000/gpio@54004000
+   - pinctrl0, /soc/pin-controller@50002000
+   - pinctrl1, /soc/pin-controller-z@54004000
+Found seq 1
+stm32_pinctrl_bind: bind gpio@54004000
+Looking for 'gpio' at 37824, name gpio@54004000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+   - gpio9, /soc/pin-controller@50002000/gpio@5000b000
+   - gpio10, /soc/pin-controller@50002000/gpio@5000c000
+   - gpio25, /soc/pin-controller-z@54004000/gpio@54004000
+Found seq 25
+stm32_pinctrl_bind: bind gpio@54004000
+ofnode_read_bool: gpio-controller: true
+ofnode_read_u32_array: ranges: fdtdec_get_int_array: ranges
+get_prop_check_min_len: ranges
+Looking for 'remoteproc' at 38440, name m4@10000000
+   - ethernet0, /soc/ethernet@5800a000
+   - serial0, /soc/serial@40010000
+   - serial1, /soc/serial@4000f000
+   - serial2, /soc/serial@40018000
+   - serial3, /soc/serial@4000e000
+   - gpio0, /soc/pin-controller@50002000/gpio@50002000
+   - gpio1, /soc/pin-controller@50002000/gpio@50003000
+   - gpio2, /soc/pin-controller@50002000/gpio@50004000
+   - gpio3, /soc/pin-controller@50002000/gpio@50005000
+   - gpio4, /soc/pin-controller@50002000/gpio@50006000
+   - gpio5, /soc/pin-controller@50002000/gpio@50007000
+   - gpio6, /soc/pin-controller@50002000/gpio@50008000
+   - gpio7, /soc/pin-controller@50002000/gpio@50009000
+   - gpio8, /soc/pin-controller@50002000/gpio@5000a000
+   - gpio9, /soc/pin-controller@50002000/gpio@5000b000
+   - gpio10, /soc/pin-controller@50002000/gpio@5000c000
+   - gpio25, /soc/pin-controller-z@54004000/gpio@54004000
+   - pinctrl0, /soc/pin-controller@50002000
+   - pinctrl1, /soc/pin-controller-z@54004000
+Not found
+ofnode_read_string: regulator-name: vin
+ofnode_read_u32: reg: 0x14 (20)
+ofnode_read_u32: reg: 0x16 (22)
+initcall: c010650d (relocated to c7f1a50d)
+board_key_check: no /config node?
+clk_set_defaults(pin-controller@50002000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f136f0
+fdtdec_get_int: #hwlock-cells: 0x2 (2)
+clk_set_defaults(hwspinlock@4c000000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12590
+OF: ** translation for device hwspinlock@4c000000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 0000004c
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1275068416
+OF: one level translation: 0000004c
+OF: reached root node
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_set_defaults(rcc@50000000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12660
+clk_set_defaults(rcc@50000000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f126d8
+OF: ** translation for device rcc@50000000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 00000050
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1342177280
+OF: one level translation: 00000050
+OF: reached root node
+clk_get_by_name(dev=c5f126d8, name=hsi, clk=c5f14230)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_set_defaults(scmi-0)
+clk_set_default_parents: could not read assigned-clock-parents for c5f140d8
+mbox_get_by_index(dev=c5f140d8, index=0, chan=c5f14348)
+fdtdec_get_int: #mbox-cells: 0x0 (0)
+ofnode_read_u32: arm,func-id: 0x82002000 (-2113921024)
+clk_set_defaults(mailbox-0)
+clk_set_default_parents: could not read assigned-clock-parents for c5f120a0
+OF: ** translation for device scmi_shm@0 **
+OF: bus is default (na=1, ns=1) on sram@2ffff000
+OF: translating address: 00000000
+OF: parent bus is default (na=1, ns=1) on 
+OF: walking ranges...
+OF: default map, cp=0, s=1000, da=0
+OF: parent translation for: 00f0ff2f
+OF: with offset: 0
+OF: one level translation: 00f0ff2f
+OF: reached root node
+mmu_set_region_dcache_behaviour: start=0x000002ff, size=128, option=0x12
+clk_set_defaults(protocol@14)
+clk_set_default_parents: could not read assigned-clock-parents for c5f14130
+clk_set_defaults(protocol@14)
+clk_set_default_parents: could not read assigned-clock-parents for c5f14130
+clk_of_xlate_default(clk=c5f14230)
+clk_request(dev=c5f14130, clk=c5f14230)
+clk_get_by_name(dev=c5f126d8, name=hse, clk=c5f14250)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5f14250)
+clk_request(dev=c5f14130, clk=c5f14250)
+clk_get_by_name(dev=c5f126d8, name=csi, clk=c5f14270)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5f14270)
+clk_request(dev=c5f14130, clk=c5f14270)
+clk_get_by_name(dev=c5f126d8, name=lsi, clk=c5f14290)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5f14290)
+clk_request(dev=c5f14130, clk=c5f14290)
+clk_get_by_name(dev=c5f126d8, name=lse, clk=c5f142b0)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5f142b0)
+clk_request(dev=c5f14130, clk=c5f142b0)
+clk_get_by_name(dev=c5f126d8, name=i2s_ckin, clk=c5f142d0)
+fdt_stringlist_search() failed: -61
+Clocks:
+clk_get_rate(clk=c5f14230)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(0) clock = 3d09000 : 64000 kHz
+- HSI : 64 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(1) clock = 16e3600 : 24000 kHz
+- HSE : 24 MHz
+clk_get_rate(clk=c5f14270)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(2) clock = 3d0900 : 4000 kHz
+- CSI : 4 MHz
+clk_get_rate(clk=c5f14290)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(3) clock = 7d00 : 32 kHz
+- LSI : 0.032 MHz
+clk_get_rate(clk=c5f142b0)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(4) clock = 8000 : 32 kHz
+- LSE : 0.033 MHz
+stm32mp1_clk_get(5) clock = 0 : 0 kHz
+- I2S_CKIN : 0 MHz
+clk_get_rate(clk=c5f14230)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(6) clock = 3d09000 : 64000 kHz
+- HSI_KER : 64 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(7) clock = 16e3600 : 24000 kHz
+- HSE_KER : 24 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(8) clock = b71b00 : 12000 kHz
+- HSE_KER_DIV2 : 12 MHz
+clk_get_rate(clk=c5f14270)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(9) clock = 3d0900 : 4000 kHz
+- CSI_KER : 4 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(10) clock = 26be3680 : 650000 kHz
+- PLL1_P : 650 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(11) clock = 135f1b40 : 325000 kHz
+- PLL1_Q : 325 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(12) clock = 135f1b40 : 325000 kHz
+- PLL1_R : 325 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(13) clock = fe277a0 : 266500 kHz
+- PLL2_P : 266.500 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(14) clock = fe277a0 : 266500 kHz
+- PLL2_Q : 266.500 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(15) clock = 1fc4ef40 : 533000 kHz
+- PLL2_R : 533 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(16) clock = c65d400 : 208000 kHz
+- PLL3_P : 208 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(17) clock = 1298be00 : 312000 kHz
+- PLL3_Q : 312 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(18) clock = 1298be00 : 312000 kHz
+- PLL3_R : 312 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(19) clock = 23c34600 : 600000 kHz
+- PLL4_P : 600 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(20) clock = 23c34600 : 600000 kHz
+- PLL4_Q : 600 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(21) clock = 23c34600 : 600000 kHz
+- PLL4_R : 600 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(22) clock = fe277a0 : 266500 kHz
+- ACLK : 266.500 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(23) clock = 632ea00 : 104000 kHz
+- PCLK1 : 104 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(24) clock = 632ea00 : 104000 kHz
+- PCLK2 : 104 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(25) clock = 632ea00 : 104000 kHz
+- PCLK3 : 104 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(26) clock = 7f13bd0 : 133250 kHz
+- PCLK4 : 133.250 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(27) clock = 3f89de8 : 66625 kHz
+- PCLK5 : 66.625 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(28) clock = fe277a0 : 266500 kHz
+- KCLK6 : 266.500 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(29) clock = fe277a0 : 266500 kHz
+- HCLK2 : 266.500 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(30) clock = 16e3600 : 24000 kHz
+- CK_PER : 24 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(31) clock = 26be3680 : 650000 kHz
+- CK_MPU : 650 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(32) clock = c65d400 : 208000 kHz
+- CK_MCU : 208 MHz
+stm32mp1_clk_get(33) clock = 0 : 0 kHz
+- DSI_PHY_PLL : 0 MHz
+stm32mp1_clk_get(34) clock = 2dc6c00 : 48000 kHz
+- USB_PHY_48 : 48 MHz
+Source Clocks:
+- I2C12(0) => parent index 7 is invalid
+- I2C35(1) => parent index 7 is invalid
+- I2C46(2) => parent HSI_KER(6)
+- UART6(3) => parent index 7 is invalid
+- UART24(4) => parent HSI_KER(6)
+- UART35(5) => parent index 7 is invalid
+- UART78(6) => parent index 7 is invalid
+- SDMMC12(7) => parent index 7 is invalid
+- SDMMC3(8) => parent index 7 is invalid
+- ETH(9) => parent index 3 is invalid
+- QSPI(10) => parent ACLK(22)
+- FMC(11) => parent ACLK(22)
+- USBPHY(12) => parent HSE_KER(7)
+- USBO(13) => parent USB_PHY_48(34)
+- STGEN(14) => parent HSE_KER(7)
+- DSI(15) => parent DSI_PHY_PLL(33)
+- ADC12(16) => parent CK_PER(30)
+- SPI1(17) => parent index 7 is invalid
+- SPI45(18) => parent index 7 is invalid
+- RTC(19) => parent LSE(4)
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(31) clock = 26be3680 : 650000 kHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(22) clock = fe277a0 : 266500 kHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(15) clock = 1fc4ef40 : 533000 kHz
+Clocks:
+- MPU : 650 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(32) clock = c65d400 : 208000 kHz
+- MCU : 208 MHz
+- AXI : 266.500 MHz
+clk_get_rate(clk=c5f14250)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(30) clock = 16e3600 : 24000 kHz
+- PER : 24 MHz
+- DDR : 533 MHz
+clk_set_defaults(rcc@50000000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f126d8
+clk_of_xlate_default(clk=c5df2070)
+clk_request(dev=c5f126d8, clk=c5df2070)
+clk_enable(clk=c5df2070)
+stm32mp1_clk_enable: id clock 82 has been enabled
+Invaild args_count: 2
+stm32_pinctrl_probe: hwspinlock_get_by_index may have failed (-22)
+clk_set_defaults(soc)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12280
+OF: ** translation for device pwr@50001000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 00100050
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1342181376
+OF: one level translation: 00100050
+OF: reached root node
+clk_set_defaults(pwr@50001000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f127c8
+ofnode_read_u32: regulator-min-microvolt: 0x10c8e0 (1100000)
+ofnode_read_u32: regulator-max-microvolt: 0x10c8e0 (1100000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: false
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(reg11)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12840
+ofnode_read_u32: regulator-min-microvolt: 0x1b7740 (1800000)
+ofnode_read_u32: regulator-max-microvolt: 0x1b7740 (1800000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: false
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(reg18)
+clk_set_default_parents: could not read assigned-clock-parents for c5f128d8
+ofnode_read_u32: regulator-min-microvolt: 0x325aa0 (3300000)
+ofnode_read_u32: regulator-max-microvolt: 0x325aa0 (3300000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: false
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(usb33)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12970
+ofnode_read_u32: regulator-min-microvolt: 0x2625a0 (2500000)
+ofnode_read_u32: regulator-max-microvolt: 0x2625a0 (2500000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: false
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(vrefbuf@50025000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12b30
+OF: ** translation for device vrefbuf@50025000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 00500250
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1342328832
+OF: one level translation: 00500250
+OF: reached root node
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5f14310)
+clk_request(dev=c5f126d8, clk=c5f14310)
+clk_enable(clk=c5f14310)
+stm32mp1_clk_enable: id clock 52 has been enabled
+ofnode_read_u32: vdda-supply: 0x17 (23)
+clk_set_defaults(i2c4_mx-0)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13c00
+fdtdec_get_int_array_count: pinmux
+stm32_pinctrl_config: no of pinmux entries= 2
+stm32_pinctrl_config: pinmux = 1607
+prep_gpio_dsc: GPIO:port= 1, pin= 6
+fdtdec_get_int: slew-rate: 0x0 (0)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 7, slew-rate= 0, op type= 1, pull-upd is = 0
+clk_set_defaults(gpio@50003000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f137c0
+OF: ** translation for device gpio@50003000 **
+OF: bus is default (na=1, ns=1) on pin-controller@50002000
+OF: translating address: 00100000
+OF: parent bus is default (na=1, ns=1) on soc
+OF: walking ranges...
+OF: default map, cp=0, s=a400, da=1000
+OF: parent translation for: 00200050
+OF: with offset: 4096
+OF: one level translation: 00300050
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1342189568
+OF: one level translation: 00300050
+OF: reached root node
+ofnode_read_string: st,bank-name: GPIOB
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5df1f10)
+clk_request(dev=c5f126d8, clk=c5df1f10)
+clk_enable(clk=c5df1f10)
+stm32mp1_clk_enable: id clock 85 has been enabled
+clock enabled for device gpio@50003000
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 1707
+prep_gpio_dsc: GPIO:port= 1, pin= 7
+fdtdec_get_int: slew-rate: 0x0 (0)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 7, slew-rate= 0, op type= 1, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+ofnode_read_u32: u-boot,i2c-transaction-bytes: (not found)
+i2c_pre_probe: I2C bus: i2c@5c002000 max transaction bytes: 0
+ofnode_read_u32: i2c-scl-rising-time-ns: 0xb9 (185)
+ofnode_read_u32: i2c-scl-falling-time-ns: 0x14 (20)
+ofnode_read_u32: st,syscfg-fmp: 0xc (12)
+fdtdec_get_addr_size_fixed: reg: OF: ** translation for device syscon@50020000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 00000250
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1342308352
+OF: one level translation: 00000250
+OF: reached root node
+addr=50020000, size=400
+ofnode_read_bool: little-endian: false
+ofnode_read_bool: big-endian: false
+ofnode_read_bool: native-endian: false
+clk_set_defaults(syscon@50020000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12ad8
+ofnode_read_u32_array: st,syscfg-fmp: fdtdec_get_int_array: st,syscfg-fmp
+get_prop_check_min_len: st,syscfg-fmp
+clk_set_defaults(i2c@5c002000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12d70
+OF: ** translation for device i2c@5c002000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 0020005c
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1543512064
+OF: one level translation: 0020005c
+OF: reached root node
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5f143a0)
+clk_request(dev=c5f14130, clk=c5f143a0)
+clk_enable(clk=c5f143a0)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+fdtdec_get_int: #reset-cells: 0x1 (1)
+clk_set_defaults(protocol@16)
+clk_set_default_parents: could not read assigned-clock-parents for c5f14188
+reset_of_xlate_default(reset_ctl=c5df2158)
+reset_assert(reset_ctl=c5df2158)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+reset_deassert(reset_ctl=c5df2158)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+ofnode_read_u32: clock-frequency: 0x61a80 (400000)
+clk_get_rate(clk=c5f143a0)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+stm32_i2c_compute_solutions: SDADEL(min/max): 0/391, SCLDEL(Min): 285
+stm32_i2c_compute_timing: Presc: 6, scldel: 2, sdadel: 0, scll: 10, sclh: 7
+stm32_i2c_setup_timing: I2C Freq(400000), Clk Source(64000000)
+stm32_i2c_setup_timing: I2C Rise(185) and Fall(20) Time
+stm32_i2c_setup_timing: I2C Analog Filter(On), DNF(0)
+clk_set_defaults(stpmic@33)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12dc8
+ofnode_read_u32: regulator-min-microvolt: 0x1b7740 (1800000)
+ofnode_read_u32: regulator-max-microvolt: 0x1b7740 (1800000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: true
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(buck3)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12f60
+pmic_reg_read: reg=22 priv->trans_len:1, value=9d, ret=0
+ofnode_read_u32: regulator-min-microvolt: 0x124f80 (1200000)
+ofnode_read_u32: regulator-max-microvolt: 0x124f80 (1200000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: true
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(buck1)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12e30
+pmic_reg_read: reg=20 priv->trans_len:1, value=61, ret=0
+buck1@vddcore: set 1200000 uV; enabling
+ofnode_read_u32: regulator-min-microvolt: 0x124f80 (1200000)
+ofnode_read_u32: regulator-max-microvolt: 0x124f80 (1200000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: true
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(buck2)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12ec8
+pmic_reg_read: reg=21 priv->trans_len:1, value=61, ret=0
+buck2@vdd_ddr: set 1200000 uV; enabling
+pmic_reg_read: reg=22 priv->trans_len:1, value=9d, ret=0
+buck3@vdd: set 1800000 uV; enabling
+ofnode_read_u32: regulator-min-microvolt: 0x325aa0 (3300000)
+ofnode_read_u32: regulator-max-microvolt: 0x325aa0 (3300000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: true
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(buck4)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12ff8
+pmic_reg_read: reg=23 priv->trans_len:1, value=d9, ret=0
+buck4@v3v3: set 3300000 uV; enabling
+ofnode_read_u32: regulator-min-microvolt: 0x1b7740 (1800000)
+ofnode_read_u32: regulator-max-microvolt: 0x1b7740 (1800000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: true
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(ldo3)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13090
+pmic_reg_read: reg=27 priv->trans_len:1, value=a5, ret=0
+ldo3@vtt_ddr: set 1800000 uV; enabling
+ofnode_read_u32: regulator-min-microvolt: 0x325aa0 (3300000)
+ofnode_read_u32: regulator-max-microvolt: 0x325aa0 (3300000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: true
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(ldo4)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13128
+ldo4@vdd_usb: set 3300000 uV; enabling (ret: -22)
+ofnode_read_u32: regulator-min-microvolt: 0x2c4020 (2900000)
+ofnode_read_u32: regulator-max-microvolt: 0x2c4020 (2900000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: false
+ofnode_read_bool: regulator-boot-on: true
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(ldo5)
+clk_set_default_parents: could not read assigned-clock-parents for c5f131c0
+pmic_reg_read: reg=29 priv->trans_len:1, value=51, ret=0
+ldo5@vdda: set 2900000 uV; enabling
+ofnode_read_u32: regulator-min-microvolt: (not found)
+ofnode_read_u32: regulator-max-microvolt: (not found)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: true
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(vref_ddr)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13258
+pmic_reg_read: reg=24 priv->trans_len:1, value=1, ret=0
+vref_ddr@vref_ddr: ; enabling
+ofnode_read_u32: regulator-min-microvolt: (not found)
+ofnode_read_u32: regulator-max-microvolt: (not found)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: false
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(boost)
+clk_set_default_parents: could not read assigned-clock-parents for c5f132f0
+ofnode_read_u32: regulator-min-microvolt: (not found)
+ofnode_read_u32: regulator-max-microvolt: (not found)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: false
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(pwr_sw1)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13388
+ofnode_read_u32: regulator-min-microvolt: (not found)
+ofnode_read_u32: regulator-max-microvolt: (not found)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: false
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+clk_set_defaults(pwr_sw2)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13420
+ofnode_read_u32: regulator-min-microvolt: 0x4c4b40 (5000000)
+ofnode_read_u32: regulator-max-microvolt: 0x4c4b40 (5000000)
+ofnode_read_u32: regulator-init-microvolt: (not found)
+ofnode_read_u32: regulator-min-microamp: (not found)
+ofnode_read_u32: regulator-max-microamp: (not found)
+ofnode_read_bool: regulator-always-on: true
+ofnode_read_bool: regulator-boot-on: false
+ofnode_read_u32: regulator-ramp-delay: (not found)
+ofnode_find_subnode: regulator-state-mem: <none>
+ofnode_read_bool: enable-active-high: false
+gpio_request_tail: Node 'vin', property 'gpio', failed to request GPIO index 0: -2
+Regulator 'vin' optional enable GPIO - not found! Error: -2
+ofnode_read_u32: startup-delay-us: (not found)
+ofnode_read_u32: u-boot,off-on-delay-us: (not found)
+clk_set_defaults(vin)
+clk_set_default_parents: could not read assigned-clock-parents for c5f14028
+regulator_common_set_enable: dev='vin', enable=1, delay=0, has_gpio=0
+vin@vin: set 5000000 uV; enabling
+fdtdec_get_config_string: u-boot,boot-led
+initcall: c0171331 (relocated to c7f85331)
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10000000 size=40000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10040000 size=1000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10041000 size=1000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=10042000 size=4000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=30000000 size=40000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=38000000 size=10000 flags=4
+fdtdec_get_bool: no-map
+   reserving fdt memory region: addr=da000000 size=4000000 flags=4
+EFI: efi_add_memory_map: 0xc0000000 0x8000 7 no
+EFI: efi_add_memory_map: 0xc4df2000 0x320e 2 no
+EFI: efi_add_memory_map: 0xc7f14000 0x1 5 no
+initcall: c0121dc5 (relocated to c7f35dc5)
+initcall: c01181d5 (relocated to c7f2c1d5)
+clk_set_defaults(uart4_mx-0)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13cb0
+fdtdec_get_int_array_count: pinmux
+stm32_pinctrl_config: no of pinmux entries= 1
+stm32_pinctrl_config: pinmux = 1209
+prep_gpio_dsc: GPIO:port= 1, pin= 2
+fdtdec_get_int: slew-rate: (not found)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 9, slew-rate= 0, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+fdtdec_get_int_array_count: pinmux
+stm32_pinctrl_config: no of pinmux entries= 1
+stm32_pinctrl_config: pinmux = 6b07
+prep_gpio_dsc: GPIO:port= 6, pin= 11
+fdtdec_get_int: slew-rate: 0x0 (0)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 7, slew-rate= 0, op type= 0, pull-upd is = 0
+clk_set_defaults(gpio@50008000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13978
+OF: ** translation for device gpio@50008000 **
+OF: bus is default (na=1, ns=1) on pin-controller@50002000
+OF: translating address: 00600000
+OF: parent bus is default (na=1, ns=1) on soc
+OF: walking ranges...
+OF: default map, cp=0, s=a400, da=6000
+OF: parent translation for: 00200050
+OF: with offset: 24576
+OF: one level translation: 00800050
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1342210048
+OF: one level translation: 00800050
+OF: reached root node
+ofnode_read_string: st,bank-name: GPIOG
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5df1f98)
+clk_request(dev=c5f126d8, clk=c5df1f98)
+clk_enable(clk=c5df1f98)
+stm32mp1_clk_enable: id clock 90 has been enabled
+clock enabled for device gpio@50008000
+stm32_pinctrl_config: rv = 0
+
+OF: ** translation for device serial@40010000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 00000140
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1073807360
+OF: one level translation: 00000140
+OF: reached root node
+clk_set_defaults(serial@40010000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12308
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5df21c8)
+clk_request(dev=c5f126d8, clk=c5df21c8)
+clk_enable(clk=c5df21c8)
+stm32mp1_clk_enable: id clock 151 has been enabled
+fdtdec_get_int: #reset-cells: 0x1 (1)
+clk_set_defaults(rcc@50000000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12750
+reset_of_xlate_default(reset_ctl=c5df21b8)
+reset_assert(reset_ctl=c5df21b8)
+stm32_reset_assert: reset id = 19472 bank = 24initcall: c01181c1 (relocated to c7f2c1c1)
+Now running in RAM - U-Boot at: c7f14000
+initcall: c011805d (relocated to c7f2c05d)
+WDT:   Not found by seq!
+clk_set_defaults(watchdog@5a002000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12c70
+IWDG init
+OF: ** translation for device watchdog@5a002000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 0020005a
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1509957632
+OF: one level translation: 0020005a
+OF: reached root node
+clk_get_by_name(dev=c5f12c70, name=pclk, clk=c5df21e8)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5df21e8)
+clk_request(dev=c5f126d8, clk=c5df21e8)
+clk_enable(clk=c5df21e8)
+stm32mp1_clk_enable: id clock 58 has been enabled
+clk_get_by_name(dev=c5f12c70, name=lsi, clk=c5df21e8)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5df21e8)
+clk_request(dev=c5f14130, clk=c5df21e8)
+clk_get_rate(clk=c5df21e8)
+mbox_send(chan=c5f14348, data=2ffff000)
+mbox_recv(chan=c5f14348, data=2ffff000, timeout_us=10000)
+IWDG init done
+ofnode_read_u32: timeout-sec: 0x20 (32)
+WDT:   Started with servicing (32s timeout)
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c01182a3 (relocated to c7f2c2a3)
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c011819d (relocated to c7f2c19d)
+NAND:  0 MiB
+initcall: c0118185 (relocated to c7f2c185)
+MMC:   
+initcall: c011813d (relocated to c7f2c13d)
+fdtdec_get_config_int: load-environment
+Using default environment
+Destroy Hash Table: c7fdc240 table = 00000000
+Create Hash Table: N=512
+INSERT: table c7fdc240, filled 1/521 rv c5f16d44 ==> name="bootcmd" value="run bootcmd_stm32mp"
+INSERT: table c7fdc240, filled 2/521 rv c5f175a0 ==> name="bootdelay" value="2"
+INSERT: table c7fdc240, filled 3/521 rv c5f16920 ==> name="baudrate" value="115200"
+INSERT: table c7fdc240, filled 4/521 rv c5f16b3c ==> name="serverip" value="192.168.1.1"
+INSERT: table c7fdc240, filled 5/521 rv c5f1762c ==> name="autoload" value="no"
+DELETE CANDIDATE: "preboot"
+hdelete: DELETE key "preboot"
+DELETE ERROR ##############################
+INSERT: table c7fdc240, filled 6/521 rv c5f17424 ==> name="loadaddr" value="0xc2000000"
+INSERT: table c7fdc240, filled 7/521 rv c5f1613c ==> name="arch" value="arm"
+INSERT: table c7fdc240, filled 8/521 rv c5f17938 ==> name="cpu" value="armv7"
+INSERT: table c7fdc240, filled 9/521 rv c5f170f0 ==> name="board" value="stm32mp1"
+INSERT: table c7fdc240, filled 10/521 rv c5f163f8 ==> name="board_name" value="stm32mp1"
+INSERT: table c7fdc240, filled 11/521 rv c5f179c4 ==> name="vendor" value="st"
+INSERT: table c7fdc240, filled 12/521 rv c5f17f8c ==> name="soc" value="stm32mp"
+INSERT: table c7fdc240, filled 12/521 rv c5f175a0 ==> name="bootdelay" value="1"
+INSERT: table c7fdc240, filled 13/521 rv c5f16da8 ==> name="kernel_addr_r" value="0xc2000000"
+INSERT: table c7fdc240, filled 14/521 rv c5f16704 ==> name="fdt_addr_r" value="0xc4000000"
+INSERT: table c7fdc240, filled 15/521 rv c5f1659c ==> name="scriptaddr" value="0xc4100000"
+INSERT: table c7fdc240, filled 16/521 rv c5f1640c ==> name="pxefile_addr_r" value="0xc4200000"
+INSERT: table c7fdc240, filled 17/521 rv c5f18018 ==> name="splashimage" value="0xc4300000"
+INSERT: table c7fdc240, filled 18/521 rv c5f17ac8 ==> name="ramdisk_addr_r" value="0xc4400000"
+INSERT: table c7fdc240, filled 19/521 rv c5f16b78 ==> name="altbootcmd" value="run bootcmd"
+INSERT: table c7fdc240, filled 20/521 rv c5f17b90 ==> name="env_check" value="env exists env_ver || env set env_ver ${ver};if env info -p -d -q; then env save; fi;if test ""
+INSERT: table c7fdc240, filled 21/521 rv c5f17d0c ==> name="bootcmd_stm32mp" value="echo "Boot over ${boot_device}${boot_instance}!";if test ${boot_device} = serial || test"
+INSERT: table c7fdc240, filled 22/521 rv c5f18504 ==> name="suffix" value="a"
+INSERT: table c7fdc240, filled 23/521 rv c5f17438 ==> name="dtimg_addr" value="0xc44FFF80"
+INSERT: table c7fdc240, filled 24/521 rv c5f1852c ==> name="android_mmc_splash" value="if part start mmc ${devnum} splash splash_start && part size mmc ${devnum} splash spl"
+INSERT: table c7fdc240, filled 25/521 rv c5f16c04 ==> name="android_mmc_fdt" value="if part start mmc ${devnum} dt_${suffix} dt_start &&part size mmc ${devnum} dt_${suffix}"
+INSERT: table c7fdc240, filled 26/521 rv c5f16268 ==> name="android_mmc_kernel" value="if part start mmc ${devnum} boot_${suffix} boot_start && part size mmc ${devnum} boot"
+INSERT: table c7fdc240, filled 27/521 rv c5f171f4 ==> name="android_mmc_boot" value="mmc dev ${devnum};run android_mmc_splash;run android_mmc_fdt;run android_mmc_kernel;boo"
+INSERT: table c7fdc240, filled 28/521 rv c5f16498 ==> name="bootcmd_android" value="env set mmc_boot run android_mmc_boot;run bootcmd_stm32mp"
+INSERT: table c7fdc240, filled 29/521 rv c5f1794c ==> name="partitions" value="name=ssbl,size=2M;name=bootfs,size=64MB,bootable;name=vendorfs,size=16M;name=rootfs,size=746M"
+INSERT: table c7fdc240, filled 30/521 rv c5f17820 ==> name="mmc_boot" value="if mmc dev ${devnum}; then devtype=mmc; run scan_dev_for_boot_part; fi"
+INSERT: table c7fdc240, filled 31/521 rv c5f17c08 ==> name="boot_net_usb_start" value="usb start"
+INSERT: table c7fdc240, filled 32/521 rv c5f16c40 ==> name="usb_boot" value="usb start; if usb dev ${devnum}; then devtype=usb; run scan_dev_for_boot_part; fi"
+INSERT: table c7fdc240, filled 33/521 rv c5f16e5c ==> name="ubifs_boot" value="env exists bootubipart || env set bootubipart UBI; env exists bootubivol || env set bootubivo"
+INSERT: table c7fdc240, filled 34/521 rv c5f1744c ==> name="boot_efi_binary" value="if fdt addr ${fdt_addr_r}; then bootefi bootmgr ${fdt_addr_r};else bootefi bootmgr ${fdt"
+INSERT: table c7fdc240, filled 35/521 rv c5f18298 ==> name="load_efi_dtb" value="load ${devtype} ${devnum}:${distro_bootpart} ${fdt_addr_r} ${prefix}${efi_fdtfile}"
+INSERT: table c7fdc240, filled 36/521 rv c5f17a00 ==> name="efi_dtb_prefixes" value="/ /dtb/ /dtb/current/"
+INSERT: table c7fdc240, filled 37/521 rv c5f15d68 ==> name="scan_dev_for_efi" value="setenv efi_fdtfile ${fdtfile}; if test -z "${fdtfile}" -a -n "${soc}"; then setenv efi_"
+INSERT: table c7fdc240, filled 38/521 rv c5f15d54 ==> name="boot_prefixes" value="/ /boot/"
+INSERT: table c7fdc240, filled 39/521 rv c5f15db8 ==> name="boot_scripts" value="boot.scr.uimg boot.scr"
+INSERT: table c7fdc240, filled 40/521 rv c5f183ec ==> name="boot_script_dhcp" value="boot.scr.uimg"
+INSERT: table c7fdc240, filled 41/521 rv c5f17b18 ==> name="boot_targets" value="mmc1 ubifs0 mmc0 mmc2 pxe "
+INSERT: table c7fdc240, filled 42/521 rv c5f161f0 ==> name="boot_syslinux_conf" value="extlinux/extlinux.conf"
+INSERT: table c7fdc240, filled 43/521 rv c5f16984 ==> name="boot_extlinux" value="sysboot ${devtype} ${devnum}:${distro_bootpart} any ${scriptaddr} ${prefix}${boot_syslinux"
+INSERT: table c7fdc240, filled 44/521 rv c5f1843c ==> name="scan_dev_for_extlinux" value="if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}${boot_syslinux_conf};"
+INSERT: table c7fdc240, filled 45/521 rv c5f16628 ==> name="boot_a_script" value="load ${devtype} ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}${script}; source ${sc"
+INSERT: table c7fdc240, filled 46/521 rv c5f1834c ==> name="scan_dev_for_scripts" value="for script in ${boot_scripts}; do if test -e ${devtype} ${devnum}:${distro_bootpart"
+INSERT: table c7fdc240, filled 47/521 rv c5f1825c ==> name="scan_dev_for_boot" value="echo Scanning ${devtype} ${devnum}:${distro_bootpart}...; for prefix in ${boot_prefixe"
+INSERT: table c7fdc240, filled 48/521 rv c5f1816c ==> name="scan_dev_for_boot_part" value="part list ${devtype} ${devnum} -bootable devplist; env exists devplist || setenv "
+INSERT: table c7fdc240, filled 49/521 rv c5f16cb8 ==> name="bootcmd_mmc1" value="devnum=1; run mmc_boot"
+INSERT: table c7fdc240, filled 50/521 rv c5f174d8 ==> name="bootcmd_ubifs0" value="devnum=0; run ubifs_boot"
+INSERT: table c7fdc240, filled 51/521 rv c5f17cf8 ==> name="bootcmd_mmc0" value="devnum=0; run mmc_boot"
+INSERT: table c7fdc240, filled 52/521 rv c5f18518 ==> name="bootcmd_mmc2" value="devnum=2; run mmc_boot"
+INSERT: table c7fdc240, filled 53/521 rv c5f16484 ==> name="bootcmd_pxe" value="run boot_net_usb_start; dhcp; if pxe get; then pxe boot; fi"
+INSERT: table c7fdc240, filled 54/521 rv c5f1717c ==> name="distro_bootcmd" value="for target in ${boot_targets}; do run bootcmd_${target}; done"
+INSERT: table c7fdc240, filled 54/521 rv c5f17c08 ==> name="boot_net_usb_start" value="true"
+INSERT: free(data = c5f147b0)
+INSERT: done
+Initial value for argc=3
+Final value for argc=3
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c01182b1 (relocated to c7f2c2b1)
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c0121dd9 (relocated to c7f35dd9)
+initcall: c0118133 (relocated to c7f2c133)
+initcall: c011e075 (relocated to c7f32075)
+In:    serial
+Out:   serial
+Err:   serial
+initcall: c01021f9 (relocated to c7f161f9)
+OF: ** translation for device nvmem@5c005000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 0050005c
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1543524352
+OF: one level translation: 0050005c
+OF: reached root node
+clk_set_defaults(nvmem@5c005000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13600
+Initial value for argc=3
+Final value for argc=3
+Initial value for argc=3
+Final value for argc=3
+Initial value for argc=3
+Final value for argc=3
+invalid MAC address in OTP 00:00:00:00:00:00
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c0101961 (relocated to c7f15961)
+initcall: c0118129 (relocated to c7f2c129)
+initcall: c0118111 (relocated to c7f2c111)
+initcall: c0147ba9 (relocated to c7f5bba9)
+initcall: c0106705 (relocated to c7f1a705)
+Initial value for argc=3
+Final value for argc=3
+Initial value for argc=3
+Final value for argc=3
+board_check_usb_power: no /config node?
+Initial value for argc=3
+Final value for argc=3
+Initial value for argc=3
+Final value for argc=3
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c01180fd (relocated to c7f2c0fd)
+Net:   No ethernet found.
+initcall: c01180f5 (relocated to c7f2c0f5)
+Initial value for argc=3
+Final value for argc=3
+Initial value for argc=3
+Final value for argc=3
+fdtdec_get_config_int: bootdelay
+### main_loop entered: bootdelay=0
+
+fdtdec_get_config_int: kernel-offset
+fdtdec_get_config_int: rootdisk-offset
+fdtdec_get_config_string: bootcmd
+fdtdec_get_config_int: bootsecure
+### main_loop: bootcmd="run bootcmd_stm32mp"
+Hit any key to stop autoboot:  0 
+Boot over usb0!
+test(4): 'usb' '=' 'serial': returns 1
+Command failed, result=1
+test(4): 'usb' '=' 'usb': returns 0
+Initial value for argc=3
+Final value for argc=3
+No video device for seq 0 (vidconsole)
+Initial value for argc=3
+Final value for argc=3
+No video device for seq 0 (vidconsole)
+partitions : done
+board_mtdparts_default:mtdids= & mtdparts=
+Initial value for argc=2
+Final value for argc=2
+hdelete: DELETE key "mtdparts"
+Initial value for argc=2
+Final value for argc=2
+hdelete: DELETE key "mtdids"
+List of MTD devices:
+No MTD device found
+Command failed, result=1
+Phase=END
+dfu_alt_init: dfu_alt_num=3
+DFU alt info setting: dfu_fill_entity: @virtual/0xf1/1*512Be interface: virt dev: 241
+dfu_fill_entity_virt: devstr = 241
+dfu_fill_entity: @OTP/0xf2/1*512Be interface: virt dev: 242
+dfu_fill_entity_virt: devstr = 242
+dfu_fill_entity: @PMIC/0xf4/1*8Be interface: virt dev: 244
+dfu_fill_entity_virt: devstr = 244
+done
+DFU alt settings list:
+dev: VIRT alt: 0 name: @virtual/0xf1/1*512Be layout: RAW_ADDR
+dev: VIRT alt: 1 name: @OTP/0xf2/1*512Be layout: RAW_ADDR
+dev: VIRT alt: 2 name: @PMIC/0xf4/1*8Be layout: RAW_ADDR
+clk_set_defaults(usb_otg_hs_mx-0)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13d60
+fdtdec_get_int_array_count: pinmux
+stm32_pinctrl_config: no of pinmux entries= 1
+stm32_pinctrl_config: pinmux = a11
+prep_gpio_dsc: GPIO:port= 0, pin= 10
+fdtdec_get_int: slew-rate: (not found)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 17, slew-rate= 0, op type= 0, pull-upd is = 0
+clk_set_defaults(gpio@50002000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13768
+OF: ** translation for device gpio@50002000 **
+OF: bus is default (na=1, ns=1) on pin-controller@50002000
+OF: translating address: 00000000
+OF: parent bus is default (na=1, ns=1) on soc
+OF: walking ranges...
+OF: default map, cp=0, s=a400, da=0
+OF: parent translation for: 00200050
+OF: with offset: 0
+OF: one level translation: 00200050
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1342185472
+OF: one level translation: 00200050
+OF: reached root node
+ofnode_read_string: st,bank-name: GPIOA
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5df1aa0)
+clk_request(dev=c5f126d8, clk=c5df1aa0)
+clk_enable(clk=c5df1aa0)
+stm32mp1_clk_enable: id clock 84 has been enabled
+clock enabled for device gpio@50002000
+stm32_pinctrl_config: rv = 0
+
+OF: ** translation for device usb-otg@49000000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 00000049
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1224736768
+OF: one level translation: 00000049
+OF: reached root node
+ofnode_read_u32: g-rx-fifo-size: 0x200 (512)
+ofnode_read_u32: g-np-tx-fifo-size: 0x20 (32)
+ofnode_read_u32_array: g-tx-fifo-size: fdtdec_get_int_array: g-tx-fifo-size
+get_prop_check_min_len: g-tx-fifo-size
+ofnode_read_bool: u-boot,force-b-session-valid: false
+ofnode_read_bool: u-boot,force-vbus-detection: false
+clk_set_defaults(usb-otg@49000000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f124a0
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5f1a540)
+clk_request(dev=c5f126d8, clk=c5f1a540)
+clk_enable(clk=c5f1a540)
+stm32mp1_clk_enable: id clock 166 has been enabled
+fdtdec_get_int: #reset-cells: 0x1 (1)
+fdtdec_get_int: #reset-cells: 0x1 (1)
+reset_of_xlate_default(reset_ctl=c5f1a5c0)
+reset_assert(reset_ctl=c5f1a5c0)
+stm32_reset_assert: reset id = 19656 bank = 2456 offset = 8)
+reset_deassert(reset_ctl=c5f1a5c0)
+stm32_reset_deassert: reset id = 19656 bank = 2456 offset = 8)
+ofnode_read_u32: usb33d-supply: 0x1a (26)
+dwc2_udc_probe: c5f124f8
+g_dnl_register: g_dnl_driver.name = usb_dnl_dfu
+dwc2_alloc_request: ep0-control c7fdbee0
+g_dnl_bind: gadget: 0xc7fdbe94 cdev: 0xc5f1a708
+usb_add_config: adding config #1 'usb_dnload'/c5f1b880
+g_dnl_do_config: configuration: 0xc5f1b880 composite dev: 0xc5f1a708
+dfu_add: cdev: 0xc5f1a708 gadget:0xc7fdbe94 gadget->ep0: 0xc7fdbee0
+adding 'dfu'/c5f1b8f8 to config 'usb_dnload'/c5f1b880
+cfg 1/c5f1b880 speeds: high full
+usb_add_config: interface 0 = dfu/c5f1b8f8
+g_dnl_bind: calling usb_gadget_connect for controller 'dwc2-udc'
+usb_dnl_dfu: ready
+Reseting OTG controller
+0
+0
+0
+0
+0
+
+CTRL-A Z for help | 115200 8N1 | NOR | Minicom 2.7.1 | VT102 | Offline | ttyUSB0                                                                                            

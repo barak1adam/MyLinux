@@ -1,0 +1,31 @@
+tkos thirs meeting - buildroot:
+===============================
+
+stm32mp defconfig - should make all relevant settings for me in BR.
+BR menus: "In tree.." vs custom - file in linux / in u-boot, etc... vs a custom file that I use in BR or locally
+toolchain - external saves much time. bootlin is recommended. external means precompiled, tar file foramt.
+	I also selecte musl instead of glibc / uclibc. it is smaller.
+our current dist is minimal  - kernel and busybox.
+I can delete output/build to clean all compilation or run make clean
+porting our code:
+	can use external packages like in UM 9.2. the advantage is that no changes in the buildroot code, but to defconfig
+changes to source code - can be done locally and avoid override with new downloads - UM 8.14.6
+
+build env - you get them all in the MK file. 
+when calling the Makefile of the package, all settings are there.
+use CC instead of GCC. (GCC is of the host, CC is of the env toolchain)
+
+what to save in BB - defconfig, OS-V
+	git clone os-v
+	git clone BR
+	make defconfig
+	apply patches
+	make
+
+check on ST eval board - 
+	how to boot from USB or UART
+	how to burn the NAND after boot (if there is a NAND)
+	try to boot from NAND after flashing
+	
+
+shlomi vaaknin - mentioned by Baruch

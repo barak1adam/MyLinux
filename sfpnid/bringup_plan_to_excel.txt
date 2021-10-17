@@ -1,0 +1,24 @@
+load FSBL over USB
+
+in FSBL:
+
+enable I2C
+connect to PMIC via I2C
+
+configure PMIC to enable power for DDR:
+
+a. enable LDO3 (VDD1_DDR) in bypass mode. The software waits at least for a further 100 us.
+
+b. enable DDR_VREF (VREF_DDR).
+
+c. enable BUCK2 (VDD2_DDR) at 1.2 V. The software waits for at least 1.4 ms for BUCK2 ready
+
+DDR Controller configuration:
+
+. The software initializes the STM32MP15x DDR controller and lpDDR device.
+keep Frequency low for low power
+
+
+3. Then try to boot the second boot loader via uart
+
+

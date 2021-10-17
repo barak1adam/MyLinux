@@ -1,0 +1,56 @@
+cd ~/mrv_dev/developer_package/SDK/
+openocd -f ./sysroots/x86_64-ostl_sdk-linux/usr/share/openocd/scripts/board/stm32mp15x_dk2.cfg -c 'init;cortex_a smp off;halt;dump_image traces.bin 0x2ffc1c00 2048;resume;shutdown'
+ls -lrt
+barak@barak-OptiPlex-7020:~/mrv_dev/developer_package/SDK$ python3 ./rom_trace_analyzer.py traces.bin 
+< @ 00007504 | [INFO] - BOOTCORE_BootRomMaskVer ( 0x00000000 ) >
+< @ 00008800 | [INFO] - BOOTCORE_BootRomVer ( 0x00000102 ) >
+< @ 00009976 | [INFO] - BOOTCORE_FreezeIWDG12Clocks >
+< @ 00011335 | [INFO] - BOOTCORE_HwResetPOR >
+< @ 00024986 | [INFO] - BOOTCORE_ChipModeSecOpen >
+< @ 00027401 | [INFO] - BOOTCORE_LogicalResetSystem >
+< @ 00029159 | [INFO] - BOOTCORE_BootActionColdBootProcess >
+< @ 00087777 | [INFO] - BOOTCORE_BootCfgOtpWordValue ( 0x00000000, 0x00000000 ) >
+< @ 00089261 | [INFO] - BOOTCORE_BootPinsFirstSelSerial >
+< @ 00090339 | [INFO] - BOOTCORE_OtpPrimarySrcForceNothing >
+< @ 00091368 | [INFO] - BOOTCORE_OtpSecondarySrcForceNothing >
+< @ 00092341 | [INFO] - BOOTCORE_BootPinsOverridesOtp ( 0x00000001 ) >
+< @ 00093568 | [INFO] - BOOTCORE_OtpBootSrcDisableMaskVal ( 0x00000000 ) >
+< @ 00094700 | [INFO] - BOOTCORE_OtpBootUartInstanceDisableMaskVal ( 0x00000000 ) >
+< @ 00096128 | [INFO] - BOOTCORE_eMmcUseSingle128KBytesBootPartition ( 0x00000000 ) >
+< @ 00098392 | [INFO] - BOOTCORE_BootCfgAfmuxOtpWord1Value ( 0x00000000 ) >
+< @ 00099756 | [INFO] - BOOTCORE_BootCfgAfmuxOtpWord2Value ( 0x00000000 ) >
+< @ 00101170 | [INFO] - BOOTCORE_BootCfgAfmuxOtpWord3Value ( 0x00000000 ) >
+< @ 00102622 | [INFO] - BOOTCORE_BootCfgHseValue ( 0x00000000 ) >
+< @ 00105669 | [INFO] - BOOTCORE_EnabledSrcMaskVal ( 0x00000640 ) >
+< @ 00107024 | [INFO] - BOOTCORE_BootModeCOLDBOOT >
+< @ 00640342 | [INFO] - BOOTCORE_StartupWaitTime ( 0x00002700 ) >
+< @ 00641902 | [INFO] - BOOTCORE_NoCpuPllOtpBitValue ( 0x00000000 ) >
+< @ 00644135 | [INFO] - BOOTCORE_Pll12StartNotDisabledByOtpBit >
+< @ 00646209 | [INFO] - BOOTCORE_Pll1Started >
+< @ 00650918 | [INFO] - BOOTCORE_Pll1Locked >
+< @ 00652291 | [INFO] - BOOTCORE_Pll2Started >
+< @ 00657322 | [INFO] - BOOTCORE_Pll2Locked >
+< @ 00658915 | [INFO] - BOOTCORE_CkMpuSsSwitchedOnPll1 >
+< @ 00660397 | [INFO] - BOOTCORE_CkAxiSsSwitchedOnPll2 >
+< @ 00660976 | [INFO] - BOOTCORE_Pll12StartReqStatusPllStarted >
+< @ 00675813 | [INFO] - BOOTCORE_HseDigBypassDetected >
+< @ 00681318 | [INFO] - BOOTCORE_HseFrequencyDetected ( 0x00000018 ) >
+< @ 00681725 | [INFO] - USB_Init >
+< @ 00752152 | [INFO] - BOOTCORE_PllUsbLocked >
+< @ 04343590 | [INFO] - UART_PeripheralSerialBootLoopStart >
+< @ 11840851 | [INFO] - USB_Loop >
+< @ 719087933 | [INFO] - USB_DataTransfered ( 0x000391B8 ) >
+< @ 719286307 | [INFO] - USB_CallingAuthAndGo >
+< @ 719286825 | [INFO] - BOOTCORE_AuthHashAreaStartAdd ( 0x2FFC2448 ) >
+< @ 719287117 | [INFO] - BOOTCORE_AuthImageLength ( 0x000390B8 ) >
+< @ 719287417 | [INFO] - BOOTCORE_AuthImageSizeToHash ( 0x00039170 ) >
+< @ 719287727 | [INFO] - BOOTCORE_AuthImageEntryPoint ( 0x2FFFB581 ) >
+< @ 719288310 | [INFO] - BOOTCORE_AuthEccAlgoP256NIST >
+< @ 719288570 | [INFO] - BOOTCORE_AuthNoSigCheckValue ( 0x00000001 ) >
+< @ 719288962 | [INFO] - BOOTCORE_AuthIsAuthenticationMandatory ( 0x00000000 ) >
+< @ 719289249 | [INFO] - BOOTCORE_AuthIsAuthenticationSkipRequestedAndAllowed ( 0x00000001 ) >
+< @ 721185267 | [INFO] - BOOTCORE_AuthDecisionIsJumpToImage >
+< @ 721186276 | [INFO] - BOOTCORE_ReOpenDbgSwEnableAndHdp ( 0x0000041F ) >
+< @ 721187462 | [INFO] - BOOTCORE_ReOpenSecOnlyDebugValue ( 0x0000047F ) >
+< @ 721189124 | [INFO] - BOOTCORE_UnFreezeIWDG12Clocks >
+barak@barak-OptiPlex-7020:~/mrv_dev/developer_package/SDK$

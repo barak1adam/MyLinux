@@ -1,0 +1,10 @@
+#to re-generate the libyang fetch and build, without waiting for a full build:
+cd ybld/poky
+source oe-init-build-env ../build
+bitbake sysrepo -c do_build
+cd tmp/work/core2-64-poky-linux/sysrepo
+vim 1.4.130+gitAUTOINC+b74df81f3d-r0/temp/log.do_fetch.<build-number>
+ 
+#check the sysrepo recipe 
+~/../ybld/poky/
+cat ./meta-sysrepo/recipes-sysrepo/sysrepo/sysrepo_git.bb

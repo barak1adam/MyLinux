@@ -1,0 +1,27 @@
+if SPI slave on M4:
+
+FPGA sends data, then should be transmitted to A7
+
+If A7 wants to transfer data, needs to implement a protocol: interrupt the FPGA to start a transaction
+
+Kenrel can't be slave since a slave has to respond in nano seconds to master requests
+
+power can be saved to A7 by using it only if M4 has something recieved.
+
+
+if SPI master on A7:
+
+A7 power can be saved too, only work on FPGA interrupts when SPI transactions starts
+
+simple
+
+no comm between the cores
+
+Baruch:
+
+transaction overhead is only one time of CS for a new transaction
+length must recieved anyway for the master to stop the transaction
+
+DMA is handled by the driver, length is not needed. check the driver
+
+

@@ -1,0 +1,22 @@
+Chen - this is what done to update the uboot defconfig as a patch:
+==================================================================
+
+28391  [2021-05-24 18:26:41] make uboot-dirclean
+28392  [2021-05-24 18:26:53] make uboot-patch
+28393  [2021-05-24 18:27:06] cd output/build/uboot-v2020.01/
+28394  [2021-05-24 18:27:17] test -d .git || git init . && git add . && git commit -m "U-Boot source code"
+28395  [2021-05-24 18:27:41] git add configs/stm32mp15_trusted_defconfig -f
+28396  [2021-05-24 18:27:49] git commit --amend 
+28397  [2021-05-24 18:27:57] git log
+28398  [2021-05-24 18:28:07] make stm32mp15_trusted_defconfig
+28399  [2021-05-24 18:28:14] make savedefconfig
+28400  [2021-05-24 18:28:23] make menuconfig
+28401  [2021-05-24 18:28:53] gs
+28402  [2021-05-24 18:29:08] make savedefconfig
+28403  [2021-05-24 18:29:14] vimdiff defconfig configs/stm32mp15_trusted_defconfig 
+28404  [2021-05-24 18:29:28] gs
+28405  [2021-05-24 18:29:31] gd
+28406  [2021-05-24 18:29:36] git add .
+28407  [2021-05-24 18:30:02] git commit -m "set bootcmd to ramboot"
+28408  [2021-05-24 18:30:11] git format-patch HEAD~1 --no-renames
+28409  [2021-05-24 18:30:50] cp 0001-set-bootcmd-to-ramboot.patch /tmp/os-v/patches/uboot/0013-set-bootcmd-to-ramboot.patch

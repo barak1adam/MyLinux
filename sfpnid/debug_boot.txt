@@ -1,0 +1,48 @@
+I did the following steps:
+=========================
+installed the developer package and built - tf-a, uboot, kernel.
+
+extracted the GDB scripts into $HOME/gdbscripts
+
+I edited the script Path_env.gdb and fixed it to have correct paths for my developer package
+
+My local developer package is:
+/home/barak/mrv_dev/developer_package
+
+I followed the instructions in gdbscripts/cmd.txt:
+==================================================
+
+cd /home/barak/mrv_dev/developer_package/stm32mp1-openstlinux-5.4-dunfell-mp1-20-11-12/sources/arm-ostl-linux-gnueabi/tf-a-stm32mp-2.2.r2-r0/
+
+source /home/barak/mrv_dev/developer_package/SDK/environment-setup-cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi
+
+stm32wrapper4dbg -s ./build/trusted/tf-a-stm32mp157c-dk2-trusted.stm32 -d ./build/trusted/w_tf-a-stm32mp157c-dk2-trusted.stm32
+
+
+open a host terminal 1:
+========================
+
+cd /home/barak/mrv_dev/developer_package/SDK/
+
+source /home/barak/mrv_dev/developer_package/SDK/environment-setup-cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi
+
+openocd -f ./sysroots/x86_64-ostl_sdk-linux/usr/share/openocd/scripts/board/stm32mp15x_dk2.cfg
+
+ 
+open a host terminal 2:
+========================
+
+source /home/barak/mrv_dev/developer_package/SDK/environment-setup-cortexa7t2hf-neon-vfpv4-ostl-linux-gnueabi
+
+cd $HOME/gdbscripts/gdbscripts-build_trusted
+
+run $GDB -x=./Setup.gdb
+
+
+for u-boot:
+what defconfig
+how to stop before the exception
+
+before or after relloacation?
+
+uset the DDR test suite?

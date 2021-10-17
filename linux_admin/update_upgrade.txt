@@ -1,0 +1,5 @@
+The commands are as follows:
+
+apt-get update : Update is used to resynchronize the package index files from their sources on Ubuntu Linux via the Internet.
+apt-get upgrade : Upgrade is used to install the newest versions of all packages currently installed on the Ubuntu system.
+sudo apt-get install package-name : Install is followed by one or more packages desired for installation. If package is already installed it will try to update to latest version.

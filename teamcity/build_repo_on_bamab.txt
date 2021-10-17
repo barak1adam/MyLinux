@@ -1,0 +1,6 @@
+cd /tmp/ybld
+repo init -u ssh://git@bitbucket.mrv.co.il:7999/yoc/manifest.git  --repo-url=http://gerrit.googlesource.com/git-repo --repo-branch=repo-1
+repo sync
+repo forall -c git checkout agema-yocto-2.5.2
+scp -r .repo mrv@10.32.130.223:~/googlerepo
+scp -r poky mrv@10.32.130.223:~/googlerepo

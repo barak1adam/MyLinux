@@ -1,0 +1,466 @@
++ '[' '!' -e /home/barak/mrv_dev/xg312/build/dist/arm_msys_root ']'
+++ dirname /home/barak/mrv_dev/xg312/build/dist/arm_msys_root
++ BASE=/home/barak/mrv_dev/xg312/build/dist
++ VERSION_FILE=OS-V-DK27-10-20-1640.ver
++ ADD_ACTIVATION=n
++ VERDIR=verdir
++ sudo cp ./flash_functions.sh /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/local/nbase/bin
++ sudo cp ./config /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/local/nbase/bin
++ sudo cp ./get_bundle.py /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/local/nbase/bin
++ ./mkimages.sh /home/barak/mrv_dev/xg312/build/dist/arm_msys_root
++ source ./config
+++ export BINUTILS_VER=2.22
+++ BINUTILS_VER=2.22
+++ export GCC_VER=4.8.5
+++ GCC_VER=4.8.5
+++ export GLIBC_VER=2.19
+++ GLIBC_VER=2.19
+++ export HOST=arm-linux-gnueabi
+++ HOST=arm-linux-gnueabi
+++ PKGFILE=pkg.txt
+++ export BASE_DIR=/home/barak/mrv_dev/xg312/build
+++ BASE_DIR=/home/barak/mrv_dev/xg312/build
+++ export SCRIPTS_DIR=/home/barak/mrv_dev/xg312/build/scripts
+++ SCRIPTS_DIR=/home/barak/mrv_dev/xg312/build/scripts
+++ export INST_DIR=/home/barak/mrv_dev/xg312/build/install
+++ INST_DIR=/home/barak/mrv_dev/xg312/build/install
+++ export ROUTER_VERSIONS_DIR=/home/barak/mrv_dev/xg312/build/versions
+++ ROUTER_VERSIONS_DIR=/home/barak/mrv_dev/xg312/build/versions
+++ export DIST_INSTALL_FILE=/home/barak/mrv_dev/xg312/build/scripts/dist_pkginstall
+++ DIST_INSTALL_FILE=/home/barak/mrv_dev/xg312/build/scripts/dist_pkginstall
+++ export HW_FAMILY=dx
+++ HW_FAMILY=dx
+++ export ARCH=arm
+++ ARCH=arm
+++ export ARCH_POSTFIX=_msys
+++ ARCH_POSTFIX=_msys
+++ export MACHINE_POSTFIX=-msys
+++ MACHINE_POSTFIX=-msys
+++ export KERNEL_CONFIG=mvebu_lsp_defconfig
+++ KERNEL_CONFIG=mvebu_lsp_defconfig
+++ export 'DTB_FILES=msys-bobk-mrv-cetus.dtb msys-bobk-mrv-caelum.dtb msys-bobk-mrv-caelum-cr.dtb msys-bc2-mrv-v20.dtb msys-bc2-mrv-v8.dtb msys-bc2-mrv-XG312.dtb'
+++ DTB_FILES='msys-bobk-mrv-cetus.dtb msys-bobk-mrv-caelum.dtb msys-bobk-mrv-caelum-cr.dtb msys-bc2-mrv-v20.dtb msys-bc2-mrv-v8.dtb msys-bc2-mrv-XG312.dtb'
+++ export UBOOT_PLAT_NAME=bobk
+++ UBOOT_PLAT_NAME=bobk
+++ export UBOOT_PLAT_POSTFIX=bobk
+++ UBOOT_PLAT_POSTFIX=bobk
+++ export FILE_SYSTEM=ubifs_bigk
+++ FILE_SYSTEM=ubifs_bigk
+++ export PAGE_SIZE=4096
+++ PAGE_SIZE=4096
+++ export SUBPAGE_SIZE=4096
+++ SUBPAGE_SIZE=4096
+++ export MAX_LEB_COUNT_KERNEL=70
+++ MAX_LEB_COUNT_KERNEL=70
+++ export MAX_LEB_COUNT_DTB=54
+++ MAX_LEB_COUNT_DTB=54
+++ export MAX_LEB_COUNT_ROOTFS=700
+++ MAX_LEB_COUNT_ROOTFS=700
+++ export LEB_SIZE=253952
+++ LEB_SIZE=253952
+++ export PEB_SIZE=262144
+++ PEB_SIZE=262144
++++ date +%d-%m-%y-%H%M
+++ export VERSION=DK27-10-20-1640
+++ VERSION=DK27-10-20-1640
+++ export DEVICE=OS-V
+++ DEVICE=OS-V
+++ export VCS=git
+++ VCS=git
+++ export 'TC_ARTIFACTS_PARAM=-pOs_MsysFamily -bMsysUnifiedFull'
+++ TC_ARTIFACTS_PARAM='-pOs_MsysFamily -bMsysUnifiedFull'
+++ export FAMILY=NextGen
+++ FAMILY=NextGen
+++ export KERNEL_VER=3.10
+++ KERNEL_VER=3.10
+++ export TARBALLS_DIR=/home/barak/mrv_dev/xg312/build/dist_packages
+++ TARBALLS_DIR=/home/barak/mrv_dev/xg312/build/dist_packages
+++ export TOOLCOMBO=gcc-4.8.5-glibc-2.19-cpu-_msys
+++ TOOLCOMBO=gcc-4.8.5-glibc-2.19-cpu-_msys
+++ export CHROOT=/home/barak/mrv_dev/xg312/build/dist
+++ CHROOT=/home/barak/mrv_dev/xg312/build/dist
+++ export CHROOT_BUILD_DIR=/build-gcc-4.8.5-glibc-2.19-cpu-_msys
+++ CHROOT_BUILD_DIR=/build-gcc-4.8.5-glibc-2.19-cpu-_msys
+++ export BUILD_DIR=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys
+++ BUILD_DIR=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys
+++ export ROUTER_CODE_DIR=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys
+++ ROUTER_CODE_DIR=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys
+++ export CHROOT_DST_DIR=/arm_msys_root
+++ CHROOT_DST_DIR=/arm_msys_root
+++ export DST_DIR=/home/barak/mrv_dev/xg312/build/dist/arm_msys_root
+++ DST_DIR=/home/barak/mrv_dev/xg312/build/dist/arm_msys_root
+++ export CROSS_TOOLPATH=/home/barak/mrv_dev/xg312/distribution/toolchains/armv7-marvell-linux-gnueabi-softfp-4.8.5_i686_20160307
+++ CROSS_TOOLPATH=/home/barak/mrv_dev/xg312/distribution/toolchains/armv7-marvell-linux-gnueabi-softfp-4.8.5_i686_20160307
+++ export CROSS_PATH=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/bin
+++ CROSS_PATH=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/bin
+++ export LIBC_INCLUDE=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/arm-linux-gnueabi/libc/usr/include
+++ LIBC_INCLUDE=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/arm-linux-gnueabi/libc/usr/include
+++ export CROSS_PATH_CHROOT=/build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/bin
+++ CROSS_PATH_CHROOT=/build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/bin
+++ export CROSS_PATH_CHROOT_LIB=/build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/arm-linux-gnueabi/lib
+++ CROSS_PATH_CHROOT_LIB=/build-gcc-4.8.5-glibc-2.19-cpu-_msys/toolchain/arm-linux-gnueabi/lib
+++ export KERNEL_DIR=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys/linux-3.10
+++ KERNEL_DIR=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys/linux-3.10
+++ export KERNEL_INCLUDE=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys/linux-3.10/include
+++ KERNEL_INCLUDE=/home/barak/mrv_dev/xg312/build/dist/build-gcc-4.8.5-glibc-2.19-cpu-_msys/linux-3.10/include
+++ export ADD_IPV6_FILTERING=yes
+++ ADD_IPV6_FILTERING=yes
+++ export ZEBOS_VER=7
+++ ZEBOS_VER=7
+++ export 'TC_ARTIFACTS_PARAM=-pOs_MsysFamily -bMsysUnifiedFull_metaswitch'
+++ TC_ARTIFACTS_PARAM='-pOs_MsysFamily -bMsysUnifiedFull_metaswitch'
+++ export BRANCH=master
+++ BRANCH=master
+++ export EXT_FS_DIR=/home/barak/mrv_dev/xg312/build/dist_packages/ext_fs_bobk
+++ EXT_FS_DIR=/home/barak/mrv_dev/xg312/build/dist_packages/ext_fs_bobk
+++ export iproute2_cc_flag=-DHAVE_SETNS
+++ iproute2_cc_flag=-DHAVE_SETNS
+++ export common_cc_flag=-DUSE_MOV
+++ common_cc_flag=-DUSE_MOV
+++ export uboot_cc_flag=-DUSE_FDT_BOOT
+++ uboot_cc_flag=-DUSE_FDT_BOOT
+++ export MANIFEST_FILE_NAME=msys_unified.ini
+++ MANIFEST_FILE_NAME=msys_unified.ini
+++ export ROUTER_CODE_DIR=/home/barak/mrv_dev/xg312/os-v
+++ ROUTER_CODE_DIR=/home/barak/mrv_dev/xg312/os-v
++ MKUBIFS=/usr/sbin/mkfs.ubifs
++ UBINIZE=/usr/sbin/ubinize
++ ROOT=/home/barak/mrv_dev/xg312/build/dist/arm_msys_root
+++ dirname /home/barak/mrv_dev/xg312/build/dist/arm_msys_root
++ BASE=/home/barak/mrv_dev/xg312/build/dist
++ '[' /home/barak/mrv_dev/xg312/build/dist/arm_msys_root = / ']'
++ '[' '!' -e /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/etc ']'
++ echo -n 'Create /home/barak/mrv_dev/xg312/build/dist/kernel.ubifs, Page Size 4096, Subpage Size 4096, LEB Size 253952'
+Create /home/barak/mrv_dev/xg312/build/dist/kernel.ubifs, Page Size 4096, Subpage Size 4096, LEB Size 253952+ mkdir kernel_ubifs
++ sudo cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/uImage kernel_ubifs/
++ mkdir dtb_ubifs
++ for dtb_file_name in $DTB_FILES
++ sudo cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bobk-mrv-cetus.dtb dtb_ubifs/
++ echo 'sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bobk-mrv-cetus.dtb dtb_production_ubifs/'
+sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bobk-mrv-cetus.dtb dtb_production_ubifs/
++ for dtb_file_name in $DTB_FILES
++ sudo cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bobk-mrv-caelum.dtb dtb_ubifs/
++ echo 'sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bobk-mrv-caelum.dtb dtb_production_ubifs/'
+sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bobk-mrv-caelum.dtb dtb_production_ubifs/
++ for dtb_file_name in $DTB_FILES
++ sudo cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bobk-mrv-caelum-cr.dtb dtb_ubifs/
++ echo 'sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bobk-mrv-caelum-cr.dtb dtb_production_ubifs/'
+sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bobk-mrv-caelum-cr.dtb dtb_production_ubifs/
++ for dtb_file_name in $DTB_FILES
++ sudo cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bc2-mrv-v20.dtb dtb_ubifs/
++ echo 'sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bc2-mrv-v20.dtb dtb_production_ubifs/'
+sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bc2-mrv-v20.dtb dtb_production_ubifs/
++ for dtb_file_name in $DTB_FILES
++ sudo cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bc2-mrv-v8.dtb dtb_ubifs/
++ echo 'sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bc2-mrv-v8.dtb dtb_production_ubifs/'
+sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bc2-mrv-v8.dtb dtb_production_ubifs/
++ for dtb_file_name in $DTB_FILES
++ sudo cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bc2-mrv-XG312.dtb dtb_ubifs/
++ echo 'sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bc2-mrv-XG312.dtb dtb_production_ubifs/'
+sudo cp -a /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/msys-bc2-mrv-XG312.dtb dtb_production_ubifs/
++ echo -n 'Create UBI images'
+Create UBI images+ sudo /usr/sbin/mkfs.ubifs --space-fixup -v -r kernel_ubifs/ -m 4096 -e 253952 -c 70 -o kernel_production.ubifs
+mkfs.ubifs
+	root:         kernel_ubifs/
+	min_io_size:  4096
+	leb_size:     253952
+	max_leb_cnt:  70
+	output:       kernel_production.ubifs
+	jrn_size:     1777664
+	reserved:     0
+	compr:        lzo
+	keyhash:      r5
+	fanout:       8
+	orph_lebs:    1
+	space_fixup:  1
+	super lebs:   1
+	master lebs:  2
+	log_lebs:     4
+	lpt_lebs:     2
+	orph_lebs:    1
+	main_lebs:    17
+	gc lebs:      1
+	index lebs:   1
+	leb_cnt:      27
+	UUID:         77096CBA-4C4F-457F-AA2C-EE06B100CC2F
+Success!
++ sudo /usr/sbin/mkfs.ubifs --space-fixup -v -r dtb_ubifs/ -m 4096 -e 253952 -c 54 -o dtb_production.ubifs
+mkfs.ubifs
+	root:         dtb_ubifs/
+	min_io_size:  4096
+	leb_size:     253952
+	max_leb_cnt:  54
+	output:       dtb_production.ubifs
+	jrn_size:     1269760
+	reserved:     0
+	compr:        lzo
+	keyhash:      r5
+	fanout:       8
+	orph_lebs:    1
+	space_fixup:  1
+	super lebs:   1
+	master lebs:  2
+	log_lebs:     4
+	lpt_lebs:     2
+	orph_lebs:    1
+	main_lebs:    3
+	gc lebs:      1
+	index lebs:   1
+	leb_cnt:      13
+	UUID:         C2247D79-D7D5-42F8-A3E7-E9F6C03A0482
+Success!
++ sudo /usr/sbin/mkfs.ubifs --space-fixup -v -r /home/barak/mrv_dev/xg312/build/dist/arm_msys_root -m 4096 -e 253952 -c 700 -o root_production.ubifs
+mkfs.ubifs
+	root:         /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/
+	min_io_size:  4096
+	leb_size:     253952
+	max_leb_cnt:  700
+	output:       root_production.ubifs
+	jrn_size:     8388608
+	reserved:     0
+	compr:        lzo
+	keyhash:      r5
+	fanout:       8
+	orph_lebs:    1
+	space_fixup:  1
+	super lebs:   1
+	master lebs:  2
+	log_lebs:     4
+	lpt_lebs:     2
+	orph_lebs:    1
+	main_lebs:    300
+	gc lebs:      1
+	index lebs:   5
+	leb_cnt:      310
+	UUID:         C2A68AFC-3259-4A29-9176-EA987DBFE8AF
+Success!
++ sudo /usr/sbin/mkfs.ubifs -v -r kernel_ubifs/ -m 4096 -e 253952 -c 70 -o kernel.ubifs
+mkfs.ubifs
+	root:         kernel_ubifs/
+	min_io_size:  4096
+	leb_size:     253952
+	max_leb_cnt:  70
+	output:       kernel.ubifs
+	jrn_size:     1777664
+	reserved:     0
+	compr:        lzo
+	keyhash:      r5
+	fanout:       8
+	orph_lebs:    1
+	space_fixup:  0
+	super lebs:   1
+	master lebs:  2
+	log_lebs:     4
+	lpt_lebs:     2
+	orph_lebs:    1
+	main_lebs:    17
+	gc lebs:      1
+	index lebs:   1
+	leb_cnt:      27
+	UUID:         28009D80-FB13-44B5-8234-046AF1EB083E
+Success!
++ sudo /usr/sbin/mkfs.ubifs -v -r dtb_ubifs/ -m 4096 -e 253952 -c 54 -o dtb.ubifs
+mkfs.ubifs
+	root:         dtb_ubifs/
+	min_io_size:  4096
+	leb_size:     253952
+	max_leb_cnt:  54
+	output:       dtb.ubifs
+	jrn_size:     1269760
+	reserved:     0
+	compr:        lzo
+	keyhash:      r5
+	fanout:       8
+	orph_lebs:    1
+	space_fixup:  0
+	super lebs:   1
+	master lebs:  2
+	log_lebs:     4
+	lpt_lebs:     2
+	orph_lebs:    1
+	main_lebs:    3
+	gc lebs:      1
+	index lebs:   1
+	leb_cnt:      13
+	UUID:         9F0B8C6D-EFD8-4B9B-AD46-4E1D162AD2ED
+Success!
++ sudo /usr/sbin/mkfs.ubifs -v -r /home/barak/mrv_dev/xg312/build/dist/arm_msys_root -m 4096 -e 253952 -c 700 -o root.ubifs
+mkfs.ubifs
+	root:         /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/
+	min_io_size:  4096
+	leb_size:     253952
+	max_leb_cnt:  700
+	output:       root.ubifs
+	jrn_size:     8388608
+	reserved:     0
+	compr:        lzo
+	keyhash:      r5
+	fanout:       8
+	orph_lebs:    1
+	space_fixup:  0
+	super lebs:   1
+	master lebs:  2
+	log_lebs:     4
+	lpt_lebs:     2
+	orph_lebs:    1
+	main_lebs:    300
+	gc lebs:      1
+	index lebs:   5
+	leb_cnt:      310
+	UUID:         4C4B8B85-2FAE-46CE-AAB7-5626C1A4886E
+Success!
++ echo -n 'Ubinize production images'
+Ubinize production images+ sudo ubinize -v -m 4096 -s 4096 -p 262144 ubinize_mos_production.cfg -o /home/barak/mrv_dev/xg312/build/dist/mos_production.ubinized
+ubinize: LEB size:                  253952
+ubinize: PEB size:                  262144
+ubinize: min. I/O size:             4096
+ubinize: sub-page size:             4096
+ubinize: VID offset:                4096
+ubinize: data offset:               8192
+ubinize: UBI image sequence number: 888930526
+ubinize: loaded the ini-file "ubinize_mos_production.cfg"
+ubinize: count of sections: 4
+
+ubinize: parsing section "dtb_volume"
+ubinize: mode=ubi, keep parsing
+ubinize: volume type: static
+ubinize: volume ID: 1
+ubinize: volume size: 8388608 bytes
+ubinize: volume name: dtb
+ubinize: volume alignment: 1
+ubinize: adding volume 1
+ubinize: writing volume 1
+ubinize: image file: dtb_production.ubifs
+
+
+ubinize: parsing section "config_volume"
+ubinize: mode=ubi, keep parsing
+ubinize: volume type: dynamic
+ubinize: volume ID: 3
+ubinize: volume size: 16777216 bytes
+ubinize: volume name: config
+ubinize: volume alignment: 1
+ubinize: autoresize flags found
+ubinize: adding volume 3
+
+
+ubinize: parsing section "kernel_volume"
+ubinize: mode=ubi, keep parsing
+ubinize: volume type: static
+ubinize: volume ID: 0
+ubinize: volume size: 16777216 bytes
+ubinize: volume name: kernel
+ubinize: volume alignment: 1
+ubinize: adding volume 0
+ubinize: writing volume 0
+ubinize: image file: kernel_production.ubifs
+
+
+ubinize: parsing section "root_volume"
+ubinize: mode=ubi, keep parsing
+ubinize: volume type: dynamic
+ubinize: volume ID: 2
+ubinize: volume size: 178257920 bytes
+ubinize: volume name: root
+ubinize: volume alignment: 1
+ubinize: adding volume 2
+ubinize: writing volume 2
+ubinize: image file: root_production.ubifs
+
+ubinize: writing layout volume
+ubinize: done
++ rm -rf kernel_ubifs
++ rm -rf dtb_ubifs
++ mv -f kernel_production.ubifs /home/barak/mrv_dev/xg312/build/dist
++ mv -f dtb_production.ubifs /home/barak/mrv_dev/xg312/build/dist
++ mv -f root_production.ubifs /home/barak/mrv_dev/xg312/build/dist
++ mv -f kernel.ubifs /home/barak/mrv_dev/xg312/build/dist
++ mv -f dtb.ubifs /home/barak/mrv_dev/xg312/build/dist
++ mv -f root.ubifs /home/barak/mrv_dev/xg312/build/dist
++ echo ' Done.'
+ Done.
++ exit 0
++ mkdir verdir
++ cd verdir
++ '[' n == y ']'
++ cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/local/nbase/bin/mupgrade_p.sh .
++ cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/local/nbase/bin/merge_p.sh .
++ cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/local/nbase/bin/flash_functions.sh .
++ cp /home/barak/mrv_dev/xg312/build/dist/kernel.ubifs /home/barak/mrv_dev/xg312/build/dist/root.ubifs /home/barak/mrv_dev/xg312/build/dist/dtb.ubifs .
++ cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/local/etc/product.conf .
++ cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/sbin/fw_setenv .
++ cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/sbin/fw_printenv .
++ cp ../last-opts .
++ tar czf ../OS-V-DK27-10-20-1640.ver dtb.ubifs flash_functions.sh fw_printenv fw_setenv kernel.ubifs last-opts merge_p.sh mupgrade_p.sh product.conf root.ubifs
++ rm -rf verdir
++ mkdir -p /home/barak/mrv_dev/xg312/build/versions
++ cp /home/barak/mrv_dev/xg312/build/dist/kernel_production.ubifs /home/barak/mrv_dev/xg312/build/dist/root_production.ubifs /home/barak/mrv_dev/xg312/build/dist/dtb_production.ubifs /home/barak/mrv_dev/xg312/build/dist/mos_production.ubinized /home/barak/mrv_dev/xg312/build/versions
++ mkdir verdir
++ cd verdir
++ cp /home/barak/mrv_dev/xg312/build/scripts/flash_functions.sh .
++ cp /home/barak/mrv_dev/xg312/build/scripts/mupgrade_p.sh .
++ cp /home/barak/mrv_dev/xg312/build/versions/u-boot-bobk.bin .
++ cp /home/barak/mrv_dev/xg312/build/versions/mos_production.ubinized .
++ cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/bin/mkfs.ubifs .
++ cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/sbin/fw_setenv .
++ cp /home/barak/mrv_dev/xg312/build/dist/arm_msys_root/usr/sbin/fw_printenv .
++ rm -rf verdir
++ exit 0
+find result file OS-V-DK27-10-20-1640.ver in /home/barak/mrv_dev/xg312/build/versions
+*** use this line to upgrade from your device ***
+up scp  /home/barak/mrv_dev/xg312/build/versions OS-V-DK27-10-20-1640.ver barak < password here > 
+NFS DIR is not set, /home/barak/mrv_dev/xg312/build/dist/arm_msys_root can be used 
+main
+
+real	0m27.649s
+user	0m24.219s
+sys	0m2.596s
+Tue Oct 27 16:40:46 IST 2020
+barak@barak-OptiPlex-7020:~/mrv_dev/xg312/build/scripts$ sudo cp ../versions/OS-V-DK27-10-20-1640.ver /srv/ftp/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OS-V8M# upgrad ftp 10.32.8.145 . OS-V-DK27-10-20-1640.ver
+
+Please wait for file transfer to finish...
+
+Software upgrade started
+Transferring data: 64340kB 34%
+System software integration started
+writing to flash ....(sec_part=0,mtd layout=0)
+UBI device number 8, total 1999 LEBs (507650048 bytes, 484.1 MiB), available 0 LEBs (0 bytes), LEB size 253952 bytes (248.0 KiB)
+Update volume 2 with root.ubifs Image...
+Update volume 0 with kernel.ubifs Image...
+Update volume 1 with dtb.ubifs Image...
+Erasing volume 3
+Starting to Copy & Merge configuration files to new partition...
+System configuration merge started
+System configuration merge finished successfully
+System software integration finished successfully
+mount_backup_rootfs
+using new layout
+running from pri_part
+attaching /dev/mtd2
+Setting boot partition to ramboot2 
+Would you like to reboot the system now? (y|n) 
+
+
+
+
+

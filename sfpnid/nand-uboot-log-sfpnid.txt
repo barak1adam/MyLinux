@@ -1,0 +1,400 @@
+Now running in RAM - U-Boot at: c7f14000
+initcall: c011805d (relocated to c7f2c05d)
+WDT:   Not found by seq!
+clk_set_defaults(watchdog@5a002000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12d40
+IWDG init
+OF: ** translation for device watchdog@5a002000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 0020005a
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1509957632
+OF: one level translation: 0020005a
+OF: reached root node
+clk_get_by_name(dev=c5f12d40, name=pclk, clk=c5df1ee8)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5df1ee8)
+clk_request(dev=c5f126d8, clk=c5df1ee8)
+clk_enable(clk=c5df1ee8)
+stm32mp1_clk_enable: id clock 58 has been enabled
+clk_get_by_name(dev=c5f12d40, name=lsi, clk=c5df1ee8)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5df1ee8)
+clk_request(dev=c5f142b0, clk=c5df1ee8)
+clk_get_rate(clk=c5df1ee8)
+mbox_send(chan=c5f144c8, data=2ffff000)
+mbox_recv(chan=c5f144c8, data=2ffff000, timeout_us=10000)
+IWDG init done
+ofnode_read_u32: timeout-sec: 0x20 (32)
+WDT:   Started with servicing (32s timeout)
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c01182a3 (relocated to c7f2c2a3)
+initcall: c0117b11 (relocated to c7f2bb11)
+initcall: c011819d (relocated to c7f2c19d)
+NAND:  clk_set_defaults(fmc_mx-0)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13cd0
+fdtdec_get_int_array_count: pinmux
+stm32_pinctrl_config: no of pinmux entries= 21
+stm32_pinctrl_config: pinmux = 300d
+prep_gpio_dsc: GPIO:port= 3, pin= 0
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+clk_set_defaults(gpio@50005000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13940
+OF: ** translation for device gpio@50005000 **
+OF: bus is default (na=1, ns=1) on pin-controller@50002000
+OF: translating address: 00300000
+OF: parent bus is default (na=1, ns=1) on soc
+OF: walking ranges...
+OF: default map, cp=0, s=a400, da=3000
+OF: parent translation for: 00200050
+OF: with offset: 12288
+OF: one level translation: 00500050
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1342197760
+OF: one level translation: 00500050
+OF: reached root node
+ofnode_read_string: st,bank-name: GPIOD
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5df1c90)
+clk_request(dev=c5f126d8, clk=c5df1c90)
+clk_enable(clk=c5df1c90)
+stm32mp1_clk_enable: id clock 87 has been enabled
+clock enabled for device gpio@50005000
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 310d
+prep_gpio_dsc: GPIO:port= 3, pin= 1
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 340d
+prep_gpio_dsc: GPIO:port= 3, pin= 4
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 350d
+prep_gpio_dsc: GPIO:port= 3, pin= 5
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 380d
+prep_gpio_dsc: GPIO:port= 3, pin= 8
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 390d
+prep_gpio_dsc: GPIO:port= 3, pin= 9
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 3a0d
+prep_gpio_dsc: GPIO:port= 3, pin= 10
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 3b0d
+prep_gpio_dsc: GPIO:port= 3, pin= 11
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 3c0d
+prep_gpio_dsc: GPIO:port= 3, pin= 12
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 3e0d
+prep_gpio_dsc: GPIO:port= 3, pin= 14
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 3f0d
+prep_gpio_dsc: GPIO:port= 3, pin= 15
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 470d
+prep_gpio_dsc: GPIO:port= 4, pin= 7
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+clk_set_defaults(gpio@50006000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f13998
+OF: ** translation for device gpio@50006000 **
+OF: bus is default (na=1, ns=1) on pin-controller@50002000
+OF: translating address: 00400000
+OF: parent bus is default (na=1, ns=1) on soc
+OF: walking ranges...
+OF: default map, cp=0, s=a400, da=4000
+OF: parent translation for: 00200050
+OF: with offset: 16384
+OF: one level translation: 00600050
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1342201856
+OF: one level translation: 00600050
+OF: reached root node
+ofnode_read_string: st,bank-name: GPIOE
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5df1c90)
+clk_request(dev=c5f126d8, clk=c5df1c90)
+clk_enable(clk=c5df1c90)
+stm32mp1_clk_enable: id clock 88 has been enabled
+clock enabled for device gpio@50006000
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 480d
+prep_gpio_dsc: GPIO:port= 4, pin= 8
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 490d
+prep_gpio_dsc: GPIO:port= 4, pin= 9
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 4a0d
+prep_gpio_dsc: GPIO:port= 4, pin= 10
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 4b0d
+prep_gpio_dsc: GPIO:port= 4, pin= 11
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 4c0d
+prep_gpio_dsc: GPIO:port= 4, pin= 12
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 4d0d
+prep_gpio_dsc: GPIO:port= 4, pin= 13
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 4e0d
+prep_gpio_dsc: GPIO:port= 4, pin= 14
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 4f0d
+prep_gpio_dsc: GPIO:port= 4, pin= 15
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+stm32_pinctrl_config: pinmux = 690d
+prep_gpio_dsc: GPIO:port= 6, pin= 9
+fdtdec_get_int: slew-rate: 0x1 (1)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 1, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+fdtdec_get_int_array_count: pinmux
+stm32_pinctrl_config: no of pinmux entries= 1
+stm32_pinctrl_config: pinmux = 360d
+prep_gpio_dsc: GPIO:port= 3, pin= 6
+fdtdec_get_int: slew-rate: (not found)
+fdtdec_get_bool: drive-open-drain
+fdtdec_get_bool: bias-pull-up
+fdtdec_get_bool: bias-pull-down
+prep_gpio_ctl: gpio fn= 13, slew-rate= 0, op type= 0, pull-upd is = 0
+stm32_pinctrl_config: rv = 0
+
+clk_set_defaults(memory-controller@58002000)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12bc8
+OF: ** translation for device memory-controller@58002000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 00200058
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1476403200
+OF: one level translation: 00200058
+OF: reached root node
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5f15b38)
+clk_request(dev=c5f126d8, clk=c5f15b38)
+clk_enable(clk=c5f15b38)
+stm32mp1_clk_enable: id clock 121 has been enabled
+fdtdec_get_int: #reset-cells: 0x1 (1)
+reset_of_xlate_default(reset_ctl=c5df1ec8)
+reset_assert(reset_ctl=c5df1ec8)
+stm32_reset_assert: reset id = 3276 bank = 408 offset = 12)
+reset_deassert(reset_ctl=c5df1ec8)
+stm32_reset_deassert: reset id = 3276 bank = 408 offset = 12)
+ofnode_read_u32: reg: 0x4 (4)
+clk_set_defaults(nand-controller@4,0)
+clk_set_default_parents: could not read assigned-clock-parents for c5f12c40
+ofnode_read_u32_array: reg: fdtdec_get_int_array: reg
+get_prop_check_min_len: reg
+OF: ** translation for device memory-controller@58002000 **
+OF: bus is default (na=1, ns=1) on soc
+OF: translating address: 00200058
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 1476403200
+OF: one level translation: 00200058
+OF: reached root node
+OF: ** translation for device nand-controller@4,0 **
+OF: bus is default (na=2, ns=1) on memory-controller@58002000
+OF: translating address: 04000000 00000000
+OF: parent bus is default (na=1, ns=1) on soc
+OF: walking ranges...
+OF: default map, cp=0, s=4000000, da=400000000
+OF: default map, cp=100000000, s=4000000, da=400000000
+OF: default map, cp=200000000, s=4000000, da=400000000
+OF: default map, cp=300000000, s=4000000, da=400000000
+OF: default map, cp=400000000, s=10000000, da=400000000
+OF: parent translation for: 00000080
+OF: with offset: 0
+OF: one level translation: 00000080
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 2147483648
+OF: one level translation: 00000080
+OF: reached root node
+OF: ** translation for device nand-controller@4,0 **
+OF: bus is default (na=2, ns=1) on memory-controller@58002000
+OF: translating address: 04000000 00000108
+OF: parent bus is default (na=1, ns=1) on soc
+OF: walking ranges...
+OF: default map, cp=0, s=4000000, da=408010000
+OF: default map, cp=100000000, s=4000000, da=408010000
+OF: default map, cp=200000000, s=4000000, da=408010000
+OF: default map, cp=300000000, s=4000000, da=408010000
+OF: default map, cp=400000000, s=10000000, da=408010000
+OF: parent translation for: 00000080
+OF: with offset: 134283264
+OF: one level translation: 00000188
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 2281766912
+OF: one level translation: 00000188
+OF: reached root node
+OF: ** translation for device nand-controller@4,0 **
+OF: bus is default (na=2, ns=1) on memory-controller@58002000
+OF: translating address: 04000000 00000208
+OF: parent bus is default (na=1, ns=1) on soc
+OF: walking ranges...
+OF: default map, cp=0, s=4000000, da=408020000
+OF: default map, cp=100000000, s=4000000, da=408020000
+OF: default map, cp=200000000, s=4000000, da=408020000
+OF: default map, cp=300000000, s=4000000, da=408020000
+OF: default map, cp=400000000, s=10000000, da=408020000
+OF: parent translation for: 00000080
+OF: with offset: 134348800
+OF: one level translation: 00000288
+OF: parent bus is default (na=1, ns=1) on 
+OF: no ranges, 1:1 translation
+OF: parent translation for: 00000000
+OF: with offset: 2281832448
+OF: one level translation: 00000288
+OF: reached root node
+fdtdec_get_int: #clock-cells: 0x1 (1)
+clk_of_xlate_default(clk=c5f15a10)
+clk_request(dev=c5f126d8, clk=c5f15a10)
+clk_enable(clk=c5f15a10)
+stm32mp1_clk_enable: id clock 121 has been enabled
+fdtdec_get_int: nand-bus-width: (not found)
+fdtdec_get_bool: nand-on-flash-bbt
+fdtdec_get_int: nand-ecc-strength: (not found)
+fdtdec_get_int: nand-ecc-step-size: (not found)
+clk_get_rate(clk=c5f15a10)
+stm32mp1_clk_get_parent: ACLK clock is the parent FMC of clk id 121
+clk_get_rate(clk=c5f143d0)
+mbox_send(chan=c5f144c8, data=2ffff000)
+mbox_recv(chan=c5f144c8, data=2ffff000, timeout_us=10000)
+stm32mp1_clk_get(22) clock = fe277a0 : 266500 kHz
+stm32mp1_clk_get_rate: computed rate for id clock 121 is 266500000 (parent is ACLK)
+
