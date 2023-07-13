@@ -1,0 +1,8 @@
+Fiber Optic modes:
+==================
+
+SX = multi mode.
+	Orange / Purple cable
+	
+LR = single mode
+	Yellow cable

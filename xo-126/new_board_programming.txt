@@ -1,0 +1,102 @@
+
+on target: change to JTAG
+==========================
+connect
+
+targets -set -filter {name =~ "Cortex-A53 #0"}
+
+rst -processor
+
+mwr 0xff5e0200 0x0100
+
+rst -system
+
+
+on host: cp u-boot for JTAG
+============================
+
+cp xo126_boot_files/u-boot-for-JTAG.elf ./u-boot.elf
+
+petalinux-boot --jtag --u-boot
+
+stop on u-boot
+
+
+#make connectivity to get BOOT.bin:
+===================================
+setenv ethaddr 18:bc:57:00:15:4e
+setenv ipaddr 10.32.8.200
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+write u-boot and env to NOR:
+=============================
+tftpboot 0x08000000 /tftpboot/BOOT_2404.bin
+
+sf probe 1 0 0; sf erase 0 0x400000; sf write 0x08000000 0 0x190000
+
+tftpboot 0x04000000 /tftpboot/uboot-env-xo126-mac.bin
+
+sf probe; sf write 0x04000000 0x200000 0x10000
+
+write SW to eMMC
+================
+mmc dev 0
+mmc erase 0 0x800000
+
+tftpboot 0x100 /tftpboot/f4-xo126-22.1.1-20230523.133659-21-disk-image.gz
+
+gzwrite mmc 0 0x100 21cdcd10
+
+reset
+stop on u-boot
+
+set eeprom INV:
+================
+
+#tftpboot 0x100 /tftpboot/i2c.bit
+#fpga load 0 0x100 22a8dc0
+
+#i2c dev 0
+#i2c probe
+
+
+inv bl set alev restricted 
+inv bl set lpwd ""  
+inv bl set active 1     
+inv bl save
+
+bootaos
+
+set eeprom INV:
+===============
+
+let the AOS to boot
+# serial number - decrement it
+
+#phyinv --accessLvl=1 -F
+#phyinv --lvlPasswd="" -F
+#phyinv --active=1 -F
+
+phyinv --partNum="1078904473-01" -F
+phyinv --serNum="LBADVA71224699993" -F
+phyinv --mfgId="0x72" -F
+phyinv --mfgSite="RO" -F
+phyinv --mfgDate="20220223" -F
+phyinv --unitName="FSP 150-XO126" -F
+phyinv --unitSName="XO126" -F
+phyinv --hwRev="1.01" -F
+phyinv --uniqueHwId="183" -F
+phyinv --hsCompatId="0"
+phyinv --baseMacAddr="18:bc:57:00:15:5f" -F
+phyinv --numMacAddr=32 -F
+phyinv --oemBrandId=0 -F
+phyinv --PSN="ITS464_00_220223_134841" -F
+
+aosCoreSrdmDbMaintLauncher
+execute database restore-factory-database 
+wait to reboot
+
+
+
+

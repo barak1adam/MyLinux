@@ -1,0 +1,34 @@
+U-Boot R2.0 (Sep 03 2021 - 06:10:44)
+
+DRAM:  1 GiB
+EL Level:       EL2
+Chip ID:        zu15cg
+Reset : power
+MMC:   mmc@ff160000: 0
+Loading Environment from SPI Flash... SF: Detected w25q32dw with page size 256 Bytes, erase size 64 KiB, total 4 MiB
+OK
+In:    serial@ff000000
+Out:   serial@ff000000
+Err:   serial@ff000000
+Model: ZynqMP XG108
+Board: XG108(SH)
+PartNumber: 1078901081-01
+Net:   ZYNQ GEM: ff0e0000, phyaddr 18, interface rgmii
+eth0: ethernet@ff0e0000
+Autoboot in 3 seconds
+1 bytes read in 7 ms (0 Bytes/s)
+11220461 bytes read in 999 ms (10.7 MiB/s)
+31929 bytes read in 27 ms (1.1 MiB/s)
+## Booting kernel from Legacy Image at 08000000 ...
+   Image Name:   Linux
+   Image Type:   AArch64 Linux Kernel Image (gzip compressed)
+   Data Size:    11220397 Bytes = 10.7 MiB
+   Load Address: 00080000
+   Entry Point:  00080000
+## Flattened Device Tree blob at 09000000
+   Booting using the fdt blob at 0x9000000
+   Uncompressing Kernel Image ... OK
+   Using Device Tree in place at 0000000009000000, end 000000000900acb8
+
+Starting kernel ...
+

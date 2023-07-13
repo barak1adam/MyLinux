@@ -1,0 +1,33 @@
+Unable to store u-boot ENV in SPI NOR FLASH:
+============================================
+
+Issue description:
+I am trying to enable the u-boot enviornment variables saving, once it is enabled then u-boot is hanged upon booting.
+
+In the u-boot config menu, once I am enabling the "Environment in SPI Flash" and excluding the option of "Environment is not stored", then it hangs.
+
+
+I followed the wiki to debug the u-boot:
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842557/Debug+U-boot#DebugU-boot-RelatedLinks
+
+Here is the analysis:
+=====================
+ 
+env_init is called under the scope of list of functions during pre-reloacation. 
+the list is init_sequence_f in board_f.c
+if one of the functions in this list is failed and returns with error, hang() is called and u-boot is halted.
+
+env_init fails because a driver is not found:
+
+env_init()
+	calls env_driver_lookup() ------> driver not found, error ENODEV is returned
+		calls env_get_location() --------> implemented in zynqmp.c and find location of ENV as ENVL_SPI_FLASH, as expected.
+			call _env_driver_lookup( location = ENVL_SPI_FLASH) ------ > fails to find a driver and returns NULL
+			
+			
+so the question is why the driver for SPI FLASH is not found?
+
+All my debug is done while the boot mode is hard set to JTAG.
+I would like to debug the SPI_FLASH boot mode, how can I do that?
+
+attachements: defconfig

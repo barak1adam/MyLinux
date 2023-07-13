@@ -1,0 +1,656 @@
+cd /opt/valgrind/bin
+./valgrind --leak-check=yes vtysh
+# ./valgrind --leak-check=yes vtysh
+
+cd /opt/valgrind/bin
+./valgrind --tool=drd --show-stack-usage=yes vtysh
+--tool=exp-sgcheck
+
+
+==1103== Memcheck, a memory error detector
+==1103== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==1103== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==1103== Command: vtysh
+==1103== 
+==1103== Syscall param socketcall.sendto(msg) points to uninitialised byte(s)
+==1103==    at 0x4DB9744: sendto (in /lib/libpthread-0.9.so)
+==1103==    by 0x4DE4C73: UiD_SocketSendto (uid_sock.c:369)
+==1103==    by 0x4DCBCCF: uidSendRequest (uid_capi.c:241)
+==1103==    by 0x4DCCAEF: UiD_Request_func (uid_capi.c:479)
+==1103==    by 0x503BF: vtysh_sys_get_system_configuration (vtysh_sys.c:477)
+==1103==    by 0x2E6EF: vtysh_main (vtysh_main.c:289)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103==  Address 0xbda2aaf4 is on thread 1's stack
+==1103==  in frame #3, created by UiD_Request_func (uid_capi.c:423)
+==1103== 
+==1103== Syscall param socketcall.sendto(msg) points to uninitialised byte(s)
+==1103==    at 0x4DB9744: sendto (in /lib/libpthread-0.9.so)
+==1103==    by 0x4DE4C73: UiD_SocketSendto (uid_sock.c:369)
+==1103==    by 0x4DCDBCF: UiD_SubscribeEventsWithConnection (uid_capi.c:744)
+==1103==    by 0x4DDA95F: UiD_SubscribeEventsWithCallback (uid_capi_ex.c:334)
+==1103==    by 0x674BF: cli_aaa_register_acct_events (vtysh_aaa.c:898)
+==1103==    by 0x68C6F: vtysh_aaa_init (vtysh_aaa.c:1430)
+==1103==    by 0x2E7B7: vtysh_main (vtysh_main.c:311)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103==  Address 0xbda2aaac is on thread 1's stack
+==1103==  in frame #2, created by UiD_SubscribeEventsWithConnection (uid_capi.c:703)
+==1103== 
+==1103== Syscall param socketcall.sendto(msg) points to uninitialised byte(s)
+==1103==    at 0x4DB976C: sendto (in /lib/libpthread-0.9.so)
+==1103==    by 0x4DE4C73: UiD_SocketSendto (uid_sock.c:369)
+==1103==    by 0x4DCBCCF: uidSendRequest (uid_capi.c:241)
+==1103==    by 0x4DCCAEF: UiD_Request_func (uid_capi.c:479)
+==1103==    by 0x50597: vtysh_sys_get_aaa_conf (vtysh_sys.c:522)
+==1103==    by 0x65257: cli_aaa_register_author_events (vtysh_aaa.c:124)
+==1103==    by 0x68C73: vtysh_aaa_init (vtysh_aaa.c:1438)
+==1103==    by 0x2E7B7: vtysh_main (vtysh_main.c:311)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103==  Address 0xbda2aaa4 is on thread 1's stack
+==1103==  in frame #3, created by UiD_Request_func (uid_capi.c:423)
+==1103== 
+==1103== Syscall param socketcall.sendto(msg) points to uninitialised byte(s)
+==1103==    at 0x4DB976C: sendto (in /lib/libpthread-0.9.so)
+==1103==    by 0x4DE4C73: UiD_SocketSendto (uid_sock.c:369)
+==1103==    by 0x4DCDBCF: UiD_SubscribeEventsWithConnection (uid_capi.c:744)
+==1103==    by 0x4DDA95F: UiD_SubscribeEventsWithCallback (uid_capi_ex.c:334)
+==1103==    by 0x655DF: cli_aaa_register_author_events (vtysh_aaa.c:143)
+==1103==    by 0x68C73: vtysh_aaa_init (vtysh_aaa.c:1438)
+==1103==    by 0x2E7B7: vtysh_main (vtysh_main.c:311)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103==  Address 0xbda2aab4 is on thread 1's stack
+==1103==  in frame #2, created by UiD_SubscribeEventsWithConnection (uid_capi.c:703)
+==1103== 
+Please wait for about ten seconds.
+==1103== Syscall param write(buf) points to uninitialised byte(s)
+==1103==    at 0x4DB8F24: write (in /lib/libpthread-0.9.so)
+==1103==    by 0x4963283: writen (network.c:56)
+==1103==    by 0x1D92B: vtysh_write_to_client (vtysh_connect.c:305)
+==1103==    by 0x2B273: vtysh_client_ask_and_parse_language (vtysh_lang.c:1383)
+==1103==    by 0x2BCCF: vtysh_ask_languages (vtysh_lang.c:1653)
+==1103==    by 0x2BF27: vtysh_runtime_init_cmd (vtysh_lang.c:1719)
+==1103==    by 0x2E7F3: vtysh_main (vtysh_main.c:322)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103==  Address 0x52ed97d is 29 bytes inside a block of size 32 alloc'd
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x49F4783: vtysh_create_line_buffer (vty.c:1409)
+==1103==    by 0x1D8E7: vtysh_write_to_client (vtysh_connect.c:298)
+==1103==    by 0x2B273: vtysh_client_ask_and_parse_language (vtysh_lang.c:1383)
+==1103==    by 0x2BCCF: vtysh_ask_languages (vtysh_lang.c:1653)
+==1103==    by 0x2BF27: vtysh_runtime_init_cmd (vtysh_lang.c:1719)
+==1103==    by 0x2E7F3: vtysh_main (vtysh_main.c:322)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+ATTENTION: LOGOUT timeout is set to 5 min.
+Next CLI timeout alarm after 300 secs.
+The system is ready
+==1103== Warning: ignored attempt to set SIGSTOP handler in sigaction();
+==1103==          the SIGSTOP signal is uncatchable
+OS-V8>
+
+LOGOUT after TIMEOUT
+==1103== Syscall param write(buf) points to uninitialised byte(s)
+==1103==    at 0x4DB8F24: write (in /lib/libpthread-0.9.so)
+==1103==    by 0x4963283: writen (network.c:56)
+==1103==    by 0x1D92B: vtysh_write_to_client (vtysh_connect.c:305)
+==1103==    by 0x1DEEB: vtysh_client_execute (vtysh_connect.c:437)
+==1103==    by 0x1E2AB: vtysh_transmit_command (vtysh_connect.c:517)
+==1103==    by 0xEA3B: vtysh_timeout_logout (vtysh_cli.c:1787)
+==1103==    by 0xEDF3: sigalarm (vtysh_cli.c:1907)
+==1103==    by 0x4F5CC0F: ??? (in /lib/libc.so)
+==1103==  Address 0x6dc4761 is 25 bytes inside a block of size 28 alloc'd
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x49F4783: vtysh_create_line_buffer (vty.c:1409)
+==1103==    by 0x1D8E7: vtysh_write_to_client (vtysh_connect.c:298)
+==1103==    by 0x1DEEB: vtysh_client_execute (vtysh_connect.c:437)
+==1103==    by 0x1E2AB: vtysh_transmit_command (vtysh_connect.c:517)
+==1103==    by 0xEA3B: vtysh_timeout_logout (vtysh_cli.c:1787)
+==1103==    by 0xEDF3: sigalarm (vtysh_cli.c:1907)
+==1103==    by 0x4F5CC0F: ??? (in /lib/libc.so)
+==1103== 
+==1103== Syscall param socketcall.sendto(msg) points to uninitialised byte(s)
+==1103==    at 0x4DB976C: sendto (in /lib/libpthread-0.9.so)
+==1103==    by 0x4DE4C73: UiD_SocketSendto (uid_sock.c:369)
+==1103==    by 0x4DCDF8F: UiD_UnSubscribeEvents_func (uid_capi.c:802)
+==1103==    by 0x118B7: osm_shutdown (vtysh_cli.c:2899)
+==1103==    by 0xE997: vtysh_timeout_exit (vtysh_cli.c:1771)
+==1103==    by 0xEA43: vtysh_timeout_logout (vtysh_cli.c:1788)
+==1103==    by 0xEDF3: sigalarm (vtysh_cli.c:1907)
+==1103==    by 0x4F5CC0F: ??? (in /lib/libc.so)
+==1103==  Address 0xbda2a248 is on thread 1's stack
+==1103==  in frame #2, created by UiD_UnSubscribeEvents_func (uid_capi.c:759)
+==1103== 
+==1103== Syscall param socketcall.sendto(msg) points to uninitialised byte(s)
+==1103==    at 0x4DB976C: sendto (in /lib/libpthread-0.9.so)
+==1103==    by 0x4DE4C73: UiD_SocketSendto (uid_sock.c:369)
+==1103==    by 0x4DCDF8F: UiD_UnSubscribeEvents_func (uid_capi.c:802)
+==1103==    by 0x67583: cli_aaa_unsubscribe_acct_events (vtysh_aaa.c:918)
+==1103==    by 0x118CF: osm_shutdown (vtysh_cli.c:2919)
+==1103==    by 0xE997: vtysh_timeout_exit (vtysh_cli.c:1771)
+==1103==    by 0xEA43: vtysh_timeout_logout (vtysh_cli.c:1788)
+==1103==    by 0xEDF3: sigalarm (vtysh_cli.c:1907)
+==1103==    by 0x4F5CC0F: ??? (in /lib/libc.so)
+==1103==  Address 0xbda2a238 is on thread 1's stack
+==1103==  in frame #2, created by UiD_UnSubscribeEvents_func (uid_capi.c:759)
+==1103== 
+==1103== Syscall param socketcall.sendto(msg) points to uninitialised byte(s)
+==1103==    at 0x4DB976C: sendto (in /lib/libpthread-0.9.so)
+==1103==    by 0x4DE4C73: UiD_SocketSendto (uid_sock.c:369)
+==1103==    by 0x4DCDF8F: UiD_UnSubscribeEvents_func (uid_capi.c:802)
+==1103==    by 0x656A3: cli_aaa_unsubscribe_author_events (vtysh_aaa.c:165)
+==1103==    by 0x118D3: osm_shutdown (vtysh_cli.c:2923)
+==1103==    by 0xE997: vtysh_timeout_exit (vtysh_cli.c:1771)
+==1103==    by 0xEA43: vtysh_timeout_logout (vtysh_cli.c:1788)
+==1103==    by 0xEDF3: sigalarm (vtysh_cli.c:1907)
+==1103==    by 0x4F5CC0F: ??? (in /lib/libc.so)
+==1103==  Address 0xbda2a238 is on thread 1's stack
+==1103==  in frame #2, created by UiD_UnSubscribeEvents_func (uid_capi.c:759)
+==1103== 
+==1103== 
+==1103== HEAP SUMMARY:
+==1103==     in use at exit: 2,623,214 bytes in 131,211 blocks
+==1103==   total heap usage: 178,118 allocs, 46,907 frees, 4,881,738 bytes allocated
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,468 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x11AD7: vtysh_init_vty (vtysh_cli.c:2977)
+==1103==    by 0x2E6EB: vtysh_main (vtysh_main.c:287)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,469 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x11AEB: vtysh_init_vty (vtysh_cli.c:2978)
+==1103==    by 0x2E6EB: vtysh_main (vtysh_main.c:287)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,470 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x11AFF: vtysh_init_vty (vtysh_cli.c:2979)
+==1103==    by 0x2E6EB: vtysh_main (vtysh_main.c:287)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,471 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x11B13: vtysh_init_vty (vtysh_cli.c:2980)
+==1103==    by 0x2E6EB: vtysh_main (vtysh_main.c:287)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,472 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x11B27: vtysh_init_vty (vtysh_cli.c:2981)
+==1103==    by 0x2E6EB: vtysh_main (vtysh_main.c:287)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,473 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x11B3B: vtysh_init_vty (vtysh_cli.c:2982)
+==1103==    by 0x2E6EB: vtysh_main (vtysh_main.c:287)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,474 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x11B4F: vtysh_init_vty (vtysh_cli.c:2983)
+==1103==    by 0x2E6EB: vtysh_main (vtysh_main.c:287)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,475 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x11B63: vtysh_init_vty (vtysh_cli.c:2984)
+==1103==    by 0x2E6EB: vtysh_main (vtysh_main.c:287)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,476 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x445C3: vtysh_osmd_init_rtr_vty (vtysh_osm.c:9420)
+==1103==    by 0x46237: vtysh_osmd_init (vtysh_osm.c:10061)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,477 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4454F: vtysh_osmd_init_dhcp_snoop_vty (vtysh_osm.c:9412)
+==1103==    by 0x4623B: vtysh_osmd_init (vtysh_osm.c:10062)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,478 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x34E9B: vtysh_osmd_init_audit_cmd (vtysh_osm.c:2944)
+==1103==    by 0x46303: vtysh_osmd_init (vtysh_osm.c:10089)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,479 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x353AB: vtysh_osmd_init_ethsrv_tag_act_dir_cmd (vtysh_osm.c:3114)
+==1103==    by 0x4630F: vtysh_osmd_init (vtysh_osm.c:10092)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,480 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x3541F: vtysh_osmd_init_evc_nni_aggr_cmd (vtysh_osm.c:3124)
+==1103==    by 0x46317: vtysh_osmd_init (vtysh_osm.c:10094)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,481 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x3589F: vtysh_osmd_init_bw_profile_cmd (vtysh_osm.c:3207)
+==1103==    by 0x4631B: vtysh_osmd_init (vtysh_osm.c:10095)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,482 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x357C3: vtysh_osmd_init_flood_limit_cmd (vtysh_osm.c:3190)
+==1103==    by 0x46323: vtysh_osmd_init (vtysh_osm.c:10097)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,483 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x3592F: vtysh_osmd_init_perf_profile_cmd (vtysh_osm.c:3219)
+==1103==    by 0x46327: vtysh_osmd_init (vtysh_osm.c:10098)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,484 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x359BF: vtysh_osmd_init_cfm_profile_cmd (vtysh_osm.c:3231)
+==1103==    by 0x4632B: vtysh_osmd_init (vtysh_osm.c:10099)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,485 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x35A4F: vtysh_osmd_init_meas_bin_profile_cmd (vtysh_osm.c:3244)
+==1103==    by 0x4632F: vtysh_osmd_init (vtysh_osm.c:10100)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,486 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x35ADF: vtysh_osmd_init_rfc2544_profile_cmd (vtysh_osm.c:3259)
+==1103==    by 0x46337: vtysh_osmd_init (vtysh_osm.c:10103)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,487 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x35B47: vtysh_osmd_init_rfc2544_profile_cmd (vtysh_osm.c:3266)
+==1103==    by 0x46337: vtysh_osmd_init (vtysh_osm.c:10103)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,488 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x447AB: vtysh_osmd_init_ethoam_domain_vty (vtysh_osm.c:9467)
+==1103==    by 0x4633B: vtysh_osmd_init (vtysh_osm.c:10107)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,489 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4481F: vtysh_osmd_init_ethoam_serv_vty (vtysh_osm.c:9477)
+==1103==    by 0x4633F: vtysh_osmd_init (vtysh_osm.c:10108)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,490 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4AB4F: vtysh_osmd_init_soam_gen_profile_cmd (vtysh_osm_soam.c:743)
+==1103==    by 0x4B273: vtysh_osmd_soam_init_profiles_cmd (vtysh_osm_soam.c:882)
+==1103==    by 0x46383: vtysh_osmd_init (vtysh_osm.c:10113)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,491 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4ABDF: vtysh_osmd_init_soam_lm_profile_cmd (vtysh_osm_soam.c:754)
+==1103==    by 0x4B277: vtysh_osmd_soam_init_profiles_cmd (vtysh_osm_soam.c:883)
+==1103==    by 0x46383: vtysh_osmd_init (vtysh_osm.c:10113)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,492 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4AC6F: vtysh_osmd_init_soam_lm_thresh_profile_cmd (vtysh_osm_soam.c:765)
+==1103==    by 0x4B27B: vtysh_osmd_soam_init_profiles_cmd (vtysh_osm_soam.c:884)
+==1103==    by 0x46383: vtysh_osmd_init (vtysh_osm.c:10113)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,493 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4ACFF: vtysh_osmd_soam_init_lm_test_cmd (vtysh_osm_soam.c:776)
+==1103==    by 0x4B27F: vtysh_osmd_soam_init_profiles_cmd (vtysh_osm_soam.c:886)
+==1103==    by 0x46383: vtysh_osmd_init (vtysh_osm.c:10113)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,494 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4AE53: vtysh_osmd_init_soam_dm_profile_cmd (vtysh_osm_soam.c:798)
+==1103==    by 0x4B283: vtysh_osmd_soam_init_profiles_cmd (vtysh_osm_soam.c:888)
+==1103==    by 0x46383: vtysh_osmd_init (vtysh_osm.c:10113)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,495 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4AEE3: vtysh_osmd_init_soam_dm_thresh_profile_cmd (vtysh_osm_soam.c:809)
+==1103==    by 0x4B287: vtysh_osmd_soam_init_profiles_cmd (vtysh_osm_soam.c:889)
+==1103==    by 0x46383: vtysh_osmd_init (vtysh_osm.c:10113)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,496 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4AF73: vtysh_osmd_soam_init_dm_test_cmd (vtysh_osm_soam.c:820)
+==1103==    by 0x4B28B: vtysh_osmd_soam_init_profiles_cmd (vtysh_osm_soam.c:891)
+==1103==    by 0x46383: vtysh_osmd_init (vtysh_osm.c:10113)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,497 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4B20F: vtysh_soam_alarm_mng_init (vtysh_osm_soam.c:871)
+==1103==    by 0x4B28F: vtysh_osmd_soam_init_profiles_cmd (vtysh_osm_soam.c:893)
+==1103==    by 0x46383: vtysh_osmd_init (vtysh_osm.c:10113)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,498 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x44893: vtysh_osmd_init_soam_mep_vty (vtysh_osm.c:9488)
+==1103==    by 0x46387: vtysh_osmd_init (vtysh_osm.c:10114)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,499 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x448FB: vtysh_osmd_init_soam_mep_vty (vtysh_osm.c:9493)
+==1103==    by 0x46387: vtysh_osmd_init (vtysh_osm.c:10114)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,500 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x44993: vtysh_osmd_init_soam_thresh_vty (vtysh_osm.c:9501)
+==1103==    by 0x4638B: vtysh_osmd_init (vtysh_osm.c:10115)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,501 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x449E3: vtysh_osmd_init_soam_thresh_vty (vtysh_osm.c:9505)
+==1103==    by 0x4638B: vtysh_osmd_init (vtysh_osm.c:10115)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,502 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x44A5B: vtysh_osmd_init_soam_bins_vty (vtysh_osm.c:9513)
+==1103==    by 0x4638F: vtysh_osmd_init (vtysh_osm.c:10116)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,503 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x45E9B: vtysh_osmd_init_vif_ta_cmd (vtysh_osm.c:9992)
+==1103==    by 0x463A3: vtysh_osmd_init (vtysh_osm.c:10123)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,504 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x44ADF: vtysh_osmd_init_tunneling_rule_vty (vtysh_osm.c:9526)
+==1103==    by 0x463A7: vtysh_osmd_init (vtysh_osm.c:10126)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,505 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x49047: vtysh_osmd_sflow_init (vtysh_osm_sflow.c:551)
+==1103==    by 0x46AC7: vtysh_osmd_init (vtysh_osm.c:10263)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,506 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x490A3: vtysh_osmd_sflow_init (vtysh_osm_sflow.c:556)
+==1103==    by 0x46AC7: vtysh_osmd_init (vtysh_osm.c:10263)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,507 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4C583: vtysh_osmd_twamp_init (vtysh_osm_twamp.c:537)
+==1103==    by 0x46ACB: vtysh_osmd_init (vtysh_osm.c:10264)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,508 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4C5AF: vtysh_osmd_twamp_init (vtysh_osm_twamp.c:539)
+==1103==    by 0x46ACB: vtysh_osmd_init (vtysh_osm.c:10264)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,509 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4C5DB: vtysh_osmd_twamp_init (vtysh_osm_twamp.c:541)
+==1103==    by 0x46ACB: vtysh_osmd_init (vtysh_osm.c:10264)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,510 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4C607: vtysh_osmd_twamp_init (vtysh_osm_twamp.c:543)
+==1103==    by 0x46ACB: vtysh_osmd_init (vtysh_osm.c:10264)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 64 (20 direct, 44 indirect) bytes in 1 blocks are definitely lost in loss record 13,511 of 14,488
+==1103==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1103==    by 0x713EF: pal_mem_malloc (pal_memory.c:43)
+==1103==    by 0x495FEC3: mfh_malloc (memory.c:154)
+==1103==    by 0x493E2FF: cmd_node_init (cli.c:4871)
+==1103==    by 0x4C633: vtysh_osmd_twamp_init (vtysh_osm_twamp.c:545)
+==1103==    by 0x46ACB: vtysh_osmd_init (vtysh_osm.c:10264)
+==1103==    by 0x2E7BF: vtysh_main (vtysh_main.c:313)
+==1103==    by 0xD267: main (vtysh.c:395)
+==1103== 
+==1103== 408 bytes in 3 blocks are possibly lost in loss record 14,394 of 14,488
+==1103==    at 0x4835DA0: calloc (vg_replace_malloc.c:711)
+==1103==    by 0x4011C43: allocate_dtv (in /lib/ld.so)
+==1103== 
+==1103== LEAK SUMMARY:
+==1103==    definitely lost: 880 bytes in 44 blocks
+==1103==    indirectly lost: 1,936 bytes in 88 blocks
+==1103==      possibly lost: 408 bytes in 3 blocks
+==1103==    still reachable: 2,619,990 bytes in 131,076 blocks
+==1103==         suppressed: 0 bytes in 0 blocks
+==1103== Reachable blocks (those to which a pointer was found) are not shown.
+==1103== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==1103== 
+==1103== For counts of detected and suppressed errors, rerun with: -v
+==1103== Use --track-origins=yes to see where uninitialised values come from
+==1103== ERROR SUMMARY: 81 errors from 54 contexts (suppressed: 0 from 0)
+# 
+
+
+
+sendto (sock->sock_fd, (msg+size), (msg_size-size),...
+
+UID_STATUS_T UiD_SocketSendto (UID_SOCKET_T* sock, void* msg, int msg_size)
+
+if (OK != UiD_SocketSendto (socket_ptr, buffer, msg_len))
+    
+msg_len = _uidBuildRequestBuffer (msg_type, cmd_id, clnt_dsc_ptr,
+                                    arg_ptr, arg_size,
+                                    buffer);
+
+UID_STATUS_T uidSendRequest (IN UID_SOCKET_T*  socket_ptr, IN UID_OPER_T cmd_id, IN UID_CLNT_DSC_T* clnt_dsc_ptr, UID_MSG_TYPE_T  msg_type, IN int arg_size, INOUT void* arg_ptr, char* buffer,  int  *the_timeout, IN const char*  file, IN int  line, int  only_wait)
+
+status = uidSendRequest (socket_ptr, cmd_id, clnt_dsc_ptr, UID_REQ_SYN, arg_size, arg_ptr, buffer, NULL, file, line, 0);
+
+UID_STATUS_T
+UiD_Request_func (IN UID_CONNECTION_T connection,
+             IN UID_OPER_T       cmd_id,
+             IN UID_CLNT_DSC_T*  clnt_dsc_ptr,
+             IN int              arg_size,
+             INOUT void*         arg_ptr,
+             IN int              reply_buffer_size,
+             OUT int*            reply_size_ptr,
+             OUT void*           reply_ptr,
+             IN const char*      file,
+             IN int              line)
+
+int vtysh_sys_get_system_configuration (void)
+{
+  UID_STATUS_T status;
+
+  sysConfig.field_mask = UID_SYS_CFG_MASK_ALL ;
+
+  status = UiD_Request(NULL, UI_SYS_GET_SYSTEM_CONFIG, &sync_dsc, sizeof(sysConfig), &sysConfig, 0, NULL, NULL);
+
+  if (OK != status) {
+      vty_out (global_vty, "vtysh_osm:Cannot get system configuration (status = %d)\n", status);
+  }
+
+  return (int)status;
+}

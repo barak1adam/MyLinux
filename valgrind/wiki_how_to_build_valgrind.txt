@@ -1,0 +1,74 @@
+​
+
+How to build Valgrind 
+ 
+This wiki is mainly inteneded by Linux Distribution maintainers.
+
+The full instructions to build and install valgrind: 
+
+1. make sure the desired Valgrind zip file is located under /dist_packages (valgrind-3.11.0.tar.bz2)
+
+2. Un-coment the entry for Valgrind in pkg.txt (we used to comment this entry, because we'd like to build Valgridn just on demand, not always)
+
+3. mkdir on the host PC: /opt/valgrind (create the dir which specified in the valgrind/configure file)
+
+​4. make sure you have the folder my_build/install/valgrind
+It should look like this:
+barak@ran-pc-linux:~/ng_build_31_01/install/valgrind$ tree
+.
+├── build
+│   └── compile
+└── install
+
+1 directory, 2 files
+
+5. The compile file should look like this:​
+
+export CROSS_COMPILE=$HOST-
+export CC=${CROSS_COMPILE}gcc
+export CPP=${CROSS_COMPILE}cpp
+export CXX=${CROSS_COMPILE}g++
+export LD=${CROSS_COMPILE}ld
+export AR=${CROSS_COMPILE}ar
+sed -i -e "s#armv7#arm#g" configure
+
+
+export CC=${CROSS_COMPILE}gcc
+#export CFLAGS=”-pipe -Os -mtune=cortex-a8 -march=armv7-a -mabi=aapcs-linux -msoft-float -I${LIBC_INCLUDE}
+export LDFLAGS=-L${BUILD_DIR}/toolchain/arm-marvell-linux-gnueabi/libc/usr/lib
+./configure --target=$HOST \
+              --host=$HOST \
+              --prefix=/opt/valgrind \
+                CFLAGS="-pipe -Os -mtune=cortex-a8 -static  -march=armv7-a -mabi=aapcs-linux -msoft-float -I${LIBC_INCLUDE}"
+
+make
+make install
+#xterm
+#sudo make install
+
+
+Please skip step 6
+
+6. chown of my_host/opt to let us run "make install" not just as sudo:
+chown -R `whoami`:`whoami` /opt/
+
+​7. buildone: "my_build/scripts/buildone.sh valgrind" - will unzip and build
+
+8. on the target root FS, mkdir /opt/valgrind
+
+9. copy manually all my_host/opt/valgrind content into my_build/dist/arm_msys_root/opt/valgrind/​:
+
+barak@ran-pc-linux:~/ng_build_31_01$ sudo cp -R /opt/valgrind/* ./dist/arm_msys_root/opt/valgrind​
+
+10. pkginstall: install valgrind binaries into target FS /usr/bin: "my_build/scripts/pkginstall.sh valgrind"
+
+11. in order to run valgrind successfully on the target, we should also install libc non-stripped into the target root FS:
+barak@ran-pc-linux:~/ng_build_31_01$ sudo cp ./dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/toolchain/arm-marvell-linux-gnueabi/libc/lib/ld-2.15.so ./dist/arm_msys_root/lib/ld.so
+
+
+
+
+
+
+
+

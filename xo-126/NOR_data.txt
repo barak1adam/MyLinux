@@ -1,0 +1,26 @@
+NOR data sheet:
+
+ID EF6016
+
+sector size: 4KB
+
+num of sectors: 1024
+
+Page size: 256B
+
+num of pages: 16384
+
+Flash dev size: 4MB
+
+sector mask: 
+
+num of Dies per flash: 1
+
+CS  Low, 24 bit address
+
+Now working in single modem (no CS)
+then we will be back to dual stack mode
+
+
+Commands used by Xilinx test program:
+ReadCmd: 0x6B, WriteCmd: 0x2, StatusCmd: 0x5, FSRFlag: 0

@@ -1,0 +1,5 @@
+kernel panic jac:
+gdb object (gdb workqueueu.o)
+x/100i func - dump 100 instructins from offest of the the func that failed
+
+

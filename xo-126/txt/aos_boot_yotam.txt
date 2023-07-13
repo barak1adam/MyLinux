@@ -1,0 +1,20 @@
+setenv ethaddr 3C:A7:2B:00:D8:18
+setenv ipaddr 10.32.8.200
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+tftpboot 0x00200000 /tftpboot/Image.new
+tftpboot 0x00010000 /tftpboot/xo126-top3.dtb
+tftpboot 0x04000000 /tftpboot/initramfs.img
+
+setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $bootargs craft=$baudrate craft_port=ttyPS0"
+run setbootargs; 
+setenv bootargs "$bootargs $append"
+setenv bootargs "$bootargs cs.0=/dev/mmcblk1p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk1p2"
+booti 0x00200000 0x04000000 0x00010000
+
+#EMMC gzwrite of the image
+mmc dev 0
+mmc erase 0 0x800000
+tftpboot 0x100 /tftpboot/xo126_disk_image.gz
+gzwrite mmc 0 0x100 21a72cc1

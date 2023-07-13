@@ -1,0 +1,50 @@
+Disk /dev/mmcblk1: 7.28 GiB, 7818182656 bytes, 15269888 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x147b6f15
+
+Device          Boot   Start     End Sectors  Size Id Type
+/dev/mmcblk1p1          8192   24575   16384    8M 83 Linux
+/dev/mmcblk1p2         24576   40959   16384    8M 83 Linux
+/dev/mmcblk1p3         40960 7831551 7790592  3.7G  f W95 Ext'd (LBA)
+/dev/mmcblk1p5         49152  114687   65536   32M 83 Linux
+/dev/mmcblk1p6        122880  253951  131072   64M 83 Linux
+/dev/mmcblk1p7        262144  876543  614400  300M 83 Linux
+/dev/mmcblk1p8        884736 2457599 1572864  768M 83 Linux
+/dev/mmcblk1p9       2465792 2596863  131072   64M 83 Linux
+/dev/mmcblk1p10      2605056 2867199  262144  128M 83 Linux
+/dev/mmcblk1p11      2875392 2940927   65536   32M 83 Linux
+/dev/mmcblk1p12      2949120 3080191  131072   64M 83 Linux
+/dev/mmcblk1p13      3088384 3702783  614400  300M 83 Linux
+/dev/mmcblk1p14      3710976 5283839 1572864  768M 83 Linux
+/dev/mmcblk1p15      5292032 5423103  131072   64M 83 Linux
+/dev/mmcblk1p16      5431296 5693439  262144  128M 83 Linux
+/dev/mmcblk1p17      5701632 6750207 1048576  512M 83 Linux
+/dev/mmcblk1p18      6758400 6766591    8192    4M 83 Linux
+/dev/mmcblk1p19      6774784 7823359 1048576  512M 83 Linux
+
+
+[xo126:~] # ls /mnt/active/boot
+boot_script.uimg  dtb  initramfs  lost+found  poms  xo126.dtb
+[xo126:~]
+setenv bootargs "$bootargs cs.0=/dev/mmcblk1p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk1p2"
+setenv bootargs "$bootargs $append"
+setenv bootargs "$bootargs sw.all=$actbank ecc=on"
+ext2load mmc 0:$bootpartnum 00200000 kernel
+ext2load mmc 0:$bootpartnum 04000000 initramfs
+ext2load mmc 0:$bootpartnum 00010000 xo126.dtb
+booti 00200000 04000000 00010000
+
+
+[xo126:/opt/adva/aos] # ll /mnt/active/boot/
+total 922
+drwxr-xr-x  4 root root   1024 Jan  5 17:09 .
+drwxr-xr-x 12 root root    240 Jul  6  1997 ..
+-rw-r--r--  1 root root    416 Jan  5 17:09 boot_script.uimg
+lrwxrwxrwx  1 root root     15 Jan  5 17:09 dtb -> /boot/xo126.dtb
+-rw-r--r--  1 root root 891010 Jan  5 17:09 initramfs
+drwx------  2 root root  12288 Jan  5 17:09 lost+found
+drwxr-xr-x  2 root root   1024 Jan  5 17:09 poms
+-rw-r--r--  1 root root  30684 Jan  5 17:09 xo126.dtb 

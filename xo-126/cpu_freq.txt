@@ -1,0 +1,96 @@
+OS-LAB device:
+==============
+setenv gatewayip 10.35.115.254
+setenv netmask 255.255.255.0
+set serverip 10.35.111.5
+tftpboot 0x08000000 BOOT_800khz.bin
+
+#uboot-env-xo126-mac-2cores.bin
+#BOOT_800khz.bin
+tftpboot 0x08000000 /tftpboot/BOOT_800khz.bin; sf probe 1 0 0; sf erase 0 0x400000; sf write 0x08000000 0 0x190000
+tftpboot 0x04000000 /tftpboot/uboot-env-xo126-mac-2cores.bin
+sf probe; sf write 0x04000000 0x200000 0x10000
+
+
+MY device:
+==========
+
+#only burn the BOOT*.bin file
+
+debug on;
+
+
+
+tftpboot 0x08000000 /tftpboot/BOOT_800khz.bin; sf probe 1 0 0; sf erase 0 0x200000; sf write 0x08000000 0 0x190000
+
+
+#only burn the env file
+tftpboot 0x04000000 /tftpboot/uboot-env-xo126-mac.bin
+
+sf probe; sf write 0x04000000 0x200000 0x10000
+
+#if JTAG mode:
+==============
+#setenv ethaddr 18:bc:57:00:15:4e
+setenv ipaddr 10.32.8.200
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+#boot kernel+AOS
+tftpboot 0x00200000 /tftpboot/Image_19_06;sleep 5; tftpboot 0x00010000 /tftpboot/system-top.dtb; sleep 3; tftpboot 0x04000000 /tftpboot/initramfs.img
+setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $bootargs craft=$baudrate craft_port=ttyPS0 maxcpus=2"
+run setbootargs; 
+setenv bootargs "$bootargs uio_pdrv_genirq.of_id=uio_pdrv_genirq"
+setenv bootargs "$bootargs cs.0=/dev/mmcblk1p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk1p2"
+booti 0x00200000 0x04000000 0x00010000
+
+#boot only the kernel
+tftpboot 0x00200000 /tftpboot/Image_19_06;sleep 5; tftpboot 0x00010000 /tftpboot/system-top.dtb; sleep 3; tftpboot 0x04000000 /tftpboot/initramfs.img
+setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $bootargs craft=$baudrate craft_port=ttyPS0 maxcpus=2 init=/bin/bash"
+run setbootargs; 
+setenv bootargs "$bootargs uio_pdrv_genirq.of_id=uio_pdrv_genirq"
+setenv bootargs "$bootargs cs.0=/dev/mmcblk1p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk1p2"
+booti 0x00200000 0x04000000 0x00010000
+
+
+#check the clk rate and the number of cores:
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+find /sys/devices/system/cpu/cpu?/online -exec bash -c "echo -n '{}: '; cat {}"  \;
+
+#other values to dump
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+find /sys/devices/system/cpu/cpu?/online -exec bash -c "echo -n '{}: '; cat {}"  \;
+
+#kerenl documentation
+=====================
+https://www.kernel.org/doc/Documentation/cpu-freq/user-guide.txt
+scaling_cur_freq :		Current frequency of the CPU as determined by
+				the governor and cpufreq core, in KHz. This is
+				the frequency the kernel thinks the CPU runs
+				at.
+
+cpuinfo_cur_freq :		Current frequency of the CPU as obtained from
+				the hardware, in KHz. This is the frequency
+				the CPU actually runs at.
+				
+#diff is becuase the the HW and the cpu freq driver offers only few values to configure (for example on zynqmp" 300,400, 600, 1200)
+#it might be that the user configures a value not supported and the driver will set in action the closest that can be done.
+
+u-boot spi commands:
+====================
+#bus=1, cs = 0, mode=1
+#80 to read, 00 to write
+#when write, give 32 bit value - 16 bit control (0006), 16 bit data (5a5a)
+sspi 1:0.1@2000000 32 80A2
+
+
+
+
+
+
+				
+				
+				
+home/barak/edt/edt_zcu102_workspace/fsbl_a53/Debug/src
+
+/home/barak/edt/edt_zcu102_workspace/xo126_fsbl/Debug/src				

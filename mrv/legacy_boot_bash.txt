@@ -1,9 +1,0 @@
-How to boot legacy in bin/bash only:
-====================================
-
-MRV>> chpart $(bootpart); fsload 0x2000000 $(image_name);
-partition changed to nor0,2
-### CRAMFS loading 'uImage' to 0x2000000
-### CRAMFS load complete: 2949388 bytes loaded to 0x2000000
-MRV>> setenv bootargs $(console) root=/dev/mtdblock1 rw $(single) bootpart=$(bootpart) init=/bin/sh
-MRV>> bootm 0x2000000;

@@ -1,0 +1,106 @@
+setting up Petalinux env:
+==========================
+
+1. install the petalinux
+ls -la /bin/sh : should be link to bash. 
+if not call: sudo dpkg-reconfigure dash
+
+download petalinux-v2022.1-04191534-installer.run to ~/Downloads
+
+sudo mkdir -p /opt/pkg/petalinux/v2022.1 (755, barak:barak)
+
+install:
+~/Downloads/petalinux-v2022.1-04191534-installer.run --dir /opt/pkg/petalinux/v2022.1/
+
+suceesfull installation: petalinux_installation_log in ~/
+otherwise it is inside the PetaLinux installation directory
+
+2. source env
+
+source /opt/pkg/petalinux/v2022.1/settings.sh
+
+echo $PETALINUX
+
+3. create a petalinux project. it is based on the specific EVB BSP + the SDK from previous steps.
+
+PetaLinux board support packages (BSPs) are reference designs on supported boards for you to
+start working with and customizing your own projects. In addition, these designs can be used as a
+basis for creating your own projects on supported boards. PetaLinux BSPs are provided in the
+form of installable BSP files, and include all necessary design and configuration files, pre-built and
+tested hardware, and software images ready for downloading on your board or for booting in the
+QEMU system emulation environment. You can download a BSP to any location of your choice.
+
+# I selected ~ as my working dir
+cd ~
+petalinux-create -t project -s ~/Downloads/xilinx-zcu102-v2022.1-04191534.bsp
+
+xilinx-zcu102-v<petalinux-version> project is created: ~/xilinx-zcu102-2022.1
+
+A PetaLinux project directory contains configuration files of the project, the Linux subsystem,
+and the components of the subsystem. 
+Nothint is built yet.
+The petalinux-build command builds the project
+with those configuration files
+
+4. export HW platfrom (xsa file, created by Vivado) to petalinux. 
+
+After you have configured your hardware project, the PetaLinux project requires a hardware
+description file (.xsa file) with information about the processing system
+
+For Zynq UltraScale+ platform, PMU firmware and TF-A needed. 
+the default by Petalinux is FSBL with TF-A for the ARM Cortex-A53. 
+FSBL for Cortex-R5f can be done with Vitis !
+
+Note: A PetaLinux project should be cleaned using petalinux-build -x mrproper before submitting
+to the source control.
+
+My vivado project was on home/barak/edt/edt_zcu102/.
+XSA file path: /home/barak/edt/edt_zcu102/edt_zcu102_wrapper.xsa
+
+petalinux-config --get-hw-description=<XSA file path>
+
+
+petalinux-config --get-hw-description=<PATH-TO_XSA Directory>
+
+5. build the image
+petalinux-build
+
+builds: DTB, FSBL and TF-A, U-Bootot, Linux kernel, root fs image.
+
+log: build/build.log
+
+images are in images/linux
+
+6. the project can be source controlled by git.
+list of .gitignore on page 23
+before any commit, clean with: petalinux-build -x mrproper
+
+7. generate boot.bin
+A boot image usually contains a first stage boot loader image, FPGA bitstream (optional), PMU firmware, ATF, and U-Boot
+
+barak@barak-OptiPlex-7020:~/xilinx-zcu102-2022.1$ petalinux-package --boot --u-boot --format BIN
+[INFO] Sourcing buildtools
+INFO: Getting system flash information...
+INFO: File in BOOT BIN: "/home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf"
+INFO: File in BOOT BIN: "/home/barak/xilinx-zcu102-2022.1/images/linux/pmufw.elf"
+INFO: File in BOOT BIN: "/home/barak/xilinx-zcu102-2022.1/images/linux/bl31.elf"
+INFO: File in BOOT BIN: "/home/barak/xilinx-zcu102-2022.1/images/linux/system.dtb"
+INFO: File in BOOT BIN: "/home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf"
+INFO: Generating zynqmp binary package BOOT.BIN...
+
+
+****** Xilinx Bootgen v2022.1
+  **** Build date : Mar 30 2022-09:29:13
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+[WARNING]: Partition zynqmp_fsbl.elf.0 range is overlapped with partition bl31.elf.0 memory range
+
+[INFO]   : Bootimage generated successfully
+
+INFO: Binary is ready.
+
+8. build optimizations - to do
+
+9. 
+
+

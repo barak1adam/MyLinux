@@ -1,0 +1,1045 @@
+Xilinx Zynq MP First Stage Boot Loader 
+Release 2022.1   Apr 11 2022  -  09:29:50
+Xilinx Zynq MP First Stage Boot Loader 
+Release 2022.1   Apr 11 2022  -  09:29:50
+NOTICE:  BL31: v2.6(release):xlnx_rebase_v2.6_2022.1_update1
+NOTICE:  BL31: Built : 03:46:40, Mar 24 2022
+
+
+U-Boot 2022.01 (Apr 04 2022 - 07:53:54 +0000)
+
+CPU:   ZynqMP
+Silicon: v3
+Model: ZynqMP ZCU102 Rev1.0
+Board: Xilinx ZynqMP
+DRAM:  4 GiB
+PMUFW:  v1.1
+EL Level:       EL2
+Chip ID:        zu17eg
+NAND:  0 MiB
+MMC:   mmc@ff160000: 0
+Loading Environment from nowhere... OK
+In:    serial
+Out:   serial
+Err:   serial
+Bootmode: JTAG_MODE
+Reset reason:   EXTERNAL 
+Net:   
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0e0000, mdio bus ff0e0000, phyaddr 12, interface rgmii-id
+zynq_gem ethernet@ff0e0000: Failed to read eth PHY id, err: -2
+Could not get PHY for eth1: addr 12
+No ethernet found.
+
+scanning bus for devices...
+Hit any key to stop autoboot:  0 
+JTAG: Trying to boot script at 20000000
+## Executing script at 20000000
+Wrong image format for "source" command
+JTAG: SCRIPT FAILED: continuing...
+starting USB...
+No working controllers found
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+missing environment variable: pxeuuid
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/00000000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/0000000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/000000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/00000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/0000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/00
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/0
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/default-arm-zynqmp-zynqmp
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/default-arm-zynqmp
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/default-arm
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/default
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Config file not found
+starting USB...
+No working controllers found
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+JTAG: Trying to boot script at 20000000
+## Executing script at 20000000
+Wrong image format for "source" command
+JTAG: SCRIPT FAILED: continuing...
+switch to partitions #0, OK
+mmc0(part 0) is current device
+** No partition table - mmc 0 **
+Couldn't find partition mmc 0:1
+MMC Device 1 not found
+no mmc device at slot 1
+jedec_spi_nor flash@0: unrecognized JEDEC id bytes: 00, 00, 00
+Failed to initialize SPI flash at 0:0 (error -2)
+QSPI: SCRIPT FAILED: continuing...
+
+
+no devices available
+NAND: SCRIPT FAILED: continuing...
+starting USB...
+No working controllers found
+USB is stopped. Please issue 'usb start' first.
+starting USB...
+No working controllers found
+USB is stopped. Please issue 'usb start' first.
+
+Device 0: unknown device
+starting USB...
+No working controllers found
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+missing environment variable: pxeuuid
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/00000000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/0000000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/000000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/00000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/0000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/000
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/00
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/0
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/default-arm-zynqmp-zynqmp
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/default-arm-zynqmp
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/default-arm
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Retrieving file: pxelinux.cfg/default
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+Config file not found
+starting USB...
+No working controllers found
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+No ethernet found.
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+
+ZYNQ GEM: ff0b0000, mdio bus ff0b0000, phyaddr -1, interface gmii
+Could not get PHY for eth0: addr -1
+ZynqMP> 

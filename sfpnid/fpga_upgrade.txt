@@ -1,0 +1,66 @@
+directc and FPGA upgrade:
+==========================
+
+currently kernel is 5.4.56
+spitest is used from the net but since it is originally compatible to 5.8, I have a patch to add the missing definitions
+
+we bring the fw to memory, then it is direct access.
+indirect access requires paging - Paging support is accomplished by making modifications to
+the data communication functions defined in dpuser.h, dpcom.c, and dpcom.h.
+
+SPI mode 3 is required:
+Clock phase SPH=1
+Clock polarity SPO=1
+CS low
+
+bring up the SPI driver
+download the FW
+define dp_get_data
+program the file with dp_top
+
+code modifications:
+do_SPI_SCAN_in and do_SPI_SCAN_out
+dp_display_text, dp_display_value, dp_delay
+memory access function
+call dp_top with the action of programming
+
+disable:USE_PAGING, ENABLE_G4M_SUPPORT
+enable: ENABLE_G5M_SUPPORT, PERFORM_CRC_CHECK, ENABLE_DISPLAY
+
+The main entry function is dp_top defined in dpalg.c. It must be called to initiate the programming operation. Prior
+to calling the function, a global variable Action_code must be assigned a value as defined in dpuser.h
+
+DP_PROGRAM_ACTION All Performs erase, program and verify operations
+for all the supported blocks in the data file.
+DP_VERIFY_ACTION All Performs verify operation for all the supported
+blocks in the data file.
+
+Mode 3 of the SPI mode is used and the data is clocked byte 0 MSB first. 
+Note the following:
+1. Before performing any data shift, the target device SPI buffer status is checked by shifting 0xff. This is the only
+instruction that is 8 bit long, and the data is read out at the same time as it is shifted in. The result of the first
+shift is ignored.
+
+2. When shifting data, into the device, the first byte is the command followed by 16 bytes of data. 16 bytes of
+zero value must be shifted for commands that do not require data.
+
+3. Shifting data out from the device is a two steps operation. The command is clocked into the device first and
+then the data is clocked out using a read command of 0x5.
+
+4. All operations except for SPI hardware status check are made of one byte of command followed by 16 bytes of
+data. Chip Select (CS) line must be driven low before clocking the command and should remain low until the
+last bit of data is shifted in. Then, it must be driven high to execute the loaded instruction.
+Note: 1, 2, and 3 are taken care of by the programming algorithm.
+
+    int command_len = command_bits%8 ? command_bits/8 + 1 : command_bits/8;
+    int data_len = data_bits%8 ? data_bits/8 + 1 : data_bits/8;
+    int total_len = command_len + data_len;
+    unsigned char *tmp_tx_buf = malloc(total_len);
+
+    memcpy(tmp_tx_buf, command, command_bits/8);
+    /* usually set cs_change to ensure CS between the messages if N > 1 for SPI_IOC_MESSAGE(N)  */
+    /*spi_transfertr.cs_change = 1;*/
+
+
+git clone git://git.buildroot.net/buildroot; cd buildroot; git checkout -b `git rev-list tags/2021.05 -1`
+commit=`git rev-list tags/2021.05 -1`

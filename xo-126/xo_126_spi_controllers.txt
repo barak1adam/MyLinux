@@ -1,0 +1,11 @@
+
+xo-126 spi controllers:
+=======================
+
+spi controllers:
+#0 ff0f0000 - qspi for NOR
+
+kernel:
+#0 ff040000 - dpll and 2 more
+
+#1 ff050000 - for cpld

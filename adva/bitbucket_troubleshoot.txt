@@ -1,0 +1,18 @@
+bitbucket troubleshoot:
+
+how to enter recovery mode?
+---------------------------
+
+su atlbb
+cd ~
+vim atlassian/bitbucket/4.11.2/bin/setenv.sh
+enable (out of comment) the following line:
+#JVM_SUPPORT_RECOMMENDED_ARGS="-Datlassian.recovery.password=123456"
+
+service bitbucket restart
+
+then go to BB web and login as recovery_admin/123456
+
+once done, change it back to comment and restart BB
+
+

@@ -1,0 +1,37 @@
+Programming u-boot to a virgin OS-V device - no u-boot exists:
+==================================================
+If you see messages "BootRom < some message>" and you do not see u-boot comes up , it is likely that there is no u-boot on device.
+
+The instruction assumes you have "minicom" uart terminal ( or another terminal app that support xmodem file transfer ) installed on your host PC.
+
+1. launch minicom on your uart port and wait until you see the message " trying uart"
+
+2. At this point, the board is ready to receive files. press CTRL+A . then Z , then s.
+
+3. choose "ascii"  and send xmodem_boot.pattern
+ 
+4. File will be sent to device, you should see wierd characters printed on screen 
+
+5. Repeat the send file operation, only now, choose u-boot-...-uart.bin, and "xmodem" in the send file menu.
+
+6. u-boot will be downloaded to device . now you can start burning images as described earlier. rename the u-boot file to "u-boot.bin" and burn it by "bubt".
+
+*.pattern file, *-uart.bin file, *u-boot*.bin file - all can be found on TeamCity images.
+
+Marvell>> setenv ipaddr 172.21.11.100
+Marvell>> setenv serverip 172.21.11.14
+Marvell>> ping 172.21.11.14
+Using egiga1 device
+host 172.21.11.14 is alive
+Marvell>> bubt u-boot.bin
+
+
+To burn MOS:
+===========
+
+download mos_production.ubinized to tftp directory
+configure mrv_images_dir, ipaddr and serverip
+run mrv_burn_master_os
+
+Thanks,
+Barak

@@ -1,0 +1,582 @@
+# cd /opt/valgrind/bin/
+# valgrind pssExe
+-bash: valgrind: command not found
+# ./valgrind pssExe
+==601== Memcheck, a memory error detector
+==601== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==601== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==601== Command: pssExe
+==601==
+***ERR: shared lib 0x38000000-0x3819c000 possible overlap with MVPPREGS6:
+***     38000000-3819c000 r-xp 00008000 00:0c 4903702    /opt/valgrind/lib/valgrind/memcheck-arm-linux
+***ERR: shared lib 0x381a3000-0x381a5000 possible overlap with MVPPREGS6:
+***     381a3000-381a5000 rw-p 001a3000 00:0c 4903702    /opt/valgrind/lib/valgrind/memcheck-arm-linux
+***ERR: shared lib 0x381a5000-0x38ad8000 possible overlap with MVPPREGS6:
+***     381a5000-38ad8000 rw-p 00000000 00:00 0          [heap]
+mvPP opened
+==601== Warning: noted but unhandled ioctl 0x701e with no size/direction hints.
+==601==    This could cause spurious value errors to appear.
+==601==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==601== Syscall param ioctl(generic) points to uninitialised byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0xEC4CE33: prvExtDrvDoMapping (genDrvPciDrv.c:200)
+==601==    by 0xEC4D0C3: extDrvInitDrv (genDrvPciDrv.c:279)
+==601==    by 0x10F0DEEB: libhelper_constructor (shrMemSharedLibraryInit.c:180)
+==601==    by 0x400F5C7: call_init (in /lib/ld.so)
+==601==  Address 0xbdde1cac is on thread 1's stack
+==601==  in frame #1, created by prvExtDrvDoMapping (genDrvPciDrv.c:191)
+==601==
+findAdressesOfSections: :369: buf = 00008000-00638000 r-xp 00000000 00:0c 4879353    /usr/local/nbase/sbin/pssExe
+findAdressesOfSections: :369: buf = 00638000-006ef000 rw-p 00630000 00:0c 4879353    /usr/local/nbase/sbin/pssExe
+findAdressesOfSections: :369: buf = 006ef000-00b31000 rw-p 00000000 00:00 0
+findAdressesOfSections: :369: buf = 04000000-0401f000 r-xp 00000000 00:0c 4874602    /lib/ld.so
+findAdressesOfSections: :369: buf = 0401f000-04026000 rw-p 00000000 00:00 0
+findAdressesOfSections: :369: buf = 04027000-04028000 r--p 0001f000 00:0c 4874602    /lib/ld.so
+findAdressesOfSections: :369: buf = 04028000-04029000 rw-p 00020000 00:0c 4874602    /lib/ld.so
+findAdressesOfSections: :369: buf = 04029000-0402a000 rwxp 00000000 00:00 0
+findAdressesOfSections: :369: buf = 04829000-0482a000 r-xp 00000000 00:0c 4903676    /opt/valgrind/lib/valgrind/vgpreload_core-arm-linux.so
+findAdressesOfSections: :369: buf = 0482a000-04831000 ---p 00001000 00:0c 4903676    /opt/valgrind/lib/valgrind/vgpreload_core-arm-linux.so
+findAdressesOfSections: :369: buf = 04831000-04832000 rw-p 00000000 00:0c 4903676    /opt/valgrind/lib/valgrind/vgpreload_core-arm-linux.so
+findAdressesOfSections: :369: buf = 04832000-0483e000 r-xp 00000000 00:0c 4903630    /opt/valgrind/lib/valgrind/vgpreload_memcheck-arm-linux.so
+findAdressesOfSections: :369: buf = 0483e000-04845000 ---p 0000c000 00:0c 4903630    /opt/valgrind/lib/valgrind/vgpreload_memcheck-arm-linux.so
+findAdressesOfSections: :369: buf = 04845000-04846000 rw-p 0000b000 00:0c 4903630    /opt/valgrind/lib/valgrind/vgpreload_memcheck-arm-linux.so
+findAdressesOfSections: :369: buf = 04846000-04850000 r-xp 00000000 00:0c 4875017    /usr/lib/libgcc_s.so.1
+findAdressesOfSections: :369: buf = 04850000-04857000 ---p 0000a000 00:0c 4875017    /usr/lib/libgcc_s.so.1
+findAdressesOfSections: :369: buf = 04857000-04858000 rw-p 00009000 00:0c 4875017    /usr/lib/libgcc_s.so.1
+findAdressesOfSections: :369: buf = 04858000-0485c000 r-xp 00000000 00:0c 4874836    /lib/libSegFault.so
+findAdressesOfSections: :369: buf = 0485c000-04863000 ---p 00004000 00:0c 4874836    /lib/libSegFault.so
+findAdressesOfSections: :369: buf = 04863000-04864000 r--p 00003000 00:0c 4874836    /lib/libSegFault.so
+findAdressesOfSections: :369: buf = 04864000-04865000 rw-p 00004000 00:0c 4874836    /lib/libSegFault.so
+findAdressesOfSections: :369: buf = 04865000-04870000 r-xp 00000000 00:0c 4875217    /usr/local/nbase/lib/libsapi.so
+findAdressesOfSections: :369: buf = 04870000-04877000 ---p 0000b000 00:0c 4875217    /usr/local/nbase/lib/libsapi.so
+findAdressesOfSections: :369: buf = 04877000-04878000 rw-p 0000a000 00:0c 4875217    /usr/local/nbase/lib/libsapi.so
+findAdressesOfSections: :369: buf = 04878000-0487f000 r-xp 00000000 00:0c 4875216    /usr/local/nbase/lib/libUiD.so
+findAdressesOfSections: :369: buf = 0487f000-04887000 ---p 00007000 00:0c 4875216    /usr/local/nbase/lib/libUiD.so
+findAdressesOfSections: :369: buf = 04887000-04888000 rw-p 00007000 00:0c 4875216    /usr/local/nbase/lib/libUiD.so
+findAdressesOfSections: :369: buf = 04888000-0488a000 r-xp 00000000 00:0c 4875219    /usr/local/nbase/lib/libUiD_ex.so
+findAdressesOfSections: :369: buf = 0488a000-04892000 ---p 00002000 00:0c 4875219    /usr/local/nbase/lib/libUiD_ex.so
+findAdressesOfSections: :369: buf = 04892000-04893000 rw-p 00002000 00:0c 4875219    /usr/local/nbase/lib/libUiD_ex.so
+findAdressesOfSections: :369: buf = 04893000-04896000 r-xp 00000000 00:0c 4875218    /usr/local/nbase/lib/libsocket.so
+findAdressesOfSections: :369: buf = 04896000-0489d000 ---p 00003000 00:0c 4875218    /usr/local/nbase/lib/libsocket.so
+findAdressesOfSections: :369: buf = 0489d000-0489e000 rw-p 00002000 00:0c 4875218    /usr/local/nbase/lib/libsocket.so
+findAdressesOfSections: :369: buf = 0489e000-048d6000 r-xp 00000000 00:0c 4875214    /usr/local/nbase/lib/libnbgen.so
+findAdressesOfSections: :369: buf = 048d6000-048dd000 ---p 00038000 00:0c 4875214    /usr/local/nbase/lib/libnbgen.so
+findAdressesOfSections: :369: buf = 048dd000-048e0000 rw-p 00037000 00:0c 4875214    /usr/local/nbase/lib/libnbgen.so
+findAdressesOfSections: :369: buf = 048e0000-04952000 rw-p 00000000 00:00 0
+findAdressesOfSections: :369: buf = 04952000-04958000 r-xp 00000000 00:0c 4875215    /usr/local/nbase/lib/libnbgen_ex.so
+findAdressesOfSections: :369: buf = 04958000-0495f000 ---p 00006000 00:0c 4875215    /usr/local/nbase/lib/libnbgen_ex.so
+findAdressesOfSections: :369: buf = 0495f000-04960000 rw-p 00005000 00:0c 4875215    /usr/local/nbase/lib/libnbgen_ex.so
+findAdressesOfSections: :369: buf = 04960000-04974000 r-xp 00000000 00:0c 4874839    /lib/libresolv.so
+findAdressesOfSections: :369: buf = 04974000-0497b000 ---p 00014000 00:0c 4874839    /lib/libresolv.so
+findAdressesOfSections: :369: buf = 0497b000-0497c000 r--p 00013000 00:0c 4874839    /lib/libresolv.so
+findAdressesOfSections: :369: buf = 0497c000-0497d000 rw-p 00014000 00:0c 4874839    /lib/libresolv.so
+findAdressesOfSections: :369: buf = 0497d000-0497f000 rw-p 00000000 00:00 0
+findAdressesOfSections: :369: buf = 0497f000-04994000 r-xp 00000000 00:0c 4874608    /lib/libpthread-0.9.so
+findAdressesOfSections: :369: buf = 04994000-0499b000 ---p 00015000 00:0c 4874608    /lib/libpthread-0.9.so
+findAdressesOfSections: :369: buf = 0499b000-0499c000 r--p 00014000 00:0c 4874608    /lib/libpthread-0.9.so
+findAdressesOfSections: :369: buf = 0499c000-0499d000 rw-p 00015000 00:0c 4874608    /lib/libpthread-0.9.so
+findAdressesOfSections: :369: buf = 0499d000-0499f000 rw-p 00000000 00:00 0
+findAdressesOfSections: :369: buf = 0499f000-04a25000 r-xp 00000000 00:0c 4875006    /usr/lib/libglib-2.0.so.0.300.0
+findAdressesOfSections: :369: buf = 04a25000-04a2c000 ---p 00086000 00:0c 4875006    /usr/lib/libglib-2.0.so.0.300.0
+findAdressesOfSections: :369: buf = 04a2c000-04a2d000 rw-p 00085000 00:0c 4875006    /usr/lib/libglib-2.0.so.0.300.0
+findAdressesOfSections: :369: buf = 04a2d000-04a31000 r-xp 00000000 00:0c 4875009    /usr/lib/libgthread-2.0.so.0.300.0
+findAdressesOfSections: :369: buf = 04a31000-04a38000 ---p 00004000 00:0c 4875009    /usr/lib/libgthread-2.0.so.0.300.0
+findAdressesOfSections: :369: buf = 04a38000-04a39000 rw-p 00003000 00:0c 4875009    /usr/lib/libgthread-2.0.so.0.300.0
+findAdressesOfSections: :369: buf = 04a39000-04a3d000 r-xp 00000000 00:0c 4874610    /lib/libdl.so
+findAdressesOfSections: :369: buf = 04a3d000-04a44000 ---p 00004000 00:0c 4874610    /lib/libdl.so
+findAdressesOfSections: :369: buf = 04a44000-04a45000 r--p 00003000 00:0c 4874610    /lib/libdl.so
+findAdressesOfSections: :369: buf = 04a45000-04a46000 rw-p 00004000 00:0c 4874610    /lib/libdl.so
+findAdressesOfSections: :369: buf = 04a46000-04a4c000 r-xp 00000000 00:0c 4874601    /lib/librt.so
+findAdressesOfSections: :369: buf = 04a4c000-04a53000 ---p 00006000 00:0c 4874601    /lib/librt.so
+findAdressesOfSections: :369: buf = 04a53000-04a54000 r--p 00005000 00:0c 4874601    /lib/librt.so
+findAdressesOfSections: :369: buf = 04a54000-04a55000 rw-p 00006000 00:0c 4874601    /lib/librt.so
+findAdressesOfSections: :369: buf = 04a55000-04a60000 r-xp 00000000 00:0c 4875421    /usr/local/nbase/lib/librgen.so
+findAdressesOfSections: :369: buf = 04a60000-04a67000 ---p 0000b000 00:0c 4875421    /usr/local/nbase/lib/librgen.so
+findAdressesOfSections: :369: buf = 04a67000-04a68000 rw-p 0000a000 00:0c 4875421    /usr/local/nbase/lib/librgen.so
+findAdressesOfSections: :369: buf = 04a68000-04ad3000 r-xp 00000000 00:0c 4874607    /lib/libm.so
+findAdressesOfSections: :369: buf = 04ad3000-04ada000 ---p 0006b000 00:0c 4874607    /lib/libm.so
+findAdressesOfSections: :369: buf = 04ada000-04adb000 r--p 0006a000 00:0c 4874607    /lib/libm.so
+findAdressesOfSections: :369: buf = 04adb000-04adc000 rw-p 0006b000 00:0c 4874607    /lib/libm.so
+findAdressesOfSections: :369: buf = 04adc000-04c04000 r-xp 00000000 00:0c 4874612    /lib/libc.so
+findAdressesOfSections: :369: buf = 04c04000-04c0b000 ---p 00128000 00:0c 4874612    /lib/libc.so
+findAdressesOfSections: :369: buf = 04c0b000-04c0d000 r--p 00127000 00:0c 4874612    /lib/libc.so
+findAdressesOfSections: :369: buf = 04c0d000-04c0e000 rw-p 00129000 00:0c 4874612    /lib/libc.so
+findAdressesOfSections: :369: buf = 04c0e000-04c11000 rw-p 00000000 00:00 0
+findAdressesOfSections: :369: buf = 04c11000-05011000 rwxp 00000000 00:00 0
+findAdressesOfSections: :369: buf = 0e000000-0ee1b000 r-xp 00008000 00:0c 4875210    /usr/local/nbase/lib/libcpss.so.0.0.0
+findAdressesOfSections: :369: buf = 0ee1b000-0ee22000 ---p 00e23000 00:0c 4875210    /usr/local/nbase/lib/libcpss.so.0.0.0
+findAdressesOfSections: :369: buf = 0ee22000-0ee25000 rw-p 00e22000 00:0c 4875210    /usr/local/nbase/lib/libcpss.so.0.0.0
+findAdressesOfSections: :369: buf = 0ee25000-10a00000 ---p 00e2d000 00:0c 4875210    /usr/local/nbase/lib/libcpss.so.0.0.0
+findAdressesOfSections: :369: buf = 10a00000-10b72000 rw-p 00e28000 00:0c 4875210    /usr/local/nbase/lib/libcpss.so.0.0.0
+findAdressesOfSections: :369: buf = 10b72000-10d70000 rw-p 00000000 00:00 0
+findAdressesOfSections: :369: buf = 10f00000-10f19000 r-xp 00008000 00:0c 4875213    /usr/local/nbase/lib/libhelper.so.0.0.0
+findAdressesOfSections: :369: buf = 10f19000-10f20000 ---p 00021000 00:0c 4875213    /usr/local/nbase/lib/libhelper.so.0.0.0
+findAdressesOfSections: :369: buf = 10f20000-10f21000 rw-p 00020000 00:0c 4875213    /usr/local/nbase/lib/libhelper.so.0.0.0
+findAdressesOfSections: :369: buf = 10f21000-10f80000 ---p 00029000 00:0c 4875213    /usr/local/nbase/lib/libhelper.so.0.0.0
+findAdressesOfSections: :369: buf = 10f80000-10f81000 rw-p 00028000 00:0c 4875213    /usr/local/nbase/lib/libhelper.so.0.0.0
+findAdressesOfSections: :369: buf = 19000000-19280000 rw-s 1ec00000 00:15 20         /dev/mvPP
+findAdressesOfSections: :369: buf = 38000000-3819c000 r-xp 00008000 00:0c 4903702    /opt/valgrind/lib/valgrind/memcheck-arm-linux
+findAdressesOfSections: :369: buf = 381a3000-381a5000 rw-p 001a3000 00:0c 4903702    /opt/valgrind/lib/valgrind/memcheck-arm-linux
+findAdressesOfSections: :369: buf = 381a5000-38ad8000 rw-p 00000000 00:00 0          [heap]
+findAdressesOfSections: :369: buf = 616f2000-625a1000 rwxp 00000000 00:00 0
+findAdressesOfSections: :369: buf = 625a1000-625a3000 ---p 00000000 00:00 0
+findAdressesOfSections: :369: buf = 625a3000-626a3000 rwxp 00000000 00:00 0          [stack:601]
+findAdressesOfSections: :369: buf = 626a3000-626a5000 ---p 00000000 00:00 0
+findAdressesOfSections: :369: buf = 626a8000-626a9000 rw-s 00000000 00:17 1115       /tmp/vgdb-pipe-shared-mem-vgdb-601-by-root-on-???
+findAdressesOfSections: :369: buf = 626a9000-62962000 rwxp 00000000 00:00 0
+findAdressesOfSections: :369: buf = 6296d000-62c08000 rwxp 00000000 00:00 0
+findAdressesOfSections: :369: buf = 62c62000-64d94000 rwxp 00000000 00:00 0
+findAdressesOfSections: :369: buf = 65094000-65194000 rwxp 00000000 00:00 0
+findAdressesOfSections: :369: buf = 65489000-65794000 rwxp 00000000 00:00 0
+findAdressesOfSections: :369: buf = 65972000-65a72000 rwxp 00000000 00:00 0
+findAdressesOfSections: :369: buf = bdddd000-bdde2000 rw-p 00000000 00:00 0
+findAdressesOfSections: :369: buf = bedc1000-bede2000 rw-p 00000000 00:00 0
+findAdressesOfSections: :369: buf = ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:48,INFO,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainDrv/src/prestera/sTapi/sTapi_main.c(6999),  main: Created UiD events connection
+
+
+Starting System Root Task==601== Syscall param ioctl(generic) points to uninitialised byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0xEC4D2AF: extDrvPciFindDev (genDrvPciDrv.c:479)
+==601==    by 0x307E37: read_board_ID (sTapi_ports.c:4626)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0xbdde1ae4 is on thread 1's stack
+==601==  in frame #1, created by extDrvPciFindDev (genDrvPciDrv.c:471)
+==601==
+==601== Syscall param ioctl(generic) points to uninitialised byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0xEC4D2AF: extDrvPciFindDev (genDrvPciDrv.c:479)
+==601==    by 0x307E6F: read_board_ID (sTapi_ports.c:4627)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0xbdde1ae4 is on thread 1's stack
+==601==  in frame #1, created by extDrvPciFindDev (genDrvPciDrv.c:471)
+==601==
+==601== Syscall param ioctl(generic) points to uninitialised byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0xEC4D2AF: extDrvPciFindDev (genDrvPciDrv.c:479)
+==601==    by 0x307FAB: read_board_ID (sTapi_ports.c:4655)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0xbdde1ae4 is on thread 1's stack
+==601==  in frame #1, created by extDrvPciFindDev (genDrvPciDrv.c:471)
+==601==
+==601== Syscall param ioctl(generic) points to uninitialised byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0xEC4D2AF: extDrvPciFindDev (genDrvPciDrv.c:479)
+==601==    by 0x3080B7: read_board_ID (sTapi_ports.c:4677)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0xbdde1ae4 is on thread 1's stack
+==601==  in frame #1, created by extDrvPciFindDev (genDrvPciDrv.c:471)
+==601==
+==601== Syscall param ioctl(generic) points to uninitialised byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0xEC4D2AF: extDrvPciFindDev (genDrvPciDrv.c:479)
+==601==    by 0x3081B3: read_board_ID (sTapi_ports.c:4696)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0xbdde1ae4 is on thread 1's stack
+==601==  in frame #1, created by extDrvPciFindDev (genDrvPciDrv.c:471)
+==601==
+==601== Syscall param ioctl(generic) points to uninitialised byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0xEC4D2AF: extDrvPciFindDev (genDrvPciDrv.c:479)
+==601==    by 0x30826B: read_board_ID (sTapi_ports.c:4709)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0xbdde1ae4 is on thread 1's stack
+==601==  in frame #1, created by extDrvPciFindDev (genDrvPciDrv.c:471)
+==601==
+==601== Syscall param ioctl(generic) points to uninitialised byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0xEC4D2AF: extDrvPciFindDev (genDrvPciDrv.c:479)
+==601==    by 0x3083C7: read_board_ID (sTapi_ports.c:4726)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0xbdde1ae4 is on thread 1's stack
+==601==  in frame #1, created by extDrvPciFindDev (genDrvPciDrv.c:471)
+==601==
+==601== Syscall param ioctl(generic) points to uninitialised byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0xEC4D2AF: extDrvPciFindDev (genDrvPciDrv.c:479)
+==601==    by 0x3084DB: read_board_ID (sTapi_ports.c:4744)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0xbdde1ae4 is on thread 1's stack
+==601==  in frame #1, created by extDrvPciFindDev (genDrvPciDrv.c:471)
+==601==
+==601== Syscall param ioctl(generic) points to uninitialised byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0xEC4D2AF: extDrvPciFindDev (genDrvPciDrv.c:479)
+==601==    by 0x3085AB: read_board_ID (sTapi_ports.c:4759)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0xbdde1ae4 is on thread 1's stack
+==601==  in frame #1, created by extDrvPciFindDev (genDrvPciDrv.c:471)
+==601==
+==601== Syscall param ioctl(generic) points to unaddressable byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0x10F05587: osSemWait (ke_lsemLib.c:474)
+==601==    by 0x24BF73: stapiCommon_IIC_board_ID_read (sTapi_common.c:2175)
+==601==    by 0x3085D3: read_board_ID (sTapi_ports.c:4761)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0x2 is not stack'd, malloc'd or (recently) free'd
+==601==
+==601== Syscall param ioctl(I2C_RDWR).msgs points to uninitialised byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0x24BC47: IIC_read (sTapi_common.c:2114)
+==601==    by 0x24BFA3: stapiCommon_IIC_board_ID_read (sTapi_common.c:2177)
+==601==    by 0x3085D3: read_board_ID (sTapi_ports.c:4761)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0xbdde1a62 is on thread 1's stack
+==601==  in frame #1, created by IIC_read (sTapi_common.c:1990)
+==601==
+==601== Syscall param ioctl(generic) points to unaddressable byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0x10F056FB: osSemSignal (ke_lsemLib.c:532)
+==601==    by 0x24BFC3: stapiCommon_IIC_board_ID_read (sTapi_common.c:2179)
+==601==    by 0x3085D3: read_board_ID (sTapi_ports.c:4761)
+==601==    by 0x30ED77: sTapiPorts_board_ID (sTapi_ports.c:6733)
+==601==    by 0x521B7: run (gtAppInit.c:127)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0x2 is not stack'd, malloc'd or (recently) free'd
+==601==
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:52,INFO,"main-pss", sTapiPorts_board_ID(6742): [i=2] board_ID=53
+)
+==601==    by 0x5222B: run (gtAppInit.c:140)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0x3 is not stack'd, malloc'd or (recently) free'd
+==601==
+==601== Syscall param ioctl(generic) points to unaddressable byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0x10F05587: osSemWait (ke_lsemLib.c:474)
+==601==    by 0x36E4DF: sTapiSpi_direct_access (sTapi_spi.c:176)
+==601==    by 0x2623CB: stapiCommon_get_reset_sw (sTapi_common.c:11605)
+==601==    by 0x5222B: run (gtAppInit.c:140)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0x3 is not stack'd, malloc'd or (recently) free'd
+==601==
+==601== Syscall param ioctl(generic) points to unaddressable byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0x10F056FB: osSemSignal (ke_lsemLib.c:532)
+==601==    by 0x36E95B: sTapiSpi_direct_access (sTapi_spi.c:340)
+==601==    by 0x2623CB: stapiCommon_get_reset_sw (sTapi_common.c:11605)
+==601==    by 0x5222B: run (gtAppInit.c:140)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0x3 is not stack'd, malloc'd or (recently) free'd
+==601==
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:54,INFO,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/sysHwConfig/gtAppInit.c(145),  SW reset button in On - applying default configuration
+
+
+   Re-initialisation /usr/local/etc/System.conf
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:54,WARNING,"main-pss", Re-initialisation /usr/local/etc/System.conf
+## Error: "cfgfile" not defined
+==601== Syscall param ioctl(generic) points to unaddressable byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0x10F05587: osSemWait (ke_lsemLib.c:474)
+==601==    by 0x10F057AF: osMutexLock (ke_lsemLib.c:658)
+==601==    by 0x10F0F563: osMemPoolsInit (gtOsMemLib.c:861)
+==601==    by 0x10F0EBCF: osMemLibInit (gtOsMemLib.c:478)
+==601==    by 0x10F0796F: osMemInit (osLinuxMem.c:427)
+==601==    by 0x4232F: appDemoInitGlobalModuls (appDemoBoardConfig.c:2294)
+==601==    by 0x43A5F: gtInitSystem (appDemoBoardConfig.c:3190)
+==601==    by 0x527E7: run (gtAppInit.c:300)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==  Address 0x5 is not stack'd, malloc'd or (recently) free'd
+==601==
+==601== Syscall param ioctl(generic) points to unaddressable byte(s)
+==601==    at 0x4B9F64C: ioctl (in /lib/libc.so)
+==601==    by 0x10F056FB: osSemSignal (ke_lsemLib.c:532)
+==601==    by 0x10F057DB: osMutexUnlock (ke_lsemLib.c:695)
+==601==    by 0x10F0F857: osMemPoolsInit (gtOsMemLib.c:923)
+==601==    by 0x10F0EBCF: osMemLibInit (gtOsMemLib.c:478)
+==601==    by 0x10F0796F: osMemInit (osLinuxMem.c:427)
+==601==    by 0x4232F: appDemoInitGlobalModuls (appDemoBoardConfig.c:2294)
+==601==    by 0x43A5F: gtInitSystem (appDemoBoardConfig.c:3190)
+==601==    by 0x527E7: run (gtAppInit.c:300)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==  Address 0x5 is not stack'd, malloc'd or (recently) free'd
+==601==
+] 0xb0e6d8
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 85 appDemoPpConfigList[i] 0xb1031c
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 86 appDemoPpConfigList[i] 0xb11f60
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 87 appDemoPpConfigList[i] 0xb13ba4
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 88 appDemoPpConfigList[i] 0xb157e8
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 89 appDemoPpConfigList[i] 0xb1742c
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 90 appDemoPpConfigList[i] 0xb19070
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 91 appDemoPpConfigList[i] 0xb1acb4
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 92 appDemoPpConfigList[i] 0xb1c8f8
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 93 appDemoPpConfigList[i] 0xb1e53c
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 94 appDemoPpConfigList[i] 0xb20180
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 95 appDemoPpConfigList[i] 0xb21dc4
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 96 appDemoPpConfigList[i] 0xb23a08
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 97 appDemoPpConfigList[i] 0xb2564c
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 98 appDemoPpConfigList[i] 0xb27290
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 99 appDemoPpConfigList[i] 0xb28ed4
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 100 appDemoPpConfigList[i] 0xb2ab18
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 101 appDemoPpConfigList[i] 0xb2c75c
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 102 appDemoPpConfigList[i] 0xb2e3a0
+==601== Warning: invalid file descriptor -1 in syscall write()
+23:45:58,ERROR,"main-pss",/home/mrv/cpss14/build_env_msys_1438/dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/pss/pss/SW/prestera/mainAppDemo/src/appDemo/boardConfig/gtMRVDbDxBobcat2.c(236),  getBoardInfo:236 ofir added TEST12, i 103 appDemoPpConfigList[i] 0xb2ffe4
+==601== Invalid read of size 4
+==601==    at 0x32B3C: getBoardInfo (gtMRVDbDxBobcat2.c:237)
+==601==    by 0x43CF3: gtInitSystem (appDemoBoardConfig.c:3276)
+==601==    by 0x527E7: run (gtAppInit.c:300)
+==601==    by 0x10F06D67: osWrapperOpen (osLinuxGen.c:108)
+==601==    by 0x52B4B: userAppInit (gtAppInit.c:415)
+==601==    by 0x4A517: preUserAppInit (main.c:257)
+==601==    by 0x10F04EB3: osStartEngine (ke_lkernelLib.c:152)
+==601==    by 0x4A5A3: main (main.c:278)
+==601==  Address 0xb31108 is not stack'd, malloc'd or (recently) free'd
+==601==
+*** Segmentation fault
+Register dump:
+
+ R0: 00001c44   R1: 00a7a088   R2: 00b2ffe4   R3: 00000000
+ R4: 10f20374   R5: 00000000   R6: 0001fcd8   R7: 00000000
+ R8: 00000000   R9: 00000000   SL: 04028000   FP: bdde1a84
+ IP: 04c0d030   SP: bdde1a58   LR: 00032b20   PC: 00032b3c
+
+ CPSR: 00000000
+
+ Trap: 0000000e   Error: 00000017   OldMask: 00000000
+ Addr: 00b31108
+
+Backtrace:
+pssExe[0x32b3c]
+pssExe[0x43cf4]
+pssExe[0x527e8]
+/usr/local/nbase/lib/libhelper.so.0(osWrapperOpen+0x70)[0x10f06d68]
+pssExe[0x52b4c]
+pssExe[0x4a518]
+/usr/local/nbase/lib/libhelper.so.0(osStartEngine+0x15c)[0x10f04eb4]
+pssExe(main+0x80)[0x4a5a4]
+/lib/libc.so.6(__libc_start_main+0x110)[0x4af3b98]
+
+Memory map:
+
+00008000-00638000 r-xp 00000000 00:0c 4879353    /usr/local/nbase/sbin/pssExe
+00638000-006ef000 rw-p 00630000 00:0c 4879353    /usr/local/nbase/sbin/pssExe
+006ef000-00b31000 rw-p 00000000 00:00 0
+04000000-0401f000 r-xp 00000000 00:0c 4874602    /lib/ld.so
+0401f000-04025000 rw-p 00000000 00:00 0
+04025000-04026000 rw-p 00000000 00:00 0
+04027000-04028000 r--p 0001f000 00:0c 4874602    /lib/ld.so
+04028000-04029000 rw-p 00020000 00:0c 4874602    /lib/ld.so
+04029000-0402a000 rwxp 00000000 00:00 0
+04829000-0482a000 r-xp 00000000 00:0c 4903676    /opt/valgrind/lib/valgrind/vgpreload_core-arm-linux.so
+0482a000-04831000 ---p 00001000 00:0c 4903676    /opt/valgrind/lib/valgrind/vgpreload_core-arm-linux.so
+04831000-04832000 rw-p 00000000 00:0c 4903676    /opt/valgrind/lib/valgrind/vgpreload_core-arm-linux.so
+04832000-0483e000 r-xp 00000000 00:0c 4903630    /opt/valgrind/lib/valgrind/vgpreload_memcheck-arm-linux.so
+0483e000-04845000 ---p 0000c000 00:0c 4903630    /opt/valgrind/lib/valgrind/vgpreload_memcheck-arm-linux.so
+04845000-04846000 rw-p 0000b000 00:0c 4903630    /opt/valgrind/lib/valgrind/vgpreload_memcheck-arm-linux.so
+04846000-04850000 r-xp 00000000 00:0c 4875017    /usr/lib/libgcc_s.so.1
+04850000-04857000 ---p 0000a000 00:0c 4875017    /usr/lib/libgcc_s.so.1
+04857000-04858000 rw-p 00009000 00:0c 4875017    /usr/lib/libgcc_s.so.1
+04858000-0485c000 r-xp 00000000 00:0c 4874836    /lib/libSegFault.so
+0485c000-04863000 ---p 00004000 00:0c 4874836    /lib/libSegFault.so
+04863000-04864000 r--p 00003000 00:0c 4874836    /lib/libSegFault.so
+04864000-04865000 rw-p 00004000 00:0c 4874836    /lib/libSegFault.so
+04865000-04870000 r-xp 00000000 00:0c 4875217    /usr/local/nbase/lib/libsapi.so
+04870000-04877000 ---p 0000b000 00:0c 4875217    /usr/local/nbase/lib/libsapi.so
+04877000-04878000 rw-p 0000a000 00:0c 4875217    /usr/local/nbase/lib/libsapi.so
+04878000-0487f000 r-xp 00000000 00:0c 4875216    /usr/local/nbase/lib/libUiD.so
+0487f000-04887000 ---p 00007000 00:0c 4875216    /usr/local/nbase/lib/libUiD.so
+04887000-04888000 rw-p 00007000 00:0c 4875216    /usr/local/nbase/lib/libUiD.so
+04888000-0488a000 r-xp 00000000 00:0c 4875219    /usr/local/nbase/lib/libUiD_ex.so
+0488a000-04892000 ---p 00002000 00:0c 4875219    /usr/local/nbase/lib/libUiD_ex.so
+04892000-04893000 rw-p 00002000 00:0c 4875219    /usr/local/nbase/lib/libUiD_ex.so
+04893000-04896000 r-xp 00000000 00:0c 4875218    /usr/local/nbase/lib/libsocket.so
+04896000-0489d000 ---p 00003000 00:0c 4875218    /usr/local/nbase/lib/libsocket.so
+0489d000-0489e000 rw-p 00002000 00:0c 4875218    /usr/local/nbase/lib/libsocket.so
+0489e000-048d6000 r-xp 00000000 00:0c 4875214    /usr/local/nbase/lib/libnbgen.so
+048d6000-048dd000 ---p 00038000 00:0c 4875214    /usr/local/nbase/lib/libnbgen.so
+048dd000-048e0000 rw-p 00037000 00:0c 4875214    /usr/local/nbase/lib/libnbgen.so
+048e0000-04952000 rw-p 00000000 00:00 0
+04952000-04958000 r-xp 00000000 00:0c 4875215    /usr/local/nbase/lib/libnbgen_ex.so
+04958000-0495f000 ---p 00006000 00:0c 4875215    /usr/local/nbase/lib/libnbgen_ex.so
+0495f000-04960000 rw-p 00005000 00:0c 4875215    /usr/local/nbase/lib/libnbgen_ex.so
+04960000-04974000 r-xp 00000000 00:0c 4874839    /lib/libresolv.so
+04974000-0497b000 ---p 00014000 00:0c 4874839    /lib/libresolv.so
+0497b000-0497c000 r--p 00013000 00:0c 4874839    /lib/libresolv.so
+0497c000-0497d000 rw-p 00014000 00:0c 4874839    /lib/libresolv.so
+0497d000-0497f000 rw-p 00000000 00:00 0
+0497f000-04994000 r-xp 00000000 00:0c 4874608    /lib/libpthread-0.9.so
+04994000-0499b000 ---p 00015000 00:0c 4874608    /lib/libpthread-0.9.so
+0499b000-0499c000 r--p 00014000 00:0c 4874608    /lib/libpthread-0.9.so
+0499c000-0499d000 rw-p 00015000 00:0c 4874608    /lib/libpthread-0.9.so
+0499d000-0499f000 rw-p 00000000 00:00 0
+0499f000-04a25000 r-xp 00000000 00:0c 4875006    /usr/lib/libglib-2.0.so.0.300.0
+04a25000-04a2c000 ---p 00086000 00:0c 4875006    /usr/lib/libglib-2.0.so.0.300.0
+04a2c000-04a2d000 rw-p 00085000 00:0c 4875006    /usr/lib/libglib-2.0.so.0.300.0
+04a2d000-04a31000 r-xp 00000000 00:0c 4875009    /usr/lib/libgthread-2.0.so.0.300.0
+04a31000-04a38000 ---p 00004000 00:0c 4875009    /usr/lib/libgthread-2.0.so.0.300.0
+04a38000-04a39000 rw-p 00003000 00:0c 4875009    /usr/lib/libgthread-2.0.so.0.300.0
+04a39000-04a3d000 r-xp 00000000 00:0c 4874610    /lib/libdl.so
+04a3d000-04a44000 ---p 00004000 00:0c 4874610    /lib/libdl.so
+04a44000-04a45000 r--p 00003000 00:0c 4874610    /lib/libdl.so
+04a45000-04a46000 rw-p 00004000 00:0c 4874610    /lib/libdl.so
+04a46000-04a4c000 r-xp 00000000 00:0c 4874601    /lib/librt.so
+04a4c000-04a53000 ---p 00006000 00:0c 4874601    /lib/librt.so
+04a53000-04a54000 r--p 00005000 00:0c 4874601    /lib/librt.so
+04a54000-04a55000 rw-p 00006000 00:0c 4874601    /lib/librt.so
+04a55000-04a60000 r-xp 00000000 00:0c 4875421    /usr/local/nbase/lib/librgen.so
+04a60000-04a67000 ---p 0000b000 00:0c 4875421    /usr/local/nbase/lib/librgen.so
+04a67000-04a68000 rw-p 0000a000 00:0c 4875421    /usr/local/nbase/lib/librgen.so
+04a68000-04ad3000 r-xp 00000000 00:0c 4874607    /lib/libm.so
+04ad3000-04ada000 ---p 0006b000 00:0c 4874607    /lib/libm.so
+04ada000-04adb000 r--p 0006a000 00:0c 4874607    /lib/libm.so
+04adb000-04adc000 rw-p 0006b000 00:0c 4874607    /lib/libm.so
+04adc000-04c04000 r-xp 00000000 00:0c 4874612    /lib/libc.so
+04c04000-04c0b000 ---p 00128000 00:0c 4874612    /lib/libc.so
+04c0b000-04c0d000 r--p 00127000 00:0c 4874612    /lib/libc.so
+04c0d000-04c0e000 rw-p 00129000 00:0c 4874612    /lib/libc.so
+04c0e000-04c11000 rw-p 00000000 00:00 0
+04c11000-05011000 rwxp 00000000 00:00 0
+0e000000-0ee1b000 r-xp 00008000 00:0c 4875210    /usr/local/nbase/lib/libcpss.so.0.0.0
+0ee1b000-0ee22000 ---p 00e23000 00:0c 4875210    /usr/local/nbase/lib/libcpss.so.0.0.0
+0ee22000-0ee25000 rw-p 00e22000 00:0c 4875210    /usr/local/nbase/lib/libcpss.so.0.0.0
+0ee25000-10a00000 ---p 00e2d000 00:0c 4875210    /usr/local/nbase/lib/libcpss.so.0.0.0
+10a00000-10d70000 rw-s 00000000 00:16 224        /dev/shm/CPSS_SHM_DATA0
+10f00000-10f19000 r-xp 00008000 00:0c 4875213    /usr/local/nbase/lib/libhelper.so.0.0.0
+10f19000-10f20000 ---p 00021000 00:0c 4875213    /usr/local/nbase/lib/libhelper.so.0.0.0
+10f20000-10f21000 rw-p 00020000 00:0c 4875213    /usr/local/nbase/lib/libhelper.so.0.0.0
+10f21000-10f80000 ---p 00029000 00:0c 4875213    /usr/local/nbase/lib/libhelper.so.0.0.0
+10f80000-10f81000 rw-s 00000000 00:16 1118       /dev/shm/MAINOS_SHM_DATA0
+11000000-19000000 rw-s 00000000 00:16 1119       /dev/shm/CPSS_SHM_MALLOC0
+19000000-19280000 rw-s 1ec00000 00:15 20         /dev/mvPP
+19400000-19500000 rw-s f1000000 00:15 20         /dev/mvPP
+1b000000-1b100000 rw-s fc000000 00:15 20         /dev/mvPP
+20000000-20400000 rw-s f8000000 00:15 20         /dev/mvPP
+38000000-3819c000 r-xp 00008000 00:0c 4903702    /opt/valgrind/lib/valgrind/memcheck-arm-linux
+381a3000-381a5000 rw-p 001a3000 00:0c 4903702    /opt/valgrind/lib/valgrind/memcheck-arm-linux
+381a5000-38ad8000 rw-p 00000000 00:00 0          [heap]
+616f2000-625a1000 rwxp 00000000 00:00 0
+625a1000-625a3000 ---p 00000000 00:00 0
+625a3000-626a3000 rwxp 00000000 00:00 0          [stack:601]
+626a3000-626a5000 ---p 00000000 00:00 0
+626a8000-626a9000 rw-s 00000000 00:17 1115       /tmp/vgdb-pipe-shared-mem-vgdb-601-by-root-on-???
+626a9000-62966000 rwxp 00000000 00:00 0
+62966000-6296a000 rwxp 00000000 00:00 0
+6296d000-62c18000 rwxp 00000000 00:00 0
+62c18000-62c60000 rwxp 00000000 00:00 0
+62c62000-64d94000 rwxp 00000000 00:00 0
+64d94000-64d98000 rwxp 00000000 00:00 0
+65094000-65194000 rwxp 00000000 00:00 0
+65489000-65794000 rwxp 00000000 00:00 0
+65972000-65a72000 rwxp 00000000 00:00 0
+bdddd000-bdde2000 rw-p 00000000 00:00 0
+bedc1000-bede2000 rw-p 00000000 00:00 0
+ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]
+==601==
+==601== Process terminating with default action of signal 11 (SIGSEGV)
+==601==    at 0x498F5C8: raise (in /lib/libpthread-0.9.so)
+==601==
+==601== HEAP SUMMARY:
+==601==     in use at exit: 777 bytes in 5 blocks
+==601==   total heap usage: 559 allocs, 554 frees, 1,038,178 bytes allocated
+==601==
+
+
+

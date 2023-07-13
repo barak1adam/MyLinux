@@ -1,0 +1,48 @@
++ /opt/adva/aos/bin/load_unidrv.sh
+/etc/local.d/xo126.start: line 104: /opt/adva/aos/bin/load_unidrv.sh: No such file or directory
++ /bin/chmod 600 /etc/ssh/ssh_vmserver_maint_dsa_key
++ /bin/chmod 600 /etc/ssh/ssh_vmserver_maint_rsa_key
++ /bin/chmod 644 /etc/ssh/ssh_vmserver_maint_rsa_key-cert.pub
++ exit 0
+ [ ok ]
+ [ !! ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/advaoptical.com-tipc start
+ * Loading TIPC ...
+modprobe: FATAL: Module tipc not found in directory /lib/modules/5.15.0
+ [ !! ]
+ * ERROR: advaoptical.com-tipc failed to start
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/advaoptical.com-xg1-update-firmware start
+ *  empty !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111  ...
+ * ERROR: cannot start advaoptical.com-aos as advaoptical.com-tipc would not start
+
+generated from ede-3.6.19
+
+/usr/b
+generated from ede-3.6.19
+
+/usr/b�
+generated from ede-3.6.19
+
+/usr/b
+generated from ede-3.6.19
+
+/usr/b
+generated from ede-3.6.19
+
+/usr/�
+generated from ede-3.6.19
+
+/usr/b
+generated from ede-3.6.19
+
+/usr/�
+generated from ede-3.6.19
+
+/usr/b
+generated from ede-3.6.19
+
+/usr/b
+generated from ede-3.6.19
+
+INIT: Id "s0" respawning too fast: disabled for 5 minutes
+INIT: no more processes left in this runlevel

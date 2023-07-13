@@ -1,0 +1,4 @@
+what is BSP?
+It is the set of interface functions for the hardware which are needed by higher-level software to be able to run. It might be something as simple as just a timer and UART perhaps. Or, it could be something much more comprehensive with lots of each of timers, PWM controllers, GPIO pins, SPI etc. A lot will depend on the requirements of your higher-level software.
+
+isn't it covered by drivers?

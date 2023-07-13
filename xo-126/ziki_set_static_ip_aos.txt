@@ -1,0 +1,11 @@
+>configure 
+         # set dcn 1 dcn-interface M0 dhcp-v4 role off
+         # set dcn 1 dcn-interface M0 dhcp-v6 role off
+       Set ip address:
+         # set dcn 1 dcn-interface M0 ip-address/mask append 10.32.8.200/24 dad-transmits 5
+       Set default gateway:
+         # set dcn 1 ipv4-routes destination-ip-address/mask 0.0.0.0/0 next-hop 10.34.71.254 metric 20 interface M0
+         # commit
+       Set console:timeout
+         # set security user-settings admin cli-user-settings session-idle-timeout 99
+         # commit

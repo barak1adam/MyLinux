@@ -1,0 +1,87 @@
+how do debug FSBL with XSCT: (debugger commandline)
+
+
+XSCT is an alternative debugging to Vitis GUI debug
+a combination of XSCT command line and a serial terminal to see the printout by the target.
+ 
+#connect with the minicom before running
+
+#reset all cores
+rst -system
+#list targets
+targets
+#set active target to A53 core 0
+targets -set -filter {name =~ "Cortex-A53 #0"}
+#take the core out of reset
+rst -processor
+#download the fsbl sw with debug symbols as I built with size optimizations
+dow /home/barak/edt/edt_zcu102_workspace/fsbl_a53/Debug/fsbl_a53.elf
+#set a breakpoint
+bpadd -addr &main
+#run / resume
+con
+
+#helpful commands:
+nxt
+bt
+print <exp>
+locals //local vars
+rrd //regs
+help
+help running
+blist
+
+burn QSPI NOR by JTAG:
+connect
+targets
+
+targets -set -filter {name =~ "PSU"}
+mwr 0xffca0038 0x1ff
+targets
+targets -set -filter {name =~ "MicroBlaze PMU"}
+targets
+dow {~/Downloads/ug1209-embedded-design-tutorial/qspi_boot/pmu_fw.elf}
+con
+
+targets -set -filter {name =~ "Cortex-A53 #0"}
+rst -processor
+dow {~/Downloads/ug1209-embedded-design-tutorial/qspi_boot/fsbl_a53.elf}
+con 
+stop
+
+dow {~/Downloads/ug1209-embedded-design-tutorial/qspi_boot/bl31.elf}
+con
+stop
+
+dow {~/Downloads/ug1209-embedded-design-tutorial/qspi_boot/u-boot.elf}
+con
+stop
+dow -data {~/Downloads/ug1209-embedded-design-tutorial/qspi_boot/qspi_BOOT.bin} 0x2000000
+con
+
+on u-boot prompt:
+ZynqMP> sf probe 0 0 0
+ZynqMP> sf erase 0 0x4000000
+ZynqMP> sf write 0x2000000 0 0x4000000
+
+how to swtich boot modes via xsct:
+===================================
+mwr 0xff5e0200 0x0100 //JTAG
+rst -system
+con
+
+mwr 0xff5e0200 0x1100 //NOR
+rst -system
+con
+
+the method to test boot from NOR: 
+=================================
+build SW (FSBL for example), bootgen it to BOOT.bin file, cp it to my tftpboot folder
+then move to JTAG, flash this BIN file to NOR
+then swtich back to NOR and try to boot from it.
+
+pwd
+/home/barak/xilinx-zcu102-2022.1/images/linux
+cp /home/barak/edt/edt_zcu102_workspace/xo126_fsbl/Debug/xo126_fsbl.elf zynqmp_fsbl.elf; /home/barak/Vitis/2022.1/bin/bootgen -w -image /home/barak/xilinx-zcu102-2022.1/images/linux/bootgen.bif -arch zynqmp -o /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT_2301.bin; sleep 5; cp BOOT_2301.bin /tftpboot/;
+
+

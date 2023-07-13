@@ -1,0 +1,34 @@
+We are looking for a highly motivated Senior Linux System Engineer to join our Linux Kernel team.
+
+Responsibilities include:
+
+Design, implementation of embedded SW systems, both for ARM and x86.
+Design and development of hardware device drivers.
+Participate in new products integrations and bring ups.
+Building and maintaining of development environments for embedded products.
+Maintenance of Embedded Linux distributions.
+Linux administration including Bash and Python scripts.
+Embedded system debugging and troubleshooting.
+Documentation and verifications of new features.
+
+Essentials:
+
+BS degree in Computer Science, Electrical Engineering or related field preferred.
+At least 5 years of experience with Embedded Linux user and kernel space programming.
+Solid understanding of Operating Systems and Networking.
+C, C++, bash, python.
+Open Source & Git.
+Any experience with virtual network functions and OpenStack.
+Boot Loaders and bring ups experience - advantage.
+Expreinece with Build frameworks for embedded systems. Yocto or BuildRoot - advantage.
+Continous Integrations - advantage.
+
+
+Personal Attributes :
+
+Teammate with ability to work in a collaborative environment
+Creative, dynamic thinker, open-minded
+Go-getter, curious
+Excellent written and spoken English
+
+If you are ready for the challenge, we want to hear from you !

@@ -1,0 +1,17 @@
+https://daniel.haxx.se/docs/poll-vs-select.html
+
+select and poll handle fds in linear way.
+
+select is simple for small # of fds
+
+performance more or less the same
+
+select example:
+===============
+example with fds:
+https://man7.org/linux/man-pages/man2/select.2.html
+
+example with sockets:
+https://man7.org/linux/man-pages/man2/select_tut.2.html
+
+

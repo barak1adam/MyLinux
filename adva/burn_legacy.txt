@@ -1,0 +1,1 @@
+protect off all ; nand erase ; setenv ipaddr 172.21.11.100 ; setenv serverip 172.21.11.14; bubt u-boot-kw_3_5_2_5.bin ; setenv ipaddr 172.21.11.100 ; setenv serverip 172.21.11.14 ; nand erase 00100000 0ff00000 ; wrTFTP2flash kernel.jffs2 08100000 00100000 ; wrTFTP2flash root.jffs2 00400000 08400000

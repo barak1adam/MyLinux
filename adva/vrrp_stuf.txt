@@ -1,0 +1,1450 @@
+login as: barak
+barak@172.21.11.14's password:
+Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.4.0-21-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+25 packages can be updated.
+0 updates are security updates.
+
+*** System restart required ***
+Last login: Wed Dec 28 15:22:50 2016 from 172.21.10.40
+barak@barak-OptiPlex-7020:~$ cd ~/Desktop/keepalived/
+barak@barak-OptiPlex-7020:~/Desktop/keepalived$ ll
+total 26852
+drwxrwxr-x  4 barak barak     4096 Jan 17 17:50 ./
+drwxr-xr-x  5 barak barak     4096 Jan  2 18:05 ../
+-rw-rw-r--  1 barak barak     3198 Jan 17 17:45 action_items.txt
+-rw-rw-r--  1 barak barak      124 Jan 10 14:38 changes_needed.txt
+-rw-rw-r--  1 barak barak      466 Dec 29 17:45 dist_pkgbuild
+-rw-rw-r--  1 barak barak      455 Dec 29 17:45 dist_pkginstall
+-rw-rw-r--  1 barak barak   154834 Dec 25 15:16 DR-VRRP-Tracking-IPv4-ver3.docx
+drwxrwxr-x  3 barak barak     4096 Dec 29 17:43 install/
+drwxr-xr-x 11 root  root      4096 Dec 29 17:41 keepalived/
+-rw-rw-r--  1 barak barak      248 Dec 29 17:48 keepalived.conf
+-rw-rw-r--  1 barak barak 16329784 Jan 17 17:50 keepalived.tar.gz
+-rw-rw-r--  1 barak barak     7997 Jan 17 11:29 notes.txt
+-rw-rw-r--  1 barak barak  8719067 Jan  8 17:35 OS9XXX Series User Manual %5bML51028%2c L2+ Ver. 2.1.9B%2c L3 Ver. 3.1.8%2c Rev. 08%5d_d13.pdf
+-rwxrwxr-x  1 barak barak     4296 Dec 29 17:45 pkg.txt*
+-rw-rw-r--  1 barak barak    18073 Jan 10 09:15 sample_config_mrv.txt
+-rw-rw-r--  1 barak barak     1578 Jan 17 16:54 vrrp_design_part1.txt
+-rw-rw-r--  1 barak barak  2192480 Jan  8 18:08 VRRP-DVT-4-2-1-Test Report (1).docx
+-rw-rw-r--  1 barak barak      460 Jan  8 18:46 vs_vrrpd.txt
+barak@barak-OptiPlex-7020:~/Desktop/keepalived$ cat action_items.txt
+
+"keepalived" - action items:
+============================
+
+1. VRRP tracking - if some address is not "pingable" from a router, this router cannot be elected as VRRP master.
+implementation: if ping test fails, current router priority is set to low value, to let the backup router become the VRRP master.
+
+The action item is to check how tracking can be done with the "keepalived" health check scripts.
+
+check scripts:
+-------------
+if KO, immediately goes into FAULT state. if "fall 20", then after 20 successive KOs, we can take some action like weight, etc..
+if OK, and if "rise 10", then after 10 successive OKs, will go out of FAULT state and restart election of master router.
+
+note: can change the testping.sh test itself without reloading the service.
+
+if weight is used, we will go to backup/master state, not to FAULT state.
+
+if negative weight is used, on first check KO - immediately priority is set to current-weight ! immeditaely we will go into BACKUP/MASTER state (depends on the remote side priority).
+OK will not affect immediately! just after KO is decreasing the priority, OK will increase it back.
+after 10 successive OK, priority is set to current+weight, and we will go into MASTER/BACKUP state (depends on the remote side priority).
+after 10 successive KO, priority is set to current-weight, and we will go into MASTER/BACKUP state (depends on the remote side priority).
+
+if positive weight is used, on fist check OK- immediately priority is set to current+weight !immeditaely we will go into MASTER/BACKUP state (depends on the remote side priority)
+KO will not affect immediately! just after OK is rising the priority, KO will decrease it back.
+after 10 successive OK, priority is set to current+weight, and we will go into MASTER/BACKUP state (depends on the remote side priority).
+after 10 successive KO, priority is set to current-weight, and we will go into MASTER/BACKUP state (depends on the remote side priority).
+
+Anyway, priority is increased/decreased only once.
+
+2. Check whether "keepalived" service supports "reload" of a configuration file.
+If "reload" is not supported and "restart" is needed, check if there are other depended services need to be restarted too.
+reload is supported: "kill -1 pidof(keepalived)"
+
+3. Check how many VRRP instances can be configured on the same router interface.
+
+4. When a router is an owner, priority is set by default to the highest value and cannot be changed. That's why VRRP tracking is not possible for an owner.
+Make sure that "keepalived" behaves the same.
+
+this is not the behavior in keepalived. priority can be configured and affect the master ellection even if we've got an owner.
+so we will have to:
+if owner, set priority by default to 255
+if owner, don't allow priority configuration
+if not owner, set priority by default to 100
+if not owner, allow priority configuration.
+
+5. Review the VRRP section in our legacy User Manual:
+-- make sure all CLI commands are supported in "keepalived"
+-- create a mapping table: Legacy VRRP CLI command ---> "keepalived" required command in the conf file.
+It will make implementation easier...
+
+
+6. remove old vrrp package + patches
+
+7. meet Pavel for fast implementations
+barak@barak-OptiPlex-7020:~/Desktop/keepalived$ ll
+total 26852
+drwxrwxr-x  4 barak barak     4096 Jan 17 17:50 ./
+drwxr-xr-x  5 barak barak     4096 Jan  2 18:05 ../
+-rw-rw-r--  1 barak barak     3198 Jan 17 17:45 action_items.txt
+-rw-rw-r--  1 barak barak      124 Jan 10 14:38 changes_needed.txt
+-rw-rw-r--  1 barak barak      466 Dec 29 17:45 dist_pkgbuild
+-rw-rw-r--  1 barak barak      455 Dec 29 17:45 dist_pkginstall
+-rw-rw-r--  1 barak barak   154834 Dec 25 15:16 DR-VRRP-Tracking-IPv4-ver3.docx
+drwxrwxr-x  3 barak barak     4096 Dec 29 17:43 install/
+drwxr-xr-x 11 root  root      4096 Dec 29 17:41 keepalived/
+-rw-rw-r--  1 barak barak      248 Dec 29 17:48 keepalived.conf
+-rw-rw-r--  1 barak barak 16329784 Jan 17 17:50 keepalived.tar.gz
+-rw-rw-r--  1 barak barak     7997 Jan 17 11:29 notes.txt
+-rw-rw-r--  1 barak barak  8719067 Jan  8 17:35 OS9XXX Series User Manual %5bML51028%2c L2+ Ver. 2.1.9B%2c L3 Ver. 3.1.8%2c Rev. 08%5d_d13.pdf
+-rwxrwxr-x  1 barak barak     4296 Dec 29 17:45 pkg.txt*
+-rw-rw-r--  1 barak barak    18073 Jan 10 09:15 sample_config_mrv.txt
+-rw-rw-r--  1 barak barak     1578 Jan 17 16:54 vrrp_design_part1.txt
+-rw-rw-r--  1 barak barak  2192480 Jan  8 18:08 VRRP-DVT-4-2-1-Test Report (1).docx
+-rw-rw-r--  1 barak barak      460 Jan  8 18:46 vs_vrrpd.txt
+barak@barak-OptiPlex-7020:~/Desktop/keepalived$ cat sample_config_mrv.txt
+hostname DUT-1
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.1/24
+ports 1,13-14
+!
+ip route 0.0.0.0/0 192.168.133.2
+
+
+::::::::::::::::::DUT2:::::::::::::::
+
+hostname DUT-2
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.1/24
+ports 32
+management
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.2/24
+ports 33
+vrrp
+  enable
+  virtual-router 1
+   virtual-ip 192.168.133.2
+   enable
+!
+router ospf
+ospf router-id 2.2.2.2
+redistribute connected
+network 192.168.136.0/24 area 0
+
+::::::::::::::::::DUT3:::::::::::::::
+
+hostname DUT-3
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.2/24
+ports 12
+management
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.3/24
+ports 13
+vrrp
+  enable
+  virtual-router 1
+   virtual-ip 192.168.133.2
+   enable
+!
+router ospf
+ospf router-id 1.1.1.1
+redistribute connected
+network 192.168.136.0/24 area 0
+
+::::::::::::::::::DUT4:::::::::::::::
+
+
+hostname DUT-4
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.3/24
+ports 1-6
+!
+router ospf
+ospf router-id 3.3.3.3
+redistribute connected
+network 192.168.136.0/24 area 0
+
+:::::::::::::::::::DUT1::::::::::::::::::::::::
+rsyslog 194.90.136.192
+!
+line vty
+ no exec-timeout global
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.1/24
+ ports 32
+management ssh 0.0.0.0/0
+ management telnet 0.0.0.0/0
+ management tftp 0.0.0.0/0
+ management snmp 0.0.0.0/0
+!
+interface vlan vif2
+tag 20
+ ip 192.168.133.2/24
+ ports 33
+vrrp
+  enable
+  virtual-router 1
+   priority 200
+   track-interface vif1
+   virtual-ip 192.168.133.5
+   enable
+no multicast
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 2.2.2.2
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+
+:::::::::::::::::::DUT2::::::::::::::::::::::::
+
+!
+line vty
+ no exec-timeout global
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.2/24
+ ports 12
+management ssh 0.0.0.0/0
+ management telnet 0.0.0.0/0
+ management tftp 0.0.0.0/0
+ management snmp 0.0.0.0/0
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.3/24
+ ports 13
+vrrp
+  enable
+  virtual-router 1
+   track-interface vif1
+   virtual-ip 192.168.133.5
+   enable
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 1.1.1.1
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+OS940#
+:::::::::::::::::::DUT4::::::::::::::::::::::::
+
+OS940# wr t
+Building configuration...
+
+Current configuration:
+! version main-DK05-03-14-1141
+!
+rsyslog 194.90.136.192
+!
+line vty
+ no exec-timeout global
+!
+! Interfaces configuration
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.1/24
+ ports 1,13-14
+!
+ip route 0.0.0.0/0 192.168.133.5
+!
+OS940#
+
+:::::::::::::::::::DUT6::::::::::::::::::::::::
+
+
+
+Current configuration:
+! version main-D05-03-14-1137
+!
+rsyslog 194.90.136.192
+!
+line vty
+ no exec-timeout global
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.3/24
+ ports 1-6
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 3.3.3.3
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+OS912C#
+
+::::::::::::::::::::::::::::::::::::::::::DUT1::::::::::::::::::::::
+
+
+OS9244(config-ip-sla)# wr t
+Building configuration...
+
+Current configuration:
+! version main-DD05-03-14-1143
+!
+rsyslog 194.90.136.192
+!
+line vty
+ no exec-timeout global
+!
+! Access-list extended configuration
+!
+access-list extended VRRP
+default policy permit
+rule 10
+  action redirect port fpga
+  protocol eq icmp
+  source-ip eq 192.168.136.10/32
+!
+! Port acl-binding-mode configuration
+port acl-binding-mode by-port 32-33
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.1/24
+ ports 32
+ip sla
+fpga-membership
+management ssh 0.0.0.0/0
+ management telnet 0.0.0.0/0
+ management tftp 0.0.0.0/0
+ management snmp 0.0.0.0/0
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.2/24
+ ports 33
+vrrp
+  enable
+  virtual-router 1
+   priority 200
+   track-interface vif1
+   track-ip VRRP *
+   virtual-ip 192.168.133.5
+   enable
+!
+! ACL to port bindings
+port access-group VRRP 32
+!
+ip sla monitor VRRP *
+dest-ip  192.168.136.10
+burst-number unlimited
+burst-interval 5
+trap packetLoss
+notify packetLoss
+threshold packet-loss rise 98 fall 2
+enable
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 2.2.2.2
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+OS9244(config-ip-sla)#
+
+::::::::::::::::::::::::::::::::::::::::::DUT2 ::::::::::::::::::::::
+
+
+
+line vty
+ no exec-timeout global
+!
+! Access-list extended configuration
+!
+access-list extended VRRP
+default policy permit
+rule 10
+  action redirect port fpga
+  source-ip eq 192.168.136.10/32
+  no enable
+!
+! Port acl-binding-mode configuration
+port acl-binding-mode by-port 12-13
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.2/24
+ ports 12
+ip sla
+fpga-membership
+management ssh 0.0.0.0/0
+ management telnet 0.0.0.0/0
+ management tftp 0.0.0.0/0
+ management snmp 0.0.0.0/0
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.3/24
+ ports 13
+vrrp
+  enable
+  virtual-router 1
+   track-interface vif1
+   track-ip VRRP *
+   virtual-ip 192.168.133.5
+   enable
+!
+! ACL to port bindings
+port access-group VRRP 12
+!
+ip sla monitor VRRP *
+dest-ip  192.168.136.10
+burst-number unlimited
+burst-interval 5
+trap packetLoss
+notify packetLoss
+threshold packet-loss rise 98 fall 2
+enable
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 1.1.1.1
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+
+
+
+:::::::::::::::::DUT6::::::::::::::::::::::
+
+Building configuration...
+
+Current configuration:
+! version main-D05-03-14-1137
+!
+rsyslog 194.90.136.192
+!
+line vty
+ no exec-timeout global
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.3/24
+ ports 1-6
+!
+! OSPF configuration
+!
+router ospf
+ospf router-id 3.3.3.3
+redistribute connected
+network 192.168.136.0/24 area 0
+!
+
+
+:::::::::::::::::::::::::::::DUT8:::::::::::::::
+
+
+!
+!
+! Interfaces configuration
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.10/24
+ ports 1-3
+!
+OS906C#
+
+
+::::::::::::::::::DUT1:::::::::::::::
+hostname DUT-1
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.1/24
+ports 1-3
+!
+ip route 0.0.0.0/0 192.168.133.2
+
+
+::::::::::::::::::DUT2:::::::::::::::
+
+hostname DUT-2
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.1/24
+ports 1
+management
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.2/24
+ports 2
+vrrp
+  enable
+  virtual-router 1
+   virtual-ip 192.168.133.2
+   enable
+!
+router ospf
+ospf router-id 2.2.2.2
+redistribute connected
+network 192.168.136.0/24 area 0
+
+::::::::::::::::::DUT3:::::::::::::::
+
+hostname DUT-3
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.2/24
+ports 1
+management
+!
+interface vlan vif2
+tag 20
+ip 192.168.133.3/24
+ports 2
+vrrp
+  enable
+  virtual-router 1
+   virtual-ip 192.168.133.2
+   enable
+!
+router ospf
+ospf router-id 1.1.1.1
+redistribute connected
+network 192.168.136.0/24 area 0
+
+::::::::::::::::::DUT4:::::::::::::::
+
+
+hostname DUT-4
+!
+interface vlan vif1
+tag 10
+ip 192.168.136.3/24
+ports 1-3
+!
+router ospf
+ospf router-id 3.3.3.3
+redistribute connected
+network 192.168.136.0/24 area 0
+
+::::::::::::::::::::::::::DUT1::::::::::::::::::::
+
+
+Current configuration:
+! version 2_1_5C
+!
+rsyslog 100.51.4.223
+!
+hostname R08001ANEW
+!
+enable password 8 VhNkeZkvsLxPA
+service advanced-vty
+service password-encryption
+!
+port trunk t1 1-2
+port trunk t1 lacp
+port trunk t2 3-4
+port trunk t2 lacp
+!
+port description 5 sw08001hnew 1/28
+port description 9 R08001BNEW/9 L2
+port description 10 R08001BNEW/10 L3
+port description 12 RMI1 G2/5
+port description t1 sw08001anew 1/25-26
+!
+port tag-outbound-mode tagged 5-6,9,t1,t2
+!interface vlan vif7
+tag 7
+ip 11.1.0.1/24
+ports 7
+management telnet 0.0.0.0/0
+!
+interface vlan vif10
+tag 10
+ip 10.178.252.173/30
+ports 10
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif11
+tag 11
+ports 11
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif12
+tag 12
+ip 10.178.2.170/24
+ports 12
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif111
+tag 111
+ip 10.179.4.1/24
+ports 5-6,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 10
+   virtual-ip 10.179.4.251
+   enable
+!
+interface vlan vif112
+description vlan TELECAMERE,IMPIANTI
+tag 112
+ip 10.179.5.1/25
+ip 10.179.5.130/25
+ports 5-6,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 20
+   virtual-ip 10.179.5.1
+   enable
+  virtual-router 21
+   priority 254
+   virtual-ip 10.179.5.129
+   enable
+!
+interface vlan vif113
+description vlan VOIP
+tag 113
+ip 10.179.6.1/27
+ports 5-6,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 30
+   virtual-ip 10.179.6.1
+   enable
+!
+interface vlan vif114
+description vlan PC,PBLU tag 114
+tag 114
+ip 10.179.7.1/25
+ip 10.179.7.130/25
+ports 5,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 40
+   virtual-ip 10.179.7.1
+   enable
+  virtual-router 41
+   priority 254
+   virtual-ip 10.179.7.129
+   enable
+!
+interface vlan vif115
+description vlan MGTRETE
+tag 115
+ip 10.179.6.225/27
+ports 5-6,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 50
+   virtual-ip 10.179.6.225
+   enable
+!
+interface dummy dummy1
+ip 10.178.254.39/32
+!
+ntp
+server 100.51.3.85    prefer
+server 100.52.4.161
+server 100.61.1.185
+server 100.32.1.170
+server 100.33.2.214
+enable
+!
+router ospf 172
+ospf router-id 10.178.254.39
+auto-cost reference-bandwidth 40000
+redistribute connected
+network 10.178.252.0 0.0.0.255 area 21
+network 10.178.254.0 0.0.0.255 area 21
+area 21 nssa
+!
+tacacs-server key 1q2w3e4r5t6y7u8i9o0p
+tacacs-server host 100.1.1.7
+tacacs-server host 100.51.1.9
+!
+aaa
+authentication login default tacacs+ local
+!
+snmp
+contact sricciardi@autostrade.it
+location Milano Nord Stazione (ANEW)
+community 10 read-only 100.0.0.0/8 TCPIP
+trapsess 100.51.1.12 1 TCPIP
+link-trap-parameters all
+!
+spanning-tree
+port 10-12 non-stp
+enable
+!
+
+::::::::::::::::::::::::::DUT2::::::::::::::::::::
+
+
+Current configuration:
+! version 2_1_5C
+!
+rsyslog 100.51.4.223
+!
+hostname R08001BNEW
+!
+enable password 8 a4xDYO3kfIPC.
+service advanced-vty
+service password-encryption
+!
+port trunk t1 1-2
+port trunk t1 lacp
+port trunk t2 3-4
+port trunk t2 lacp
+!
+port description 5 sw08001hnew 1/27
+port description 9 R08001ANEW/9 L2
+port description 10 R08001ANEW/10 L3
+port description 11 R08002BNEW/12 LAINATE
+port description t1 sw08001bnew
+port description t2 sw08001fnew
+port state disable 11
+!
+port tag-outbound-mode tagged 5,9,t1,t2
+!
+interface vlan vif10
+tag 10
+ip 10.178.252.174/30
+ports 10
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif11
+tag 11
+ip 10.178.252.177/30
+ports 11
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif12
+tag 12
+ports 12
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif111
+tag 111
+ip 10.179.4.2/24
+ports 5,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 10
+   virtual-ip 10.179.4.251
+   enable
+!
+interface vlan vif112
+description vlan TELECAMERE,IMPIANTI
+tag 112
+ip 10.179.5.2/25
+ip 10.179.5.131/25
+ports 9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 20
+   virtual-ip 10.179.5.1
+   enable
+  virtual-router 21
+   virtual-ip 10.179.5.129
+   enable
+!
+interface vlan vif113
+description vlan VOIP
+tag 113
+ip 10.179.6.2/27
+ports 9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 30
+   virtual-ip 10.179.6.1
+   enable
+!
+interface vlan vif114
+description vlan PC,PBLU
+tag 114
+ip 10.179.7.2/25
+ip 10.179.7.131/25
+ports 5,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 40
+   virtual-ip 10.179.7.1
+   enable
+  virtual-router 41
+   virtual-ip 10.179.7.129
+   enable
+!
+interface vlan vif115
+description vlan MGTRETE
+tag 115
+ip 10.179.6.226/27
+ports 5,9,t1,t2
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 50
+   virtual-ip 10.179.6.225
+   enable
+!
+interface dummy dummy1
+ip 10.178.254.40/32
+!
+ntp
+server 100.51.3.85    prefer
+server 100.52.4.161
+server 100.61.1.185
+server 100.32.1.170
+server 100.33.2.214
+enable
+!
+router ospf 172
+ospf router-id 10.178.254.40
+auto-cost reference-bandwidth 40000
+redistribute connected
+network 10.178.252.0 0.0.0.255 area 21
+network 10.178.254.0 0.0.0.255 area 21
+area 21 nssa
+!
+tacacs-server key 1q2w3e4r5t6y7u8i9o0p
+tacacs-server host 100.51.1.7
+tacacs-server host 100.51.1.9
+!
+aaa
+authentication login default tacacs+ local
+!
+snmp
+contact sricciardi@autostrade.it
+location Milano Nord Stazione (BNEW)
+community 10 read-only 100.0.0.0/8 TCPIP
+trapsess 100.51.1.12 1 TCPIP
+link-trap-parameters all
+!
+spanning-tree
+port 10-12 non-stp
+enable
+!
+R08001BNEW#
+
+::::::::::::::::::::::::::DUT3::::::::::::::::::::
+
+R08002BNEW# sh run
+Building configuration...
+
+Current configuration:
+! version 2_1_6C
+!
+rsyslog 100.51.4.223
+!
+hostname R08002BNEW
+!
+enable password 8 QKlq0XtUrdUDI
+service advanced-vty
+service password-encryption
+!
+clock timezone  ftp Rome
+!
+port trunk t1 1-2
+port trunk t1 lacp
+!
+port description 9 TAGGED
+port description 10 TO R08002ANEW/10
+port description 12 TO R08001BNEW/11(MilanoNord)
+port description t1 TAGGED
+!
+port tag-outbound-mode tagged 9,t1
+!
+interface vlan vif7
+tag 7
+ip 12.1.0.1/24
+ports 7
+management telnet 0.0.0.0/0
+!
+interface vlan vif10
+tag 10
+ip 10.178.252.234/30
+ports 10
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif11
+tag 11
+ports 11
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif12
+tag 12
+ip 10.178.252.178/30
+ports 12
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif111
+tag 111
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif112
+description vlan TELECAMERE,IMPIANTI
+tag 112
+ip 10.179.37.2/25
+ip 10.179.37.129/25
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 20
+   virtual-ip 10.179.37.1
+   enable
+  virtual-router 21
+   virtual-ip 10.179.37.129
+   enable
+!
+interface vlan vif113
+description vlan VOIP
+tag 113
+ip 10.179.38.2/27
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 30
+   virtual-ip 10.179.38.1
+   enable
+!
+interface vlan vif114
+description vlan PC,PBLU
+tag 114
+ip 10.179.39.2/25
+ip 10.179.39.129/25
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 40
+   virtual-ip 10.179.39.1
+   enable
+  virtual-router 41
+   virtual-ip 10.179.39.129
+   enable
+!
+interface vlan vif115
+description vlan MGTRETE
+tag 115
+ip 10.179.38.226/27
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 50
+   virtual-ip 10.179.38.225
+   enable
+!
+interface dummy dummy1
+ip 10.178.254.50/32
+!
+ntp
+server 100.51.3.85    prefer
+server 100.52.4.161
+server 100.61.1.185
+server 100.32.1.170
+server 100.33.2.214
+enable
+!
+router ospf 172
+ospf router-id 10.178.254.50
+auto-cost reference-bandwidth 40000
+redistribute connected
+network 10.178.252.0 0.0.0.255 area 21
+network 10.178.254.0 0.0.0.255 area 21
+area 21 nssa
+!
+tacacs-server key 1q2w3e4r5t6y7u8i9o0p
+tacacs-server host 100.51.1.7
+tacacs-server host 100.51.1.9
+!
+aaa
+authentication login default tacacs+ local
+!
+snmp
+contact sricciardi@autostrade.it
+location Lainate (BNEW)
+community 10 read-only 100.0.0.0/8 TCPIP
+trapsess 100.51.1.12 1 TCPIP
+link-trap-parameters all
+!
+spanning-tree
+port 10-12 non-stp
+enable
+!
+
+::::::::::::::::::::::::::DUT4::::::::::::::::::::
+
+
+Current configuration:
+! version 2_1_6C
+!
+rsyslog 100.51.4.223
+!
+hostname R08002ANEW
+!
+enable password 8 tLFYguNxyyAX2
+service advanced-vty
+service password-encryption
+!
+clock timezone  ftp Rome
+!
+port trunk t1 1-2
+port trunk t1 lacp
+!
+port description 9 TAGGED
+port description 10 TO R08002BNEW/10
+port description 11 TO R08006BNEW/12
+port description t1 TAGGED
+!
+port tag-outbound-mode tagged 9,t1
+!
+interface vlan vif10
+tag 10
+ip 10.178.252.233/30
+ports 10
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif11
+tag 11
+ip 10.178.2.171/24
+ports 11
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif12
+tag 12
+ports 12
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif111
+tag 111
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+!
+interface vlan vif112
+description vlan TELECAMERE,IMPIANTI
+tag 112
+ip 10.179.37.1/25
+ip 10.179.37.130/25
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 20
+   virtual-ip 10.179.37.1
+   enable
+  virtual-router 21
+   virtual-ip 10.179.37.129
+   enable
+!
+interface vlan vif113
+description vlan VOIP
+tag 113
+ip 10.179.38.1/27
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 30
+   virtual-ip 10.179.38.1
+   enable
+!
+interface vlan vif114
+description vlan PC,PBLU
+tag 114
+ip 10.179.39.1/25
+ip 10.179.39.130/25
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 40
+   virtual-ip 10.179.39.1
+   enable
+  virtual-router 41
+   virtual-ip 10.179.39.129
+   enable
+!
+interface vlan vif115
+description vlan MGTRETE
+tag 115
+ip 10.179.38.225/27
+ports 9,t1
+management telnet 0.0.0.0/0
+management snmp 100.0.0.0/8
+vrrp
+  enable
+  virtual-router 50
+   virtual-ip 10.179.38.225
+   enable
+!
+interface dummy dummy1
+ip 10.178.254.49/32
+!
+ntp
+server 100.51.3.85    prefer
+server 100.52.4.161
+server 100.61.1.185
+server 100.32.1.170
+server 100.33.2.214
+enable
+!
+router ospf 172
+ospf router-id 10.178.254.49
+auto-cost reference-bandwidth 40000
+redistribute connected
+network 10.178.252.0 0.0.0.255 area 21
+network 10.178.254.0 0.0.0.255 area 21
+network 10.179.36.0 0.0.3.255 area 21
+area 21 nssa
+!
+tacacs-server key 1q2w3e4r5t6y7u8i9o0p
+tacacs-server host 100.51.1.7
+tacacs-server host 100.51.1.9
+!
+aaa
+authentication login default tacacs+ local
+!
+snmp
+contact sricciardi@autostrade.it
+location Lainate (ANEW)
+community 10 read-only 100.0.0.0/8 TCPIP
+trapsess 100.51.1.12 1 TCPIP
+link-trap-parameters all
+!
+spanning-tree
+port 10-12 non-stp
+enable
+!
+barak@barak-OptiPlex-7020:~/Desktop/keepalived$ cat vrrp_design_part1.txt
+Keepalived: init state MASTER / BACKUP - is mandatory?
+
+need to add the test for link up/ down. not just the ping test.
+---- > use of track_interface
+
+Keepalived - is it possible to go into vebose / debug mode on the fly ?
+
+Keepalived - is it possible to restart one instance only? does reload affect always all services?
+
+svrrp / vrrp
+
+actions to be done in HW:
+1) set VRRP multicast MAC in router table for any interface in which VRRP instances are configured
+2) set my VRRP virtual MAC per VRRP instance for any instance configured when it becomes a MASTER and remove it from the Backup router.
+
+DHCP - look for a reference how UID Requests are sent by script upon an event of RX packet.
+(we will use it upon VRRP state change)
+
+NTP, DHCP - look for a reference of saving configuration parameters in "router" module and update config files.
+
+check out keepalived file size.
+
+prepare a plan and + a time line for implementation.
+
+Pavel
+====
+-ping to virtual / real IPs ? ping was not supported to virtual IP (only arp was supported) in case of no ownership, where the real IP != virtual IP.
+        verify that we have a ping with keepalived.
+-action 2 in HW : to handle the case where a switch has no learning and push packet also to the backup router.
+-enable ? check configuration and set it to keepalived conf only after "enabled".
+
+
+Ran:
+===
+follow a CLI command into svrrp.c and vrrp.c. get into invoke_vrrpd()
+how to stop keepalived vrrp instance
+follow svrrpd events
+summarize what has to be built first and what shoul I remove
+DHCP / NTP  - a ref for handling conf files
+
+barak@barak-OptiPlex-7020:~/Desktop/keepalived$ ll
+total 26852
+drwxrwxr-x  4 barak barak     4096 Jan 17 17:50 ./
+drwxr-xr-x  5 barak barak     4096 Jan  2 18:05 ../
+-rw-rw-r--  1 barak barak     3198 Jan 17 17:45 action_items.txt
+-rw-rw-r--  1 barak barak      124 Jan 10 14:38 changes_needed.txt
+-rw-rw-r--  1 barak barak      466 Dec 29 17:45 dist_pkgbuild
+-rw-rw-r--  1 barak barak      455 Dec 29 17:45 dist_pkginstall
+-rw-rw-r--  1 barak barak   154834 Dec 25 15:16 DR-VRRP-Tracking-IPv4-ver3.docx
+drwxrwxr-x  3 barak barak     4096 Dec 29 17:43 install/
+drwxr-xr-x 11 root  root      4096 Dec 29 17:41 keepalived/
+-rw-rw-r--  1 barak barak      248 Dec 29 17:48 keepalived.conf
+-rw-rw-r--  1 barak barak 16329784 Jan 17 17:50 keepalived.tar.gz
+-rw-rw-r--  1 barak barak     7997 Jan 17 11:29 notes.txt
+-rw-rw-r--  1 barak barak  8719067 Jan  8 17:35 OS9XXX Series User Manual %5bML51028%2c L2+ Ver. 2.1.9B%2c L3 Ver. 3.1.8%2c Rev. 08%5d_d13.pdf
+-rwxrwxr-x  1 barak barak     4296 Dec 29 17:45 pkg.txt*
+-rw-rw-r--  1 barak barak    18073 Jan 10 09:15 sample_config_mrv.txt
+-rw-rw-r--  1 barak barak     1578 Jan 17 16:54 vrrp_design_part1.txt
+-rw-rw-r--  1 barak barak  2192480 Jan  8 18:08 VRRP-DVT-4-2-1-Test Report (1).docx
+-rw-rw-r--  1 barak barak      460 Jan  8 18:46 vs_vrrpd.txt
+barak@barak-OptiPlex-7020:~/Desktop/keepalived$ cat notes
+cat: notes: No such file or directory
+barak@barak-OptiPlex-7020:~/Desktop/keepalived$ cat notes.txt
+VRRP notes:
+=============
+
+-- VRRP control messages: sent by the master
+if the backup don't get messages within a time period > (3*adv.time), then it considers the master as dead, and new ellection of master is started.
+In this ellection, the backup routers sends messages till a master is ellected again.
+
+--VRRP virtual multicast MAC
+- will be used for control messages
+
+--VRRP source mac for every VRRP instance will be: 00-00-5E-00-01-{VRID} where VRID is the VRRP instance ID.
+- will be used as the MAC that returned for arp requests to the VRRP IP.
+
+How VRRP works:
+================
+
+1. Assumes R1 and R2 are the VRRP machines connected with a switch S. R3 is another router in the LAN connected to S.
+R1 connected to port 1 on S. R2 connected to port 2 on S.
+2. R1 and R2 send VRRP control packets every adv. seconds. Dest IP is the VRRP multicast 224.0.0.18 and VRRP multicast MAC 01:00:5e:00:00:12.
+Source IP and source MAC are the real MAC addresses.
+3. A VRRP master is elected, let's say R1. Then, R2 stops sending control packet. Only R1 sends control packets.
+4. R1 adds to the underlying real interface the virtual IP and the virtual MAC 00-00-5E-00-01-{VRID}
+5. R1 sends Gratuitous ARP (a broadcas ETH packet) including its VRRP source addresses: virtual IP and virtual MAC
+It lets S relearning - it updates its MAC table that the virtual MAC is related to port 1 connected to R1.
+ARP table in S will have an entry for the virtual IP and virtual MAC for every VRRP instance.
+We expect this ARP entry to stay un-changed, so R3 (or any other router in the LAN) will get always the same virtual MAC as ARP answer for the virtual IP
+and thus will don't know about the VRRP redundancy. The only change will be on the udpate of S MAC table.
+
+OP-S:
+=====
+For each interface where VRRP instances (1 or more) are confiugred, we will have to add a vlan MAC entry to prestera MAC table
+including the VRRP multicast address 01:00:5e:00:00:12, to open the path for multicast packets from that interface vlan towards the CPU.
+
+
+
+
+
+--tcpdump - what for?
+
+--Pavel F: how to monitor keepalived into CLI ?
+
+Reuven:
+I checked it out: on Transition to Master state, a Gratuitous ARP is sent immediately to update arp tables of the underlying switches.
+A gratuitous ARP request is an AddressResolutionProtocol request packet where the source and destination IP are both set to the IP of the machine issuing the packet
+and the destination MAC is the broadcast address ff:ff:ff:ff:ff:ff. Ordinarily, no reply packet will occur.
+
+Why 2 processes:
+To ensure robustness and stability, daemon is split into 3 distinct processes.
+The global design is based on a minimalistic parent process in charge with forked children process monitoring.
+Then 2 children processes, one responsible for VRRP framework and the other for healthchecking.
+Each children process has its own scheduling I/O multiplexer, that way VRRP scheduling jitter is optimized since VRRP scheduling is more sensible/critical than healthcheckers.
+On the other hand this split design minimalize for healthchecking the usage of foreign librairies and minimalize its own action down to and idle mainloop in order to avoid malfunctions caused by itself.
+The parent process monitoring framework is called watchdog, the design is : each children process open an accept unix domain socket, then while daemon bootstrap, parent process connect to those unix domain socket and send periodic (5s) hello packets to children.
+If parent cannot send hello packet to remote connected unix domain socket it simply restart children process.
+This watchdog design offers 2 benefits, first of all hello packets sent from parent process to remote connected children is done throught I/O multiplexer scheduler that way it can detect deadloop in the children scheduling framework.
+The second benefit is brought by the uses of sysV signal to detect dead children. When running you will see in process list :
+
+        PID
+        111     Keepalived      <-- Parent process monitoring children
+        112     \_ Keepalived   <-- VRRP child
+        113     \_ Keepalived   <-- Healthchecking child
+
+OS-V8M# show startup-config
+! File: /usr/local/etc/System.conf
+!
+! File has been created 2016/12/27 15:16:49
+!
+! version DK22-12-16-1816 ()
+!
+!
+line vty
+ no exec-timeout global
+!
+! System configuration
+no fpga-tests-scheduler
+!
+! Port configuration
+port speed 1000 9
+port duplex full 9
+!
+! Interfaces configuration
+!
+interface vlan vif10
+ tag 10
+ ports 1
+ ip 10.1.1.1/24
+!
+interface vlan vif20
+ tag 20
+ ports 2
+ ip 20.1.1.1/24
+!
+OS-V8M#
+
+
+
+R2# show startup-config
+! File: /usr/local/etc/System.conf
+!
+! File has been created 2000/03/28 06:05:22
+!
+! version DK22-12-16-1816 ()
+!
+!
+hostname R2
+!
+line vty
+ no exec-timeout global
+!
+! Port configuration
+port speed 1000 9
+port duplex full 9
+!
+! Interfaces configuration
+!
+interface vlan vif10
+ tag 10
+ ports 1
+ ip 10.1.1.2/24
+!
+interface vlan vif20
+ tag 20
+ ports 2
+ ip 20.1.1.2/24
+!
+interface out-of-band eth0
+ ip 172.21.11.101/24
+!
+R2#
+
+
+mount -o remount,rw -t ubifs ubi0!root /
+
+R2(hw-debug)# lt entry 01:00:5e:00:00:12 cpu 10 static 5
+lt entry 00:00:5e:00:01:01 cpu 10 static 5
+
+keepalived -P -l -D
+
+tail /var/log/messages -f
+
+ip addr del 10.1.1.2/24 dev vif10
+ifconfig vif10 10.1.1.2/24
+
+#show virtual mac interfaces:
+ip link show
+
+Alexandre Cassen, <acassen@linux-vs.org>
+
+
+
+Symbol: MACVLAN [=n]                                                                                                                                                                                       ?
+  ? Type  : tristate                                                                                                                                                                                           ?
+  ? Prompt: MAC-VLAN support                                                                                                                                                                                   ?
+  ?   Location:                                                                                                                                                                                                ?
+  ?     -> Device Drivers                                                                                                                                                                                      ?
+  ?       -> Network device support (NETDEVICES [=y])                                                                                                                                                          ?
+  ? (1)     -> Network core driver support (NET_CORE [=y])                                                                                                                                                     ?
+  ?   Defined at drivers/net/Kconfig:125                                                                                                                                                                       ?
+  ?   Depends on: NETDEVICES [=y] && NET_CORE [=y]                                                                                                                                                             ?
+  ?
+
+for f in ./*rp_*; do echo -n "$f "; cat $f; done
+
+cd /proc/sys/net/ipv4/conf/all
+echo 1 > arp_ignore
+echo 1 > arp_announce
+echo 0 > arp_filter
+
+
+cd /proc/sys/net/ipv4/conf/vrrp.1
+echo 0 > rp_filter                                                                                                                                              
+echo 1 > accept_local
+echo 0 > arp_filter
+
+cd /proc/sys/net/ipv4/conf/vif10
+echo 1 > arp_filter
+
+tcpdump -i vif10 -e
+
+https://sourceforge.net/p/keepalived/mailman/message/32326584/
+
+# sudo ifconfig vrrp.1 down
+# sudo ifconfig vrrp.1 up
+barak@barak-OptiPlex-7020:~/Desktop/keepalived$

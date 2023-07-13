@@ -1,0 +1,129 @@
+bif file used today by bootgen:
+============================== 
+
+//arch = zynqmp; split = false; format = BIN
+the_ROM_image:
+{
+	[bootloader, destination_cpu = a53-0]/home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf
+	[pmufw_image]/home/barak/xilinx-zcu102-2022.1/images/linux/pmufw.elf
+	[destination_cpu = a53-0, trustzone]/home/barak/xilinx-zcu102-2022.1/images/linux/bl31.elf
+	[load = 0x00100000, destination_cpu = a53-0]/home/barak/xilinx-zcu102-2022.1/images/linux/system.dtb
+	[destination_cpu = a53-0]/home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf
+}
+
+the successful programming output today:
+========================================
+
+program_flash -f /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT.bin -offset 0 \
+-flash_type qspi-x4-single -fsbl \
+/home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf -cable type xilinx_tcf url \
+TCP:127.0.0.1:3121 
+
+****** Xilinx Program Flash
+****** Program Flash v2022.1 (64-bit)
+  **** SW Build 3524075 on 2022-04-13-17:42:45
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+
+Connected to hw_server @ TCP:127.0.0.1:3121
+
+Retrieving Flash info...
+
+Initialization done
+Using default mini u-boot image file - /home/barak/Vitis/2022.1/data/xicom/cfgmem/uboot/zynqmp_qspi_x4_single.bin
+===== mrd->addr=0xFF5E0204, data=0x00000000 =====
+BOOT_MODE REG = 0x0000
+Downloading FSBL...
+Running FSBL...
+===== mrd->addr=0xFFD80044, data=0x00000000 =====
+===== mrd->addr=0xFFD80044, data=0x00000003 =====
+Finished running FSBL.
+
+
+U-Boot 2022.01-06940-g8ed6b9e (Feb 24 2022 - 09:50:51 -0700)
+
+Model: ZynqMP MINI QSPI SINGLE
+Board: Xilinx ZynqMP
+DRAM:  WARNING: Initializing TCM overwrites TCM content
+256 KiB
+EL Level:	EL3
+Multiboot:	0
+Loading Environment from <NULL>... OK
+In:    dcc
+Out:   dcc
+Err:   dcc
+ZynqMP> sf probe 0 0 0
+
+SF: Detected w25q32dw with page size 256 Bytes, erase size 64 KiB, total 4 MiB
+ZynqMP> Sector size = 65536.
+f probe 0 0 0
+
+Performing Erase Operation...
+sf erase 0 1C0000
+
+SF: 1835008 bytes @ 0x0 Erased: OK
+ZynqMP> Erase Operation successful.
+INFO: [Xicom 50-44] Elapsed time = 5 sec.
+Performing Program Operation...
+0%...sf write FFFC0000 0 20000
+
+device 0 offset 0x0, size 0x20000
+SF: 131072 bytes @ 0x0 Written: OK
+ZynqMP> sf write FFFC0000 20000 20000
+
+device 0 offset 0x20000, size 0x20000
+SF: 131072 bytes @ 0x20000 Written: OK
+ZynqMP> sf write FFFC0000 40000 20000
+
+device 0 offset 0x40000, size 0x20000
+SF: 131072 bytes @ 0x40000 Written: OK
+ZynqMP> sf write FFFC0000 60000 20000
+
+device 0 offset 0x60000, size 0x20000
+SF: 131072 bytes @ 0x60000 Written: OK
+ZynqMP> 30%...sf write FFFC0000 80000 20000
+
+device 0 offset 0x80000, size 0x20000
+SF: 131072 bytes @ 0x80000 Written: OK
+ZynqMP> sf write FFFC0000 A0000 20000
+
+device 0 offset 0xa0000, size 0x20000
+SF: 131072 bytes @ 0xa0000 Written: OK
+ZynqMP> sf write FFFC0000 C0000 20000
+
+device 0 offset 0xc0000, size 0x20000
+SF: 131072 bytes @ 0xc0000 Written: OK
+ZynqMP> sf write FFFC0000 E0000 20000
+
+device 0 offset 0xe0000, size 0x20000
+SF: 131072 bytes @ 0xe0000 Written: OK
+ZynqMP> sf write FFFC0000 100000 20000
+
+device 0 offset 0x100000, size 0x20000
+SF: 131072 bytes @ 0x100000 Written: OK
+ZynqMP> sf write FFFC0000 120000 20000
+
+device 0 offset 0x120000, size 0x20000
+SF: 131072 bytes @ 0x120000 Written: OK
+ZynqMP> sf write FFFC0000 140000 20000
+
+device 0 offset 0x140000, size 0x20000
+SF: 131072 bytes @ 0x140000 Written: OK
+ZynqMP> sf write FFFC0000 160000 20000
+
+device 0 offset 0x160000, size 0x20000
+SF: 131072 bytes @ 0x160000 Written: OK
+ZynqMP> sf write FFFC0000 180000 20000
+
+device 0 offset 0x180000, size 0x20000
+SF: 131072 bytes @ 0x180000 Written: OK
+ZynqMP> 100%
+sf write FFFC0000 1A0000 13B98
+
+device 0 offset 0x1a0000, size 0x13b98
+SF: 80792 bytes @ 0x1a0000 Written: OK
+ZynqMP> Program Operation successful.
+INFO: [Xicom 50-44] Elapsed time = 81 sec.
+
+Flash Operation Successful
+

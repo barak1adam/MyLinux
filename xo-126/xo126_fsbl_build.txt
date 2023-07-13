@@ -1,0 +1,50 @@
+how to build FSBL 
+=================
+
+#with petalinux
+cd ~/xilinx-zcu102-2022.1/images/linux
+#get latest XSA
+petalinux-config --get-hw-description=/home/barak/xilinx-zcu102-2022.1/17EG/system_wrapper.xsa
+
+#build
+petalinux-build -c fsbl-firmware
+
+
+#on Vitis
+==========
+right click on the platform wrapper and select - "Update HW Specification". 
+the wrapper is: edt_zcu102_xo126_bringup_wrapper
+(/home/barak/edt/edt_zcu102_workspace/edt_zcu102_bringup_wrapper/hw/edt_zcu102_bringup_wrapper.xsa - this was the last working xsa before I created barak_ws2 workspace)
+
+then rebuild the project: fsbl_a53_system
+
+#cp the image to ~/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf
+
+#on Vitis towards the release
+=============================
+I created a new ws with guy - barak_ws2
+create an application project for the FSBL with a new platform pointing to our latest XSA and without the option of Generate boot components.
+The XSA is: /home/barak/edt/test_fsbl_guy/system_wrapper.xsa
+Then on the FSBL application project, it is importand to select the "Release" as active and add the "-Os -flto -ffat-lto-objects" to extra_compiler_flags, and verify BSP right libs selected
+All can be found in chapter 3 of ug1209 doc - FSBL section.
+The final image is: /home/barak/edt/barak_ws2/fsbl/Release/fsbl.elf
+
+XSA:
+===
+created in Vivado
+contains psu_init.c, psu_init.h that are compiled in FSBL
+contains psu_init.html that is nice to review the settings in a browser
+bug in Vitis - psu files are not updated while updating the XSA
+
+how to boot u-boot over JTAG:
+=============================
+petalinux-boot --jtag --u-boot
+
+
+This is my change in xfsbl_qspi.c to support ISSI NOR:
+======================================================
+
+if((QspiFlashMake==ISSI_ID) && ((QspiFlashSize==FLASH_SIZE_128M) ****************|| (QspiFlashSize==FLASH_SIZE_32M)*****************))
+	{
+		IssiIdFlag=1;
+	}

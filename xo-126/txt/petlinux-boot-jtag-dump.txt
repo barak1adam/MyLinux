@@ -1,0 +1,55 @@
+XSDB Script:
+INFO: Launching XSDB for file download and boot.
+INFO: This may take a few minutes, depending on the size of your image.
+
+connect
+for {set i 0} {$i < 20} {incr i} {
+	if { [ta] != "" } break;
+	after 50
+}
+targets -set -nocase -filter {name =~ "*PSU*"}
+mask_write 0xFFCA0038 0x1C0 0x1C0
+targets -set -nocase -filter {name =~ "*MicroBlaze PMU*"}
+puts stderr "INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/pmufw.elf to the target."
+dow  "/home/barak/xilinx-zcu102-2022.1/images/linux/pmufw.elf"
+con
+targets -set -nocase -filter {name =~ "*A53*#0"}
+rst -processor -clear-registers
+
+source /home/barak/xilinx-zcu102-2022.1/project-spec/hw-description/psu_init.tcl
+puts stderr "INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf to the target."
+dow  "/home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf"
+con
+
+after 4000
+stop
+psu_ps_pl_isolation_removal; psu_ps_pl_reset_config
+puts stderr "INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf to the target."
+dow  "/home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf"
+puts stderr "INFO: Loading image: /home/barak/xilinx-zcu102-2022.1/images/linux/Image at 0x00200000"
+dow -data  "/home/barak/xilinx-zcu102-2022.1/images/linux/Image" 0x00200000
+puts stderr "INFO: Loading image: /home/barak/xilinx-zcu102-2022.1/images/linux/system.dtb at 0x00100000"
+dow -data  "/home/barak/xilinx-zcu102-2022.1/images/linux/system.dtb" 0x00100000
+puts stderr "INFO: Loading image: /home/barak/xilinx-zcu102-2022.1/images/linux/rootfs.cpio.gz.u-boot at 0x04000000"
+dow -data  "/home/barak/xilinx-zcu102-2022.1/images/linux/rootfs.cpio.gz.u-boot" 0x04000000
+puts stderr "INFO: Loading image: /home/barak/xilinx-zcu102-2022.1/images/linux/boot.scr at 0x20000000"
+dow -data  "/home/barak/xilinx-zcu102-2022.1/images/linux/boot.scr" 0x20000000
+puts stderr "INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/bl31.elf to the target."
+dow  "/home/barak/xilinx-zcu102-2022.1/images/linux/bl31.elf"
+con
+exit
+rlwrap: warning: your $TERM is 'xterm-256color' but rlwrap couldn't find it in the terminfo database. Expect some problems.: Inappropriate ioctl for device
+attempting to launch hw_server                                                                                                                                               
+
+****** Xilinx hw_server v2022.1.0
+  **** Build date : Apr 10 2022 at 06:24:21
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+INFO: hw_server application started
+INFO: Use Ctrl-C to exit hw_server application
+
+INFO: To connect to this hw_server instance use url: TCP:127.0.0.1:3121
+INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/pmufw.elf to the target.
+INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf to the target.
+INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf to the target.
+INFO: Loading image: /home/barak/xilinx-zcu102-2022.1/images/linux/Image at 0x00200000

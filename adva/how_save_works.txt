@@ -1,0 +1,139 @@
+how save mechnism works?
+
+/ partition / volume is ro 
+(rootfs mtd partition or a ubi volume in one of the 2 partitions of xg300. 2 possible ubi volumes 2 or 7 for sfpnid)
+
+/config partition / volume is rw 
+(/config is the mount point. the device is config mtd partition or a ubi volume in one of the 2 partitions of xg300, ubi volumes 3 or 8 for sfpnid)
+
+to make the ilussion of rw / for the user, aufs / overlay fs are used.
+
+in fstab - var/storage is told to be a tmfs mountpoint !
+also aufs/overlayfs mount points are there.
+
+tmpfs rw directories + /confige are created and mounted on init (S15mountfofs.sh):
+
+mkdir -p -m 755 /var/storage/etc
+mkdir -p -m 755 /var/storage/local_etc
+mkdir -p -m 755 /var/storage/zoneinfo
+mkdir -p -m 755 /var/storage/admin
+
+these directories are mounted explicitly as the rw underlying folders of the unified points accroding to fstab.
+/config rule is then added to fstab according to ramboot / ramboot2 and mounted explictly too
+
+system is ready now
+
+now, each time anything is written/saved by the user, it is saved on the unified fs points.
+
+once the user do "write memory"
+
+UID is sent by the user: UID_SYS_FLUSH_CONFIG
+
+then it is handled by ssys: SSYS_flush_config()
+
+SSYS_flush_config is calling flush-conf.sh
+
+flush-conf.sh is calling 30unpackconfig.sh + stop argument to make a save action
+
+	#!/bin/sh
+
+	VERBOSE=no
+	. /etc/init.d/S30unpackconfig.sh ${1:-stop}
+	exit 0
+	
+30unpackconfig.sh:
+	STORAGE_DIR=/var/storage
+
+	stop)
+		[ "$VERBOSE" != "no" ] && echo -n "Save configuration... "
+		/sbin/flconfig save /etc etc
+		/sbin/flconfig save /usr/local/etc local_etc
+		/sbin/flconfig save /usr/share/zoneinfo zoneinfo
+		/sbin/flconfig save /home/admin admin
+			[ "$VERBOSE" != "no" ] && echo "done."
+			
+30unpackconfig.sh calls flconifg with args "save" and all folders to save including the unified folder, and the name of the tar files to create for saving.
+for example: /sbin/flconfig save /etc etc
+save /etc as tar file named etc.
+
+flconifg operation:
+	for save:
+		search ".save" file of the the folder to save, for example /etc.save
+		if it has an entry named "save_all_files_in_dir", then recursively create a list of all files and dirs in this base folders.
+		(for example, all files and dirs under /etc)
+		else, create a list of all entires in ".save" if the exist in action.
+		
+		then, once a list of what to save is created, tar all files /dirs in the list to a file (the name was given as arg) and move it to /config.
+		note: tar takes both files and dirs. in case of dirs they are tared recursilvey with their underlying files tree. I tested it.
+		
+		So at the end, we get a tar file for all the content that should be saved for this base folder.
+		in our example, /config/etc file will hold all needed for unified /etc !
+		
+
+now how saved files are restored on init:
+
+after S15mountfofs created and mounted all mount points as explained
+
+in xg300 initd is calling  system ("/etc/init.d/unpackconfig.sh start");
+now unpackconfig.sh will restore / untar the tar files back into the base folders (including the unified folders) that were saved by the user or upon user reboot.
+(upon software reboot, K30unpackconfig.sh is called automatically with "stop" for save !)
+
+in sfpnid, rcS script is called upon init and calls all rcS scripts with "action=start"
+this make S30unpackconfig.sh to be called with "start" and to restore configuration.
+it is different than xg300, it is called here and not by initd.c
+
+here are the relevant parts in rcS:
+if [ `basename $0` == "rcS" ]; then
+	A=S
+	action=start
+else
+	A=K
+	action=stop
+fi
+...
+for i in /etc/init.d/${A}??*
+do
+...	
+	case "$i" in
+		*.sh)
+			# Source shell script for speed.
+			(
+				trap - INT QUIT TSTP
+				set ${action}
+				echo $i
+				. $i
+			)
+			;;
+
+
+this is what unpackconfig.sh is doing on init to "restore" configuration
+
+#
+# unpackconfig.sh  Unpack config directory
+#
+
+STORAGE_DIR=/var/storage
+
+case "$1" in
+start)
+	[ "$VERBOSE" != no ] && echo -n "Restore configuration... "
+	/sbin/flconfig restore /etc etc
+	/sbin/flconfig restore /usr/local/etc local_etc
+	/sbin/flconfig restore /usr/share/zoneinfo zoneinfo
+	/sbin/flconfig restore /home/admin admin
+	[ "$VERBOSE" != no ] && echo "done."
+	;;
+
+
+old layout xg300:
+# cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00800000 00040000 "boot1"
+mtd1: 00800000 00040000 "kernel1"
+mtd2: 00800000 00040000 "config1"
+mtd3: 10000000 00040000 "rootfs1"
+mtd4: 00800000 00040000 "boot2"
+mtd5: 00800000 00040000 "kernel2"
+mtd6: 00800000 00040000 "config2"
+mtd7: 10000000 00040000 "rootfs2"
+#

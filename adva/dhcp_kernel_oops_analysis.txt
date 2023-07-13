@@ -1,0 +1,85 @@
+The root cause is a patch ported by the following commit:
+========================================================
+
+commit 6e2d4333272f691814c98f472f8a5a2680251457
+Author: Ilja Tabachnik <itabachnik@mrv.com>
+Date:   Mon Oct 10 16:07:52 2016 +0300
+
+    Porting patch from Linux kernel upstream.
+    Patch modified for linux-3.10.
+    Original patch: https://patchwork.ozlabs.org/patch/507186/
+    
+This patch is adding a call to fib_table_lookup() under fib_check_nh().
+But, if fib_table_lookup() fails, then the return err value might be > 0 
+(1 is returned)
+
+This err is propogated and returned by fib_check_nh to fib_create_info which
+then returns this value as a pointer to fib_table_insert():
+
+fi = fib_create_info(cfg);
+
+But as expected in the kernel, the returned value is checked by fib_table_insert()
+only for negative values by the IS_ERR(ptr) macro. 
+Positvie values are never considered as errors.
+
+fi = fib_create_info(cfg);
+if (IS_ERR(fi)) {
+	err = PTR_ERR(fi);
+	goto err;
+}
+
+
+So the returned pointer (in reg r3) is assigned to "fi" and is not considered as err and
+then access viloation is happening and makes the Kernel Oops.
+
+
+
+The original commit was introduced into the kernel on Aug 13 2015 and
+mainlined into version 4.1.6:
+
+commit 3bfd847203c6d89532f836ad3f5b4ff4ced26dd9
+Author: David Ahern <dsa@cumulusnetworks.com>
+Date:   Thu Aug 13 14:59:07 2015 -0600
+
+    net: Use passed in table for nexthop lookups
+
+This solves the case where a connected route does not exist in the main table, 
+but only another table and then a subsequent route is added with a next hop using the connected route.
+
+
+But this commit depends on other relevant commits previoulsy mainlined.
+It cannot be back ported as a stand alone commit into kernel version 3.10.x.
+For example, the following previous commit was changing the implementation
+of fib_table_lookup and removing the option of returning a positive value of 1:
+
+git show 9f9e636d4f89f788c5cf9c6a5357501c0d405fcb
+commit 9f9e636d4f89f788c5cf9c6a5357501c0d405fcb
+Author: Alexander Duyck <alexander.h.duyck@redhat.com>
+Date:   Wed Dec 31 10:55:54 2014 -0800
+
+    fib_trie: Optimize fib_table_lookup to avoid wasting time on loops/variables
+    
+
+The fix:
+=========
+The fix for this bug now is to simply check the retuned value of the new call to
+fib_table_lookup(). If it is > 0, then return -ENETUNREACH as expected upon errors
+before this patch !
+
+
+The lesson:
+===========
+A good practice is to simply rebase on the relevant kernel version which includes
+all required changes. Or, the other option - not recommended, is to port all commits
+which are logically related to some specific patch and take it as a complete set
+of changes, not as a stand alone change.
+
+
+
+fa = fib_find_alias(fa_head, tos, fi->fib_priority);
+    2658:	e59d3020 	ldr	r3, [sp, #32]
+    265c:	e1a01007 	mov	r1, r7
+    2660:	e1a0000a 	mov	r0, sl
+    2664:	e5932028 	ldr	r2, [r3, #40]	; 0x28
+
+

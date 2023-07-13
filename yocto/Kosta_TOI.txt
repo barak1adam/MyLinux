@@ -16,6 +16,10 @@ CONFIG_YOCTO_2_5_2=y
 CONFIG_BUILD_DIR="ybld"
 CONFIG_LOG_FILE="ylog"
 
+#kconifg works with the .config
+#.config_auto_generated holds kind of formatted entries out of .config, used in the init-kconfig build_yocto_step* scripts
+
+
 #convert menu configs to our config format
 ./build_yocto_step_01_configure.sh
 

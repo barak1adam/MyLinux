@@ -1,0 +1,77 @@
+Marvell>> setenv ipaddr 10.32.8.200
+Marvell>> ping 10.32.8.145
+Using egiga1 device
+host 10.32.8.145 is alive
+Marvell>> printenv
+10G_activation_key=49fd1bb5b718
+CASset=min
+MALLOC_len=5
+MPmode=smp
+autoload=no
+baudrate=115200
+boardsn=1540100156
+boot_order=hd_scr usb_scr mmc_scr hd_img usb_img mmc_img pxe net_img net_scr
+bootargs_dflt=$console $nandEcc $mtdparts $bootargs_root nfsroot=$serverip:$rootpath ip=$ipaddr:$serverip$bootargs_end $mvNetConfig video=dovefb:lcd0:$lcd0_params clcd.lcd0l
+bootargs_end=:$gatewayip:$netmask:MSYS-BC2:eth0:none
+bootargs_root=root=/dev/nfs rw
+bootcmd=run ramboot
+bootcmd_auto=stage_boot $boot_order
+bootcmd_lgcy=tftpboot 0x2000000 $image_name; setenv bootargs $bootargs_dflt; bootm 0x2000000; 
+bootdelay=3
+bootmode=router
+bootpart_index=1
+cacheShare=no
+console=console=ttyS0,115200
+device_partition=0:1
+disL2Cache=yes
+disL2Prefetch=yes
+disaMvPnp=no
+eeeEnable=no
+enaClockGating=no
+enaCpuStream=no
+enaDCPref=yes
+enaFPU=yes
+enaICPref=yes
+enaLPAE=no
+enaWrAllo=no
+eth1addr=3C:A7:2B:00:D8:18
+eth1mtu=1500
+ethact=egiga1
+ethaddr=3C:A7:2B:00:D8:18
+ethmtu=1500
+ethprime=egiga1
+gatewayip=172.21.14.254
+ide_path=/
+image_name=uImage
+initrd_name=uInitrd
+ipaddr=10.32.8.200
+kernel_addr_r=2080000
+lcd0_enable=0
+lcd0_params=640x480-16@60
+lcd_panel=0
+loadaddr=0x02000000
+netbsd_en=no
+netmask=255.255.248.0
+netretry=no
+nfsboot=nfs 2000000 $rootpath/$image_name; setenv bootargs $console $nandEcc $mtdparts ubi.mtd=4 ubi.mtd=2 $bootargs_root nfsroot=$serverip:$rootpath ip=$ipaddr:$serverip:$r
+pcieTune=no
+pexMode=rc
+pxe_files_load=:default.arm-armadaxp-db:default.arm-armadaxp:default.arm
+pxefile_addr_r=3100000
+ramboot=save; ubi part kernel1 4096; ubifsmount kernel; ubifsload 2000000 $image_name; setenv bootargs $console $nandEcc $mtdparts ubi.mtd=3 root=ubi0:root rw rootfstype=ubr
+ramboot2=save; ubi part kernel2 4096; ubifsmount kernel; ubifsload 2000000 $image_name; setenv bootargs $console $nandEcc $mtdparts ubi.mtd=7 root=ubi0:root rw rootfstype=ur
+ramdisk_addr_r=2880000
+rcvrip=169.254.100.100
+rootpath=/home/kostaz/My/MRV/NG/Dev/2018_01_09_pam/build/dist/arm_msys_root
+sata_delay_reset=0
+sata_dma_mode=yes
+script_addr_r=3000000
+script_name=boot.scr
+serverip=172.21.10.119
+standalone=fsload 0x2000000 $image_name;setenv bootargs $console $nandEcc $mtdparts root=/dev/mtdblock0 rw ip=$ipaddr:$serverip$bootargs_end; bootm 0x2000000;
+stderr=serial
+stdin=serial
+stdout=serial
+unitsn=1234567891
+vxworks_en=no
+yuk_ethaddr=00:00:00:

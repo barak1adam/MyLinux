@@ -1,8 +1,0 @@
-#how to detect systemd or sysvinit
-
-ls -la /sbin/init 
-lrwxrwxrwx 1 root root 20 Feb  6  2020 /sbin/init -> /lib/systemd/systemd
-
-
-#systemd is the replacement of sysvinit
-https://www.computernetworkingnotes.com/linux-tutorials/differences-between-sysvinit-upstart-and-systemd.html

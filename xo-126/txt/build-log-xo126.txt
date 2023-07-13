@@ -1,0 +1,1224 @@
+$ sudo ./build deploy
+sync /targ/prod/xo126/scripts/deploy_hooks.py <-- /targ/prod-devel/xo126/copy/scripts/deploy_hooks.py
+sync /targ/prod/xo126/fsmod/etc/runlevels/default/advaoptical.com-xg1-update-firmware <-- /targ/prod-devel/xo126/copy/fsmod/etc/runlevels/default/advaoptical.com-xg1-update-firmware
+sync /targ/prod/xo126/fsmod/etc/runlevels/sysinit/advaoptical.com-earily <-- /targ/prod-devel/xo126/copy/fsmod/etc/runlevels/sysinit/advaoptical.com-earily
+diff: /targ/prod/xo126/fsmod/etc/runlevels/default/advaoptical.com-xg1-update-firmware: No such file or directory
+diff: /targ/prod-devel/xo126/copy/fsmod/etc/runlevels/default/advaoptical.com-xg1-update-firmware: No such file or directory
+sync /targ/prod/xo126/fsmod/etc/runlevels/default/advaoptical.com-xg1-update-firmware <-- /targ/prod-devel/xo126/copy/fsmod/etc/runlevels/default/advaoptical.com-xg1-update-firmware
+diff: /targ/prod/xo126/fsmod/etc/runlevels/sysinit/advaoptical.com-earily: No such file or directory
+diff: /targ/prod-devel/xo126/copy/fsmod/etc/runlevels/sysinit/advaoptical.com-earily: No such file or directory
+sync /targ/prod/xo126/fsmod/etc/runlevels/sysinit/advaoptical.com-earily <-- /targ/prod-devel/xo126/copy/fsmod/etc/runlevels/sysinit/advaoptical.com-earily
+target_arch = arm8-64bit -------------------------------------------------------
+pkg_name = card -------------------------------------------------------
+ede_ver = ede-3.6.19 -------------------------------------------------------
+build_id = 2022-09-05_11:45:32_maozy -------------------------------------------------------
+build_number = 1234 -------------------------------------------------------
+kp = D -------------------------------------------------------
+pwd
+/targ/prod-devel/xo126
+action: install
+basepkg:
+    pom: /targ/prod/xo126/base.pom
+    tar: /targ/prod/xo126/base.tar.bz2
+boot:
+    dtb: boot/xo126.dtb
+    initramfs: boot/initramfs.img
+    kernel:
+        base: boot/kernel_images
+        config: default_config
+        source: default_source
+consoles:
+    ttyS0: 115200
+container:
+    type: mbr
+factory:
+    hostname: xo126
+    ifs:
+        eth0:
+            gw: null
+            ip: null
+        eth2:
+            gw: null
+            ip: null
+fsmods:
+- default
+- admin
+- update
+- aos
+- swclock
+install:
+    overwrite: true
+    path: /targ/prod/xo126/med
+logfile: deploy.log
+ospkg:
+    pom: /targ/prod/xo126/os.pom
+    tar: /targ/prod/xo126/os.tar.bz2
+packages:
+- canon cc
+- add dev-util/valgrind
+- add dev-python/setuptools
+- add sys-devel/binutils
+- add sys-devel/binutils-config
+- add app-misc/screen
+- add net-libs/libnsl
+- add net-misc/curl
+- add net-misc/scponly
+- remove mail-client/mailx
+- remove mail-client/mailx-support
+- remove net-misc/rsync
+- remove sys-block/parted
+- add sys-fs/e2fsprogs
+- remove net-dns/libidn
+- remove net-dialup/ppp
+- remove net-dialup/ppp-scripts
+- remove net-dialup/lrzsz
+- remove app-misc/tmux
+- remove sys-libs/e2fsprogs-libs
+- remove mail-mta/nullmailer
+proxy:
+    stay: true
+targ:
+    arch: aarch64-linux-gnu
+    mode: eos
+    prod: xo126
+unidrvpkg:
+    pom: /targ/prod/xo126/unidrv.pom
+    tar: /targ/prod/xo126/unidrv.tar.bz2
+volumes:
+    adva:
+        size: 1000
+        type: ext4
+    boot:
+        size: 64
+        type: 
+    common:
+        quantity: 1
+        size: 900
+        type: ext4
+        writable: 1
+    cs:
+        size: 4
+        type: ext3
+    main:
+        size: 300
+        type: ext4
+    modules:
+        cskey: kernel
+        size: 64
+        type: ext4
+    rwd:
+        cskey: main
+        size: 64
+        type: ext4
+        writable: 1
+    rwda:
+        cskey: adva
+        size: 1000
+        type: ext4
+        writable: 1
+    staging:
+        quantity: 1
+        size: 984
+        type: ext4
+        writable: 1
+    vm:
+        quantity: 1
+        size: 10
+        type: ext4
+        writable: 1
+
+df -T /targ/prod/xo126/med/proxy
+str
+creating modules volume
+creating main volume
+picking packages
+
+        sys-apps/baselayout         ,canon
+      app-shells/bash               ,canon
+...
+        mail-mta/nullmailer         ,removed
+
+cpio -dup /targ/prod/xo126/med/proxy/main
+494722 blocks
+
+...
+
+creating adva volume
+creating rwd volume
+additions to volumes
+ps_install !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+ADVA: need_emmc is yes
+install_partitioned !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+'cs'
+{'type': 'ext3', 'size': 4}
+'main'
+{'type': 'ext4', 'size': 300}
+'modules'
+{'cskey': 'kernel', 'type': 'ext4', 'size': 64}
+'adva'
+{'type': 'ext4', 'size': 1000}
+'rwd'
+{'writable': 1, 'cskey': 'main', 'type': 'ext4', 'size': 64}
+'rwda'
+{'writable': 1, 'cskey': 'adva', 'type': 'ext4', 'size': 1000}
+'boot'
+{'type': 'ext3', 'size': 64}
+'staging'
+{'type': 'ext4', 'size': 984, 'writable': 1, 'quantity': 1}
+'vm'
+{'type': 'ext4', 'size': 10, 'writable': 1, 'quantity': 1}
+'common'
+{'type': 'ext4', 'size': 900, 'writable': 1, 'quantity': 1}
+{}
+nr_ext: 3
+{3, 4} 2
+1 cs 0
+2 cs 1
+3 None None
+5 boot 0
+6 modules 0
+7 main 0
+8 adva 0
+9 rwd 0
+10 rwda 0
+11 boot 1
+12 modules 1
+13 main 1
+14 adva 1
+15 rwd 1
+16 rwda 1
+17 staging 0
+18 vm 0
+19 common 0
+spec real p name
+   4    4 1 cs.0
+   4    4 1 cs.1
+  64   64 0 boot.0
+  64   64 0 modules.0
+ 300  300 0 main.0
+1000 1000 0 adva.0
+  64   64 0 rwd.0
+1000 1000 0 rwda.0
+  64   64 0 boot.1
+  64   64 0 modules.1
+ 300  300 0 main.1
+1000 1000 0 adva.1
+  64   64 0 rwd.1
+1000 1000 0 rwda.1
+ 984  984 0 staging.0
+  10   12 0 vm.0
+ 900  900 0 common.0
+dd if=/dev/zero of=/targ/prod/xo126/med/xo126_disk_image bs=1M count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0023773 s, 1.8 GB/s
+truncate -s 6960M /targ/prod/xo126/med/xo126_disk_image
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image mklabel msdos
+(1, 'cs', 0)
+(2, 'cs', 1)
+(3, None, None)
+(5, 'boot', 0)
+(6, 'modules', 0)
+(7, 'main', 0)
+(8, 'adva', 0)
+(9, 'rwd', 0)
+(10, 'rwda', 0)
+(11, 'boot', 1)
+(12, 'modules', 1)
+(13, 'main', 1)
+(14, 'adva', 1)
+(15, 'rwd', 1)
+(16, 'rwda', 1)
+(17, 'staging', 0)
+(18, 'vm', 0)
+(19, 'common', 0)
+mkpart 4 4 primary
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart primary 4194304 8388607
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+pri:8 ext:None log:None
+mkpart 8 4 primary
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart primary 8388608 12582911
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+pri:12 ext:None log:None
+mkpart 12 6944 extended
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart extended 12582912 7293894655.0
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+pri:6956 ext:12 log:12
+mkpart 16 64 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 16777216 83886079
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+pri:6956 ext:12 log:80
+mkpart 84 64 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 88080384 155189247
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+pri:6956 ext:12 log:148
+mkpart 152 300 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 159383552 473956351
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+pri:6956 ext:12 log:452
+mkpart 456 1000 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 478150656 1526726655
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+pri:6956 ext:12 log:1456
+mkpart 1460 64 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 1530920960 1598029823
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+9:1530920960B:1598029823B:67108864B:::;
+pri:6956 ext:12 log:1524
+mkpart 1528 1000 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 1602224128 2650800127
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+9:1530920960B:1598029823B:67108864B:::;
+10:1602224128B:2650800127B:1048576000B:::;
+pri:6956 ext:12 log:2528
+mkpart 2532 64 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 2654994432 2722103295
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+9:1530920960B:1598029823B:67108864B:::;
+10:1602224128B:2650800127B:1048576000B:::;
+11:2654994432B:2722103295B:67108864B:::;
+pri:6956 ext:12 log:2596
+mkpart 2600 64 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 2726297600 2793406463
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+9:1530920960B:1598029823B:67108864B:::;
+10:1602224128B:2650800127B:1048576000B:::;
+11:2654994432B:2722103295B:67108864B:::;
+12:2726297600B:2793406463B:67108864B:::;
+pri:6956 ext:12 log:2664
+mkpart 2668 300 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 2797600768 3112173567
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+9:1530920960B:1598029823B:67108864B:::;
+10:1602224128B:2650800127B:1048576000B:::;
+11:2654994432B:2722103295B:67108864B:::;
+12:2726297600B:2793406463B:67108864B:::;
+13:2797600768B:3112173567B:314572800B:::;
+pri:6956 ext:12 log:2968
+mkpart 2972 1000 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 3116367872 4164943871
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+9:1530920960B:1598029823B:67108864B:::;
+10:1602224128B:2650800127B:1048576000B:::;
+11:2654994432B:2722103295B:67108864B:::;
+12:2726297600B:2793406463B:67108864B:::;
+13:2797600768B:3112173567B:314572800B:::;
+14:3116367872B:4164943871B:1048576000B:::;
+pri:6956 ext:12 log:3972
+mkpart 3976 64 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 4169138176 4236247039
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+9:1530920960B:1598029823B:67108864B:::;
+10:1602224128B:2650800127B:1048576000B:::;
+11:2654994432B:2722103295B:67108864B:::;
+12:2726297600B:2793406463B:67108864B:::;
+13:2797600768B:3112173567B:314572800B:::;
+14:3116367872B:4164943871B:1048576000B:::;
+15:4169138176B:4236247039B:67108864B:::;
+pri:6956 ext:12 log:4040
+mkpart 4044 1000 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 4240441344 5289017343
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+9:1530920960B:1598029823B:67108864B:::;
+10:1602224128B:2650800127B:1048576000B:::;
+11:2654994432B:2722103295B:67108864B:::;
+12:2726297600B:2793406463B:67108864B:::;
+13:2797600768B:3112173567B:314572800B:::;
+14:3116367872B:4164943871B:1048576000B:::;
+15:4169138176B:4236247039B:67108864B:::;
+16:4240441344B:5289017343B:1048576000B:::;
+pri:6956 ext:12 log:5044
+mkpart 5048 984 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 5293211648 6325010431
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+9:1530920960B:1598029823B:67108864B:::;
+10:1602224128B:2650800127B:1048576000B:::;
+11:2654994432B:2722103295B:67108864B:::;
+12:2726297600B:2793406463B:67108864B:::;
+13:2797600768B:3112173567B:314572800B:::;
+14:3116367872B:4164943871B:1048576000B:::;
+15:4169138176B:4236247039B:67108864B:::;
+16:4240441344B:5289017343B:1048576000B:::;
+17:5293211648B:6325010431B:1031798784B:::;
+pri:6956 ext:12 log:6032
+mkpart 6036 12 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 6329204736 6341787647
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+9:1530920960B:1598029823B:67108864B:::;
+10:1602224128B:2650800127B:1048576000B:::;
+11:2654994432B:2722103295B:67108864B:::;
+12:2726297600B:2793406463B:67108864B:::;
+13:2797600768B:3112173567B:314572800B:::;
+14:3116367872B:4164943871B:1048576000B:::;
+15:4169138176B:4236247039B:67108864B:::;
+16:4240441344B:5289017343B:1048576000B:::;
+17:5293211648B:6325010431B:1031798784B:::;
+18:6329204736B:6341787647B:12582912B:::;
+pri:6956 ext:12 log:6048
+mkpart 6052 900 logical
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B mkpart logical 6345981952 7289700351
+parted -s -m -- /targ/prod/xo126/med/xo126_disk_image unit B print
+BYT;
+/targ/prod/xo126/med/xo126_disk_image:7298088960B:file:512:512:msdos::;
+1:4194304B:8388607B:4194304B:::;
+2:8388608B:12582911B:4194304B:::;
+3:12582912B:7293894655B:7281311744B:::lba;
+5:16777216B:83886079B:67108864B:::;
+6:88080384B:155189247B:67108864B:::;
+7:159383552B:473956351B:314572800B:::;
+8:478150656B:1526726655B:1048576000B:::;
+9:1530920960B:1598029823B:67108864B:::;
+10:1602224128B:2650800127B:1048576000B:::;
+11:2654994432B:2722103295B:67108864B:::;
+12:2726297600B:2793406463B:67108864B:::;
+13:2797600768B:3112173567B:314572800B:::;
+14:3116367872B:4164943871B:1048576000B:::;
+15:4169138176B:4236247039B:67108864B:::;
+16:4240441344B:5289017343B:1048576000B:::;
+17:5293211648B:6325010431B:1031798784B:::;
+18:6329204736B:6341787647B:12582912B:::;
+19:6345981952B:7289700351B:943718400B:::;
+pri:6956 ext:12 log:6952
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/0..4194303.gap bs=1M skip=0 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0042256 s, 993 MB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/12582912..16777215.gap bs=1M skip=12 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00367507 s, 1.1 GB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/83886080..88080383.gap bs=1M skip=80 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00299205 s, 1.4 GB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/155189248..159383551.gap bs=1M skip=148 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00525845 s, 798 MB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/473956352..478150655.gap bs=1M skip=452 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00321079 s, 1.3 GB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/1526726656..1530920959.gap bs=1M skip=1456 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00369104 s, 1.1 GB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/1598029824..1602224127.gap bs=1M skip=1524 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00337532 s, 1.2 GB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/2650800128..2654994431.gap bs=1M skip=2528 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00577222 s, 727 MB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/2722103296..2726297599.gap bs=1M skip=2596 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00341235 s, 1.2 GB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/2793406464..2797600767.gap bs=1M skip=2664 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0042725 s, 982 MB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/3112173568..3116367871.gap bs=1M skip=2968 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00363385 s, 1.2 GB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/4164943872..4169138175.gap bs=1M skip=3972 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00656558 s, 639 MB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/4236247040..4240441343.gap bs=1M skip=4040 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00376708 s, 1.1 GB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/5289017344..5293211647.gap bs=1M skip=5044 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00344022 s, 1.2 GB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/6325010432..6329204735.gap bs=1M skip=6032 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.003062 s, 1.4 GB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/6341787648..6345981951.gap bs=1M skip=6048 count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00392314 s, 1.1 GB/s
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/targ/prod/xo126/med/proxy/7289700352..7298088959.gap bs=1M skip=6952 count=8
+8+0 records in
+8+0 records out
+8388608 bytes (8.4 MB, 8.0 MiB) copied, 0.00616975 s, 1.4 GB/s
+rm -f -- /targ/prod/xo126/med/xo126_disk_image
+cs_tab content:
+all=0    /dev/mmcblk0p1     cs         ext3    ro
+all=1    /dev/mmcblk0p2     cs         ext3    ro
+all=0    /dev/mmcblk0p5     boot       ext3    ro
+all=0    /dev/mmcblk0p6     modules    ext4    ro
+all=0    /dev/mmcblk0p7     main       ext4    ro
+all=0    /dev/mmcblk0p8     adva       ext4    ro
+all=0    /dev/mmcblk0p9     rwd        ext4    rw
+all=0    /dev/mmcblk0p10    rwda       ext4    rw
+all=1    /dev/mmcblk0p11    boot       ext3    ro
+all=1    /dev/mmcblk0p12    modules    ext4    ro
+all=1    /dev/mmcblk0p13    main       ext4    ro
+all=1    /dev/mmcblk0p14    adva       ext4    ro
+all=1    /dev/mmcblk0p15    rwd        ext4    rw
+all=1    /dev/mmcblk0p16    rwda       ext4    rw
+true     /dev/mmcblk0p17    staging    ext4    rw
+true     /dev/mmcblk0p18    vm         ext4    rw
+true     /dev/mmcblk0p19    common     ext4    rw
+
+mkimage -A arm -O linux -T script -C none -a 88000000 -e 0 -n cs_script -d /targ/prod/xo126/med/proxy/cs_script.hush /targ/prod/xo126/med/proxy/cs/cs_script.uimg
+Image Name:   cs_script
+Created:      Mon Sep  5 11:45:43 2022
+Image Type:   ARM Linux Script (uncompressed)
+Data Size:    258 Bytes = 0.25 KiB = 0.00 MiB
+Load Address: 88000000
+Entry Point:  00000000
+Contents:
+   Image 0: 250 Bytes = 0.24 KiB = 0.00 MiB
+
+
+
+install_boot_content !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+mod /targ/prod/xo126/os.tar.bz2 exist, just use it
+rm -rf /targ/prod/xo126/med/os.tar.bz2
+ln -s /targ/prod/xo126/os.tar.bz2 /targ/prod/xo126/med/os.tar.bz2
+cp /tmp/oopbe0fg/boot/xo126.dtb /targ/prod/xo126/med/proxy/boot/xo126.dtb
+
+XO126 - check me here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
+generate_initramfs_source /targ/arch/aarch64-linux-gnu/busybox/initramfs
+gen_init_cpio_to_file /targ/prod/xo126/med/proxy/initramfs.listfile /targ/prod/xo126/med/proxy/initramfs.img gzip
+
+ -A arm -O linux -T ramdisk -C gzip -a 84000000 -n initramfs -d /targ/prod/xo126/med/proxy/initramfs.img /targ/prod/xo126/med/proxy/boot/initramfs
+Image Name:   initramfs
+Created:      Mon Sep  5 11:45:56 2022
+Image Type:   ARM Linux RAMDisk Image (gzip compressed)
+Data Size:    890948 Bytes = 870.07 KiB = 0.85 MiB
+Load Address: 84000000
+Entry Point:  84000000
+
+install_rwda_content !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+mod /targ/prod/xo126/base.tar.bz2 exist, just use it
+rm -rf /targ/prod/xo126/med/base.tar.bz2
+ln -s /targ/prod/xo126/base.tar.bz2 /targ/prod/xo126/med/base.tar.bz2
+apply rwda dir /tmp/l62pj_4f/var
+./opt
+./opt/adva
+./opt/adva/aos
+./opt/adva/aos/core-apps
+./opt/adva/aos/db
+./opt/adva/aos/framework
+./opt/adva/aos/log
+./opt/adva/aos/package
+./opt/adva/aos/log/tracelog
+./opt/adva/aos/log/.keep cp
+./opt/adva/aos/log/tracelog/.keep cp
+./opt/adva/aos/core-apps/bridge
+./opt/adva/aos/core-apps/sirm
+...
+apply rwda dir /tmp/l62pj_4f/etc
+./opt
+./opt/adva
+./opt/adva/aos
+./opt/adva/aos/logrotate.conf cp
+
+install_adva_content !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+mod /targ/prod/xo126/base.tar.bz2 exist, just use it
+rm -rf /targ/prod/xo126/med/base.tar.bz2
+ln -s /targ/prod/xo126/base.tar.bz2 /targ/prod/xo126/med/base.tar.bz2
+apply dir /tmp/zp3ysp6v/opt/adva
+./aos
+./system-overrides
+./system-overrides/etc
+./aos/bin
+./aos/csm
+./aos/etc
+./aos/firmware
+./aos/fpga
+./aos/fpga_dbg
+./aos/lib
+./aos/pkg
+./aos/poms
+./aos/share
+./aos/firmware/cpld
+./aos/firmware/csf
+./aos/firmware/nor
+./aos/firmware/pwrseq
+
+./aos/etc/3rd-party
+
+install_modules_content !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+ls -lah /targ/prod/xo126/med/proxy/modules
+total 12K
+drwxr-xr-x  3 root root 4.0K Sep  5 11:45 .
+drwxr-xr-x 12 root root 4.0K Sep  5 11:45 ..
+drwxr-xr-x  4 root root 4.0K Sep  5 11:45 5.15.50-rt47
+os_mod /targ/prod/xo126/os.tar.bz2 exist, just use it
+rm -rf /targ/prod/xo126/med/os.tar.bz2
+ln -s /targ/prod/xo126/os.tar.bz2 /targ/prod/xo126/med/os.tar.bz2
+
+install_vm_content !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+mkdir /targ/prod/xo126/med/proxy/vm/vmimgs
+
+install_common_content !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+mkdir /targ/prod/xo126/med/proxy/common/log
+mkdir /targ/prod/xo126/med/proxy/common/log/tracelog
+python /targ/prod/xo126/scripts/packesel.py --phase CREATE_META --cfgFilePath /targ/prod/xo126/metadata.json --stagingPath /targ/prod/xo126/med/proxy --pkgName card --pkgArch arm8-64bit --edeVer ede-3.6.19 --buildId 2022-09-05_11:45:32_maozy --buildNo 1234
+Create metafile /targ/prod/xo126/med/proxy/opt/adva/aos/pkg/metadata/metadata-f4-xo126-card-21.5.1.json
+Copy /targ/prod/xo126/med/proxy/opt/adva/aos/pkg/metadata/metadata*.json To /targ/prod/xo126/med/proxy/adva/aos/pkg/metadata/
+rm -rf /targ/prod/xo126/med/proxy/main/etc/init.d/net.eth0
+rm -rf /targ/prod/xo126/med/proxy/main/etc/init.d/net.eth2
+chmod 644 /targ/prod/xo126/med/proxy/main/etc/crontab
+chmod 644 /targ/prod/xo126/med/proxy/main/etc/logrotate.conf
+chmod 644 /targ/prod/xo126/med/proxy/main/etc/logrotate.d/rsyslog
+rm -rf /targ/prod/xo126/med/proxy/main/var/run
+rm -rf /targ/prod/xo126/med/proxy/main/var/lock
+cp -rf /targ/prod/xo126/med/proxy/main/etc/conf.d/hostname /targ/prod/xo126/med/proxy/rwd/etc/conf.d/hostname
+-------------------------------------------------------------------------
+gap: 0-4194303 (4M)
+-------------------------------------------------------------------------
+volume: cs.0
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/cs.img bs=1M count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00436445 s, 961 MB/s
+mkfs.ext3 -O ^metadata_csum /targ/prod/xo126/med/proxy/cs.img -L cs
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 4096 1k blocks and 1024 inodes
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (1024 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+populatefs -d /targ/prod/xo126/med/proxy/cs -U /targ/prod/xo126/med/proxy/cs.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/cs)
+Filesystem /targ/prod/xo126/med/proxy/cs.img populated.
+-------------------------------------------------------------------------
+volume: cs.1
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/cs.img bs=1M count=4
+4+0 records in
+4+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.00356551 s, 1.2 GB/s
+mkfs.ext3 -O ^metadata_csum /targ/prod/xo126/med/proxy/cs.img -L cs
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 4096 1k blocks and 1024 inodes
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (1024 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+populatefs -d /targ/prod/xo126/med/proxy/cs -U /targ/prod/xo126/med/proxy/cs.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/cs)
+Filesystem /targ/prod/xo126/med/proxy/cs.img populated.
+-------------------------------------------------------------------------
+gap: 12582912-16777215 (4M)
+-------------------------------------------------------------------------
+volume: boot.0
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/boot.img bs=1M count=64
+64+0 records in
+64+0 records out
+67108864 bytes (67 MB, 64 MiB) copied, 0.0354963 s, 1.9 GB/s
+mkfs.ext3 -O ^metadata_csum /targ/prod/xo126/med/proxy/boot.img -L boot
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 65536 1k blocks and 16384 inodes
+Filesystem UUID: d43ad7e1-cd8f-4bbf-ab34-696156b7b763
+Superblock backups stored on blocks: 
+	8193, 24577, 40961, 57345
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+populatefs -d /targ/prod/xo126/med/proxy/boot -U /targ/prod/xo126/med/proxy/boot.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/boot)
+Filesystem /targ/prod/xo126/med/proxy/boot.img populated.
+-------------------------------------------------------------------------
+gap: 83886080-88080383 (4M)
+-------------------------------------------------------------------------
+
+volume: modules.0
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/modules.img bs=1M count=64
+64+0 records in
+64+0 records out
+67108864 bytes (67 MB, 64 MiB) copied, 0.0366839 s, 1.8 GB/s
+mkfs.ext4 -O ^metadata_csum /targ/prod/xo126/med/proxy/modules.img -L modules
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 65536 1k blocks and 16384 inodes
+Filesystem UUID: 37f2ce01-f47d-4906-8c69-757d14d85799
+Superblock backups stored on blocks: 
+	8193, 24577, 40961, 57345
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+populatefs -d /targ/prod/xo126/med/proxy/modules -U /targ/prod/xo126/med/proxy/modules.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/modules)
+Filesystem /targ/prod/xo126/med/proxy/modules.img populated.
+-------------------------------------------------------------------------
+gap: 155189248-159383551 (4M)
+-------------------------------------------------------------------------
+
+volume: main.0
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/main.img bs=1M count=300
+300+0 records in
+300+0 records out
+314572800 bytes (315 MB, 300 MiB) copied, 0.320302 s, 982 MB/s
+mkfs.ext4 -O ^metadata_csum /targ/prod/xo126/med/proxy/main.img -L main
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 307200 1k blocks and 76912 inodes
+Filesystem UUID: 6860ab60-267f-497e-aa93-10c42d0dfe23
+Superblock backups stored on blocks: 
+	8193, 24577, 40961, 57345, 73729, 204801, 221185
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (8192 blocks): done
+Writing superblocks and filesystem accounting information: done 
+
+populatefs -d /targ/prod/xo126/med/proxy/main -U /targ/prod/xo126/med/proxy/main.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/main)
+Filesystem /targ/prod/xo126/med/proxy/main.img populated.
+--- /targ/prod/xo126/med/proxy/main.metalines
+cat /targ/prod/xo126/med/proxy/main.metalines
+/var/tmp d 1777 0 0
+/tmp d 1777 0 0
+/etc/logrotate.conf f 644 0 0
+/etc/logrotate.d/rsyslog f 644 0 0
+/var/lib/nginx d 755 125 125
+/home/scponly d 755 9022 9022
+--+ /targ/prod/xo126/med/proxy/main.metalines
+ls -lR /targ/prod/xo126/med/proxy/main.img
+-rw-r--r-- 1 root root 314572800 Sep  5 11:46 /targ/prod/xo126/med/proxy/main.img
+populatefs -d /targ/prod/xo126/med/proxy/main.metalines /targ/prod/xo126/med/proxy/main.img
+Populating filesystem from filespec (/targ/prod/xo126/med/proxy/main.metalines)
+Filesystem /targ/prod/xo126/med/proxy/main.img populated.
+-------------------------------------------------------------------------
+gap: 473956352-478150655 (4M)
+-------------------------------------------------------------------------
+
+volume: adva.0
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/adva.img bs=1M count=1000
+1000+0 records in
+1000+0 records out
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 1.58344 s, 662 MB/s
+mkfs.ext4 -O ^metadata_csum /targ/prod/xo126/med/proxy/adva.img -L adva
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 256000 4k blocks and 64000 inodes
+Filesystem UUID: 7a474a49-9137-4893-9857-5b24f20db174
+Superblock backups stored on blocks: 
+	32768, 98304, 163840, 229376
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+populatefs -d /targ/prod/xo126/med/proxy/adva -U /targ/prod/xo126/med/proxy/adva.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/adva)
+Filesystem /targ/prod/xo126/med/proxy/adva.img populated.
+-------------------------------------------------------------------------
+gap: 1526726656-1530920959 (4M)
+-------------------------------------------------------------------------
+
+volume: rwd.0
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/rwd.img bs=1M count=64
+64+0 records in
+64+0 records out
+67108864 bytes (67 MB, 64 MiB) copied, 0.0472498 s, 1.4 GB/s
+mkfs.ext4 -O ^metadata_csum /targ/prod/xo126/med/proxy/rwd.img -L rwd
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 65536 1k blocks and 16384 inodes
+Filesystem UUID: ddfffe6c-cd51-414a-9b31-ad884fa37cb1
+Superblock backups stored on blocks: 
+	8193, 24577, 40961, 57345
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+populatefs -d /targ/prod/xo126/med/proxy/rwd -U /targ/prod/xo126/med/proxy/rwd.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/rwd)
+Filesystem /targ/prod/xo126/med/proxy/rwd.img populated.
+-------------------------------------------------------------------------
+gap: 1598029824-1602224127 (4M)
+-------------------------------------------------------------------------
+
+volume: rwda.0
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/rwda.img bs=1M count=1000
+1000+0 records in
+1000+0 records out
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 1.59291 s, 658 MB/s
+mkfs.ext4 -O ^metadata_csum /targ/prod/xo126/med/proxy/rwda.img -L rwda
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 256000 4k blocks and 64000 inodes
+Filesystem UUID: 03c463df-41af-444a-b1a3-1e211f5aad5a
+Superblock backups stored on blocks: 
+	32768, 98304, 163840, 229376
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+populatefs -d /targ/prod/xo126/med/proxy/rwda -U /targ/prod/xo126/med/proxy/rwda.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/rwda)
+Filesystem /targ/prod/xo126/med/proxy/rwda.img populated.
+-------------------------------------------------------------------------
+gap: 2650800128-2654994431 (4M)
+-------------------------------------------------------------------------
+
+volume: boot.1
+-------------------------------------------------------------------------
+gap: 2722103296-2726297599 (4M)
+-------------------------------------------------------------------------
+
+volume: modules.1
+-------------------------------------------------------------------------
+gap: 2793406464-2797600767 (4M)
+-------------------------------------------------------------------------
+
+volume: main.1
+-------------------------------------------------------------------------
+gap: 3112173568-3116367871 (4M)
+-------------------------------------------------------------------------
+volume: adva.1
+
+-------------------------------------------------------------------------
+gap: 4164943872-4169138175 (4M)
+-------------------------------------------------------------------------
+volume: rwd.1
+-------------------------------------------------------------------------
+gap: 4236247040-4240441343 (4M)
+-------------------------------------------------------------------------
+volume: rwda.1
+d-------------------------------------------------------------------------
+gap: 5289017344-5293211647 (4M)
+-------------------------------------------------------------------------
+volume: staging.0
+-------------------------------------------------------------------------
+gap: 6325010432-6329204735 (4M)
+-------------------------------------------------------------------------
+volume: vm.0
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/vm.img bs=1M count=12
+12+0 records in
+12+0 records out
+12582912 bytes (13 MB, 12 MiB) copied, 0.00982513 s, 1.3 GB/s
+mkfs.ext4 -O ^metadata_csum /targ/prod/xo126/med/proxy/vm.img -L vm
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 12288 1k blocks and 3072 inodes
+Filesystem UUID: 85ea0e9a-e02d-4246-9550-9f461f4d0e47
+Superblock backups stored on blocks: 
+	8193
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (1024 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+populatefs -d /targ/prod/xo126/med/proxy/vm -U /targ/prod/xo126/med/proxy/vm.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/vm)
+Filesystem /targ/prod/xo126/med/proxy/vm.img populated.
+-------------------------------------------------------------------------
+gap: 6341787648-6345981951 (4M)
+-------------------------------------------------------------------------
+volume: common.0
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/common.img bs=1M count=900
+900+0 records in
+900+0 records out
+943718400 bytes (944 MB, 900 MiB) copied, 1.33322 s, 708 MB/s
+mkfs.ext4 -O ^metadata_csum /targ/prod/xo126/med/proxy/common.img -L common
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 230400 4k blocks and 57600 inodes
+Filesystem UUID: e1d81a69-948d-41d1-a2d7-fd26a26611e6
+Superblock backups stored on blocks: 
+	32768, 98304, 163840, 229376
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+populatefs -d /targ/prod/xo126/med/proxy/common -U /targ/prod/xo126/med/proxy/common.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/common)
+Filesystem /targ/prod/xo126/med/proxy/common.img populated.
+-------------------------------------------------------------------------
+gap: 7289700352-7298088959 (8M)
+create_half_pak !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+mkdir -p /targ/prod/xo126/med/proxy/staging
+python /targ/prod/xo126/scripts/packesel.py --phase COPY_INST --cfgFilePath /targ/prod/xo126/metadata.json --instFilePath /targ/prod/xo126/scripts/install.half.em2.2.sh --stagingPath /targ/prod/xo126/med/proxy/staging --pkgName card
+Add inst-script /targ/prod/xo126/med/proxy/staging/opt/adva/aos/pkg/scripts/install-f4-xo126-card-21.5.1.sh
+sync
+mkdir -p /targ/prod/xo126/med/proxy/staging/opt/adva/aos/pkg/metadata/
+tar -jcf /targ/prod/xo126/med/proxy/staging/boot.tar.bz2 -C /targ/prod/xo126/med/proxy boot
+tar -jcf /targ/prod/xo126/med/proxy/staging/modules.tar.bz2 -C /targ/prod/xo126/med/proxy modules
+tar -jcf /targ/prod/xo126/med/proxy/staging/main.tar.bz2 -C /targ/prod/xo126/med/proxy main
+tar -jcf /targ/prod/xo126/med/proxy/staging/adva.tar.bz2 -C /targ/prod/xo126/med/proxy adva
+tar -jcf /targ/prod/xo126/med/proxy/staging/rwd.tar.bz2 -C /targ/prod/xo126/med/proxy rwd
+tar -jcf /targ/prod/xo126/med/proxy/staging/rwda.tar.bz2 -C /targ/prod/xo126/med/proxy rwda
+python /targ/prod/xo126/scripts/packesel.py --phase CREATE_INV --cfgFilePath /targ/prod/xo126/metadata.json --stagingPath /targ/prod/xo126/med/proxy/staging --tarFilePath /targ/prod/xo126/med --pkgName card --pkgArch arm8-64bit
+Create tar-file /targ/prod/xo126/med/f4-xo126-card-21.5.1-arm8-64bit.tar
+1f000a9c62a1cc4c285fdbddda0609fd1e339fe61c0202f815a9694416331e97
+d535de233966c1cb8c80ab928fda6b0dfd1fa5f53f08c47f4362489eabecb1db
+81ec434a63acba95a5f63be8abf0e1c1ee4cb6764e48930865d4e0a7ba7336d6
+59f055d0a2dfc93ba9c5a844fcc41a62eabb30b5ef1d7c3ebedf1c197ff38a0a
+a04fec528b8ca1f7ddd9ef750d865f1ff1cf369a1b3536b010bce0a1396582ee
+fa01aec1f2f7f6c526e86a5e937a3ede004a4f1449f749d4324ebef7f0b89bd7
+ee669a00e306291b87a082b97c64020d21dbb10d3eb5d4961ca4f17a2abea800
+49d680f830fffa252788182865bd881b7c9bf40aa6b97f245230538647392665
+Create inv-file /targ/prod/xo126/med/proxy/staging/opt/adva/aos/pkg/metadata/inventory-f4-xo126-card-21.5.1.json
+python /targ/prod/xo126/scripts/packesel.py --phase REORDER_TAR --cfgFilePath /targ/prod/xo126/metadata.json --stagingPath /targ/prod/xo126/med/proxy/staging --tarFilePath /targ/prod/xo126/med --pkgName card --pkgArch arm8-64bit
+Reorder tarfile /targ/prod/xo126/med/f4-xo126-card-21.5.1-arm8-64bit.tar
+python /targ/prod/xo126/scripts/packesel.py --phase CREATE_PAK --cfgFilePath /targ/prod/xo126/metadata.json --tarFilePath /targ/prod/xo126/med --pkgName card --pkgArch arm8-64bit
+Compress tar file  /targ/prod/xo126/med/f4-xo126-card-21.5.1-arm8-64bit.tar
+Create pak-file /targ/prod/xo126/med/f4-xo126-card-21.5.1-arm8-64bit.tar.bz2.pak
+-------------------------------------------------------------------------
+volume: adva.0
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/adva.img bs=1M count=1000
+1000+0 records in
+1000+0 records out
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 2.23346 s, 469 MB/s
+mkfs.ext4 -O ^metadata_csum /targ/prod/xo126/med/proxy/adva.img -L adva
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 256000 4k blocks and 64000 inodes
+Filesystem UUID: 42be8641-9d24-4d46-ac1b-cadac965a92b
+Superblock backups stored on blocks: 
+	32768, 98304, 163840, 229376
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+populatefs -d /targ/prod/xo126/med/proxy/adva -U /targ/prod/xo126/med/proxy/adva.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/adva)
+Filesystem /targ/prod/xo126/med/proxy/adva.img populated.
+-------------------------------------------------------------------------
+volume: adva.1
+dd if=/dev/zero of=/targ/prod/xo126/med/proxy/adva.img bs=1M count=1000
+1000+0 records in
+1000+0 records out
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 2.1079 s, 497 MB/s
+mkfs.ext4 -O ^metadata_csum /targ/prod/xo126/med/proxy/adva.img -L adva
+mke2fs 1.45.5 (07-Jan-2020)
+Discarding device blocks: done                            
+Creating filesystem with 256000 4k blocks and 64000 inodes
+Filesystem UUID: f4eee9a0-8e84-4d2d-9658-52e3b09b5d84
+Superblock backups stored on blocks: 
+	32768, 98304, 163840, 229376
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+populatefs -d /targ/prod/xo126/med/proxy/adva -U /targ/prod/xo126/med/proxy/adva.img
+Populating filesystem from path (/targ/prod/xo126/med/proxy/adva)
+Filesystem /targ/prod/xo126/med/proxy/adva.img populated.
+dd if=/targ/prod/xo126/med/proxy/0..4194303.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0181622 s, 231 MB/s
+dd if=/targ/prod/xo126/med/proxy/cs.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0221709 s, 189 MB/s
+dd if=/targ/prod/xo126/med/proxy/cs.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0174837 s, 240 MB/s
+dd if=/targ/prod/xo126/med/proxy/12582912..16777215.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0176109 s, 238 MB/s
+dd if=/targ/prod/xo126/med/proxy/boot.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+131072+0 records in
+131072+0 records out
+67108864 bytes (67 MB, 64 MiB) copied, 0.261655 s, 256 MB/s
+dd if=/targ/prod/xo126/med/proxy/83886080..88080383.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0207144 s, 202 MB/s
+dd if=/targ/prod/xo126/med/proxy/modules.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+131072+0 records in
+131072+0 records out
+67108864 bytes (67 MB, 64 MiB) copied, 0.257395 s, 261 MB/s
+dd if=/targ/prod/xo126/med/proxy/155189248..159383551.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0198975 s, 211 MB/s
+dd if=/targ/prod/xo126/med/proxy/main.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+614400+0 records in
+614400+0 records out
+314572800 bytes (315 MB, 300 MiB) copied, 1.84542 s, 170 MB/s
+dd if=/targ/prod/xo126/med/proxy/473956352..478150655.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0226229 s, 185 MB/s
+dd if=/targ/prod/xo126/med/proxy/adva.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+2048000+0 records in
+2048000+0 records out
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 5.55273 s, 189 MB/s
+dd if=/targ/prod/xo126/med/proxy/1526726656..1530920959.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0176288 s, 238 MB/s
+dd if=/targ/prod/xo126/med/proxy/rwd.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+131072+0 records in
+131072+0 records out
+67108864 bytes (67 MB, 64 MiB) copied, 0.291111 s, 231 MB/s
+dd if=/targ/prod/xo126/med/proxy/1598029824..1602224127.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.124697 s, 33.6 MB/s
+dd if=/targ/prod/xo126/med/proxy/rwda.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+2048000+0 records in
+2048000+0 records out
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 4.12583 s, 254 MB/s
+dd if=/targ/prod/xo126/med/proxy/2650800128..2654994431.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0188703 s, 222 MB/s
+dd if=/targ/prod/xo126/med/proxy/boot.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+131072+0 records in
+131072+0 records out
+67108864 bytes (67 MB, 64 MiB) copied, 0.322293 s, 208 MB/s
+dd if=/targ/prod/xo126/med/proxy/2722103296..2726297599.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0192525 s, 218 MB/s
+dd if=/targ/prod/xo126/med/proxy/modules.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+131072+0 records in
+131072+0 records out
+67108864 bytes (67 MB, 64 MiB) copied, 0.38574 s, 174 MB/s
+dd if=/targ/prod/xo126/med/proxy/2793406464..2797600767.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0195071 s, 215 MB/s
+dd if=/targ/prod/xo126/med/proxy/main.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+614400+0 records in
+614400+0 records out
+314572800 bytes (315 MB, 300 MiB) copied, 2.08567 s, 151 MB/s
+dd if=/targ/prod/xo126/med/proxy/3112173568..3116367871.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0219471 s, 191 MB/s
+dd if=/targ/prod/xo126/med/proxy/adva.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+2048000+0 records in
+2048000+0 records out
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 4.9444 s, 212 MB/s
+dd if=/targ/prod/xo126/med/proxy/4164943872..4169138175.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0198696 s, 211 MB/s
+dd if=/targ/prod/xo126/med/proxy/rwd.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+131072+0 records in
+131072+0 records out
+67108864 bytes (67 MB, 64 MiB) copied, 0.264809 s, 253 MB/s
+dd if=/targ/prod/xo126/med/proxy/4236247040..4240441343.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0243355 s, 172 MB/s
+dd if=/targ/prod/xo126/med/proxy/rwda.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+2048000+0 records in
+2048000+0 records out
+1048576000 bytes (1.0 GB, 1000 MiB) copied, 4.24662 s, 247 MB/s
+dd if=/targ/prod/xo126/med/proxy/5289017344..5293211647.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.26378 s, 15.9 MB/s
+dd if=/targ/prod/xo126/med/proxy/staging.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+2015232+0 records in
+2015232+0 records out
+1031798784 bytes (1.0 GB, 984 MiB) copied, 4.10144 s, 252 MB/s
+dd if=/targ/prod/xo126/med/proxy/6325010432..6329204735.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.113985 s, 36.8 MB/s
+dd if=/targ/prod/xo126/med/proxy/vm.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+24576+0 records in
+24576+0 records out
+12582912 bytes (13 MB, 12 MiB) copied, 0.0535778 s, 235 MB/s
+dd if=/targ/prod/xo126/med/proxy/6341787648..6345981951.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+8192+0 records in
+8192+0 records out
+4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0189117 s, 222 MB/s
+dd if=/targ/prod/xo126/med/proxy/common.img of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+1843200+0 records in
+1843200+0 records out
+943718400 bytes (944 MB, 900 MiB) copied, 3.74769 s, 252 MB/s
+dd if=/targ/prod/xo126/med/proxy/7289700352..7298088959.gap of=/targ/prod/xo126/med/xo126_disk_image oflag=append conv=notrunc
+16384+0 records in
+16384+0 records out
+8388608 bytes (8.4 MB, 8.0 MiB) copied, 0.0380194 s, 221 MB/s
+
+
+Installation of EOS is _almost_ complete.
+
+The SD/MMC card image has been created in /targ/prod/xo126/med/xo126_disk_image.
+Write it to SD/MMC card for example by:
+
+dd if=/targ/prod/xo126/med/xo126_disk_image of=/dev/mmcblk0
+or
+gzip -dc /targ/prod/xo126/med/xo126_disk_image.gz > /dev/mmcblk0
+
+The last part is to modify u-boot environment of your device (if it wasn't done yet).
+Please issue the following commands in u-boot shell of your XG480:
+
+setenv actbank 0
+setenv eosboot_a "ext2load mmc 0:1 88000000 cs_script.uimg; source 88000000"
+setenv eosboot_b "ext2load mmc 0:2 88000000 cs_script.uimg; source 88000000"
+setenv bootcmd "run eosboot_a; run eosboot_b"
+saveenv
+boot
+
+For your information, these commands have been written to xo126_uboot_setup_commands.txt in /targ/prod/xo126/med.

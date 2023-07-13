@@ -1,0 +1,31 @@
+172.21.13.75 – 79
+255.255.248.0
+172.21.14.254
+
+Marvell>> 
+Marvell>> setenv ipaddr 172.21.13.75
+Marvell>> setenv net
+  netbsd_en netdev netmask netretry
+Marvell>> setenv netmask 255.255.248.0
+Marvell>> setenv gatewayip 172.21.14.254
+Marvell>> ping 172.21.11.14
+Using egiga1 device
+host 172.21.11.14 is alive
+
+
+Marvell>> printenv rootpath 
+rootpath=/home/barak/mrv_dev/build_04_10/build/dist/arm_msys_root
+Marvell>> setenv rootpath /home/barak/mrv_dev/build_04_10/build1/dist/arm_msys_root
+Marvell>> setenv bootcmd run nfsboot
+Marvell>>
+
+
+InReach connection: 10.111.4.253 port 2600
+Use the following IP address and default gateway on the device for nfs mode:
+Ip address 10.111.4.51/24
+Default gateway: 10.111.4.254
+
+setenv ipaddr 10.111.4.51
+setenv gatewayip 10.111.4.254
+setenv serverip 172.21.11.14
+

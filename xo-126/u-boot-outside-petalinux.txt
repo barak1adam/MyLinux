@@ -1,0 +1,61 @@
+how to work and build with u-boot, outside petalinux
+=====================================================
+
+#add the Xilinx toolchanin to PATH and to env variables
+
+export PATH=/home/barak/Vitis/2022.1/gnu/aarch64/lin/aarch64-linux/bin/:$PATH
+export CROSS_COMPILE=aarch64-linux-gnu-
+export ARCH=aarch64
+
+#clone the u-boot
+git clone https://github.com/Xilinx/u-boot-xlnx.git -b xilinx-v2019.1
+
+#cd to u-boot folder
+cd u-boot-xlnx
+
+#make sure the defconfig is under configs folder
+#now do:
+make xilinx_zynqmp_zcu102_rev1_0_defconfig
+
+#the full config is built now from that defconfig
+
+#save config - a .config file  is added / updated
+make defconfig
+
+#set the DTS
+export DEVICE_TREE="zynqmp-zcu102-rev1.0"
+or
+make DEVICE_TREE=xg108
+
+#make clean
+make clean
+make distclean
+
+#menuconfig
+make menuconfig
+
+#save defconfig - the defconfig is added / updated
+make savedefconfig
+
+#build
+make
+
+#to compare u-boot configurations, it always better to compare defconfigs
+cd /tmp/u-boot-xlnx/
+vimdiff defconfig ~/xg108_defconfig 
+
+#f8 u-boot defconfig:
+~/f8-bootloader-aflex/configs/aflex_defconfig 
+
+#our defconfig
+~/u-boot-xlnx/configs/xilinx_zynqmp_virt_defconfig
+
+
+actions summary to build:
+=========================
+export PATH=/home/barak/Vitis/2022.1/gnu/aarch64/lin/aarch64-linux/bin/:$PATH
+export CROSS_COMPILE=aarch64-linux-gnu-
+export ARCH=aarch64
+cd ~/u-boot-xlnx
+make xilinx_zynqmp_virt_defconfig
+make

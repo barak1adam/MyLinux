@@ -1,0 +1,28 @@
+The following is taken from mkimages.sh:
+=========================================
+
+## create ubifs image that can be written from MOS
+sudo $MKUBIFS  -v -r kernel_ubifs/ -m $PAGE_SIZE -e $LEB_SIZE -c $MAX_LEB_COUNT_KERNEL -o kernel.ubifs
+sudo $MKUBIFS  -v -r dtb_ubifs/ -m $PAGE_SIZE -e $LEB_SIZE -c $MAX_LEB_COUNT_DTB  -o dtb.ubifs
+sudo $MKUBIFS  -v -r $ROOT -m $PAGE_SIZE -e $LEB_SIZE -c $MAX_LEB_COUNT_ROOTFS -o root.ubifs
+
+echo -n "Ubinize production images"
+sudo $UBINIZE -v -m $PAGE_SIZE -s $SUBPAGE_SIZE -p $PEB_SIZE $BR2_EXTERNAL_OSV_PATH/ubinize_mos_uboot.cfg -o $BASE/mos.ubi
+sudo $UBINIZE -v -m $PAGE_SIZE -s $SUBPAGE_SIZE -p $PEB_SIZE $BR2_EXTERNAL_OSV_PATH/ubinize_mos_uboot_production.cfg -o $BASE/production_mos.ubi
+
+# in output/images: rename tf-a-stm32mp157c-dk2.stm32 to tf-a-stm32mp157c-dk2-trusted.stm32
+sudo mv $BASE/tf-a-stm32mp157c-dk2.stm32 $BASE/tf-a-stm32mp157c-dk2-trusted.stm32
+
+# change TF-A build 'trusted' flags into 'serial' flags
+sed -i 's/STM32MP_RAW_NAND=1 STM32MP_SPI_NAND=1 STM32MP_SPI_NOR=1 STM32MP_EMMC=1 STM32MP_SDMMC=1/STM32MP_UART_PROGRAMMER=1 STM32MP_USB_PROGRAMMER=1/' .config
+
+#rebuild TF-A with the new trusted flags, tf-a-stm32mp157c-dk2.stm32 is re-generated
+make arm-trusted-firmware-dirclean
+make arm-trusted-firmware-rebuild
+
+# in output/images: rename tf-a-stm32mp157c-dk2.stm32 to tf-a-stm32mp157c-dk2-serialboot.stm32
+sudo mv $BASE/tf-a-stm32mp157c-dk2.stm32 $BASE/tf-a-stm32mp157c-dk2-serialboot.stm32
+
+# restore the deafult parameters for building tf-a firmware
+sed -i 's/STM32MP_UART_PROGRAMMER=1 STM32MP_USB_PROGRAMMER=1/STM32MP_RAW_NAND=1 STM32MP_SPI_NAND=1 STM32MP_SPI_NOR=1 STM32MP_EMMC=1 STM32MP_SDMMC=1/' .config
+

@@ -1,0 +1,43 @@
+how to build xlinx kernel for XO-126:
+=====================================
+
+source /home/barak/Vitis/2022.1/settings64.sh
+export CROSS_COMPILE=aarch64-linux-gnu-;
+export ARCH=arm64;
+export CC=aarch64-linux-gnu-gcc;
+cd ~/linux-xlnx/
+
+make clean
+make -f Makefile xilinx_zynqmp_defconfig
+make -f Makefile all -j 32
+#cp arch/arm64/boot/Image /tftpboot/Image.new
+
+
+DTS:
+===
+#make sure dtc is added to $PATH
+cd ~
+git clone https://git.kernel.org/pub/scm/utils/dtc/dtc.git
+cd dtc
+make
+
+barak@barak-OptiPlex-7020:~/linux-xlnx$ which dtc
+/usr/bin/dtc
+
+
+#~/XO126_DT is a copy I created from Xilix ~/DTG. In XO126_DT I created a final flat DTS - system-top.dts
+cd ~/XO126_DT/
+#gcc any include files to generate the final system-top.dts.tmp
+gcc -I my_dts -E -nostdinc -undef -D__DTS__ -x assembler-with-cpp -o system-top.dts.tmp system-top.dts
+#compile it to a dtb
+dtc -I dts -O dtb -o system-top.dtb system-top.dts.tmp
+#if needed cp it for loading
+cp system-top.dtb /tftpboot/system-top-fpga21.dtb
+
+to make the reverse compilation from dtb to dtc:
+=================================================
+
+dtc -I dtb -O dts /tftpboot/system-top-fpga20.dtb  > /tmp/fpga20.dts
+
+
+

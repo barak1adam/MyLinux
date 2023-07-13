@@ -1,0 +1,135 @@
+[    5.033211] mmc1: new HS200 MMC card at address 0001
+[    5.042379] mmcblk1: mmc1:0001 IS008G 7.28 GiB 
+[    5.042380] Freeing unused kernel memory: 1984K
+[    5.057442]  mmcblk1: p1 p2 p3 < p5 p6 p7 p8 p9 p10 p11 p12 p13 p14 p15 p16 p17 p18 p19 >
+[    5.065171] Run /init as init process
+[    5.067433] mmcblk1boot0: mmc1:0001 IS008G 4.00 MiB 
+ir_init version 58
+set csir_log=1 in kernel cmdline to enable log
+[    5.075466] mmcblk1boot1: mmc1:0001 IS008G 4.00 MiB 
+fsck (busybox 1.31.1)
+fsck: can't read '/etc/fstab': No such file or [    5.086611] mmcblk1rpmb: mmc1:0001 IS008G 4.00 MiB, chardev (242:0)
+directory
+fsck: fsck.auto: No such file or directory
+[    5.086814] EXT4-fs (mmcblk1p1): mounting ext3 file system using the ext4 subsystem
+[    5.112822] EXT4-fs (mmcblk1p1): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsc[    5.147647] EXT4-fs (mmcblk1p7): INFO: recovery required on readonly filesystem
+k (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)[    5.158040] EXT4-fs (mmcblk1p7): write access will be enabled during recovery
+
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+[    5.493557] random: fast init done
+[    5.525163] EXT4-fs (mmcblk1p7): recovery complete
+[    5.531093] EXT4-fs (mmcblk1p7): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+cs_init version 58 (SB)
+set csir_log=1 in kernel cmdline to enable log
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+cs: clean, 13/2048 files, 1337/8192 blocks
+[    5.629163] EXT4-fs (mmcblk1p1): mounting ext3 file system using the ext4 subsystem
+[    5.641005] EXT4-fs (mmcblk1p1): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck from util-linux 2.36
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+cs: clean, 13/2048 files, 1337/8192 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+boot: clean, 16/8192 files, 6456/32768 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+modules: clean, 117/16384 files, 43919/65536 blocks
+fsck from util-linux 2.36
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+adva: clean, 3096/38400 files, 141899/153600 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwd: clean, 23/16384 files, 7475/65536 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwda: clean, 173/32768 files, 9953/131072 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+boot: clean, 16/8192 files, 6456/32768 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+modules: clean, 117/16384 files, 43919/65536 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+main: clean, 12238/76912 files, 279340/307200 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+adva: clean, 3096/38400 files, 141899/153600 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwd: clean, 23/16384 files, 7475/65536 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwda: clean, 173/32768 files, 9953/131072 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+staging: clean, 11/32768 files, 6353/131072 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+vm: clean, 12/1024 files, 1203/4096 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+common: clean, 13/32768 files, 6355/131072 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+boot: clean, 16/8192 files, 6456/32768 blocks
+[    6.111042] EXT4-fs (mmcblk1p5): mounting ext3 file system using the ext4 subsystem
+[    6.125774] EXT4-fs (mmcblk1p5): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+modules: clean, 117/16384 files, 43919/65536 blocks
+[    6.148987] EXT4-fs (mmcblk1p6): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+adva: clean, 3096/38400 files, 141899/153600 blocks
+[    6.172069] EXT4-fs (mmcblk1p8): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwd: clean, 23/16384 files, 7475/65536 blocks
+[    6.195578] EXT4-fs (mmcblk1p9): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+[    6.204894] ext4 filesystem being mounted at /mnt/active/rwd supports timestamps until 2038 (0x7fffffff)
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwda: clean, 173/32768 files, 9953/131072 blocks
+[    6.227439] EXT4-fs (mmcblk1p10): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+[    6.236832] ext4 filesystem being mounted at /mnt/active/rwda supports timestamps until 2038 (0x7fffffff)
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+staging: clean, 11/32768 files, 6353/131072 blocks
+[    6.262819] EXT4-fs (mmcblk1p17): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+vm: clean, 12/1024 files, 1203/4096 blocks
+[    6.285968] EXT4-fs (mmcblk1p18): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+[    6.295336] ext4 filesystem being mounted at /mnt/active/vm supports timestamps until 2038 (0x7fffffff)
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+common: clean, 13/32768 files, 6355/131072 blocks
+[    6.320541] EXT4-fs (mmcblk1p19): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+AOS Signature | getInventoryFiles failed due to missing inventory folder
+AOS Signature | Action ended with FAILURE [ERR_INV_FILE]
+failed to open eeprom
+
+==================================
+Secure boot failed - system halted
+==================================

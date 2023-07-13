@@ -1,0 +1,45 @@
+QSPI NOR
+
+I found the CPLD reset
+
+
+ETH PHY
+
+he wanted me to debug u-boot
+I focused on diffs to 108 and found the MSCC PHY missing (he didnt read emails and didnt se the MSCC)
+
+then I cancelled GEM0 errors and fixed PHY ID errors
+
+still no ping, still pushed me to debug
+
+I opened u-boot printouts and google
+I pushed to clocks
+
+he showed me the MII and MDIO dumps on u-boot
+
+He pushed to kernel clocks (no kernel yet...)
+I changed the clock on Vivado and cancelled the random MAC to resolve it
+
+he showed me DTG - was helpful
+
+
+Kernel panic
+
+he showed me the booti and bootm
+
+he pushed me to initrd I tried initramfs cpio and it worked better
+
+he showed FIT offset - but the issue might be only the offests of the images (kernel, dtb, rootfs)
+
+he pushed me to bootm but I got back to booti to move forward
+
+systemd - I resolved (he told not to change rootfs config...)
+
+no console - I resolved
+
+user passwords I resolved
+
+image.ub to repack - I found
+
+
+

@@ -1,0 +1,461 @@
+[    5.089948] mmc1: new HS200 MMC card at address 0001
+[    5.095547] mmcblk1: mmc1:0001 IS008G 7.28 GiB 
+[    5.105818]  mmcblk1: p1 p2 p3 < p5 p6 p7 p8 p9 p10 p11 p12 p13 p14 p15 p16 p17 p18 p19 >
+[    5.113188] Run /init as init process
+[    5.115780] mmcblk1boot0: mmc1:0001 IS008G 4.00 MiB 
+ir_init version 58
+set csir_log=1 in kernel cmdline to enable log
+[    5.123804] mmcblk1boot1: mmc1:0001 IS008G 4.00 MiB 
+fsck (busybox 1.31.1)
+fsck: can't read '/etc/fstab': No such file or [    5.134946] mmcblk1rpmb: mmc1:0001 IS008G 4.00 MiB, chardev (242:0)
+directory
+fsck: fsck.auto: No such file or directory
+[    5.135166] EXT4-fs (mmcblk1p1): mounting ext3 file system using the ext4 subsystem
+[    5.161252] EXT4-fs (mmcblk1p1): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+[    5.196420] EXT4-fs (mmcblk1p7): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+fsck (busybox 1.31.1)
+cs_init version 58
+set csir_log=1 in kernel cmdline to enable log
+[    5.239936] random: fast init done
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+cs: clean, 13/2048 files, 1337/8192 blocks
+[    5.483773] EXT4-fs (mmcblk1p1): mounting ext3 file system using the ext4 subsystem
+[    5.495623] EXT4-fs (mmcblk1p1): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck from util-linux 2.36
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+cs: clean, 13/2048 files, 1337/8192 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+boot: clean, 16/8192 files, 6456/32768 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+modules: clean, 117/16384 files, 43919/65536 blocks
+fsck from util-linux 2.36
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+adva: clean, 3096/38400 files, 141899/153600 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwd: recovering journal
+rwd: clean, 26/16384 files, 7478/65536 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwda: recovering journal
+rwda: clean, 173/32768 files, 9953/131072 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+boot: clean, 16/8192 files, 6456/32768 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+modules: clean, 117/16384 files, 43919/65536 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+main: clean, 12238/76912 files, 279344/307200 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+adva: clean, 3096/38400 files, 141899/153600 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwd: recovering journal
+rwd: clean, 23/16384 files, 7475/65536 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwda: recovering journal
+rwda: clean, 173/32768 files, 9953/131072 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+staging: recovering journal
+staging: clean, 11/32768 files, 6353/131072 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+vm: recovering journal
+vm: clean, 12/1024 files, 1203/4096 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+common: recovering journal
+common: clean, 13/32768 files, 6355/131072 blocks
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+boot: clean, 16/8192 files, 6456/32768 blocks
+[    6.024057] EXT4-fs (mmcblk1p5): mounting ext3 file system using the ext4 subsystem
+[    6.038604] EXT4-fs (mmcblk1p5): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+modules: clean, 117/16384 files, 43919/65536 blocks
+[    6.062123] EXT4-fs (mmcblk1p6): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+adva: clean, 3096/38400 files, 141899/153600 blocks
+[    6.084945] EXT4-fs (mmcblk1p8): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwd: clean, 26/16384 files, 7478/65536 blocks
+[    6.108636] EXT4-fs (mmcblk1p9): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+[    6.117915] ext4 filesystem being mounted at /mnt/active/rwd supports timestamps until 2038 (0x7fffffff)
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+rwda: clean, 173/32768 files, 9953/131072 blocks
+[    6.140663] EXT4-fs (mmcblk1p10): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+[    6.150024] ext4 filesystem being mounted at /mnt/active/rwda supports timestamps until 2038 (0x7fffffff)
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+staging: clean, 11/32768 files, 6353/131072 blocks
+[    6.175999] EXT4-fs (mmcblk1p17): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+vm: clean, 12/1024 files, 1203/4096 blocks
+[    6.198953] EXT4-fs (mmcblk1p18): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+[    6.208325] ext4 filesystem being mounted at /mnt/active/vm supports timestamps until 2038 (0x7fffffff)
+fsck from util-linux 2.36
+e2fsck 1.45.6 (20-Mar-2020)
+common: clean, 13/32768 files, 6355/131072 blocks
+[    6.233731] EXT4-fs (mmcblk1p19): mounted filesystem with ordered data mode. Opts: . Quota mode: none.
+INIT: version 2.97 booting
+
+   OpenRC 0.42.1 is starting up Gentoo Linux (aarch64)
+
+ * /proc is already mounted
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ...
+ * Maoz: 1 !!!!!!!!!!!!!!!!!!!!!!1
+ * Maoz: 1 !!!!!!!!!!!!!!!!!!!!!!2
+ * Maoz: 1 !!!!!!!!!!!!!!!!!!!!!!3
+ * Maoz: 1 !!!!!!!!!!!!!!!!!!!!!!4 depend done
+Running: mgmt
+Service `dhcpd' needs non existent service `net'
+Service `dhcrelay' needs non existent service `net'
+Service `dhcrelay6' needs non existent service `net'
+Service `nfsclient' needs non existent service `rpc.idmapd'
+Service `radvd' needs non existent service `net'
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/advaoptical.com-earily start
+ * Early init ...
+Starting system ...
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/sysfs start
+ * Mounting security filesystem ...
+ [ ok ]
+ * Mounting debug filesystem ...
+ [ ok ]
+ * Mounting config filesystem ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/cgroups start
+ * Mounting cgroup filesystem ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/dmesg start
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/kmod-static-nodes start
+ * Creating list of required static device nodes for the current kernel ...
+Warning: /lib/modules/5.15.0-00002-gf75c25507c18/modules.devname not found - ignoring
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/opentmpfiles-dev start
+ * Setting up tmpfiles.d entries for /dev ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/swclock start
+ * Setting the local clock based on last shutdown time ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/devfs start
+ * Remounting devtmpfs on /dev ...
+ [ ok ]
+ * Mounting /dev/mqueue ...
+ [ ok ]
+ * Mounting /dev/shm ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/advaoptical.com-skip-to-date start
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/modules start
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/procfs start
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/binfmt start
+ * Loading custom binary format handlers ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/sysctl start
+ * Configuring kernel parameters ...
+* Applying /etc/sysctl.d/00protected-links.conf ...
+fs.protected_symlinks = 1
+fs.protected_hardlinks = 1
+* Applying /etc/sysctl.conf ...
+net.ipv4.ip_forward = 0
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/bootmisc start
+ * Creating user login records ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/hostname start
+ * Setting hostname to xo126  ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/loopback start
+ * Bringing up network interface lo ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/ntp-client start
+ * Setting clock via the NTP client 'echo' ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/opentmpfiles-setup start
+ * Setting up tmpfiles.d entries ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/termencoding start
+ * Setting terminal encoding [ASCII] ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/save-keymaps start
+ * Saving key mapping ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/save-termencoding start
+ * Saving terminal encoding ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/urandom start
+INIT: Entering runlevel: 3
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/hwclock start
+ * Setting system clock using the hardware clock [UTC] ...
+hwclock: select() to /dev/rtc0 to wait for clock tick timed out
+ * Failed to set the system clock
+ [ !! ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/advaoptical.com-logrotate-once start
+ * Starting advaoptical.com-logrotate-once ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/advaoptical.com-aos-mount start
+ * Mounting AOS writable directories ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/advaoptical.com-aos-logrotate start
+ * Creating logrotate configuration for AOS ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/advaoptical.com-mount-standby start
+ * Mounting standby ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/advaoptical.com-mount-b-side-runtime start
+ * Mounting hierarchy in /mnt/b-side/runtime ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/rsyslog start
+ * Checking rsyslogd's configuration ...
+ [ ok ]
+ * Starting rsyslog ...
+ * start-stop-daemon: fopen `/run/rsyslogd.pid': No such file or directory
+ * Detaching to start `/usr/sbin/rsyslogd' ...
+ [ ok ]
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/cronie start
+ * Starting cronie ...
+ * start-stop-daemon: fopen `/var/run/crond.pid': No such file or directory
+ * Detaching to start `/usr/sbin/crond' ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/haveged start
+ * Starting haveged ...
+ * start-stop-daemon: fopen `/run/haveged.pid': No such file or directory
+ * Detaching to start `/usr/sbin/haveged' ...
+haveged: command socket is listening at fd 3
+ [ ok ]
+ * /etc/init.d/sshd uses runscript, please convert to openrc-run.
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/sshd start
+ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519 
+ * Starting sshd ...
+ * start-stop-daemon: fopen `/var/run/sshd.pid': No such file or directory
+ * Detaching to start `/usr/sbin/sshd' ...
+ * start-stop-daemon: fopen `/var/run/sshd_internal.pid': No such file or directory
+ * Detaching to start `/usr/sbin/sshd' ...
+ * start-stop-daemon: fopen `/var/run/sshd_debug.pid': No such file or directory
+ * Detaching to start `/usr/sbin/sshd' ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/xinetd start
+ * Starting xinetd ...
+ * Detaching to start `/usr/sbin/xinetd' ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/local start
+ * Starting local ...
+ *   Executing "/etc/local.d/00coredump.start" ...
+ [ ok ]
+ *   Executing "/etc/local.d/port-8022-iptbl.start" ...
+ [ ok ]
+ *   Executing "/etc/local.d/ssh_cleanup.start" ...
+ [ ok ]
+ *   Executing "/etc/local.d/ssl_cleanup.start" ...
+rm: cannot remove '/etc/ssl/private/*': No such file or directory
+ *   Execution of "/etc/local.d/ssl_cleanup.start" failed.
+ [ !! ]
+ *   Executing "/etc/local.d/xo126.start" ...
++ AWK=/usr/bin/awk
++ CAT=/bin/cat
++ CHMOD=/bin/chmod
++ GREP=/bin/grep
++ SED=/bin/sed
++ BOARDDBG=/opt/adva/aos/bin/board_dbg
+++ hostname
++ '[' '!' -e /etc/conf.d/hostname -o xo126 = localhost ']'
++ /bin/ip link show eth2
++ ret=1
++ '[' 1 -eq 0 ']'
+++ /bin/cat /proc/mtd
+++ /usr/bin/awk '(NR>1){ gsub(/[:"]/,""); \
+       print "ln -s /dev/" $1 " /dev/mtd_" $4 " 2>/dev/null;"}'
++ eval
++ /sbin/modprobe restartcause
+modprobe: FATAL: Module restartcause not found in directory /lib/modules/5.15.0-00002-gf75c25507c18
++ /sbin/modprobe mdio
+modprobe: FATAL: Module mdio not found in directory /lib/modules/5.15.0-00002-gf75c25507c18
++ /sbin/modprobe watchdog
+modprobe: FATAL: Module watchdog not found in directory /lib/modules/5.15.0-00002-gf75c25507c18
++ mknod /dev/linux-bcm-knet c 122 0
++ mknod /dev/linux-uk-proxy c 125 0
++ mknod /dev/linux-user-bde c 126 0
++ mknod /dev/linux-kernel-bde c 127 0
++ mkdir -p /mnt/active/common/log/tracelog
++ mount --bind /mnt/active/common/log/tracelog /var/opt/adva/aos/log/tracelog
++ SIRM_CFG_FILE=/opt/adva/aos/etc/core-apps/sirm/sirmConfigurationFile.json
++ '[' -e /opt/adva/aos/etc/core-apps/sirm/sirmConfigurationFile.json ']'
+++ /bin/sed -n 's/.*"mode": "//p' /opt/adva/aos/etc/core-apps/sirm/sirmConfigurationFile.json
+++ /bin/sed -n 's/",.*//p'
++ MODE=development
++ '[' development '!=' development ']'
++ echo MODE=development
+MODE=development
++ ifconfig eth1 up promisc allmulti
+eth1: ERROR while getting interface flags: No such device
+eth1: ERROR while getting interface flags: No such device
+eth1: ERROR while getting interface flags: No such device
++ ifconfig eth1 mtu 9628
+SIOCSIFMTU: No such device
++ /opt/adva/aos/bin/load_unidrv.sh
+Please init eth1 first. 
++ /bin/chmod 600 /etc/ssh/ssh_vmserver_maint_dsa_key
++ /bin/chmod 600 /etc/ssh/ssh_vmserver_maint_rsa_key
++ /bin/chmod 644 /etc/ssh/ssh_vmserver_maint_rsa_key-cert.pub
++ exit 0
+ [ ok ]
+ [ !! ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/advaoptical.com-tipc start
+ * Loading TIPC ...
+ [ ok ]
+ * Executing: /lib/rc/sh/openrc-run.sh /lib/rc/sh/openrc-run.sh /etc/init.d/advaoptical.com-aos start
+ * Maoz: start  !!!!!!!!!!!!!!!!!!!!!!1
+ * Maoz: start  !!!!!!!!!!!!!!!!!!!!!!3
+ * Starting AOS ...
+Starting AOS ...
+ *   MODE=development
+
+aosInit.sh invoked with parameters: --bootkey=
+stty: /dev/ttyLP0: No such file or directory
+modprobe: FATAL: Module tipc not found in directory /lib/modules/5.15.0-00002-gf75c25507c18
+Cannot find device "dummy0"
+RTNETLINK answers: Network is down
+dhclient: no process found
+modprobe: FATAL: Module L2loopback not found in directory /lib/modules/5.15.0-00002-gf75c25507c18
+net.ipv4.neigh.default.gc_thresh1 = 4096
+net.ipv4.neigh.default.gc_thresh2 = 16384
+net.ipv4.neigh.default.gc_thresh3 = 32768
+net.ipv6.neigh.default.gc_thresh1 = 4096
+net.ipv6.neigh.default.gc_thresh2 = 16384
+net.ipv6.neigh.default.gc_thresh3 = 32768
+net.ipv4.route.gc_thresh = 1000
+net.ipv4.route.max_size = 1000
+net.ipv6.route.gc_thresh = 800
+net.ipv6.route.max_size = 1000
+net.core.rmem_max = 1024000
+modprobe: FATAL: Module PciFpgaDrvLd not found in directory /lib/modules/5.15.0-00002-gf75c25507c18
+modprobe: FATAL: Module ErpUniDrvLd not found in directory /lib/modules/5.15.0-00002-gf75c25507c18
+Adding jail commands to /home/aos/usr/bin
+cp: cannot stat '/usr/bin/rsync': No such file or directory
+useradd: warning: the home directory /home/aos//scppush already exists.
+useradd: Not copying any file from skel directory into it.
+create guiProductionSupport.json
+*************************
+* Welcome to AOS world! *
+*************************
+Embedded Operating System
+  version: generated from ede-3.6.19
+AOS SDK build
+  version: 19.0.0-SNAPSHOT build: 14714 date: 2022-07-05_12:55:48 EDE: ede-3.6.19 
+ETH SDK build
+  version: 19.0.0-SNAPSHOT build: 9 date: 2022-07-05_13:12:47 EDE: ede-3.6.19 
+Components
+  rdm - 12.0.28
+    Raima Database Manager 12.0.28 Build 3672 [3/18/2021] http://www.raima.com/
+    Copyright (c) 2021 Raima Inc., All rights reserved.
+Root build
+  build: 14029 
+$(/opt/adva/aos/bin/aosCoreSirm -c /opt/adva/aos/etc/core-apps/sirm/sirmConfigurationFile.json -v=NOTICE  2>&1 | logger -t "console" ) &
+ [ ok ]
+
+generated from ede-3.6.19
+
+xo126 login: root
+[xo126:~] # mount
+/dev/mmcblk1p7 on / type ext4 (ro,relatime)
+none on /proc type proc (rw,relatime)
+none on /sys type sysfs (rw,relatime)
+none on /dev type devtmpfs (rw,nosuid,relatime,size=10240k,nr_inodes=471301,mode=755)
+none on /tmp type tmpfs (rw,relatime)
+none on /run type tmpfs (rw,relatime)
+none on /mnt type tmpfs (rw,relatime)
+devpts on /dev/pts type devpts (rw,relatime,mode=600,ptmxmode=000)
+/dev/mmcblk1p1 on /mnt/active/cs type ext3 (ro,relatime)
+/dev/mmcblk1p5 on /mnt/active/boot type ext3 (ro,relatime)
+/dev/mmcblk1p6 on /mnt/active/modules type ext4 (ro,relatime)
+/dev/mmcblk1p8 on /mnt/active/adva type ext4 (ro,relatime)
+/dev/mmcblk1p9 on /mnt/active/rwd type ext4 (rw,relatime)
+/dev/mmcblk1p10 on /mnt/active/rwda type ext4 (rw,relatime)
+/dev/mmcblk1p17 on /mnt/active/staging type ext4 (rw,relatime)
+/dev/mmcblk1p18 on /mnt/active/vm type ext4 (rw,relatime)
+/dev/mmcblk1p19 on /mnt/active/common type ext4 (rw,relatime)
+/dev/mmcblk1p7 on /mnt/active/main type ext4 (ro,relatime)
+/dev/mmcblk1p1 on /mnt/cs type ext3 (ro,relatime)
+/dev/mmcblk1p5 on /boot type ext3 (ro,relatime)
+/dev/mmcblk1p6 on /lib/modules type ext4 (ro,relatime)
+/dev/mmcblk1p8 on /opt/adva type ext4 (ro,relatime)
+none on /etc type aufs (rw,relatime,si=cceda164df138915)
+none on /var type aufs (rw,relatime,si=cceda164df134915)
+none on /root type aufs (rw,relatime,si=cceda164df121915)
+none on /home type aufs (rw,relatime,si=cceda164df124915)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)
+cgroup_root on /sys/fs/cgroup type tmpfs (rw,nosuid,nodev,noexec,relatime,size=10240k,mode=755)
+openrc on /sys/fs/cgroup/openrc type cgroup (rw,nosuid,nodev,noexec,relatime,release_agent=/lib/rc/sh/cgroup-release-agent.sh,name=openrc)
+none on /sys/fs/cgroup/unified type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime)
+none on /var/opt/adva/aos type aufs (rw,relatime,si=cceda164de65c115)
+none on /etc/opt/adva/aos type aufs (rw,relatime,si=cceda164dd5eb915)
+/dev/mmcblk1p2 on /mnt/standby/cs type ext3 (ro,relatime)
+/dev/mmcblk1p11 on /mnt/standby/boot type ext3 (ro,relatime)
+/dev/mmcblk1p12 on /mnt/standby/modules type ext4 (ro,relatime)
+/dev/mmcblk1p13 on /mnt/standby/main type ext4 (ro,relatime)
+/dev/mmcblk1p14 on /mnt/standby/adva type ext4 (ro,relatime)
+/dev/mmcblk1p15 on /mnt/standby/rwd type ext4 (rw,relatime)
+/dev/mmcblk1p16 on /mnt/standby/rwda type ext4 (rw,relatime)
+/dev/mmcblk1p13 on /mnt/b-side/runtime type ext4 (ro,relatime)
+/dev/mmcblk1p12 on /mnt/b-side/runtime/lib/modules type ext4 (ro,relatime)
+/dev/mmcblk1p12 on /mnt/standby/main/lib/modules type ext4 (ro,relatime)
+/dev/mmcblk1p11 on /mnt/b-side/runtime/boot type ext3 (ro,relatime)
+/dev/mmcblk1p11 on /mnt/standby/main/boot type ext3 (ro,relatime)
+/dev/mmcblk1p14 on /mnt/b-side/runtime/opt/adva type ext4 (ro,relatime)
+/dev/mmcblk1p14 on /mnt/standby/main/opt/adva type ext4 (ro,relatime)
+none on /mnt/b-side/runtime/etc type aufs (rw,relatime,si=cceda164df024915)
+none on /mnt/standby/main/etc type aufs (rw,relatime,si=cceda164df024915)
+none on /mnt/b-side/runtime/var type aufs (rw,relatime,si=cceda164dd3a3115)
+none on /mnt/standby/main/var type aufs (rw,relatime,si=cceda164dd3a3115)
+none on /mnt/b-side/runtime/home type aufs (rw,relatime,si=cceda164de31e915)
+none on /mnt/standby/main/home type aufs (rw,relatime,si=cceda164de31e915)
+none on /mnt/b-side/runtime/root type aufs (rw,relatime,si=cceda164de7ae915)
+none on /mnt/standby/main/root type aufs (rw,relatime,si=cceda164de7ae915)
+none on /mnt/b-side/runtime/var/opt/adva/aos type aufs (rw,relatime,si=cceda164dfe91915)
+none on /mnt/standby/main/var/opt/adva/aos type aufs (rw,relatime,si=cceda164dfe91915)
+none on /mnt/b-side/runtime/etc/opt/adva/aos type aufs (rw,relatime,si=cceda164df292915)
+none on /mnt/standby/main/etc/opt/adva/aos type aufs (rw,relatime,si=cceda164df292915)
+/dev/mmcblk1p19 on /var/opt/adva/aos/log/tracelog type ext4 (rw,relatime)
+/dev/mmcblk1p19 on /var/opt/adva/aos/warmdata type ext4 (rw,relatime)
+/dev/mmcblk1p8 on /opt/adva/aos/etc/framework/hal type ext4 (ro,relatime)
+[xo126:~] # 

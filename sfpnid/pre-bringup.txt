@@ -1,0 +1,42 @@
+pre-bringup:
+============
+
+NAND selection:
+---------------
+
+nand types: SLC vs MLC
+SLC (Single Level Cell) - reliable, long life cycle
+MLC (Multi Level Cell) - shorter EOL by the vendors, cheaper, more space.
+
+SLC is preferred to avoid EOL.
+
+if we use SPI-FLASH chip, this is a fixed protocol, we will be flexible in replacing the NAND vendors.
+SPI-FLASH lets you program the NAND from outside.
+Without SPI-FLASH we will program the NAND from u-boot or Linux
+
+It requres that NAND will be compatible to the ROM page size (provided by the CPU vendor)
+
+Using RAMFS will let us skip the work with NAND and move forward with simultaneous dev
+
+Kernel driver usually we have to configure ECC
+
+
+BuildRoot vs Yocto:
+-------------------
+
+BR - fast ramup, you alwaye one set of packages
+Yocto - complex, flexible in changeing the set of packages, good for large projects / desktops.
+
+
+SPI to FPGA
+------------
+
+-tun/tup - very simple. user space app, overhead of context switches. might be good enough for our needs.
+
+-FPGA to mimik NIC over SPI emulation 
+For example use Microchip enc28j60 ETH/SPI release in the kernel and let the FPGA implement the slave side as that chip.
+reliable, released in the kernel, efficient master implmenetation.
+
+-Let the FPGA be the master and the CPU will be the slave
+only possbile using the CPU M4
+Linux Kernel on A7 doesn't support SPI slave because of the high clock rates.

@@ -1,0 +1,39 @@
+On host - build SW:
+===================
+
+- Download NG distro and MOS:
+  ```
+  git clone ssh://mrv@172.21.9.224:/home/mrv/optiswitch/optiswitch_dist.git
+  git clone ssh://mrv@172.21.9.224/home/mrv/NextGen/NextGen.git/
+  ```
+
+- Create build environment:
+  ```
+  cd optiswitch_dist.git/
+  ./setup.sh msys.ini -i ~/My/MRV/NG/Build/msys_2016_02_02
+  ```
+
+- Build NG SW:
+  ```
+  cd msys_2016_02_02/scripts/
+  ./mkall.sh -N -L ~/My/MRV/NG/NextGen/ -G -b vrf 
+  ./pkginstall.sh pssExe 1 # don't forget!
+  ```
+
+- Verify that ld-linux.so library is non stripped:
+  ```
+  sudo cp ./dist/build-gcc-4.6.4-glibc-2.15-cpu-_msys/toolchain/arm-marvell-linux-gnueabi/libc/lib/ld-2.15.so ./dist/arm_msys_root/lib/ld.so
+  ```
+
+- Copy precompiled valgrind to /opt/ on target.
+  Talk to Barak, Ran or Kosta.
+  Later valgrind will become a part of distro.
+
+- Disable MOS in S85osr-route.sh (path: /etc/rcS.d/ in NFS directory)
+
+- Run some program on target under valgrind:
+  ```
+  cd /opt/valgrind/bin
+  uid_task &
+  ./valgrind --leak-check=yes pssExe
+  ```

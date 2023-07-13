@@ -1,0 +1,309 @@
+#memory size is 4GB
+#address space: 0x0 - 0x7FF00000
+#block is 512 bytes
+
+#erase emmc (erase group is 512*1024)
+
+mmc dev 0
+mmc erase 0 0x800000
+
+#make ip connection
+
+setenv ethaddr 3C:A7:2B:00:D8:18
+setenv ipaddr 10.32.8.200
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+#EMMC gzwrite of the image
+tftpboot 0x100 /tftpboot/xo126_disk_image.gz
+gzwrite mmc 0 0x100 21a72cc1
+
+#get kernel image
+#kernel size = 16140800 (0xF64A00) bytes. it is 0x7B25 blocks.
+#0x00200000 + 0xF64A00 = 0x00232525
+
+tftpboot 0x00200000 /tftpboot/Image.new
+
+#write kernel image to mmc
+mmc write 0x00200000 0 7B25
+
+
+#get dtb
+#dtb size = 27572 (0x6BB4). it is 0x35 blocks.
+#0x00010000 + 0x6BB4 = 0x00016BB4
+
+tftpboot 0x00010000 /tftpboot/xo126.dtb 
+tftpboot 0x00010000 /tftpboot/xo126-top1.dtb
+
+#write dtb to mmc
+mmc erase 8000 80000
+mmc write 0x00010000 8000 0x35
+
+
+#get initramfs
+#initramfs size = 891012 (0xD9884). it is 0x6CC blocks.
+
+tftpboot 0x04000000 /tftpboot/initramfs
+
+#write initramfs to mmc
+mmc write 0x04000000 8100 0x6CC
+
+#EMMC READ
+mmc dev 0
+mmc read 0x00200000 0 7B25
+mmc read 0x00010000 8000 0x35
+mmc read 0x04000000 8100 0x6CC 
+
+
+#EMMC  partitions read with ext2load
+ext2load mmc 0:5 0x00200000 kernel
+ext2load mmc 0:5 0x00010000 xo126.dtb
+ext2load mmc 0:5 0x04000000 initramfs
+
+#CRC
+
+#crc for kernel:
+crc32 0x00200000 0xF64A00
+#crc for first 0x100 bytes
+crc32 0x00200000 0x100
+#dump memory of first 0x50 bytes
+md.b 0x00200000 0x50
+
+#crc for dtb
+crc32 0x00010000 0x6BB4
+#crc for first 0x100 bytes
+crc32 0x00010000 0x100
+#dump memory of first 0x50 bytes
+md.b 0x00010000 0x50
+
+#crc for initramfs
+crc32 0x04000000 0xD9884
+#crc for first 0x100 bytes
+crc32 0x04000000 0x100
+#dump memory of first 0x50 bytes
+md.b 0x04000000 0x50
+
+
+
+#BOOT
+booti 0x00200000 0x04000000 0x00010000
+
+setenv ethaddr 3C:A7:2B:00:D8:18
+
+setenv ethaddr 3C:A7:2B:00:D8:17
+setenv ipaddr 10.32.8.250
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+tftpboot 0x100 /tftpboot/xo126_top1684.bit
+fpga load 0 0x100 22a8dc7
+
+tftpboot 0x100 /tftpboot/xo126-top1852.bit
+fpga load 0 0x100 22a8dc7
+
+tftpboot 0x00200000 /tftpboot/Image.new
+tftpboot 0x00200000 /tftpboot/Image_22_09.new
+
+tftpboot 0x00200000 /tftpboot/Image-16-10
+
+tftpboot 0x00200000 /tftpboot/Image-19-10
+
+tftpboot 0x00200000 /tftpboot/Image_02_10_uio
+
+
+xo126-top-guy.dtb
+tftpboot 0x00010000 /tftpboot/system-top-fpga12.dtb
+tftpboot 0x00010000 /tftpboot/system-top-fpga23.dtb
+
+tftpboot 0x04000000 /tftpboot/initramfs.img
+setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $bootargs craft=$baudrate craft_port=ttyPS0"
+run setbootargs; 
+setenv bootargs "$bootargs $append"
+setenv bootargs "$bootargs uio_pdrv_genirq.of_id=uio_pdrv_genirq"
+setenv bootargs "$bootargs cs.0=/dev/mmcblk1p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk1p2"
+booti 0x00200000 0x04000000 0x00010000
+
+setenv bootargs "$bootargs uio_pdrv_genirq.of_id=uio_pdrv_genirq init=/bin/bash"
+
+setenv bootargs "$bootargs sw.all=$actbank ecc=on root=/dev/mmcblk1p7 rw rootwait console=ttyPS0,115200"
+booti 0x00200000 - 0x00010000
+
+setenv bootargs "$bootargs sw.all=$actbank ecc=on init=/bin/bash root=/dev/mmcblk1p7 rw rootwait"
+
+setenv bootargs "$bootargs sw.all=$actbank ecc=on mmcdev=0 init=/bin/bash root=/dev/mmcblk1p7 rootwait earlyprintk"
+setenv bootargs "$bootargs sw.all=$actbank ecc=on mmcdev=0 init=/bin/bash root=/dev/mmcblk0p7 rootwait ro earlyprintk;"
+
+setenv bootargs "$bootargs sw.all=$actbank ecc=on init=/bin/bash root=/dev/mmcblkp7 rootfstype=ext4 rootwait ro earlyprintk;"
+
+ext2load mmc 0:5 0x00200000 kernel
+ext2load mmc 0:5 0x00010000 xo126.dtb
+booti 0x00200000 - 0x00010000
+ext2load mmc 0:5 0x04000000 initramfs
+
+booti 0x00200000 - 0x00010000
+
+
+setenv bootaos = "run setbootargs; ext2load mmc 0:1 8000000 cs_script.uimg; source 8000000"
+run bootaos
+
+setenv bootargs "$bootargs cs.0=/dev/mmcblk1p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk1p2"
+booti 0x00200000 0x04000000 0x00010000
+
+
+
+
+setenv bootargs ubi.mtd=UBI root=ubi0:rootfs rootfstype=ubifs rootwait ro ;"
+
+[(none):/] # dmesg | grep tty
+[    0.000545] printk: console [tty0] enabled
+[    2.643445] ff000000.serial: ttyPS0 at MMIO 0xff000000 (irq = 50, base_baud = 6249999) is a xuartps
+[    3.983768] printk: console [ttyPS0] enabled
+[    3.988567] ff010000.serial: ttyPS1 at MMIO 0xff010000 (irq = 51, base_baud = 6249999) is a xuartps
+[(none):/] # 
+
+[(none):/] # /usr/bin/kadaw ttyPS0 115200
+cat: /proc/cmdline: No such file or directory
+
+generated from ede-3.6.19
+
+/usr/bin/session_wrapper: line 13: /usr/bin/session_fallback: Permission denied
+/usr/bin/session_wrapper: line 13: exec: /usr/bin/session_fallback: cannot execute: Permission denied
+[(none):/] # 
+
+[(none):/] # /sbin/agetty ttyPS0 115200
+
+generated from ede-3.6.19
+(none) login: 
+
+ifconfig eth0 up
+ifconfig eth0 10.32.8.250 netmask 255.255.255.0
+#scp board_dbg to /tmp
+scp barak@10.32.8.145:/tftpboot/board_dbg /tmp/
+#run board_dbg
+/tmp/board_dbg
+
+/var/opt/adva/aos/board_dbg
+
+mount -o remount,rw /
+#mii / mdio
+net list
+mdio list
+mii dump 0x18 0-5
+
+DDR addresses:
+we have 4GB = 1024 * 1024 *1024 * 4 = > 0 -> 0xFFFFFFFF
+ 
+memory is usaully splitted into low and high (I still have to check it) 0x- 0x7fffffff, 0x80000000 -> 0xffffffff
+ 
+0x7ff00000 -> 0x80000000 is reserved for pmufw
+
+First time burn of NOR:
+=======================
+start in JTAG mode
+
+setenv ethaddr 3C:A7:2B:00:D8:18
+setenv ipaddr 10.32.8.200
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+tftpboot 0x08000000 /tftpboot/BOOT.bin
+sf probe 1 0 0; sf erase 0 0x400000; sf write 0x08000000 0 0x400000
+
+tftpboot 0x04000000 /tftpboot/uboot-env.bin
+sf write 0x04000000 200000 0x8000
+
+
+AXI addresses Vitis:
+=====================
+<PARAMETER NAME="C_S_AXI_BASEADDR" VALUE="0xA0000000"/>
+<PARAMETER NAME="C_S_AXI_HIGHADDR" VALUE="0xA0001FFF"/>
+        
+        
+        
+build DTS
+===========
+export PATH=$PATH:~/dtc
+make clean
+make dts XSA_FILE=/home/barak/xilinx-zcu102-2022.1/17EG/system_wrapper.xsa
+make include_dtsi DTSI_FILE=system-user.dtsi
+make compile
+
+
+where are the lables come from ??
+why mmc0=sdhc1 made the troubles, I am not using mmc0 in the dts
+wehre is the bram driver ?
+
+
+mkdir -p my_dts/include/dt-bindings/gpio
+cp ./repo/my_dtg/device-tree-xlnx/device_tree/data/kernel_dtsi/2020.1/include/dt-bindings/gpio/gpio.h my_dts/include/dt-bindings/gpio/gpio.h
+mkdir -p my_dts/include/dt-bindings/pinctrl
+cp ./repo/my_dtg/device-tree-xlnx/device_tree/data/kernel_dtsi/2020.1/include/dt-bindings/pinctrl/pinctrl-zynqmp.h my_dts/include/dt-bindings/pinctrl/pinctrl-zynqmp.h
+mkdir -p my_dts/include/dt-bindings/phy
+cp ./repo/my_dtg/device-tree-xlnx/device_tree/data/kernel_dtsi/2020.1/include/dt-bindings/phy/phy.h my_dts/include/dt-bindings/phy/phy.h
+
+versions:
+===========
+~/system-user_top6.dtsi - booting properly from emmc, i2c devices registered properly with kernel, i2ctools not detecting i2c devices
+
+
+kernel builds:
+
+source /home/barak/Vitis/2022.1/settings64.sh
+export CROSS_COMPILE=aarch64-linux-gnu-;
+export ARCH=arm64;
+export CC=aarch64-linux-gnu-gcc;
+cd ~/linux-xlnx/
+
+make clean
+make -f Makefile xilinx_zynqmp_defconfig
+make -f Makefile all -j 32
+#cp arch/arm64/boot/Image /tftpboot/Image.new
+cp arch/arm64/boot/Image /tftpboot/Image_22_09.new
+
+
+cat /sys/class/uio/uio0/maps/map0/addr 
+cat /sys/class/fpga_manager/fpga0/
+
+write_bd_tcl
+
+
+
+last commands I used:
+======================
+setenv ethaddr 3C:A7:2B:00:D8:17
+setenv ipaddr 10.32.8.250
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+tftpboot 0x100 /tftpboot/xo126_top1684.bit
+fpga load 0 0x100 22a8dc7
+
+tftpboot 0x00200000 /tftpboot/Image_31_10_1
+tftpboot 0x00200000 /tftpboot/Image-02-11
+tftpboot 0x00200000 /tftpboot/Image_19_06
+
+
+tftpboot 0x00010000 /tftpboot/system-top-fpga53.dtb
+tftpboot 0x00010000 /tftpboot/system-top-fpga58.dtb
+tftpboot 0x00010000 /tftpboot/system-top-fpga62.dtb
+
+tftpboot 0x04000000 /tftpboot/initramfs.img
+
+setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $bootargs craft=$baudrate craft_port=ttyPS0"
+run setbootargs; 
+setenv bootargs "$bootargs uio_pdrv_genirq.of_id=uio_pdrv_genirq"
+setenv bootargs "$bootargs cs.0=/dev/mmcblk1p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk1p2"
+booti 0x00200000 0x04000000 0x00010000
+
+
+setenv bootargs "$bootargs uio_pdrv_genirq.of_id=uio_pdrv_genirq init=/bin/bash"
+
+setenv bootargs "$bootargs cs.0=/dev/mmcblk0p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk0p2"
+
+
+ext4load mmc 0:5 0x00200000 kernel.uimg
+ext4load mmc 0:5 0x00010000 xo126.dtb  
+ext4load mmc 0:5 0x04000000 initramfs
+
+
+booti 0x00200000 0x04000000 0x00010000

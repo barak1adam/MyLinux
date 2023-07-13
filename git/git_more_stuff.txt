@@ -33,3 +33,7 @@ In the process while ammending in the relevant commit, if I want
 to compare a file the its previous version, in order to rollback a change,
 I can do it with :
 git difftool HEAD~1..HEAD install/nginx/post
+
+#delete local branches that matches <pattern>.
+#here the pattern is backup_20 but not remotes
+gb -a |  grep backup_20 | grep -v remotes | sed 's/.\{3\}$//'| xargs git branch -D

@@ -1,0 +1,58 @@
+memory@0 {
+  device_type = "memory";
+  reg = <0x0 0x0 0x0 0x40000000>;
+ };
+
+
+&gem3 {
+ status = "okay";
+ phy-handle = <&phy0>;
+ phy-mode = "rgmii";
+ pinctrl-names = "default";
+ pinctrl-0 = <&pinctrl_gem3_default>;
+ phy0: ethernet-phy@18 {
+  reg = <0x18>;
+ };
+};
+
+
+&i2c0 {
+ status = "okay";
+ clock-frequency = <100000>;
+ pinctrl-names = "default", "gpio";
+ pinctrl-0 = <&pinctrl_i2c0_default>;
+ pinctrl-1 = <&pinctrl_i2c0_gpio>;
+ scl-gpios = <&gpio 14 0>;
+ sda-gpios = <&gpio 15 0>;
+
+
+&i2c1 {
+ status = "okay";
+ clock-frequency = <100000>;
+ 
+ }
+ 
+ &qspi {
+ status = "okay";
+ flash@0 {
+  compatible = "spi-flash", "jedec,spi-nor";
+  #address-cells = <1>;
+  #size-cells = <1>;
+  reg = <0x0>;
+  spi-tx-bus-width = <1>;
+  spi-rx-bus-width = <4>;
+  spi-max-frequency = <50000000>;
+ };
+};
+
+
+??
+&sdhci0 {
+ status = "okay";
+ pinctrl-names = "default";
+ pinctrl-0 = <&pinctrl_sdhci0_default>;
+ xlnx,mio_bank = <0>;
+ disable-wp;
+ non-removable;
+ bus-width = <8>;
+};

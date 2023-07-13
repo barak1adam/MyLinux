@@ -1,0 +1,79 @@
+PLL settings for Winbond current DDR, copied from the tf-a DTS:
+================================================================
+ 	pll2:st,pll@1 {
+ 		compatible = "st,stm32mp1-pll";
+ 		reg = <1>;
+-		cfg = < 2 65 1 1 0 PQR(1,0,1) >;
+-		frac = < 0x1400 >;
++		cfg = < 2 49 1 1 0 PQR(1,0,1) >;
+ 	};
+ 	
+ 	
+ 	
+ 	
+#all tools are under $HOME/STM32MPU_workspace/STM32MPU-Tools/STM32CubeProgrammer-2.4.0/bin, add it to PATH
+export PATH=$HOME/STM32MPU_workspace/STM32MPU-Tools/STM32CubeProgrammer-2.4.0/bin:$PATH
+ 
+to program prebuilt signed ddr tool binary:
+============================================
+ 
+ 
+cd ~/mrv_dev/sfp+nid/buildroot
+#cp /tmp/STM32DDRFW-UTIL/Binaries/STM32MP157C-DK2_DDR_UTILITIES_A7/STM32MP157C-DK2_DDR_UTILITIES_A7_signed.stm32 ./
+STM32_Programmer_CLI -c port=usb1 -w ./STM32MP157C-DK2_DDR_UTILITIES_A7_signed.stm32 0x01 --start 0x01
+ 
+To modify, build and sign the DDR tool:
+ 
+to generate keys:
+=================
+STM32MP_KeyGen_CLI --help
+STM32MP_KeyGen_CLI --private-key ./privateKey.pem -pwd "bootrom-dev"
+
+#keys are here:
+~/STM32MPU_workspace/STM32MPU-Tools/STM32CubeProgrammer-2.4.0/publicKey.pem 
+~/STM32MPU_workspace/STM32MPU-Tools/STM32CubeProgrammer-2.4.0/privateKey.pem
+
+keys are copied to ~/.
+
+to build the project
+=====================
+
+clean and build from  CubeIDE
+
+it was cloned to /tmp
+cd /tmp; git clone https://github.com/STMicroelectronics/STM32DDRFW-UTIL.git
+
+cd  /tmp/STM32DDRFW-UTIL/DDR_Tool/STM32MP157C-DK2
+
+
+#artifacts are here:
+./STM32MP157C-DK2_DDR_UTILITIES_A7/DK2/STM32MP157C-DK2_DDR_UTILITIES_A7.bin
+
+to sign the binaries:
+======================
+#load address and entry point = 0
+STM32MP_SigningTool_CLI -bin ./STM32MP157C-DK2_DDR_UTILITIES_A7/DK2/STM32MP157C-DK2_DDR_UTILITIES_A7.bin -o ./STM32MP157C-DK2_DDR_UTILITIES_A7_signed.stm32 -la 0x0 -of 1 -ep 0x0 --public-key ~/publicKey.pem --private-key ~/privateKey.pem -iv 0x0 -pwd "bootrom-dev"
+
+#load address and entry point = 0x2ffc2500
+STM32MP_SigningTool_CLI -bin ./STM32MP157C-DK2_DDR_UTILITIES_A7/DK2/STM32MP157C-DK2_DDR_UTILITIES_A7.bin -o ./STM32MP157C-DK2_DDR_UTILITIES_A7_signed.stm32 -la 0x2ffc2500 -of 1 -ep 0x2ffc2500 --public-key ~/publicKey.pem --private-key ~/privateKey.pem -iv 0x0 -pwd "bootrom-dev"
+
+to program the signed image:
+============================
+STM32_Programmer_CLI -c port=usb1 -w ./STM32MP157C-DK2_DDR_UTILITIES_A7_signed.stm32 0x01 --start 0x01
+
+Only this command created a working bin file for me exactly that was working as the prebuilt bin file:
+=======================================================================================================
+the mandatory fields:
+	-t fsbl
+	-la 0x2ffc2500 -ep 0x2ffc2500
+
+
+pwd = /tmp/STM32DDRFW-UTIL
+STM32MP_SigningTool_CLI -bin ./DDR_Tool/STM32MP157C-DK2/STM32MP157C-DK2_DDR_UTILITIES_A7/DK2/STM32MP157C-DK2_DDR_UTILITIES_A7.bin -o ./STM32MP157C-DK2_DDR_UTILITIES_A7_signed.stm32 -la 0x2ffc2500 -of 1 -t fsbl -ep 0x2ffc2500 --public-key ~/publicKey.pem --private-key ~/privateKey.pem -iv 0x0 -pwd "bootrom-dev"
+
+
+NAND:
+=====
+STM32 FMC2 NFC controller - the driver is stm32mp1-fmc2-nfc.
+dts in u-boot is involved. it is stm32mp151aadx-sfpnid.dts
+

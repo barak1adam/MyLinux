@@ -1,0 +1,209 @@
+void G5M_SPI_SCAN_in(DPUCHAR total_dat_bits)
+{
+    printf("\r\nbarak G5M_SPI_SCAN_in started. total_bits_in: %d \n\r", total_dat_bits);
+    //dp_G5M_check_hwstatus(G5_BUSY_BIT);
+    do_SPI_SCAN_in(spi_command_buffer, total_dat_bits, spi_input_buffer);
+
+    return;
+}
+
+void G5M_SPI_SCAN_out(DPUCHAR total_dat_bits_in, DPUCHAR total_dat_bits_out)
+{
+    printf("\r\nbarak G5M_SPI_SCAN_out started. total_bits_in: %d, total_bits_out: %d\n\r", total_dat_bits_in, total_dat_bits_out);
+    G5M_SPI_SCAN_in(total_dat_bits_in);
+    //barak
+    if (debug) return;
+    //dp_G5M_check_hwstatus(G5_BUSY_BIT | G5_READY_BIT);
+    dp_flush_spi_buffers();
+    spi_command_buffer = G5M_SPI_READ_DATA;
+    do_SPI_SCAN_out(SPI_COMMAND_BIT_SIZE, &spi_command_buffer,total_dat_bits_out,spi_output_buffer);
+
+    return;
+}
+
+static unsigned char tmp_tx_buf[17] = {0};
+static unsigned char tmp_rx_buf[17] = {0};
+
+static void hex_dump(const void *src, size_t length, size_t line_size,
+		     char *prefix)
+{
+	int i = 0;
+	const unsigned char *address = src;
+	const unsigned char *line = address;
+	unsigned char c;
+
+	printf("%s | ", prefix);
+	while (length-- > 0) {
+		printf("%02X ", *address++);
+		if (!(++i % line_size) || (length == 0 && i % line_size)) {
+			if (length == 0) {
+				while (i++ % line_size)
+					printf("__ ");
+			}
+			printf(" |");
+			while (line < address) {
+				c = *line++;
+				printf("%c", (c < 32 || c > 126) ? '.' : c);
+			}
+			printf("|\n");
+			if (length > 0)
+				printf("%s | ", prefix);
+		}
+	}
+}
+
+/* make SPI transaction of 17 bytes long:
+   tx - 1 byte of command + up to 16 bytes of data are assigned from input_buffer to tx buffer
+   rx - 17 zero bytes are assigned to rx buffer 
+   SPI transaction is done with those buffers
+   print the buffers before and after the SPI transaction with hex_dump
+*/
+void do_SPI_SCAN_in(unsigned char command, unsigned int data_bits, unsigned char *input_buffer)
+{
+
+    memset(tmp_tx_buf, 0, 17);
+    memset(tmp_rx_buf, 0, 17);
+
+    int i;
+    if (command) tmp_tx_buf[0] = command;
+    /* the following copy could be done with memcpy. keep the loop for clarity */
+    if (data_bits && input_buffer){
+        for (i=1; i<= (data_bits/8); i++)
+        {
+            tmp_tx_buf[i] = input_buffer[i-1];
+        }
+    }
+    spi_transfer.tx_buf = (unsigned long)tmp_tx_buf;
+    spi_transfer.rx_buf = (unsigned long)tmp_rx_buf;
+    spi_transfer.len = 17;
+    spi_transfer.cs_change = 0;
+    spi_transfer.speed_hz = speed;
+    spi_transfer.bits_per_word = bits;
+    hex_dump((const void *)(tmp_rx_buf),  17, 32, "RX buffer BEFORE SPI transaction");
+    hex_dump((const void *)(tmp_tx_buf),  17, 32, "TX buffer BEFORE SPI transaction");
+    ioctl(fd, SPI_IOC_MESSAGE(1), &spi_transfer);
+    hex_dump((const void *)(tmp_rx_buf),  17, 32, "RX buffer AFTER SPI transaction");
+    hex_dump((const void *)(tmp_tx_buf),  17, 32, "TX buffer AFTER SPI transaction");
+
+}
+
+
+/* make SPI transaction of 17 bytes long:
+   tx - 1 byte of command + 16 zero bytes are assigned to tx buffer
+   rx - 17 zero bytes are assigned to rx buffer 
+   SPI transaction is done with those buffers
+   16 bytes recieved on SPI rx buffer are copied to the output_buffer.
+   print the buffers before and after the SPI transaction with hex_dump
+*/
+void do_SPI_SCAN_out(unsigned int command_bits, unsigned char *command, unsigned int data_bits, unsigned char *output_buffer)
+{
+    memset(tmp_tx_buf, 0, 17);
+    memset(tmp_rx_buf, 0, 17);
+
+     if (command) tmp_tx_buf[0] = command[0];
+    spi_transfer.tx_buf = (unsigned long)tmp_tx_buf;
+    spi_transfer.rx_buf = (unsigned long)tmp_rx_buf;
+    spi_transfer.len = 17;
+    spi_transfer.cs_change = 0;
+    spi_transfer.speed_hz = speed;
+    spi_transfer.bits_per_word = bits;
+    hex_dump((const void *)(tmp_rx_buf),  17, 32, "RX buffer BEFORE SPI transaction");
+    hex_dump((const void *)(tmp_tx_buf),  17, 32, "TX buffer BEFORE SPI transaction");
+    ioctl(fd, SPI_IOC_MESSAGE(1), &spi_transfer);
+    hex_dump((const void *)(tmp_rx_buf),  17, 32, "RX buffer AFTER SPI transaction");
+    hex_dump((const void *)(tmp_tx_buf),  17, 32, "TX buffer AFTER SPI transaction");
+
+    /* the following copy could be done with memcpy. keep the loop for clarity */
+    int i;
+    if (data_bits && output_buffer){
+        for (i=1; i<= (data_bits/8); i++)
+        {
+            output_buffer[i-1] = tmp_rx_buf[i];
+        }
+    }
+
+}
+
+
+int main()
+{
+    printf("Welcome to DirectC!\n");
+
+    /*  TODO Get data file via ftp, then assign it to
+     *  image_buffer (global of type: DPUCHAR*). */
+    dp_read_image_file("/usr/sfpnid_fpga.ppd");
+
+    printf("DirectC read file done\n");
+
+    /* Initialize the spi flash */
+    dut_spi_flash_init();
+
+    printf("DirectC flash init done\n");
+
+    /* Initially, there are no errors */
+    error_code = DPE_SUCCESS;
+
+    /* Set programming action for dp_top(). */
+    Action_code = DP_PROGRAM_ACTION_CODE;
+
+    /* PolarFire FPGA is G5M family because it is MPF family */
+    device_family = G5M_DEVICE_FAMILY;
+
+    /* Begin programming procedure */
+    dp_top();
+
+    printf("DirectC programming of FPGA image done!\n");
+
+    dp_free_image_buffer();
+
+    return 0;
+}
+
+ifdef ENABLE_G5M_SUPPORT
+void dp_G5M_check_hwstatus(DPUCHAR mask)
+{
+    DPULONG timeout;
+ 
+    timeout = 0xffffffu;
+ 
+    do_SPI_SCAN_in(G5M_SPI_HWSTATUS, 0u, (DPUCHAR*)(DPUCHAR*)DPNULL);
+    while (timeout != 0)
+    {
+        spi_hwstatus_buffer = G5M_SPI_HWSTATUS;
+        do_SPI_SCAN_out(8u, &spi_hwstatus_buffer, 0, (DPUCHAR*)(DPUCHAR*)DPNULL);
+
+        if ((spi_hwstatus_buffer & mask) == (G5_READY_BIT & mask))
+        {
+            spi_hwstatus_buffer = G5M_SPI_HWSTATUS;
+            do_SPI_SCAN_out(8u, &spi_hwstatus_buffer, 0, (DPUCHAR*)(DPUCHAR*)DPNULL);
+            break;
+        }
+        timeout--;
+    }
+
+    if (timeout == 0u)
+    {
+        #ifdef ENABLE_DISPLAY
+        dp_display_text("\r\nError: SPI polling timeout encountered.");
+        #endif
+        error_code = DPE_POLL_ERROR;
+    }
+
+    if(spi_hwstatus_buffer & G5_SPI_VIOLATION_BIT)
+    {
+        #ifdef ENABLE_DISPLAY
+        dp_display_text("\r\nSPI VIOLATION...");
+        #endif
+        error_code = DPE_POLL_ERROR;
+    }
+    if(spi_hwstatus_buffer & G5_SPIERR_BIT)
+    {
+        #ifdef ENABLE_DISPLAY
+        dp_display_text("\r\nSPI Error...");
+        #endif
+        error_code = DPE_POLL_ERROR;
+    }
+
+    return;
+}
+

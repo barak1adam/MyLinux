@@ -1,0 +1,9 @@
+Russel:
+
+possible to generate FSBL, u-boot and kernel aside with Yocto and then import it to EDE Artifactory
+
+it's better to start learning EDE
+
+how to integrate ROOTFS for EMMC, like ext4 (deploy scripts, deploy hooks)
+talk to 480
+Prakasha Shet in China

@@ -1,0 +1,11 @@
+FPGA keepalive:
+===============
+
+1)link flag - get into reset loop?
+
+2) stop keepalive upon FPGA upgrade 
+
+3) test TLVs of mgmt and data
+
+4) SW wd is needed for other SW stucks
+

@@ -1,0 +1,21 @@
+line-vty
+	no exec-timeout
+
+
+power control:
+
+ip 10.32.251.144/outlet.htm
+
+ip 10.32.251.183/outlet.htm
+
+snmp, 1234
+
+
+yocto machine for builds:
+
+ssh mrv@@10.32.8.133
+
+
+xfreerdp: CTRL+ALT+ENTER
+
+

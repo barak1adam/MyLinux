@@ -1,0 +1,38 @@
+connect
+
+#rst -system
+
+for {set i 0} {$i < 20} {incr i} {
+	if { [ta] != "" } break;
+	after 50
+}
+
+targets -set -nocase -filter {name =~ "*PSU*"}
+mask_write 0xFFCA0038 0x1C0 0x1C0
+targets -set -nocase -filter {name =~ "*MicroBlaze PMU*"}
+#puts stderr "INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/pmufw.elf to the target."
+dow  "/home/barak/xilinx-zcu102-2022.1/images/linux/pmufw.elf"
+con
+targets -set -nocase -filter {name =~ "*A53*#0"}
+rst -processor -clear-registers
+
+source /home/barak/xilinx-zcu102-2022.1/project-spec/hw-description/psu_init.tcl
+#puts stderr "INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf to the target."
+dow  "/home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf"
+con
+
+after 4000
+stop
+psu_ps_pl_isolation_removal; psu_ps_pl_reset_config
+#puts stderr "INFO: Loading image: /home/barak/xilinx-zcu102-2022.1/images/linux/system.dtb at 0x00100000"
+#how comes this line is critical ??
+dow -data  "/home/barak/edt/zcu102_for_bringup/BOOT.bin" 0x08000000
+dow -data  "/home/barak/xilinx-zcu102-2022.1/images/linux/system.dtb" 0x00100000
+
+
+#puts stderr "INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf to the target."
+dow  "/home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf"
+#puts stderr "INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/bl31.elf to the target."
+dow  "/home/barak/xilinx-zcu102-2022.1/images/linux/bl31.elf"
+con
+exit

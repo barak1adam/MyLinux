@@ -1,0 +1,80 @@
+cpu0 - cpss, host oam
+cpu1 - oam fw
+
+l1 cache is the local cache on each core
+
+l2 cache is 2nd level of cache, 512 Byte, it is other device on the SoC bus.
+l2 cache is called SRAM.
+
+OAM FW by FreeRTOS is running on half SRAM (including bss, txt, data)
+other half SRAM is used for L2 cache. 
+
+we can see these settings in DTS !
+
+DRAM of 1GB is accessed by DDR controller, located on the SoC bus.
+
+cpu0 is running Linux
+cpu1 is running FreeRTOS (oam fw)
+
+cpu0 handles oam ccms
+cpu1 handles oam dm, slm, ip-sla.
+
+
+SDMA memory for cpu0 (7 queues) is 16M
+(Remember: previously before OAM it was 2.5M)
+
+this memory is allocated by dma_coher() (dma controller)
+changes involve cpss + kernel code ! not straight forward.
+
+both cpus use SDMA drivers to access memory queues of PP.
+
+totally there are 8 SDMA queues, each is a pair of RX+TX.
+
+7 (7TX+7RX) queues are used by cpu0
+1 queue is used by cpu1.
+
+SDMA TX:
+========
+
+3 periodic SDMA TX queues (for ccm, dm):
+---------------------------------------
+--dm requires ccms, so dm and ccm share the same SDMA queues.
+for ccm and dm we use 3 different periodic TX queues, one queue per oam frequency.
+each periodic queue has 750 entries * 1500 byte per entry
+
+jumbo frames - are allocated dynamically to 9600 entry size instead of one queue of 1500 bytes long
+and then allocated back to 1500 entry size.
+
+4 non periodic SDMA TX queues for cpu0 (protocols)
+------------------------------------------------
+3 queues for cpu0 - protocols
+1 queue (smda q #2) for cpu1 - for slm, ip-sla. located as part of OAM DB memory.
+
+
+SDMA RX:
+========
+
+7 queues of cpu0 - default settings as before OAM, not changed.
+1 queue of cpu1 (smda q #2) allocated in OAM DB meory.
+
+
+OAM DB:
+=======
+memory of 12M
+taken from the kernel memory in the dts. (will not be used by linux, only by cpu1)
+
+
+Pavel:
+======
+POC includes: 
+-- successful init
+-- trying y1564 / rfc2544 successfully tx frames on the media
+-- no error messages on sending frames
+
+Then goes into EVT of full scale OAM tests + protocols!
+
+debug commands: BUSY = sdma Q for protocols, non periodic
+				FREE = sdma Q as frame generators, periodic 
+
+
+

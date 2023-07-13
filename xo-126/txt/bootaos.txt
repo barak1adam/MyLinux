@@ -1,0 +1,118 @@
+
+cs_tab content:
+all=0    /dev/mmcblk0p1     cs         ext3    ro
+all=1    /dev/mmcblk0p2     cs         ext3    ro
+all=0    /dev/mmcblk0p5     boot       ext3    ro
+all=0    /dev/mmcblk0p6     modules    ext4    ro
+all=0    /dev/mmcblk0p7     main       ext4    ro
+all=0    /dev/mmcblk0p8     adva       ext4    ro
+all=0    /dev/mmcblk0p9     rwd        ext4    rw
+all=0    /dev/mmcblk0p10    rwda       ext4    rw
+all=1    /dev/mmcblk0p11    boot       ext3    ro
+all=1    /dev/mmcblk0p12    modules    ext4    ro
+all=1    /dev/mmcblk0p13    main       ext4    ro
+all=1    /dev/mmcblk0p14    adva       ext4    ro
+all=1    /dev/mmcblk0p15    rwd        ext4    rw
+all=1    /dev/mmcblk0p16    rwda       ext4    rw
+true     /dev/mmcblk0p17    staging    ext4    rw
+true     /dev/mmcblk0p18    vm         ext4    rw
+true     /dev/mmcblk0p19    common     ext4    rw
+
+#load image and write it to emmc
+tftpboot 0x04000000 /tftpboot/xo126_disk_image.gz
+ZynqMP> gzwrite mmc 0 0x04000000 DF8C000
+
+gzwrite: weird termination with result 0
+
+        uncompressed 884578826 of 776973184
+        crcs == 0x96feecaf/0x69887af5
+ZynqMP> 
+
+#how to load and boot
+"bootdcmd=bootaos $local_bootaos_args\0"
+bootcmd=bootaos
+
+bootaos = 
+#define EOSBOOT_EMMC_A \
+    "run setbootargs;run boot_dpl;" \
+    "ext2load mmc 0:1 88000000 cs_script.uimg;" \
+    "source 88000000\0"
+
+boot_dpl = 
+if ext2load mmc 0:$bootpartnum 80200000 dpl-xg480.bin; then
+    fsl_mc apply dpl 80200000
+    setenv dpldone 1
+    echo load dpl-xg480 from /boot is successful
+else
+    setenv dpldone
+    echo load dpl-xg480 from /boot is failed
+fi
+
+cs_script.uimg = 
+
+setenv bootpartnum1 b
+if test "x$actbank" = "x1"; then
+    setenv bootpartnum $bootpartnum1
+else
+    setenv actbank 0
+    setenv bootpartnum $bootpartnum0
+fi
+ext2load mmc 0:$bootpartnum 88100000 boot_script.uimg
+source 88100000
+
+
+boot_script = 
+
+setenv bootargs "$bootargs cs.0=/dev/mmcblk0p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk0p2"
+setenv bootargs "$bootargs $append"
+setenv bootargs "$bootargs sw.all=$actbank ecc=on"
+ext2load mmc 0:$bootpartnum 84000000 kernel
+ext2load mmc 0:$bootpartnum 87000000 initramfs
+ext2load mmc 0:$bootpartnum 83f00000 xg480.dtb
+
+bootm 84000000 87000000 83f00000
+
+setbootargs=setenv bootargs ethaddr=$ethaddr panic=5  $extraargs  $bootargs craft=$baudrate
+
+
+
+setenv ethaddr 3C:A7:2B:00:D8:18
+setenv ipaddr 10.32.8.200
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+
+tftpboot 0x00200000 /tftpboot/Image
+tftpboot 0x00100000 /tftpboot/system.dtb
+tftpboot 0x04000000 /tftpboot/rootfs.cpio.gz.u-boot
+#booti 0x00200000 0x04000000 0x00100000
+
+setenv bootpartnum 5
+#setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $extraargs  $bootargs craft=$baudrate"
+setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $bootargs craft=$baudrate"
+run setbootargs;
+setenv bootargs "$bootargs cs.0=/dev/mmcblk0p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk0p2"
+#setenv bootargs "$bootargs $append"
+#setenv bootargs "$bootargs sw.all=$actbank ecc=on"
+ext2load mmc 0:$bootpartnum 0x00200000 kernel
+ext2load mmc 0:$bootpartnum 0x04000000 initramfs
+ext2load mmc 0:$bootpartnum 0x00100000 x0126.dtb
+
+bootm 0x00200000 0x04000000 0x00100000
+ZynqMP> mmc erase 0 800000                
+
+MMC erase: dev # 0, block # 0, count 8388608 ... 8388608 blocks erased: OK
+ZynqMP> gzwrite mmc 0 0x04000000 6FC60    
+
+gzwrite: weird termination with result 0
+
+        uncompressed 21977293 of 2882429785
+        crcs == 0x1c143339/0x53c25bc8
+ZynqMP> 
+
+
+setenv ethaddr 3C:A7:2B:00:D8:18
+setenv ipaddr 10.32.8.200
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+tftpboot 0x00100000 /tftpboot/system.dtb

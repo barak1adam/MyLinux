@@ -1,0 +1,197 @@
+VITIS and XSCT using JTAG:
+==========================
+
+#get jtag freq
+jtag frequency
+#set jtag freq
+jtag frequency 3000000
+
+#connect
+connect
+
+#list targets
+targets
+
+#reset all cores
+rst -system
+
+---------------------------------------------------------------
+#3) Set target APU
+#targets -set -filter {name =~ "APU (L2 Cache Reset)"}
+targets -set -filter {name =~ "APU*"}
+
+#4) Load hardware definition
+loadhw -hw /media/xilinx/training/build_framework/os/xilinx-v2018.1/board/zcu102_eval_prod/rev1.0/hw_platform/system.hdf  -mem-ranges [list {0x80000000 0xbfffffff} {0x400000000 0x5ffffffff} {0x1000000000 0x7fffffffff} {0xfffc0000 0xfffffc3f} ]
+
+#5) Disable access protection for dow, mrd, and mwr commands.
+configparams force-mem-access 1
+----------------------------------------------------------------
+
+
+
+#PMU FW
+========
+
+#select PMU micro-controller visible to the Debugger
+targets -set -filter {name =~ "PSU"}
+mwr 0xffca0038 0x1ff
+after 500
+
+targets -set -filter {name =~ "PSU"}; mwr 0xffca0038 0x1ff; after 500
+
+#list targets
+targets
+
+#select the PMU 
+targets -set -filter {name =~ "MicroBlaze PMU"}
+
+#list targets
+targets
+
+#download PMU FW
+dow {~/Downloads/ug1209-embedded-design-tutorial/qspi_boot/pmu_fw.elf}
+
+
+#run
+con
+after 500
+
+#targets -set -filter {name =~ "PSU"}; mwr 0xffca0038 0x1ff; after 500; targets; targets -set -filter {name =~ "MicroBlaze PMU"}; targets; after 100; dow {~/Downloads/ug1209-embedded-design-tutorial/qspi_boot/pmu_fw.elf}; con; after 500
+#targets -set -filter {name =~ "PSU"}; mwr 0xffca0038 0x1ff; after 500; targets; targets -set -filter {name =~ "MicroBlaze PMU"}; targets; after 100; dow {/home/barak/xilinx-zcu102-2022.1/pre-built/linux/images/pmufw.elf}; con; after 500
+targets -set -filter {name =~ "PSU"}; mwr 0xffca0038 0x1ff; after 500; targets; targets -set -filter {name =~ "MicroBlaze PMU"}; targets; after 100; dow {/home/barak/xilinx-zcu102-2022.1/images/linux/pmufw.elf}; con; after 500
+
+
+#FSBL
+=======
+
+#set active target to A53 core 0
+targets -set -filter {name =~ "Cortex-A53 #0"}
+
+#take the core out of reset
+rst -processor
+
+#download the fsbl sw with debug symbols as I built with size optimizations
+dow /home/barak/edt/edt_zcu102_workspace/edt_zcu102_xo126_bringup_wrapper/zynqmp_fsbl/fsbl_a53.elf
+dow /home/barak/edt/edt_zcu102_workspace/xo126_fsbl/Debug/xo126_fsbl.elf
+
+#run
+con
+
+
+#halt
+after 5000
+stop
+
+#targets -set -filter {name =~ "Cortex-A53 #0"}; targets; rst -processor; dow /home/barak/edt/edt_zcu102_workspace/xo126_fsbl/Debug/xo126_fsbl.elf; con; after 5000
+targets -set -filter {name =~ "Cortex-A53 #0"}; targets; rst -processor; dow /home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf; con; after 5000
+ 
+examples
+==========
+
+#download hello / examples
+#dow /home/barak/edt/edt_zcu102_workspace/xo_126_bringup_test/Debug/xo_126_bringup_test.elf
+#dow /home/barak/edt/edt_zcu102_workspace/xqspipsu_generic_flash_non_blocking_read_example_1/Debug/xqspipsu_generic_flash_non_blocking_read_example_1.elf
+#dow /home/barak/edt/edt_zcu102_workspace/xsdps_raw_example_1/Debug/xsdps_raw_example_1.elf
+
+dow /home/barak/edt/edt_zcu102_workspace/hello_a53/Debug/hello_a53.elf
+
+#run
+con
+
+#TF + u-boot:
+===============
+#stop FSBL
+stop
+dow {/home/barak/xilinx-zcu102-2022.1/images/linux/bl31.elf}
+con
+stop
+dow {/home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf}
+con
+stop
+
+#dow {/home/barak/Vitis/2022.1/data/xicom/cfgmem/uboot/zynqmp_qspi_x4_single.bin}; con; after 5000; stop
+
+dow {/home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf}; con; after 500; dow {/home/barak/xilinx-zcu102-2022.1/images/linux/bl31.elf}; con; after 5000; stop
+
+u-boot is started !
+
+successful VItis summary on my ref board:
+=========================================
+
+connect
+
+targets
+
+configparams force-mem-access 1
+
+targets -set -filter {name =~ "PSU"}; mwr 0xffca0038 0x1ff; after 500; targets;
+
+targets -set -filter {name =~ "MicroBlaze PMU"}; targets; after 100; dow {/home/barak/xilinx-zcu102-2022.1/images/linux/pmufw.elf}; con; after 500
+
+targets -set -filter {name =~ "Cortex-A53 #0"}; targets; rst -processor; dow /home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf; con; after 5000
+
+dow /home/barak/edt/edt_zcu102_workspace/hello_a53/Debug/hello_a53.elf
+
+#The following is for dow BOOT.bin via Vitis:
+=============================================
+stop
+dow -data {/home/barak/edt/zcu102_for_bringup/BOOT.bin} 0x2000000
+con
+
+
+#if we like to make the u-boot working with ETH connectivity for BOOT.bin tftpboot, we need to load also the dtb.
+#so we need to load u-boot by "petalinux-boot --jtag --u-boot".
+
+First time burn of NOR:
+=======================
+on u-boot:
+
+setenv ethaddr 3C:A7:2B:00:D8:18
+setenv ipaddr 10.32.8.200
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+tftpboot 0x08000000 /tftpboot/BOOT.bin
+sf probe 1 0 0; sf erase 0 0x400000; sf write 0x08000000 0 0x400000
+
+
+
+#The following is a ducmenttion of what is happening upon petalinux-boot --jtag --u-boot
+=========================================================================================
+INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/pmufw.elf to the target.                                                                           
+INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf to the target.                                                                     
+INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf to the target.                                                                          
+INFO: Loading image: /home/barak/xilinx-zcu102-2022.1/images/linux/Image at 0x00200000                                                                                       
+INFO: Loading image: /home/barak/xilinx-zcu102-2022.1/images/linux/system.dtb at 0x00100000                                                                                  
+INFO: Loading image: /home/barak/xilinx-zcu102-2022.1/images/linux/rootfs.cpio.gz.u-boot at 0x04000000                                                                       
+INFO: Loading image: /home/barak/xilinx-zcu102-2022.1/images/linux/boot.scr at 0x20000000                                                                                    
+INFO: Downloading ELF file: /home/barak/xilinx-zcu102-2022.1/images/linux/bl31.elf to the target. 
+
+
+#Histoy list of issues handled on board bringup
+================================================
+-changed xfsbl_config.h to reduce size
+
+-to update existing XSA - 
+right click on the platform wrapper and select - "Update HW Specification"
+
+-to debug the FSBL - I need to generate a new one in Vitis (can't work with the given one for the hello)
+
+-how to see debug printouts without uart, using Vitis console.
+
+-fsbl is big but still loaded - kester
+
+-fails on i2c init
+
+-then fails on bootmode 1 (QSPI 24)
+
+-when setting FSBL_DEUBG_INFO in the Vitis “C/C++ Build Settings” -> “Tool Settings” tab -> Symbols (under ARM v8 gcc compiler), it is not reflected in xfsbl_config.h
+
+-hello was not loaded into DDR, now after debug the fsbl it is loaded into DDR
+I skiped boardInit in FSBL because of i2c
+
+-original image name on petalinux:
+petalinux-image-minimal
+
+
+

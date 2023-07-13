@@ -1,0 +1,11 @@
+vtysh/vtysh_config.c
+write_file_to_nvram
+	vtysh_sys_write_files_config (in vtysh/vtysh_sys.c)
+	sync
+	vtysh_flush_config
+
+
+
+vtysh/vtysh_cli.c:
+vtysh_flush_config:
+	sudo /usr/local/nbase/bin/flush-conf.sh"

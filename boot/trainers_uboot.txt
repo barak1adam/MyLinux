@@ -1,0 +1,7 @@
+u-boot trainers:
+
+Marek Vasut
+Jagan teki
+bootlin
+baruch
+

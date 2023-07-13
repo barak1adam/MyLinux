@@ -1,0 +1,166 @@
+Summary for the OOB, 12/2023:
+============================
+
+SMI - Serial Management Interface (IEEE SMI = Clause 22), used by PHY devices
+
+The SMI is supported by MDC / MDIO lines - 
+MDC is the Managment Data Clock referenc for the SMI
+MDIO is the Managment Data in/out for the SMI, data is transferred synchronous to the MDC.
+
+terms related to pp (Packet Processor) SMI:
+
+External SMI - when a phy is not connected directly to the Marvel ETH controller (but by other Gbe MAC or switch like SOHO).
+Then SW polling is used in the driver and HW PHY polling is disabled in the driver.
+For the SW polling mv_eth_adjust_link() is called by the driver to sychronize ethernet port's link, speed and duplex with phy settings 
+
+Internal SMI: when phy is connected directly. used with HW polling via Gbe MAC, need to enable HW PHY polling in the driver. 
+
+If phy is connected directly we set is_oob_phy to 1, it means HW polling is enabled in the driver and SW polling is disabled. (XG304, 312, 308CR)
+
+If phy is not connected directly, for example by SOHO, then HW polling is disabled and SW polling is enabled (XG308)
+
+for 312 where BC2 was used I think we did something different like disabling the HW polling too.
+
+About the SOHO - we have SOHO PPU (polling unit) enabled and feel the status of the external phys.
+I used it eventually to read the phy link state from SOHO registers and not from the phy registers.
+
+reading phy registers is done in branch fix_oob_308_with_soho
+
+reading SOHO registers is done in the main branch 3.10.70-cpss-2018.2-master
+
+in dts we used phy address 999 just to detect the case where soho is used and external phy address is not relevant, and is_oob_phy is not set.
+
+if (internal SMI) 
+{
+	if (304)
+		enable HW polling
+		
+	if (312 - BC2)
+		disable HW polling
+}
+else //SOHO
+{
+	if (308)
+		disable HW polling
+}
+
+
+mv_eth_probe
+=============
+
+	mv_plat_data_get
+	
+		if (plat_data->is_oob_phy && (mv_eth_link_polling == false)) {
+		mv_eth_link_polling = true;
+#ifdef CONFIG_OF
+		/* for oob-phy port, requires ADdr/Compl and init SMI register */
+		mv_eth_indirect_smi_init(plat_data);
+#endif
+	}
+
+	mv_eth_load_network_interfaces
+		mv_eth_hal_init ------------------> the logic above
+
+
+in u-boot, to read soho polling status:
+=======================================
+phyRead 1b 4
+
+// 408x means polling is enabled
+// 008x means polling is disabled
+
+in u-boot read phy status (phy addresses (0-9) is mapped by SOHO and then the phy is directly accessed. look in SOHO Data Sheet figure 34)
+==========================================================================================================================================
+
+MV ----- SMI ----- SOHO ------ SMI ----- PHY
+
+phyWrite 0 16 0
+
+phyRead 0 1
+
+
+
+code from u-boot I found to init:
+=================================
+
+MV_STATUS mvSysEthPhyInit(void)
+{
+	MV_ETHPHY_HAL_DATA halData;
+	MV_U32 port;
+
+	for (port=0; port < mvCtrlEthMaxPortGet(); port++) {
+
+		if (mvNextGenBoardIsSwitchPresent())
+		{
+			/*
+			 * When SOHO is present on board, the OOB connection is as shown below:
+			 *
+			 *			      88e6155 SOHO Switch
+			 *  +----------+           +----------------------+         +-------------+
+			 *  |          | 1000BaseX |                      |  SGMII  |             |
+			 *  | CPU_MAC1 +-----------+Port 1          Port 0+---------+ 88e1512 PHY |
+			 *  |          | LinkForce |                      | Polling |             |
+			 *  +----------+           +----------------------+ via SMI +-------------+
+			 *
+			 * When OOB port is connected through SOHO Port 1,
+			 * we still need to initialize OOB PHY connected to SOHO Port 0.
+			 */
+			halData.phyAddr[port] = 0x00;
+		}
+		else
+		{
+			/*
+			 * When SOHO is NOT present on board, the OOB port connection is as shown below:
+			 *
+			 *  +----------+         +-------------+
+			 *  |          |  SGMII  |             |
+			 *  | CPU_MAC1 +---------+ 88e1512 PHY |
+			 *  |          | Polling |             |
+			 *  +----------+ via SMI +-------------+
+			 */
+			halData.phyAddr[port] = mvBoardPhyAddrGet(port);
+		}
+
+		halData.boardSpecInit = MV_FALSE;
+		halData.isSgmii[port] = mvBoardIsPortInSgmii(port);
+		halData.QuadPhyPort0[port] = mvBoardQuadPhyAddr0Get(port);
+	}
+
+	halData.ethPhySmiReg = ETH_SMI_REG(MV_ETH_SMI_PORT);
+	halData.ctrlModel = mvCtrlModelGet();
+	halData.ctrlFamily=mvCtrlDevFamilyIdGet(halData.ctrlModel);
+
+	return mvEthPhyHalInit(&halData);
+}
+
+
+
+
+more info:
+==========
+to get eeprom programed with CR:
+Marvell>>i2c mw 52 0x91 0x40
+to read it:
+Marvell>>i2c md 52 0x91
+to cleae cr:
+Marvell>>i2c mw 52 0x91 0x0
+
+to burn a new u-boot:
+=====================
+Marvell>> setenv serverip 10.32.8.145
+Marvell>> setenv ipaddr 10.32.8.200
+Marvell>> ping 10.32.8.145           
+Using egiga1 device
+host 10.32.8.145 is alive
+Marvell>> setenv mrv_images_dir /tftpboot
+Marvell>> mrv_burn_u_boot 
+
+u-boot-bobk.bin is flashed to nand !
+
+
+when we change the CR bit in EEPROM, to make it happen next boot, we must delete the current values of dtb from env:
+Marvell>>i2c mw 52 0x91 0x40
+Marvell>>env default fdtfile
+Marvell>>env default dtb_image_name
+Marvell>>saveenv
+Marvell>>reset

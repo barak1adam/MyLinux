@@ -1,0 +1,37 @@
+DEBUG: /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb: 
+Cache: default: Parsing /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb
+
+DEBUG: /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb: 
+Inheriting /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/classes/xlnx-embeddedsw.bbclass 
+(from /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware.inc:3)
+
+DEBUG: /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb: 
+Inheriting /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/core/meta/classes/deploy.bbclass 
+(from /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware.inc:3)
+
+
+DEBUG: /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb: 
+Inheriting /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/core/meta/classes/image-artifact-names.bbclass (from /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware.inc:62)
+
+
+DEBUG: /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb: 
+Appending .bbappend file /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx-tools/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bbappend to /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb
+
+DEBUG: /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb: 
+Inheriting /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx-tools/classes/xsctapp.bbclass (from /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx-tools/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bbappend:7)
+
+DEBUG: /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb: 
+Inheriting /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx-tools/classes/xsctbase.bbclass (from /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx-tools/classes/xsctapp.bbclass:5)
+
+DEBUG: /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb: 
+Inheriting /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx-tools/classes/xsct-tc.bbclass (from /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx-tools/classes/xsctbase.bbclass:1)
+
+
+DEBUG: /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb: 
+Inheriting /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx-tools/classes/xsctyaml.bbclass (from /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx-tools/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bbappend:7)
+
+
+DEBUG: /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb: Inheriting /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/core/meta/classes/python3native.bbclass (from /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx-tools/classes/xsctyaml.bbclass:1)
+DEBUG: /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw/fsbl-firmware_2022.1.bb: Inheriting /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/core/meta/classes/python3-dir.bbclass (from /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/core/meta/classes/python3native.bbclass:1)
+
+-g -Wall -Wextra -fno-tree-loop-distribute-patterns

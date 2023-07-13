@@ -1,0 +1,19 @@
+Index: 6500/65vse/apps/datapath/scripts/vse_datapath
+===================================================================
+--- 6500/65vse/apps/datapath/scripts/vse_datapath	(revision 55360)
++++ 6500/65vse/apps/datapath/scripts/vse_datapath	(working copy)
+@@ -1288,6 +1288,14 @@
+ 	macList=$(cat $PHY_MAC_FILENAME |grep -e "^phy_mac_list")
+ 	vimTunnelMAC=$(echo ",$(ifconfig eth0|grep ether|awk {'print $2'}| awk '{print toupper($0)}'|awk -F\: '{ print "02"$2$3$4$5$6$7 }'):1:0.3")
+ 	sed -i "s/^phy_mac_list.*/${macList}${vimTunnelMAC}/g" $PHY_MAC_FILENAME
++# Add MAC for interface 0.4
++    macList=$(cat $PHY_MAC_FILENAME |grep -e "^phy_mac_list")
++    vimTunnelMAC=$(echo ",$(ifconfig eth0|grep ether|awk {'print $2'}| awk '{print toupper($0)}'|awk -F\: '{ print "03"$2$3$4$5$6$7 }'):1:0.4")
++    sed -i "s/^phy_mac_list.*/${macList}${vimTunnelMAC}/g" $PHY_MAC_FILENAME
++# Add MAC for interface 0.5
++    macList=$(cat $PHY_MAC_FILENAME |grep -e "^phy_mac_list")
++    vimTunnelMAC=$(echo ",$(ifconfig eth0|grep ether|awk {'print $2'}| awk '{print toupper($0)}'|awk -F\: '{ print "04"$2$3$4$5$6$7 }'):1:0.5")
++    sed -i "s/^phy_mac_list.*/${macList}${vimTunnelMAC}/g" $PHY_MAC_FILENAME
+     fi
+ 
+     # Ensure the shared memory block has been allocated

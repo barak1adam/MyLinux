@@ -1,0 +1,20 @@
+I got the board with working JTAG on Tuesday 19.7 11:30
+
+After few hours I got FSBL loaded,and DDR working (with hello program running) !!!
+
+One day after we had u-boot and kernel running
+
+NOR was tested and working on Thursday including example tests after fixed by Yotam and disabled the other NOR and the CPLD logic.
+
+2 weeks spent on u-boot: building outside petalinux, compare to 108, all done for debug.
+got the NOR , "UART"  and ETH PHY issues.
+
+vacation 2 weeks started on 5.8 (friday)
+
+back on 21.8, back to bringup on 23.8 Tuesday
+Till Thursday found the issue of CPLD and it fixed the NOR and the UART
+learned to complie DTS by DTG
+
+On Friday & Saturday started with ETH PHY - enable the correct driver, get rid of errors, and work for ping.
+Couldn't work on Sunday for it. Monday to Tuesday morning - Ping resolved.
+Tuesday up to midnight - kernel was up too by TFTP !

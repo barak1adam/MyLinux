@@ -1,0 +1,43 @@
+Hi Stephen
+
+A quick question please.
+If we won't have a quick answer I will create a ticket.
+
+For the PS-PL we've got:
+-The AXI inteface for registers access - works perfect.
+-One ETH controller for data - trouble shooting it now...
+
+For the data we need GEM0 in gmii mode to communicate ETH framse between our FPGA and the PS application.
+No phys connected on this GEM0, we just need it to interface with the PL.
+
+Trying to enable this GEM0 in the DTB, but the MACB driver is failed to probe for this GEM0.
+
+Here are the errors from dmesg:
+
+[    4.830106] macb ff0b0000.ethernet: failed to add to PM domain domain8: -13
+[    4.837070] macb: probe of ff0b0000.ethernet failed with error -13
+
+
+Here is my DTS relevant section:
+
+&gem0 {
+ compatible = "cdns,zynqmp-gem", "cdns,gem";
+ phy-mode = "gmii";
+ status = "okay";
+        fixed-link {
+                speed = <1000>;
+                full-duplex;
+                //pause;
+        };
+};
+
+I need it as kernel eth1, so I also added " ethernet1 = &gem0;" to the alias section.
+
+BTW, GEM3 works perfect.
+
+what do you think is missing for GEM0?
+
+The full DTB along with its reversed DTS (compiled back with DTC for your convenience) are attached.
+
+Thanks
+Barak

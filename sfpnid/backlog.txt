@@ -1,0 +1,81 @@
+backlog sfpnid:
+===============
+
+barak:
+
+upgrade kernel
+change DTS file names to 151
+how to change partitions
+DDR - learning with Naftali
+try to decrease timer frequency
+valgrind
+TeamCity
+add product.conf to ver file
+gdb training
+ramfs training
+
+ST - what is used finally - FMC or NAND (for example ECC settings)
+ST - review USB settings I got from Emmanuel
+ST - review memory layout. for example kernel is loaded into 0xc2000000
+ST - debug of u-boot and tf-a
+ST - review DDR training
+
+
+together:
+
+new setup in LAB including Spirent
+
+Jac:
+
+invalid len
+improve and align driver to SFS
+
+driver leftovers by jac:
+- fix compatible strings
+- load percent counter % (time in driver vs time no in drv)
+- MTU is hardcoded in the code ---- need to read it from the interface dynamically
+- replace the include <linux/spi/spidev.h> (but maybe this is ok ?) and replace by including our driver.h (which includes what is required)
+- remove linux includes in user_ifs.h
+
+use select in the driver or timer optimization
+
+optimize BR image size
+CubeIDE plugin to Eclipse
+try to use M4 (elf example)
+core dumps
+unify the driver module into the kernel
+successfully enable BR users table, and remove the workarround scripts:
+	more, dev/x permissions
+	admin / root users
+	fix sudo
+Management inside a service (control tag)
+
+
+Josh:
+Linux mode
+Syslog:
+add show info, show error
+add logrotate
+fix - if same lines are writtend in a row, they are not loged ----------- > fixed. (email by Alex)
+remote syslog
+Hard (cold) FPGA resets
+ntp porting and integration into dhcp
+move setif and initd to rcS.d
+move dhclient to rcS.d
+
+Alex:
+OAM
+in XG we did LT and CCM in CPU, dmm and service turn up in FPGA
+Tag manipulations conditions  ‘absent’ and  ‘any’ 
+Tag manipulations action  ‘strip’ 
+PCP map/remark must be redesigned and re-implemented.
+DSCP map/remark (?)
+Tag manipulations on downstream for q-in-q services
+TPID configuration for internal tag.
+Port statistics
+Keep alive tools
+FPGA configuration TLVs revision
+UPEDD-47290, Jac removed the warnings, need to handle with Shay
+
+serial numbers to get into the show version
+

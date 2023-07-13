@@ -1,0 +1,180 @@
+xg108 u-boot printenv:
+=========================
+
+=> printenv
+_updateimg=if run ethinit && tftp $loadaddr $updatefile; then run _writeimg;fi
+_updateiocpld=if run ethinit && tftp $loadaddr $serverdir/$cpldfile; then cpld erase 0;cpld update 0;fi
+_updatembcpld=if run ethinit && tftp $loadaddr $serverdir/$cpldfile; then cpld erase 0;cpld update 0;fi
+_writeimg=sf probe;sf erase $updateaddr +$filesize; sf write  $loadaddr $updateaddr $filesize; sf read $chkaddr $updateaddr $filesize;cmp.b $loadaddr $chkaddr $filesize;
+actbank=0
+arch=arm
+autoload=no
+baudrate=115200
+baudrate2=115200
+board=xg480
+board_name=xg480
+boot_dpl=fwimg apply dpl
+boot_dpl_old=cpld rw 40 0;sf probe 0:0;sf read 0x80200000 0x1B0000 0x10000;cpld rw 40 2;fsl_mc apply dpl 0x80200000
+boot_tftp=if run ethinit && tftp $kdiaddr $serverdir/$skdifile && tftp $fdtaddr $serverdir/$fdtfile; then run setbootargs; bootm $kdiaddr - $fdtaddr; fi
+bootargs=ethaddr=$ethaddr panic=5
+bootcmd=bootaos
+bootdcmd=bootaos $local_bootaos_args
+bootdelay=2
+bootpartnum=5
+chkaddr=0x92000000
+clearenv=env default -f -a; saveenv
+cpldaddr=0x520000000ULL
+cpldfile=cpld.bin
+cpu=armv8
+dpcfile=mcdpc-xg480.bin
+dplfile=dpl-xg480.bin
+emmcfile=xg480_em2.2_disk_image.gz
+eosboot_a=run eosboot_emmc_a
+eosboot_b=run eosboot_emmc_b
+eosboot_emmc_a=run setbootargs;run boot_dpl;ext2load mmc 0:1 88000000 cs_script.uimg;source 88000000
+eosboot_emmc_b=run setbootargs;run boot_dpl;ext2load mmc 0:2 88000000 cs_script.uimg;source 88000000
+eth10addr=84:c8:07:1d:72:4a
+eth11addr=84:c8:07:1d:72:4b
+eth12addr=84:c8:07:1d:72:4c
+eth13addr=84:c8:07:1d:72:4d
+eth14addr=84:c8:07:1d:72:4e
+eth15addr=84:c8:07:1d:72:4f
+eth1addr=84:c8:07:1d:72:41
+eth2addr=84:c8:07:1d:72:42
+eth3addr=84:c8:07:1d:72:43
+eth4addr=84:c8:07:1d:72:44
+eth5addr=84:c8:07:1d:72:45
+eth6addr=84:c8:07:1d:72:46
+eth7addr=84:c8:07:1d:72:47
+eth8addr=84:c8:07:1d:72:48
+eth9addr=84:c8:07:1d:72:49
+ethact=DPMAC4@rgmii
+ethaddr=84:c8:07:1d:72:40
+ethinit=if test 0$ethinitdone -ne 1; then ; ethinitdone=1; fi; if test _$ipconfig = _static -o 0$dhcpdone -eq 1; then exit; fi; if dhcp; then dhcpdone=1; fi
+ethprime=DPMAC4@rgmii
+fdtaddr=0x81FF0000
+fdtcontroladdr=ff4e5ae0
+fdtfile=dtb
+fileaddr=80100000
+filesize=2cc
+hostname=xg418
+hwconfig=fsl_ddr:bank_intlv=auto
+kdiaddr=0x82000000
+loadaddr=0x82000000
+mcdone=1
+mcfile=mcfw-xg480.bin
+mcinitcmd=fwimg start mc
+mcinitcmd_old=sf probe 0:0;sf read 0x80000000 0x40000 0x100000;sf read 0x80100000 0x30000 0x10000;fsl_mc start mc 0x80000000 0x80100000
+mcmemsize=0x40000000
+nandfile=xg480-nand.bin
+netretry=no
+norfile=xg480-qspi-nor.bin
+postfile=post-xg480.bin
+ppafile=ppa-xg480.bin
+rcwfile=rcw_qspi.bin
+rfsaddr=0x81800000
+rfsfile=initramfs
+scsidevs=0
+serverdir=xg404
+setbootargs=setenv bootargs ethaddr=$ethaddr panic=5  $extraargs  $bootargs craft=$baudrate
+skdifile=kernel
+soc=fsl-layerscape
+stderr=serial
+stdin=serial
+stdout=serial
+ubootfile=u-boot-xg480-qspi.bin
+update_cpld100g=cpld dev 1; run _updateiocpld;
+update_cpld10g=cpld dev 2; run _updateiocpld;
+update_dpc=updatefile=$serverdir/$dpcfile; updateaddr=0x30000; updatesize=0x10000; run _updateimg
+update_dpl=updatefile=$serverdir/$dplfile; updateaddr=0x1B0000; updatesize=0x10000; run _updateimg
+update_emmc=if run ethinit && tftp $loadaddr $serverdir/$emmcfile; then gzwrite mmc 0 $loadaddr $filesize; fi
+update_mbcpld=cpld dev 0; run _updatembcpld;
+update_mc=updatefile=$serverdir/$mcfile; updateaddr=0x40000; updatesize=0x00100000; run _updateimg
+update_nor=updatefile=$serverdir/$norfile; updateaddr=0; updatesize=0x400000; updateimg nor
+update_post=updatefile=$serverdir/$postfile; updateaddr=0x1E0000; updatesize=0x00020000; run _updateimg
+update_ppa=updatefile=$serverdir/$ppafile; updateaddr=0x1C0000; updatesize=0x20000; run _updateimg
+update_rcw=updatefile=$serverdir/$rcwfile; updateaddr=0; updatesize=0x10000; updateimg rcw
+update_uboot=updatefile=$serverdir/$ubootfile; updateaddr=0x200000; updatesize=0x00200000; updateimg bl
+vendor=adva
+
+
+
+Environment size: 4057/65531 bytes
+=>
+
+
+
+Michal Piotrewicz
+
+[8/29 10:03 AM] Michał Piotrewicz
+I think this is where they keep the 'vanilla' u-boot sources in this repository:
+fsp150cm/bootldr/r7-r13.1ge110/u-boot/source/
+
+[8/29 10:04 AM] Michał Piotrewicz
+And the ADVA patches:
+fsp150cm/bootldr/r7-r13.1ge110/u-boot/patches
+
+[8/29 10:04 AM] Michał Piotrewicz
+Actually the latter are the patches + board specific code
+
+Maciek Rogalski
+
+
+
+Lucky Luo9/6 10:35 AM
+just as see the command "gzwrite mmc 0 $loadaddr $filesize" will uncompress emmc file and write it into emmc
+
+bootcmd will load kernel/initramfs/dtb auot... by Lucky Luo
+Lucky Luo9/6 10:36 AM
+bootcmd will load kernel/initramfs/dtb auotmaticly
+
+"bootdcmd=bootaos $local_bootaos_args\0" by Lucky Luo
+Lucky Luo9/6 10:36 AM
+"bootdcmd=bootaos $local_bootaos_args\0"
+
+do you have bootaos and local_bootaos_args... by Barak Adam
+Barak Adam9/6 10:38 AM
+do you have bootaos and local_bootaos_args content?
+
+Profile picture of Lucky Luo.to know the detailed info, you may need to ... by Lucky Luo
+Lucky Luo9/6 10:50 AM
+to know the detailed info, you may need to refer to the source code of U-Boot and script for deploy emmc file.
+
+#define EOSBOOT_EMMC_A \      "run setboota... by Lucky Luo
+Lucky Luo9/6 10:51 AM
+#define EOSBOOT_EMMC_A \
+    "run setbootargs;run boot_dpl;" \
+    "ext2load mmc 0:1 88000000 cs_script.uimg;" \
+    "source 88000000\0"
+#define EOSBOOT_EMMC_B \
+    "run setbootargs;run boot_dpl;" \
+    "ext2load mmc 0:2 88000000 cs_script.uimg;" \
+    "source 88000000\0"
+
+Lucky Luo9/6 10:55 AM
+OK, here is the content in /cs and /boot which has some files needed by uboot
+
+xg480 ~ # ls /boot/ boot_script.uimg    dpc... by Lucky Luo
+Lucky Luo9/6 10:55 AM
+xg480 ~ # ls /boot/
+boot_script.uimg  dpc-xg480.bin  dpl-xg480.bin  dpl_script.uimg  dtb  initramfs  kernel  lost+found  mc-xg480.bin  mc_script.uimg  poms  xg404.dtb  xg418.dtb  xg480.dtb
+xg480 ~ # ls /mnt/active/cs/
+cs_script.uimg  cs_tab  lost+found
+
+
+Maoz Yona9/6 11:08 AM
+Lucky can you please refer me to the u-boot repo ? It it f4-bootloader-xg1 or aos-ne-bootloader ?
+
+
+Lucky Luo9/6 11:10 AM
+this is repo of xg480 uboot repo: ssh://luckyl@muc-gerrit.rd.advaoptical.com:29418/f4-bootloader-xg480
+
+
+Maoz Yona9/6 1:43 PM
+Hi we have xg480 and I would like to go into the linux file system - but port 614 is blocked - is there a simple way to enable it ?
+
+Lucky Luo9/6 1:44 PM
+https://polarion.advaoptical.com/polarion/#/project/GE1D/wiki/F4/F4%20Installation%20Guide
+
+Lucky Luo9/6 1:45 PM
+see "enable ssh access in production mode"

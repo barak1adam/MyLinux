@@ -1,0 +1,253 @@
+48795  [2022-07-28 14:30:13] git clone https://github.com/Xilinx/u-boot-xlnx.git
+48796  [2022-07-28 14:34:10] cd u-boot-xlnx/
+48797  [2022-07-28 14:34:11] ll
+48798  [2022-07-28 14:34:14] export CROSS_COMPILE=aarch64-linux-gnu-
+48799  [2022-07-28 14:34:26] export ARCH=aarch64
+48800  [2022-07-28 14:34:46] make xilinx_zynqmp_virt_defconfig
+
+
+49765  [2022-08-02 17:09:40] cd /tmp/u-boot-xlnx/
+49766  [2022-08-02 17:09:44] make distclean
+49767  [2022-08-02 17:09:51] make xilinx_zynqmp_virt_defconfig
+49768  [2022-08-02 17:10:04] ff xilinx_zynqmp_virt_defconfig
+49769  [2022-08-02 17:10:41] ll configs | grep zynqmp
+49770  [2022-08-02 17:10:59] make xilinx_zynqmp_zcu102_rev1_0_defconfig
+49771  [2022-08-02 17:11:13] export DEVICE_TREE="zynqmp-zcu102-rev1.0"
+49772  [2022-08-02 17:11:16] make
+49773  [2022-08-02 17:12:01] aarch64-linux-gnu-gcc
+49774  [2022-08-02 17:12:34] cd /opt/pkg/
+49775  [2022-08-02 17:12:38] ff gcc-aarch64-linux-gnu
+49776  [2022-08-02 17:12:53] ff gcc-a
+49777  [2022-08-02 17:13:40] cd ~/Vitis
+49778  [2022-08-02 17:13:53] ff gcc-aarch64-linux-gnu
+49779  [2022-08-02 17:14:04] ff linux-gnu
+49780  [2022-08-02 17:14:35] fp ./2022.1/gnu/aarch64/lin/aarch64-linux/bin/aarch64-linux-gnu-gcc
+49781  [2022-08-02 17:15:22] ff aarch64-linux-gnu-gcc
+49782  [2022-08-02 17:22:29] fp ./2022.1/gnu/aarch64/lin/aarch64-linux/bin/aarch64-linux-gnu-gcc
+49783  [2022-08-02 17:24:41] cd /tmp/u-boot-xlnx/
+49784  [2022-08-02 17:24:45] make
+49785  [2022-08-02 17:35:42] export PATH=/home/barak/Vitis/2022.1/gnu/aarch64/lin/aarch64-linux/bin/:$PATH
+49786  [2022-08-02 17:35:54] export CROSS_COMPILE=aarch64-linux-gnu-
+49787  [2022-08-02 17:36:06] export ARCH=aarch64
+49788  [2022-08-02 17:36:09] make
+
+
+50105  [2022-08-03 19:35:03] make menuconfig
+50106  [2022-08-03 19:36:09] make distclean
+50107  [2022-08-03 19:36:28] make xilinx_zynqmp_virt_defconfig
+50108  [2022-08-03 19:36:31] ,ale
+50109  [2022-08-03 19:36:33] make
+50110  [2022-08-03 19:38:28] cp u-boot.elf ~/xilinx-zcu102-2022.1/images/linux/u-boot.elf.xilinx2022.1
+50111  [2022-08-03 19:38:53] cd ~/xilinx-zcu102-2022.1/images/linux
+50114  [2022-08-03 19:39:09] cp u-boot.elf.xilinx2022.1 u-boot.elf
+50115  [2022-08-03 19:39:20] petalinux-boot --jtag --u-boot -v
+50116  [2022-08-03 19:39:41] petalinux-boot --jtag --u-boot
+
+
+
+50131  [2022-08-03 19:51:18] cp ~/zcu102_defconfig ./configs/xilinx_zynqmp_virt_defconfig
+50132  [2022-08-03 19:51:19] gs
+50133  [2022-08-03 19:51:20] gd
+50134  [2022-08-03 19:52:54] make clean
+50135  [2022-08-03 19:53:04] make xilinx_zynqmp_virt_defconfig
+50136  [2022-08-03 19:53:07] make
+
+
+50157  [2022-08-03 20:42:38] make xilinx_zynqmp_virt_defconfig
+50158  [2022-08-03 20:42:41] make
+50159  [2022-08-03 20:45:00] cp ~/xilinx-zcu102-2022.1/project-spec/meta-user/recipes-bsp/u-boot/files/platform-top.h configs/
+50160  [2022-08-03 20:45:03] make
+50161  [2022-08-03 20:45:25] make xilinx_zynqmp_virt_defconfig
+50162  [2022-08-03 20:45:27] make
+50163  [2022-08-03 20:46:12] make clean
+50164  [2022-08-03 20:46:24] ls configs/
+50165  [2022-08-03 20:46:31] ls configs/ | grep plat
+50166  [2022-08-03 20:46:34] make
+50167  [2022-08-03 20:48:20] make clean
+50168  [2022-08-03 20:48:26] make xilinx_zynqmp_virt_defconfig
+50169  [2022-08-03 20:48:30] make
+50170  [2022-08-03 20:50:25] cp u-boot.elf ~/xilinx-zcu102-2022.1/images/linux/u-boot.elf.xilinx2022.1
+50171  [2022-08-03 20:50:36] petalinux-boot --jtag --u-boot
+
+50199  [2022-08-04 09:02:10] cd /tmp/u-boot-xlnx/
+50200  [2022-08-04 09:02:12] ll
+50201  [2022-08-04 09:02:35] ff zynqmp-zcu100-revC.dts
+50202  [2022-08-04 09:02:42] gvim ./arch/arm/dts/zynqmp-zcu100-revC.dts\
+50203  [2022-08-04 09:02:46] gvim ./arch/arm/dts/zynqmp-zcu100-revC.dts
+50204  [2022-08-04 09:08:13] ~/Vivado/2022.1/bin/vivado &
+50205  [2022-08-04 09:34:29] make clean
+50206  [2022-08-04 09:34:40] make xilinx_zynqmp_virt_defconfig
+50207  [2022-08-04 09:34:46] make
+50208  [2022-08-04 09:36:28] ls -lrt
+50209  [2022-08-04 09:36:33] gs
+50210  [2022-08-04 09:36:42] gd arch/arm/dts/zynqmp-zcu100-revC.dts
+50211  [2022-08-04 09:38:43] q
+50212  [2022-08-04 09:38:59] cp u-boot.elf ~/xilinx-zcu102-2022.1/images/linux/u-boot.elf.xilinx2022.1
+50213  [2022-08-04 09:39:15] cp u-boot.dtb ~/xilinx-zcu102-2022.1/images/linux/u-boot.dtb.xilinx2022.1
+
+
+
+50236  [2022-08-04 10:15:43] cp u-boot.dtb ~/xilinx-zcu102-2022.1/images/linux/u-boot.dtb.xilinx2022.1
+50237  [2022-08-04 10:15:45] cd -
+50238  [2022-08-04 10:15:52] cp u-boot.dtb.xilinx2022.1 system.dtb
+50239  [2022-08-04 10:15:58] petalinux-boot --jtag --u-boot
+50240  [2022-08-04 10:17:40] dtc -I dtb -O dts ~/xilinx-zcu102-2022.1/images/linux/system.dtb > /tmp/system.dtb.dts.tmp
+50241  [2022-08-04 10:17:48] gvim /tmp/system.dtb.dts.tmp
+50242  [2022-08-04 10:59:24] dtc -I dtb -O dts -f system.dtb -o system.dts
+50243  [2022-08-04 10:59:33] gvim system.dts
+
+50255  [2022-08-04 13:28:41] cd ~/xilinx-zcu102-2022.1/images/linux$
+50256  [2022-08-04 13:28:53] cd ~/xilinx-zcu102-2022.1/images/linux
+50257  [2022-08-04 13:44:32] cd /tmp/u-boot-xlnx/
+50258  [2022-08-04 13:44:54] #make DEVICE_TREE=
+50259  [2022-08-04 13:44:59] export DEVICE_TREE="zynqmp-zcu102-rev1.0"
+50260  [2022-08-04 13:45:29] gd arch/arm/dts/zynqmp-zcu100-revC.dts
+50261  [2022-08-04 13:45:42] make menuconfig
+50262  [2022-08-04 13:46:13] export DEVICE_TREE="zynqmp-zcu100-revC"
+50263  [2022-08-04 13:46:41] make DEVICE_TREE=zynqmp-zcu100-revC
+50264  [2022-08-04 13:47:27] dtc -I dtb -O dts -f u-boot.dtb -o u-boot.dts
+50265  [2022-08-04 13:47:33] gvim u-boot.dts
+50266  [2022-08-04 13:48:59] make DEVICE_TREE=zynqmp-zcu100-revC
+50267  [2022-08-04 13:49:06] dtc -I dtb -O dts -f u-boot.dtb -o u-boot.dts
+50268  [2022-08-04 13:49:09] gvim u-boot.dts
+50269  [2022-08-04 13:50:56] make DEVICE_TREE=zynqmp-zcu100-revC
+50270  [2022-08-04 13:51:45] cp u-boot.dtb ~/xilinx-zcu102-2022.1/images/linux/u-boot.dtb.xilinx2022.1
+50271  [2022-08-04 13:51:54] cd ~/xilinx-zcu102-2022.1/images/linux
+50272  [2022-08-04 13:52:05] cp u-boot.dtb.xilinx2022.1 system.dtb
+50273  [2022-08-04 13:52:25] petalinux-boot --jtag --u-boot
+50274  [2022-08-04 17:39:18] cd /tmp/u-boot-xlnx/
+50275  [2022-08-04 17:39:19] gd
+50276  [2022-08-04 17:41:21] cd /tmp/u-boot-xlnx/cd ~/xilinx-zcu102-2022.1/
+50277  [2022-08-04 17:41:25] petalinux-config
+50278  [2022-08-04 17:41:39] cd cd ~/xilinx-zcu102-2022.1/
+50279  [2022-08-04 17:41:48] cd ~/xilinx-zcu102-2022.1/
+50280  [2022-08-04 17:42:00] petalinux-config
+50281  [2022-08-04 17:46:56] cd -
+50282  [2022-08-04 17:47:09] gvim u-boot.dts
+50283  [2022-08-05 07:00:39] cd ~/xilinx-zcu102-2022.1/
+50284  [2022-08-05 07:00:43] petalinux-config
+50285  [2022-08-05 07:02:24] cd -
+50286  [2022-08-05 07:02:26] gs
+50287  [2022-08-05 07:02:50] rm configs/platform-top.h
+50288  [2022-08-05 07:02:53] make
+50289  [2022-08-05 07:03:02] make clean
+50290  [2022-08-05 07:03:11] make DEVICE_TREE=zynqmp-zcu100-revC
+50291  [2022-08-05 07:04:59] gs
+50292  [2022-08-05 07:05:12] git add arch/arm/dts/zynqmp-zcu100-revC.dts configs/xilinx_zynqmp_virt_defconfig include/configs/platform-top.h
+50293  [2022-08-05 07:05:26] git commit -m "My first working DTS"
+
+
+50326  [2022-08-05 07:30:05] cd /tmp/u-boot-xlnx/
+50327  [2022-08-05 07:30:11] make menuconfig
+50328  [2022-08-05 07:31:08] make DEVICE_TREE=system-top
+50329  [2022-08-05 07:32:22] make clean
+50330  [2022-08-05 07:32:31] make menuconfig
+50331  [2022-08-05 07:33:37] make DEVICE_TREE=system-top
+50332  [2022-08-05 07:35:36] ls -lrt
+50333  [2022-08-05 07:36:02] ff *.dts
+50334  [2022-08-05 07:36:08] ff *.dts | grep tmp
+50335  [2022-08-05 07:37:28] ff system-top.dts
+50336  [2022-08-05 07:37:37] gvim ./arch/arm/dts/system-top.dts
+50337  [2022-08-05 07:38:11] make DEVICE_TREE=system-top
+50338  [2022-08-05 07:38:50] export DEVICE_TREE="system-top"
+50339  [2022-08-05 07:38:52] make
+50340  [2022-08-05 07:40:08] make xilinx_zynqmp_virt_defconfig
+50341  [2022-08-05 07:40:12] export DEVICE_TREE="system-top"
+50342  [2022-08-05 07:40:14] make
+50343  [2022-08-05 07:41:02] ls dts/Makefile
+50344  [2022-08-05 07:41:08] more dts/Makefile
+50345  [2022-08-05 07:41:20] gvim dts/Makefile
+50346  [2022-08-05 07:41:58] ff system-top.dts
+50347  [2022-08-05 07:43:34] cp ./arch/arm/dts/zynqmp-zcu100-revC.dts ./arch/arm/dts/system-top.dts 
+50348  [2022-08-05 07:43:37] make
+50349  [2022-08-05 07:44:10] cd -
+50350  [2022-08-05 07:44:35] cp system-top.dts /tmp/u-boot-xlnx/arch/arm/dts/zynqmp-zcu100-revC.dts
+50351  [2022-08-05 07:44:42] cd -
+50352  [2022-08-05 07:44:45] make menuconfig
+50353  [2022-08-05 07:45:26] make DEVICE_TREE=zynqmp-zcu100-revC
+50354  [2022-08-05 07:45:44] cd -
+50355  [2022-08-05 07:45:49] ff system-conf.dtsi 
+50356  [2022-08-05 07:46:12] cp ./system-conf.dtsi /tmp/u-boot-xlnx/arch/arm/dts/
+50357  [2022-08-05 07:46:15] cd -
+50358  [2022-08-05 07:46:16] make
+50359  [2022-08-05 07:46:33] make menuconfig
+50360  [2022-08-05 07:47:06] make DEVICE_TREE=zynqmp-zcu100-revC
+
+50361  [2022-08-05 07:47:32] ls -lrt
+50362  [2022-08-05 07:47:52] cp u-boot.dtb ~/xilinx-zcu102-2022.1/images/linux/u-boot.dtb.xilinx2022.1
+50363  [2022-08-05 07:48:08] cd ~/xilinx-zcu102-2022.1/images/linux/
+50364  [2022-08-05 07:48:28] cp u-boot.dtb.xilinx2022.1 system.dtb
+50365  [2022-08-05 07:48:58] petalinux-boot --jtag --u-boot
+50366  [2022-08-05 07:52:28] ls -lrt
+50367  [2022-08-05 07:52:58] cd /tmp/u-boot-xlnx/
+50368  [2022-08-05 07:53:05] ff *.dts | grep tmp
+50369  [2022-08-05 07:53:15] gvim ./arch/arm/dts/.zynqmp-zcu100-revC.dtb.dts.tmp
+50370  [2022-08-05 07:54:18] gs
+50371  [2022-08-05 07:54:35] rm arch/arm/dts/system-top.dts
+50372  [2022-08-05 07:55:16] cp ./arch/arm/dts/.zynqmp-zcu100-revC.dtb.dts.tmp /tmp/dts_latest_nouart.dts
+50373  [2022-08-05 07:55:24] gs
+50374  [2022-08-05 07:55:46] gd arch/arm/dts/zynqmp-zcu100-revC.dts
+50375  [2022-08-05 07:56:30] gs
+50376  [2022-08-05 07:57:02] git add arch/arm/dts/zynqmp-clk-ccf.dtsi arch/arm/dts/zynqmp-zcu100-revC.dts arch/arm/dts/zynqmp.dtsi arch/arm/dts/pcw.dtsi arch/arm/dts/pl.dtsi arch/arm/dts/system-conf.dtsi arch/arm/dts/system-user.dtsi arch/arm/dts/zcu102-rev1.0.dtsi
+50377  [2022-08-05 07:57:22] git commit -m "use xilinx auto generated DTS"
+50378  [2022-08-05 07:57:27] git log
+50379  [2022-08-05 07:58:19] git checkout -b my_fist_working_dts 0b0034a810c98c677f124e6958a4e4d891c5f840
+50380  [2022-08-05 07:58:37] make clean
+50381  [2022-08-05 07:58:43] make DEVICE_TREE=zynqmp-zcu100-revC
+50382  [2022-08-05 08:00:58] cp ./arch/arm/dts/.zynqmp-zcu100-revC.dtb.dts.tmp /tmp/my_fist_working_dts.dts
+50383  [2022-08-05 08:01:21] bcompare /tmp/my_fist_working_dts.dts /tmp/dts_latest_nouart.dts &
+50384  [2022-08-05 08:05:55] dtc -I dtb -O dts -f u-boot.dtb -o u-boot.dts
+50385  [2022-08-05 08:06:01] ls -lrt
+50386  [2022-08-05 08:06:21] cp u-boot.dts /tmp/non-working.dts
+50387  [2022-08-05 08:06:30] gb
+50388  [2022-08-05 08:06:41] git checkout v2022.1
+50389  [2022-08-05 08:06:43] git log
+50390  [2022-08-05 08:07:23] rm /tmp/non-working.dts
+50391  [2022-08-05 08:07:33] cp u-boot.dts /tmp/working.dts
+50392  [2022-08-05 08:07:37] gb
+50393  [2022-08-05 08:07:43] make clean
+50394  [2022-08-05 08:07:48] make DEVICE_TREE=zynqmp-zcu100-revC
+50395  [2022-08-05 08:10:23] dtc -I dtb -O dts -f u-boot.dtb -o u-boot.dts
+50396  [2022-08-05 08:10:28] ls -lrt
+50397  [2022-08-05 08:10:35] cp u-boot.dts /tmp/non-working.dts
+50398  [2022-08-05 08:10:55] bcompare /tmp/non-working.dts /tmp/working.dts &
+50399  [2022-08-05 08:24:12] cd arch/arm/dts/
+50400  [2022-08-05 08:24:15] ll
+50401  [2022-08-05 08:24:18] ls -lrt
+50402  [2022-08-05 08:24:30] ag uart0-default
+50403  [2022-08-05 08:25:06] ag uart0-default | grep 100
+50404  [2022-08-05 08:25:45] gvim zynqmp-zcu100-revC.dts
+50405  [2022-08-05 08:32:17] cd -
+50406  [2022-08-05 08:32:18] make
+50407  [2022-08-05 08:38:51] make DEVICE_TREE=zynqmp-zcu100-revC
+50408  [2022-08-05 08:41:56] cp u-boot.dtb ~/xilinx-zcu102-2022.1/images/linux/u-boot.dtb.xilinx2022.1
+
+
+
+
+:56] /home/barak/Vitis/2022.1/bin/xsct -eval "source dow_BOOT.tcl;"
+
+50942  [2022-08-24 18:49:35] petalinux-boot --jtag --u-boot
+50943  [2022-08-24 18:54:24] /home/barak/Vitis/2022.1/bin/xsct -eval "source dow_BOOT.tcl;"
+
+
+51101  [2022-08-25 18:21:32] ls /home/barak/Vitis/2022.1/bin
+51102  [2022-08-25 18:22:46] ls /home/barak/Vitis/2022.1/bin/bootgen -image /home/barak/xilinx-zcu102-2022.1/images/linux/bootgen.bif -arch zynqmp -o /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT.bin -w on
+51103  [2022-08-25 18:23:25] /home/barak/Vitis/2022.1/bin/bootgen -image /home/barak/xilinx-zcu102-2022.1/images/linux/bootgen.bif -arch zynqmp -o /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT.bin -w on
+51104  [2022-08-25 18:25:16] /home/barak/Vitis/2022.1/bin/bootgen -image /home/barak/xilinx-zcu102-2022.1/images/linux/bootgen.bif -arch zynqmp -o /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT.bin
+51105  [2022-08-25 18:25:25] /home/barak/Vitis/2022.1/bin/bootgen -image /home/barak/xilinx-zcu102-2022.1/images/linux/bootgen.bif -arch zynqmp -o /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT.bin -w
+51106  [2022-08-25 18:25:39] /home/barak/Vitis/2022.1/bin/bootgen -image /home/barak/xilinx-zcu102-2022.1/images/linux/bootgen.bif -arch zynqmp -wo /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT.bin
+51107  [2022-08-25 18:26:02] /home/barak/Vitis/2022.1/bin/bootgen -image /home/barak/xilinx-zcu102-2022.1/images/linux/bootgen.bif -w -arch zynqmp -o /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT.bin
+51108  [2022-08-25 18:26:09] /home/barak/Vitis/2022.1/bin/bootgen -image /home/barak/xilinx-zcu102-2022.1/images/linux/bootgen.bif -arch zynqmp -o /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT.bin -w on
+51109  [2022-08-25 18:26:26] /home/barak/Vitis/2022.1/bin/bootgen -image /home/barak/xilinx-zcu102-2022.1/images/linux/bootgen.bif -arch zynqmp -o /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT.bin -w on -v
+51110  [2022-08-25 18:26:42] /home/barak/Vitis/2022.1/bin/bootgen -image /home/barak/xilinx-zcu102-2022.1/images/linux/bootgen.bif -arch zynqmp -o /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT1.bin -w on
+51111  [2022-08-25 18:27:32] ll
+
+51782  [2022-08-29 06:53:26] ff psu_init
+51783  [2022-08-29 06:56:53] bcompare ./board/xilinx/zynqmp/zynqmp-zcu102-rev1.0/psu_init_gpl.c /home/barak/edt/edt_zcu102_workspace/xo126_fsbl/src/psu_init.c &
+51784  [2022-08-29 06:58:08] bcompare ./board/xilinx/zynqmp/zynqmp-zcu102-rev1.0/psu_init_gpl.c ~/mrv_dev/f8-bootloader-aflex/source/psu_init_gpl.c &
+
+
+
+
+

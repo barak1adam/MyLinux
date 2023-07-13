@@ -1,0 +1,11 @@
+kernel_name=Image
+ramdisk_name=ramdisk.cpio.gz.u-boot
+rootfs_name=rootfs.cpio.gz.u-boot
+
+
+load 0x00100000 system.dtb;
+load 0x00200000 Image; 
+load 0x04000000 rootfs.cpio.gz.u-boot.
+
+booti <kernel load address> <rootfs loadaddress> <devicetree load address>
+booti 0x00200000 0x04000000 0x00100000

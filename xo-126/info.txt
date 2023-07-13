@@ -1,0 +1,132 @@
+XO-126
+=======
+
+general info:
+https://docs.xilinx.com/v/u/en-US/zynq-ultrascale-plus-product-selection-guide
+
+XCZU17EG:
+“E” means Quad APU, Dual RPU, Single GPU 
+"G" means General purpose
+
+ADVA products and EVB:
+
+		SOC=CPU+FPGA#1		FPGA#2			CPU		CPU DDR/PS DDR		PL-DDR(TM DDR)		OPERATION SYS
+
+XO126 (SH)	XCZU17EG		NO			SOC CPU		PS DDR-2GB DDR4		NO			AOS	
+XG108S		XCZU15EG-1FFVC900I  	NO			SOC CPU		PS DDR-2GB DDR4		NO			F3	
+XG118CSH	NO			XCKU15P-2FFVA1156I4630 	NXP CPU		CPU-NXP-PS DDR-2GB 	FPGA 6GB(3X2 SETS) DDR4	AOS	
+XJ128		XCZU15EG		XCKU5P-2FFVB676I  	SOC CPU		PS DDR-2GB DDR4	NO				F3
+XILINX EVB	ZU9EG			NO			SOC CPU		4GB / x16		NO		
+
+compared to 108S:
+
+		XO126 SH			XG108S
+NOR FLASH	4MB				4MB
+eMMC		8GB				4GB
+DDR4		2 units 2GB=4GB			2 UNITS 0.5GB=1GB
+MNG PORT	RGMII -Probably Removed 	RGMII-RJ45 inband
+USB		MICRO USB?			USB2.0 TYPE A
+
+
+Settings for the Vivado project by Yotam:
+=========================================
+DDR - take it from the data sheet
+NOR - dual stacked
+eMMC nand MIO 13-25
+I2C1 MIO 48-49
+PMU? I used the default
+USB0 MIO 52-63, less fast
+GPIO banks 0, 1, 2
+SPI0 MIO 38-43
+SPI1 MIO 32-37
+UART0 MIO 26-27
+
+
+NOR:
+
+email from Teryy to Russell,
+Xilinx User’s Guide UG1085, “Zynq UltraScale+ Device TRM”  Chapter 11, “Boot and Configuration” is a good resource.
+
+NOR Flash interface is Quad-SPI referenced in Tables 11-1, 11-2 & 11-3 and the FPGA device is the XCZU17 referenced in Table 11-10.
+
+Hobson Frater, hobson@xilinx.com is our local FAE.
+
+NOR Programmer:
+One quick note, it looks like you may be able to order the Olimex ARM-USB-OCD-H or ARM-USB-OCD-HL directly from the manufacture https://www.olimex.com/Products/ARM/JTAG/ARM-USB-OCD-H/.
+
+PMU
+Platform Management Unit (PMU). The PMU controls the power-up, reset, and monitoring of resources within the system
+
+questions for Yotam:
+Vivado validation to the Design
+Synthesis
+
+
+Open questions, Xilinx:
+=======================
+-how to conttol the power for each core? how it is set by default in the DTS? 
+- how to compile PMU FW if needed?
+-PMU is using o.source FW. used also for safety?
+
+
+Bootloaders (Xilinix FSBL, U-boot) and Linux kernel are set about power domains (u-boot and Linux with DTS)
+then they communicate with PMU FW to make it happen
+
+OCM is the static RAM where the FSBL is loaded to.
+
+bootloaders are saved on NOR with QSPI interface, the NOR is more reliable and more expensive then eMMC.
+eMMC for mas stroge, NOR for backup with boot loaders
+
+both Xilinx FSBL and u-boot SBL are using ARM TF-A for secure boot
+
+bringup plan:
+=============
+Recall Yocto training
+open the real XSA I got in Vivado and in Vitis
+Review all peripherals settings in Vivado / Vitis
+Update the XSA and use it for petalinux
+Complete debug with JTAG / QEMU
+Learn Vitis baremetal application FSBL + hello world app
+Learn Vitis peripherals tests
+Try the boot levels with JTAG
+Learn to load FPGA image
+Try to boot our application with QEMU
+
+Good to know:
+=============
+PMU - 
+PMU FW is loaded to PMU, it is a "user" FW.
+By default, no need to change it.
+it controls the power sequence inside Zynq
+
+FSBL -
+manages the PMU to disable / enable CPUs or peripherals
+(CPUs are by default powered up, FSBL disable them)
+FSBL configuration about what to enable is defined in Vivado, Vivado files are then exported and compiled in FSBL.
+
+CSU - 
+microcontroller
+completely internal, no user access
+running the BootRom
+
+PMU -- >  CSU --- > (FSBL in OCM) PMU FW into PMU RAM.
+
+In non-secure boot mode, the platform management unit (PMU) releases the reset of the
+configuration security unit, and enters the PMU server mode to monitor power. At this stage the
+configuration security unit loads the first stage boot loader (FSBL) into on-chip memory (OCM).
+
+BL1- ROM code
+BL2 - TF-A
+Xilinx FSBL is wrapping the BL2 TF-A
+U-Boot can run at any exception level it is entered in, it is recommened to enter it in EL3 if U-Boot takes some responsibilities of a classical firmware (like initial hardware setup, CPU errata workarounds or SMP bringup). U-Boot can be entered in EL2 when its main purpose is that of a boot loader. It can drop to lower exception levels before entering the OS
+
+
+On NXP for GE104:
+they have a prebootloader blob on ROM and a "reset config word"
+"reset config word" lets you costomize the ROM code
+The ROM contorls the PLL, DRAM, etc
+
+They used 1046A EVK
+
+exception levels - el1, el2, el3
+highest priviledges provided by ARM

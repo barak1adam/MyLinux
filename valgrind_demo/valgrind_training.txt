@@ -1,0 +1,269 @@
+allocation of wrong amount of memory
+un-initialized variables
+writing before or after a buffer  bounds
+multiple free
+allocating stack memory over the stack size
+memory leaks - allocating memory and forgetting to free...
+
+
+results:
+crashes
+junk values far from the original mistake
+
+valgrind runs on the binary, source code is not needed !
+just make sure binary is up to date.
+
+takes sometime to start  - some configurations are done to binary
+program runs slower (30%)
+
+compile with -Wall -Werror to get as much info as possible by the compiler
+-g - must have symbols, to let valgrind give us meaningful output
+
+show how to compile one of our packages with symbols
+
+then compile a new test program
+
+
+every program must ended with no errors:
+
+
+The big problem:
+programs can compile perfect (no errors, no warnings)
+program can even run normally due to some good luck.
+but still memory issues might be still there...
+do not believe the statistics. A crash is a crash !
+
+valgrind output:
+source line
+what was the problem
+memory addresses involved
+
+example 0:
+no errors, no leaks
+allocate memory on the heap, put some int values, free the whole block.
+--show and example:
+no leaks, 0 errors
+also it is important to pay attention to # of bytes were totally allocated...
+(reasons might be: using heap instead of stack, using duplicates, etc...)
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#define NUM_INTS 4
+
+int main (void)
+{
+	/* allocate some memory on the heap */
+	int *block = malloc(NUM_INTS * sizeof(int));
+	
+	/* put some values in the block [0..NUM_INT-1] */
+	for (int i = 0; i < NUM_INTS; i++)
+	{
+		block[i] = i;
+	}
+	
+	free(block);
+}
+
+
+example 1:
+invalid read of heap memory
+complie - no errors / warning and then run
+it is run successfully - might be bad if wrong values are used to control the program...
+run it
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#define NUM_INTS 4
+
+int main (void)
+{
+	/* allocate some memory on the heap */
+	int *block = malloc(NUM_INTS * sizeof(int));
+	
+	/* put some values in the block [0..NUM_INT-1] */
+	for (int i = 0; i < NUM_INTS; i++)
+	{
+		block[i] = i;
+	}
+	
+	/* invalid read 1 */
+	printf("The %d int value is %d\n\r", NUM_INT, block[NUM_INT]);
+	
+	/* invalid read 2 */
+	printf("The -1st int value is %d\n\r", block[-1]);
+	
+	/* free the allocated memory */
+	free(block);
+}
+
+example 2:
+invalid write
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+
+int main (void)
+{
+	/* NOTE: "mrv string" length is total 11:  10 chars + '\0' char */
+	
+	/* allocate some memory for a string on the heap */
+	char *str = malloc(strlen("mrv string"));
+	
+	/* a classical strlen bug - strlen returns with 10. need to allocate strlen + 1, e.g. 11 */
+	
+	/* copy 11 bytes into a block of 10 ... */
+	/* this is an invalid write ! */
+	strcpy(str, "mrv string");
+	
+	/* printf looks fine, if we lucky to have an ended 0 */
+	/* reading the 11 char is an invalid read, out of bounds */
+	printf("str = %s\n\r", str);
+	
+	/* free the allocated memory */
+	free(str);
+	
+	return;
+}
+
+can run both examples many time and see no errors.
+
+might be bad:
+
+example 3:
+invalid read & write by strcpy
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+
+int main (void)
+{
+	/* NOTE: "mrv string" length is total 11:  10 chars + '\0' char */
+	
+	/* allocate the correct amount of memory for a string on the heap */
+	char *str1 = malloc(strlen("mrv string") + 1);
+	char *str2 = malloc(strlen("mrv string") + 1);
+	
+	/* copy a much bigger string into str1 */
+	/* this is an invalid write ! */
+	strcpy(str1, "mrv string mrv string");
+	
+	/* a correct copy into str2 */
+	strcpy(str2, "mrv string");
+	
+	/* printf of str1 looks fine, even we had an invalid write */
+	printf("str1 = %s\n\r", str1);
+	
+	/* printf of str2 */
+	printf("str2 = %s\n\r", str2);
+	
+	/* free the allocated memory */
+	free(str1);
+	free(str2);
+	
+	return;
+}
+
+now let's comment the copy into str2
+if str1, and str2 are adjacent blocks in memory, str1 overrun str2 and we still might think that everything is OK, Although we put nothing in str2...
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+
+int main (void)
+{
+	/* NOTE: "mrv string" length is total 11:  10 chars + '\0' char */
+	
+	/* allocate the correct amount of memory for a string on the heap */
+	char *str1 = malloc(strlen("mrv string") + 1);
+	char *str2 = malloc(strlen("mrv string") + 1);
+	
+	/* copy a much bigger string into str1 */
+	/* this is an invalid write ! */
+	strcpy(str1, "mrv string mrv string");
+	
+	/* a correct copy into str2 */
+	//strcpy(str2, "mrv string");
+	
+	/* printf of str1 looks fine, even we had an invalid write */
+	printf("str1 = %s\n\r", str1);
+	
+	/* printf of str2 */
+	printf("str2 = %s\n\r", str2);
+	
+	/* free the allocated memory */
+	free(str1);
+	free(str2);
+	
+	return;
+}
+
+example 4: 
+memory leak
+run with valgrind, then with valgrind --leak-check=yes
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#include <assert.h>
+
+int main (void)
+{
+	int i;
+	
+	/* allocate an integer on the heap */
+	int *ptr = malloc(sizeof(int));
+	
+	/* ptr is now uninitialized - it points to junk data */
+	
+	/* dereference ptr, to copy its junk into i variable on the stack */
+	i = *ptr;
+	
+	/* assert: check that i == 0, otherwise quit */
+	/* even if we use assert, we might still run successfully if the junk data is "luckily" 0 */
+	assert (i == 0);
+	
+	printf("if we are here, we are luck\n\r");
+	
+	/* free the allocated memory */
+	free(str);
+	
+	return;
+
+
+}
+
+explain about heap messages
+
+example 5: invalid free
+
+example 6:
+exceeding the stack size - local array
+exceeding the stack size by a recurrsion
+
+example 7: Nir - free memory from another thread
+
+
+
+
+
+to do:
+-v
+--track-origins=yes
+what is assert
+what's the difference between memory leak / overrun / buffer overflow - glisha, might cause to overrun
+
+write test program, each run - uncomment one test
+
+leaks considered less critical
+first handle memory corruptions
+
+try to run a leaky program with / without leak check = yes
+
+-Wall -Werror -std=c99

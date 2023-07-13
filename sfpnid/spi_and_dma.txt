@@ -1,0 +1,19 @@
+spi and dma in the kernel
+=========================
+
+user space
+ |
+ |
+ |
+ |
+ |
+kernel space 
+
+spidev
+.
+.
+mastetspi-stm32.c (is a dma slave)
+----------------------------------
+dmaengine
+---------------------------------
+stm32dma drivers

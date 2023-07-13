@@ -1,0 +1,19 @@
+&spi2 {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&spi2_pins_a>;
+	pinctrl-1 = <&spi2_sleep_pins_a>;
+	cs-gpios = <&gpiob 12 0>;
+	status = "okay";
+
+	/* barak: define spi connection for fpga slave */
+        fpga_data@0 {
+                compatible = "adva,spidev";
+                reg = <0>; /* CS #0 */
+                spi-max-frequency = <20000000>;
+		fw_upgrade = <0>;
+		spiread-gpios = <&gpioc 8 GPIO_ACTIVE_HIGH>;
+		devrstn-gpios = <&gpiob 14 GPIO_ACTIVE_LOW>;
+		fpga_reg_rst-gpios = <&gpioc 9 GPIO_ACTIVE_LOW>;
+		main_ss_en-gpios = <&gpiod 13 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
+        };
+};

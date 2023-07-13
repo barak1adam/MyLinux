@@ -1,0 +1,54 @@
+add the zip file to dist_packages
+add an entry to pkg.txt
+
+valgrind installation:
+----------------------
+
+To install from a tar.bz2 distribution:
+
+  4. Run ./configure, with some options if you wish.  The only interesting
+     one is the usual --prefix=/where/you/want/it/installed.
+
+  5. Run "make".
+
+  6. Run "make install", possibly as root if the destination permissions
+     require that.
+
+  7. See if it works.  Try "valgrind ls -l".  Either this works, or it
+     bombs out with some complaint.  In that case, please let us know
+     (see www.valgrind.org).
+
+Important!  Do not move the valgrind installation into a place
+different from that specified by --prefix at build time.  This will
+cause things to break in subtle ways, mostly when Valgrind handles
+fork/exec calls.
+
+
+The Valgrind Developers
+
+Next Gen:
+---------
+
+add the zip file to dist_packages
+
+add an entry to pkg.txt
+(leave it in comment. we will build it just if we need to)
+
+mkdir on the PC: /opt/valgridn (create the dir which specified in the valgrind/configure file)
+
+chown of /opt - to let us run make install not as sudo:
+
+chown -R `whoami`:`whoami` /opt/
+
+./buildone valgrind ---> output will be in opt/valgrind
+
+manually copy all output to build/dist/arm../opt/valgrind
+
+to run valgrind successfully, need to have also non-stripped c libs (especially the ld.so which is the dynamic linker, used by the programs to load other libraries)
+(build/dist/arm../lib):
+scripts/./pkginstall.sh libc 1
+
+check it: file ../dist/arm_msys_root/lib/libc.so
+
+
+

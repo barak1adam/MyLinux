@@ -1,0 +1,112 @@
+Done: 
+=====
+
+Recall and learn Yocto and OpenEbedded work flow
+
+Embedded Design Turorial (UG-1209): cover Vivado and Vitis, generate XSA file for ZCU102
+
+Learn Petalinux (UG-1144)
+
+Petalinux hands on - create a project for the ZCU102 (use the XSA file), build the SW
+
+Generate boot image and flash and boot from SDCARD (UG-1144: Partioning and Foramtting an SDCARD)
+
+Programming the BSP images with JTAG to ZCU102, cover all boot levels (UG-1144, UG-1182 for the EBV)
+
+Cover Vitis Tutorial (UG-1400) - started
+
+Get the real HW XSA file from US team and load it into Vivado
+
+Make sure US team is aligned and working with the same 2022 versions for the tools
+
+Cover UG-1144 - appendix petalinux project structure
+
+Cover UG-1144 - yocto features
+
+Yocto wiki tips: https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842475/PetaLinux+Yocto+Tips
+ 
+
+Tasks In-Progress:
+==================
+
+patch FSBL (source code, cfg fragments, dts fragments) and program it to the EVB with JTAG
+try both petalinux and bitbake commands
+
+patch PMU (source code, cfg fragments, dts fragments) and program it to the EVB with JTAG
+
+patch u-boot (source code, cfg fragments, dts fragments) and program it to the EVB with JTAG
+
+patch kernel (source code, cfg fragments, dts fragments) and program it to the EVB with JTAG
+
+try QEMU with bootlevel
+
+ug1144 chapter 9 - debugging with QEMU
+
+
+To DO tasks:
+=============
+Repeat Vivado XSA generation
+
+Vitis it is better for early development (Petalinux will be used later once all changes are done)
+
+Try Vitis Hello World, Zync DRAM tester (a docmuentation file inside) and the peripherals tester
+
+Try boot levels and JTAG programming with Vitis. Debug with Vitis
+
+Check the first uart console for Yotam
+
+Cover UG- 1144: Creating and Adding Custom Applications
+
+Cover UG-1144 build optimizations and devtool commands
+
+Cover UG-1144 - chapter 7, customizing the project
+
+Cover UG-1144 - appendix c, generating boot components
+
+Cover UG-1144 - chapter 10 - advanced configuations
+
+Try to change sstate cache and dl dir, do the wiki for "How to reduce build time using SSTATE CACHE"
+
+Try to pack/generate a bootable image with prebuilt or generated builds
+
+Vitis FSBL debug ! need size optimiazations for the OCM. not needed for u-boot running from the DDR
+
+
+hello programs on EVB:
+----------------------
+Learn Vitis bare-metal application FSBL + hello world app: it will be usable in the bringup
+
+Learn Vitis peripherals tests
+
+Add the same hello world to petalinux (meta-example)
+
+
+Load FPGA by FSBL
+------------------
+Load FPGA sample image
+
+
+Create petalinux new project for the real HW:
+---------------------------------------------
+Open xsa in vivado and try review all perphierials settings with Yotam
+
+Use the the XSA and rebuild petalinux with it
+
+
+AOS EDE
+--------
+Integrate BSP files to AOS EDE artifactory
+
+Integrate to AOS FS (advise China)
+
+More with QEMU
+---------------
+
+try QEMU to run the real project builds
+
+try QEMU to run AOS app by Ziki and Maoz
+
+
+Other tips
+-----------
+bringup guides - Arizon

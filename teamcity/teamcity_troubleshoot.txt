@@ -72,4 +72,6 @@ Need to investigate:
 1) go back with teamcity sources to work with SVN, and look what was configured for build.vcs.number.Os_OptiSwitchSvn parameter
 2) try to understand $app_ver
 
-
+roomba is accessible with ping but secured connection for DB is disallowed.
+==========================================================================
+open it by: sudo disable ufw

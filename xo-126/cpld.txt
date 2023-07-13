@@ -1,0 +1,9 @@
+AOS supports 2 NOR flashes to enale update
+The user can update the standby NOR, the CPLD blocks updates of the active one
+CPLD let you toggle between active / standby
+Once the boot is not completed successfully (for example becuse of issues upon writing/updating the boot SW to the standby), then a WD timer
+is expired and the boot will start from the other nor
+
+We simply dont support update of the NOR, so wd and toggling is not needed
+
+Usually they disable the wd in the u-boot code under LAST_STAGE_INIT, but in XO-126 I didnt even enable it in menuconfig.

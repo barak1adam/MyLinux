@@ -1,0 +1,275 @@
+
+setenv bootpartnum 5
+setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $bootargs craft=$baudrate"
+run setbootargs;
+setenv bootargs "$bootargs cs.0=/dev/mmcblk0p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk0p2"
+setenv ethaddr 3C:A7:2B:00:D8:18
+setenv ipaddr 10.32.8.200
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+tftpboot 0x00100000 /tftpboot/system.dtb
+
+ext2load mmc 0:$bootpartnum 0x00200000 kernel
+ext2load mmc 0:$bootpartnum 0x04000000 initramfs
+
+booti 0x00200000 0x04000000 0x00100000
+
+#load image and write it to emmc
+tftpboot 0x100 /tftpboot/xo126_disk_image.gz
+ZynqMP> gzwrite mmc 0 0x100 21a72cc1
+
+ZynqMP> 
+
+#mandatory commands for load and boot
+
+setenv bootpartnum 5
+#setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $extraargs  $bootargs craft=$baudrate"
+setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $bootargs craft=$baudrate"
+run setbootargs;
+setenv bootargs "$bootargs cs.0=/dev/mmcblk0p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk0p2"
+#setenv bootargs "$bootargs $append"
+#setenv bootargs "$bootargs sw.all=$actbank ecc=on"
+ext2load mmc 0:$bootpartnum 0x00200000 kernel
+ext2load mmc 0:$bootpartnum 0x04000000 initramfs
+ext2load mmc 0:$bootpartnum 0x00100000 xo126.dtb
+
+bootm 0x00200000 0x04000000 0x00100000
+
+#how to load and boot
+"bootdcmd=bootaos $local_bootaos_args\0"
+
+bootaos = 
+#define EOSBOOT_EMMC_A \
+    "run setbootargs;run boot_dpl;" \
+    "ext2load mmc 0:1 88000000 cs_script.uimg;" \
+    "source 88000000\0"
+
+boot_dpl = 
+if ext2load mmc 0:$bootpartnum 80200000 dpl-xg480.bin; then
+    fsl_mc apply dpl 80200000
+    setenv dpldone 1
+    echo load dpl-xg480 from /boot is successful
+else
+    setenv dpldone
+    echo load dpl-xg480 from /boot is failed
+fi
+
+cs_script.uimg = 
+
+setenv bootpartnum1 b
+if test "x$actbank" = "x1"; then
+    setenv bootpartnum $bootpartnum1
+else
+    setenv actbank 0
+    setenv bootpartnum $bootpartnum0
+fi
+ext2load mmc 0:$bootpartnum 88100000 boot_script.uimg
+source 88100000
+
+
+
+
+
+
+
+setenv ethaddr 3C:A7:2B:00:D8:18
+setenv ipaddr 10.32.8.200
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+
+tftpboot 0x00200000 /tftpboot/Image
+tftpboot 0x00100000 /tftpboot/system.dtb
+tftpboot 0x00100000 /tftpboot/xo126.dtb
+tftpboot 0x04000000 /tftpboot/rootfs.cpio.gz.u-boot
+tftpboot 0x04000000 /tftpboot/initramfs
+#booti 0x00200000 0x04000000 0x00100000
+
+tftpboot 0x04000000 /tftpboot/xo126_disk_image.gz
+234405888
+6FC60 size in blocks
+DF8C000 size in bytes
+
+
+mmc erase 0 80000
+gzwrite mmc 0 0x04000000 234405888
+gzwrite mmc 0 0x04000000 DF8C000
+
+
+Image 16140800 31525
+need to convert 31525 to HEX, u-boot mmc takes HEX 7B25
+mmc erase - takes multiplies of erase group
+erase group = 512 * 1024 = 0x80000
+
+Image
+mmc erase 0 80000
+tftpboot 0x00200000 /tftpboot/Image
+mmc erase 0 80000
+mmc write 0x00200000 0 7B25
+
+tftpboot 0x00100000 /tftpboot/system.dtb
+dtb 27572 53
+0x35
+
+30684 = 3b blocks
+
+mmc erase 8000 80000
+mmc write 0x00100000 8000 0x35
+
+ftpboot 0x04000000 /tftpboot/rootfs.cpio.gz.u-boot //9130
+ftpboot 0x04000000 /tftpboot/initramfs //6cc
+rootfs 19030107 37168
+0x9130
+mmc write 0x04000000 8100 0x9130
+mmc write 0x04000000 8100 0x6CC
+
+ramdisk rootfs
+5218467 Sep  2 13:12 ramdisk.cpio.gz.u-boot
+4FA0A3, 27D0
+mmc write 0x04000000 8100 27D0
+
+mmc dev 0
+mmc read 0x00200000 0 7B25
+mmc read 0x00100000 8000 0x35 0x3b
+mmc read 0x04000000 8100 0x6CC //maoz initramfs
+mmc read 0x04000000 8100 0x9130 //my initramfs
+mmc read 0x04000000 8100 0x27D0 //ramdisk
+booti 0x00200000 0x04000000 0x00100000
+
+
+
+
+
+
+sf write 0x08000000 0 0x400000
+
+tftpboot 0x3000000 /tftpboot/Image
+tftpboot 0x2A00000 /tftpboot/system.dtb
+tftpboot 0x2000000 /tftpboot/ramdisk.cpio.gz.u-boot
+booti 0x3000000 0x2000000 0x2A00000
+
+tftpboot 0x1000000 /tftpboot/image.ub
+bootm 0x1000000
+
+
+DTG:
+
+git checkout -b xilinx-v2020.1 xilinx-v2020.1
+
+Makefile clean - I removed
+
+rm -f instead of rm -r
+
+u-boot for qspi: 
+
+sf probe 1 0 0
+
+sf erase 0 0x400000
+
+/home/barak/Vitis/2022.1/bin/xsct -eval "source dow_BOOT.tcl;"
+
+======================================
+
+
+setenv ethaddr 3C:A7:2B:00:D8:18
+setenv ipaddr 10.32.8.200
+setenv serverip 10.32.8.145
+ping 10.32.8.145
+
+
+tftpboot 0x00200000 /tftpboot/Image
+tftpboot 0x00100000 /tftpboot/system.dtb
+tftpboot 0x04000000 /tftpboot/rootfs.cpio.gz.u-boot
+booti 0x00200000 0x04000000 0x00100000
+#tftpboot 0x10000000 /tftpboot/aos_initramfs.cpio.gz
+#booti 0x00200000 0x10000000 0x00100000
+
+===========================================
+
+#tftpboot 0x10000000 /tftpboot/board_dbg
+booti 0x00200000 0x04000000 0x00100000
+
+bootgen -image /home/barak/xilinx-zcu102-2022.1/images/linux/bootgen.bif -arch zynqmp -o /home/barak/xilinx-zcu102-2022.1/images/linux/BOOT.bin -w on 
+
+
+I am not sure how the DTS files are organized under DTG.
+
+I can't find for example gem3 pinctrl settings in any dtsi file under my_dts folder, and I don't see it is included  by the top DTS file.
+
+how comes?
+
+&pinctrl0 {
+	status = "okay";
+	gem3-default {
+		mux {
+			function = "ethernet3";
+			groups = "ethernet3_0_grp";
+		};
+
+		conf {
+			groups = "ethernet3_0_grp";
+		};
+
+		conf-rx {
+			pins = "MIO70", "MIO71", "MIO72", "MIO73", "MIO74",
+									"MIO75";
+		};
+
+		conf-tx {
+			pins = "MIO64", "MIO65", "MIO66", "MIO67", "MIO68",
+									"MIO69";
+		};
+
+		mux-mdio {
+			function = "mdio3";
+			groups = "mdio3_0_grp";
+		};
+		conf-mdio {
+			groups = "mdio3_0_grp";
+		};
+	};
+};
+
+
+Model: ZynqMP XG108
+Board: XG108(SH)
+PartNumber: 1078901081-01
+Net:   ZYNQ GEM: ff0e0000, phyaddr 18, interface rgmii
+eth0: ethernet@ff0e0000
+Autoboot in 3 seconds
+
+xilinx-zcu102-2022_1:~$ ls -la /dev/mmcblk0                                                                                                                                  
+brw-r--r--    1 root     root      179,   0 Dec 17 11:25 /dev/mmcblk0
+xilinx-zcu102-2022_1:~$ mknod /dev/mmcblk0p1 b 179 1                                                                                                                         
+mknod: /dev/mmcblk0p1: Permission denied
+xilinx-zcu102-2022_1:~$ sudo mknod /dev/mmcblk0p1 b 179 1 
+
+
+#define EOSBOOT_EMMC_B \
+    "run setbootargs;run boot_dpl;" \
+    "ext2load mmc 0:2 88000000 cs_script.uimg;" \
+    "source 88000000\0"
+
+
+setenv bootpartnum 5
+#setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $extraargs  $bootargs craft=$baudrate"
+setenv setbootargs "setenv bootargs ethaddr=$ethaddr panic=5  $bootargs craft=$baudrate"
+#setenv bootaos = "run setbootargs; ext2load mmc 0:1 88000000 cs_script.uimg; source 88000000"
+
+setenv bootaos = "run setbootargs; ext2load mmc 0:1 00200000 cs_script.uimg; source 00200000"
+run setbootargs;
+setenv bootargs "$bootargs cs.0=/dev/mmcblk0p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk0p2"
+#setenv bootargs "$bootargs $append"
+#setenv bootargs "$bootargs sw.all=$actbank ecc=on"
+ext2load mmc 0:$bootpartnum 0x00200000 kernel
+ext2load mmc 0:$bootpartnum 0x04000000 initramfs
+ext2load mmc 0:$bootpartnum 0x00100000 xo126.dtb
+
+bootm 0x00200000 0x04000000 0x00100000
+
+
+dumpimage -pX -o junk <path to image - for example the pak file>
+
+then tar junk:
+tar -tf ./junk

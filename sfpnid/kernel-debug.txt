@@ -1,0 +1,41 @@
+debugfs and clocks summary:
+============================
+
+build kernel with: 
+CONFIG_DYNAMIC_DEBUG=y
+CONFIG_DEBUG_FS=y
+
+mount -t debugfs none /sys/kernel/debug
+dmesg -n8
+
+for clock summary:
+
+echo "file drivers/clk/* +p" > /sys/kernel/debug/dynamic_debug/control
+cat /sys/kernel/debug/clk/clk_summary
+cat /sys/kernel/debug/clk/clk_summary | grep spi
+
+
+kernel dynamic debug (including during boot):
+https://wiki.st.com/stm32mpu/wiki/How_to_use_the_kernel_dynamic_debug
+
+
+kernel debug fs:
+https://wiki.st.com/stm32mpu/wiki/Debugfs
+
+# cat /sys/kernel/debug/clk/clk_summary | grep spi
+ spi6_k                               0        0        0           0          0     0  50000
+    qspi_k                            0        0        0   266500000          0     0  50000
+          spi3_k                      0        0        0    24487707          0     0  50000
+          spi2_k                      0        0        0    24487707          0     0  50000
+          spi1_k                      0        0        0    24487707          0     0  50000
+                spi5                  0        0        0   104072754          0     0  50000
+                spi4                  0        0        0   104072754          0     0  50000
+                spi1                  0        0        0   104072754          0     0  50000
+                spi3                  0        0        0   104072754          0     0  50000
+                spi2                  0        0        0   104072754          0     0  50000
+ spi5_k                               0        0        0           0          0     0  50000
+ spi4_k                               0        0        0           0          0     0  50000
+# cat /sys/kernel/debug/clk/clk_summary
+
+# ls /dev/spid*
+/dev/spidev0.0  /dev/spidev1.0

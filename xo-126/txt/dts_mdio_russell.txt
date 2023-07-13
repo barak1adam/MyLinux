@@ -1,0 +1,74 @@
+option 1: qphy and "adv,mdio" are under gem0
+============================================
+
+&gem3 {
+compatible = "cdns,zynqmp-gem", "cdns,gem";
+status = "okay";
+phy-handle = <&phy0>;
+pinctrl-0 = <&pinctrl_gem3_default>;
+phy0: ethernet-phy@18 {  reg = <0x18>;
+};
+
+};
+
+&gem0 {
+compatible = "cdns,zynqmp-gem", "cdns,gem", "adv,mdio";
+status = "okay";
+pinctrl-0 = <&pinctrl_gem3_default>;
+qphy0: ethernet-qphy@14 {    reg = <0x14>;    //compatible = "ethernet-phy-ieee802.3-c45";  };
+};
+
+option 2: qphy under gem3, only "adv,mdio" under gem0
+======================================================
+
+&gem3 {
+compatible = "cdns,zynqmp-gem", "cdns,gem";
+status = "okay";
+pinctrl-0 = <&pinctrl_gem3_default>;
+phy0: ethernet-phy@18 {  reg = <0x18>;
+};
+
+ qphy0: ethernet-qphy@14 {    reg = <0x14>;    compatible = "ethernet-phy-ieee802.3-c45";  };
+};
+
+&gem0 {
+compatible = "cdns,zynqmp-gem", "cdns,gem", "adv,mdio";
+status = "okay";
+};
+
+option 3: same like option 2, but mdio is a new node under gem0
+================================================================
+
+&gem3 {
+compatible = "cdns,zynqmp-gem", "cdns,gem";
+status = "okay";
+pinctrl-0 = <&pinctrl_gem3_default>;
+phy0: ethernet-phy@18 {  reg = <0x18>;
+};
+
+ qphy0: ethernet-qphy@14 {    reg = <0x14>;    compatible = "ethernet-phy-ieee802.3-c45";  };
+};
+
+&gem0 {
+compatible = "cdns,zynqmp-gem", "cdns,gem";
+status = "okay";
+mdio {          compatible = "adv,mdio";
+};
+};
+
+option 4 - keep using only gem3, "adv,mdio" just added
+working: /dev/mdio created, eth0 is working.
+=======================================================
+
+&gem3 {
+compatible = "cdns,zynqmp-gem", "cdns,gem", "adv,mdio";
+status = "okay";
+phy-handle = <&phy0>;
+pinctrl-0 = <&pinctrl_gem3_default>;
+phy0: ethernet-phy@18 {  reg = <0x18>;
+};
+
+ qphy0: ethernet-qphy@14 {    reg = <0x14>;    compatible = "ethernet-phy-ieee802.3-c45";  };
+
+};
+

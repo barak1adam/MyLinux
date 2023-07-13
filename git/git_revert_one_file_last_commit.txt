@@ -1,0 +1,5 @@
+how to revert cahnges to one file in the last commit?
+=======================================================
+git reset HEAD~1 configs/stm32mp157c_dk2_sfpnid_defconfig
+git checkout configs/stm32mp157c_dk2_sfpnid_defconfig
+git commit --amend 

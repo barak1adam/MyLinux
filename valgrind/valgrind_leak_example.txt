@@ -1,0 +1,56 @@
+my exe name is: valg_no_free
+-----------------------------
+
+1)run valgrind without the --leak-check=full. 
+we just see that we had a leak, no details:
+
+# valgrind valg_no_free                     
+==1063== Memcheck, a memory error detector
+==1063== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==1063== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==1063== Command: valg_no_free
+==1063== 
+==1063== 
+==1063== HEAP SUMMARY:
+==1063==     in use at exit: 16 bytes in 1 blocks
+==1063==   total heap usage: 1 allocs, 0 frees, 16 bytes allocated
+==1063== 
+==1063== LEAK SUMMARY:
+==1063==    definitely lost: 16 bytes in 1 blocks
+==1063==    indirectly lost: 0 bytes in 0 blocks
+==1063==      possibly lost: 0 bytes in 0 blocks
+==1063==    still reachable: 0 bytes in 0 blocks
+==1063==         suppressed: 0 bytes in 0 blocks
+==1063== Rerun with --leak-check=full to see details of leaked memory
+==1063== 
+==1063== For counts of detected and suppressed errors, rerun with: -v
+==1063== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+# 
+
+2)run valgrind with the --leak-check=full. 
+here are the leak details:
+# valgrind --leak-check=full ./valg_no_free                     
+==1060== Memcheck, a memory error detector
+==1060== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==1060== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==1060== Command: ./valg_no_free
+==1060== 
+==1060== 
+==1060== HEAP SUMMARY:
+==1060==     in use at exit: 16 bytes in 1 blocks
+==1060==   total heap usage: 1 allocs, 0 frees, 16 bytes allocated
+==1060== 
+==1060== 16 bytes in 1 blocks are definitely lost in loss record 1 of 1
+==1060==    at 0x4838328: malloc (vg_replace_malloc.c:299)
+==1060==    by 0x846F: main (valgrind_no_free.c:19)
+==1060== 
+==1060== LEAK SUMMARY:
+==1060==    definitely lost: 16 bytes in 1 blocks
+==1060==    indirectly lost: 0 bytes in 0 blocks
+==1060==      possibly lost: 0 bytes in 0 blocks
+==1060==    still reachable: 0 bytes in 0 blocks
+==1060==         suppressed: 0 bytes in 0 blocks
+==1060== 
+==1060== For counts of detected and suppressed errors, rerun with: -v
+==1060== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+# 

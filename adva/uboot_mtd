@@ -1,0 +1,10 @@
+MRV>> mtdparts
+
+device nand0 <Numonyx0>, # parts = 6
+ #: name                        size            offset          mask_flags
+ 0: boot1               0x00100000      0x00000000      0
+ 1: kernel1             0x00300000      0x00100000      0
+ 2: other1              0x07c00000      0x00400000      0
+ 3: boot2               0x00100000      0x08000000      0
+ 4: kernel2             0x00300000      0x08100000      0
+ 5: other2              0x07c00000      0x08400000      0

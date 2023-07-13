@@ -1,0 +1,112 @@
+aos-ne-bootloader - 
+==================
+a generic ADVA boot loader repo
+projects have folders with thier u-boots for different platforms
+for aflex there is u-boot-xlnx as cloned from xilinx. vanilla, no changes.
+
+it has also common and components folders for ADVA specific code, and build scripts.
+
+f8-bootloader-aflex - 
+==================== 
+aflex specific code that is overlaying that genereic ADVA repo.
+this is the one that its Makefile is running by the build.
+it runs python scripts to connect itself to the generic ADVA repo above
+
+it holds:
+ a dts under arch/...
+ board file
+ defconfig
+ procject h file which has extra settings to the defconfig (aflex.h)
+ 
+ CONFIG_EXTRA_ENV_SETTINGS - used if ENV blob is not found on NOR. "emergency" only, should not happen
+ 
+ CPLD selects which NOR is active
+ 
+ aosboot selects which SW bank to load A or B. decision is based on inventory that is being read by i2c and holds the flag which bank is the active.
+ 
+ under std u-boot repo, there is a tool mkenvimage that takes a txt file as input (like the dump of printenv) and convert it to env image blob
+ 
+ then Michal has s generate_bootimg.sh script that takes this blob and concatenates this blob to the bootloader BIN file generated with bootgen(bif).
+ together a final image is generated that includes BIN + env blob and it can be programmed to the NOR with u-boot SF commands.
+ 
+ /cs pratition holds cs_script.uimg
+ 
+ complete from Maoz the content of the scripts and when they get packed to uImg format.
+ 
+xo126-bootloader:
+=================
+
+my u-boot board/xilinx/common/*, board/xilinx/zynqmp/* -------------> aos-ne-bootloader/.../board/adva/xo-126
+f8-bootloader-aflex/source ------------> aos-ne-bootloader/.../board/adva/aflex
+aos-ne-bootloader/.../board/adva/common - aos common
+ 
+for xo-126:
+===========
+bootcmd = bootaos
+bootaos - read inventory, set $actbank. then $actbank is used by sw.all=$actbank
+
+bootaos code: selects eosboot_a or eosboot_b
+eosboot_a/b - run cs_script for the selected cs partition.
+
+exmaple:
+eosboot_a=run eosboot_emmc_a
+eosboot_b=run eosboot_emmc_b
+eosboot_emmc_a=run setbootargs;run boot_dpl;ext2load mmc 0:1 88000000 cs_script.uimg;source 88000000
+eosboot_emmc_b=run setbootargs;run boot_dpl;ext2load mmc 0:2 88000000 cs_script.uimg;source 88000000
+
+cs_script: 
+is then test the $actbank and set bootpart to 5 or b, calls boot script from 5 or b
+boot script set sw.all to $actbank in bootargs (along with cs.0 and cs.1) and boot the system with intiramfs.
+initramfs uses these bootargs to load the proper bank of SW partitions as listed in cs_tab.
+
+
+NOR Flash and CPLD
+==================
+
+CPLD protects the active NOR, so we can write only to the standby NOR.
+These active / standby has nothing related to the active SW banks logic, it's only the CPLD.
+CPLD registers are memory mapped
+in aos-ne-bootloader repo, under tools, there is code to access the CPLD regisgers from Linux.
+CPLD watchdog - triggers the other NOR if the active is buggy and not booting, that's why we have 2 NOR, one will backup the other.
+
+CPLD wikipage:
+https://polarion.advaoptical.com/polarion/#/project/WDM_F8_Dev/wiki/Tools/cpld_uio_tool
+
+Inventory (EEPROM) fields:
+==========================
+it has 4 pages of 256B each. each page has its own i2c address
+
+generic - the actual MAC address
+
+ab = autoboot
+ab type - txt (1) or md5sum (2)
+ab passwd - it is the u-boot interrupt keys
+
+access level - level for debug commands (not related at all to ab) :
+there are 4 levels:
+0- not restricted
+1-restricted
+others are not in use
+default is 1
+
+
+debug command - is using / protected by the level password.
+you write debugon, then the level password.
+
+2 baudrates - not relevant to xo126, the F8 had 2 serial ports.
+
+example:
+
+Bootloader Static Data
+    accessLvl      : 1
+    abPasswdType   : 1
+    abPasswd       : 
+    lvlPasswdType  : 1
+    lvlPasswd      : aos
+    baud1          : 115200
+    baud2          : 115200 Bootloader Variable Data
+    active         : 1
+    valid          : 7
+
+
+

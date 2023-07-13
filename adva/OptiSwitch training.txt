@@ -1,0 +1,253 @@
+training final:
+--------------
+
+SW structures:
+--------------
+2 SW units
+
+each contain packates (zip, source, git)
+
+A package can produce a binary that will be later loaded into the device file system
+A package can produce a library\header that will be used by another package. Hence, the order in which packages are built is important.
+
+
+2 source folders and The BUILD ENV folder !!!!!!
+
+
+Bit Bucket - how to clone 2 source folders
+
+
+Theory of operation
+---------------------
+
+A complete build process consists of 3 steps:
+1)packages processing / build (build dir)
+2)install the fs (used for NFS / ver file) (root_fs dir)
+3)creating the ver file
+(The build system is a collection of binaries and scripts that combine together to produce a “ver” file (like bundle))
+
+usually dist is built just one time.
+
+usually:
+
+building all including the dist: mkall !
+(option: building just the dist by tricks or update_dist)
+
+building master os packages using buildone, pkginstall or onemk to do both!
+
+
+Set up the BUILD ENV
+---------------------
+
+Set up the Build ENV and explain about the INI files
+
+Setup.sh creates the build environment based on a mandatory manifest file name. The script will create
+the directory structure and will copy the necessary files and toolchain required to compile the distribution
+and  MasterOS.
+
+Note that the MasterOS code itself is not copied at this stage to the directory tree. 
+
+example: run setup
+
+differneces between build envs: kernel toolchains script and all stuff relavant to that product.
+
+(optional: show a compare between build dirs)
+
+
+Manifest File Name Structure:
+The manifest file describes the build environment created by the setup process.
+Some predefined manifest file exists and can be used for creating simple builds; however, the user can modify the manifest file if changes are required.
+The manifest file is a “windows-like” ini files consists of section, keys and values.
+The setup script will parse those values and will create the build environment accordingly.
+
+Sample Manifest file
+
+
+Show the manifest files table
+
+
+do not check them in !
+
+
+different build envs are created based on the same dist source.
+copy different kernel, toolchains and also use "overrides"
+install_overrides - overriding files and folders according to the platform
+
+
+going into the Build ENv:
+-------------------------
+
+explain about the directories and files
+
+build directory structure
+ls -l
+
+cd to dist
+ls -l
+
+don't confuse bin etc ... with the final folders in root fs. these folder are used just for build.
+
+know arm_msys_root
+know build...
+
+build is some "tmp" location for outputs, libs are created in root fs according to make or build/install files.
+
+ls -l arm_msys_root
+ls -l build...
+
+how sources are built:
+---------------------
+1)Source is compiled according to the command line described in a file called /install/<package name>/build/compile.
+2)copy binaries / libs / headers inside the BUILD dir, for BUILD only:
+if a file called install/<package name>/build/install exist, files listed in this file will be copied according to the install file instruction.
+
+how sources are install:
+-----------------------
+1) installed into root-fs !
+Build output are "installed" ( distributed to the build system ) usually by running an install script under /install/<package name>/build/install.
+do not confuse with BUILD install. 
+
+
+find . -name "install" -type f
+find . -name "compile" -type f
+
+find . -name "install" -type f | grep build/install
+
+most of the time we use buildone (all files are built)
+-c for clean
+-b for incremenatal build
+
+after all packages are built into the BUILD DIR, we are ready to install all of them into the root fs which is the base for NFS/ver file
+
+important files to know under scripts:
+--------------------------------------
+
+“config” – export system variables that will be populated do all scripts. ( for example $BUILD_DIR = /home/mrv/build_version )
+
+“pkg” – This important file contains a mapping between a module logical name ( iptables for ex ) to its tarball ( iptable2-4.7.tar.gz2 for ex )
+
+“apps_pkgbuild” – contains the list of router related software to build during step 1
+
+“apps_pkginstall” – contains a list of router related software to be installed during file-system creation
+
+“dist_pkgbuild” - contains the list of Linux distribution related software to build during build step ( step 1 )
+
+“dist_pkginstall” – contains a list of Linux distribution related software to be installed during file-system creation step (step 2)
+
+
+The following scripts can be found under /scripts folder, scripts will be explained in more details in following chapters:
+
+“mkall.sh” – This script is the master script for building the entire software.
+
+“buildone.sh” – building ( step 1) a single package , invokes “pkgbuild.sh”
+
+“pkginstall.sh” – installing a single package ( step 2) .
+
+“install.sh” – installing ( step 2 ) all the Linux Distribution\Router software packages
+
+“build.sh” - building ( step 1 ) all the Linux Distribution\Router software packages
+
+
+important scripts USAGE and flags:
+-----------------------------------
+mkall.sh: main script for creating optiswitch target image
+
+usage:
+-D - rebuild the dist first. no other flags are set, will make all sources including pullinng the latest router, but ensure dist rebuild first.	
+-N - does not check out router code from git. if not set sources are pulled automatically into BUILD.
+-L - specify router external location
+-I - do the install only
+-o + build switch - build options for each package:
+	ou - continue from last failure, oc - clean ob- build current sources without unzip / patches
+-b - build flags, for example -b vrf
+-G - do not strip symbols while install. same like calling pkginstall 1 for each pkg. not ensures -g (like calling install -s)
+-S - to specif an explicit NFS path
+
+more on -L:
+-----------
+working with router at external direcotoy can be flexible for worrking on multiples platforms builds
+Note:
+editing is done on router git
+debugging on build dir
+keep debugging after buildone to keep sync
+
+you might want to work on the same folder, then you cannot reuse the router code, need to pull it to each build env.
+
+
+buildone.sh – build a single package
+package name :as appears in "pkg" mapping file.
+Important: default is rebuild and override sources !
+
+-u : use source code from build directory without untaring the compressed package 
+ -p : do not apply patches from install/<package name>/build/patches
+ -q : be verbose
+ -c : run make clean or execute "clean" script if available 
+ -k : when building kernel, set this when manually modifying .config file. 
+
+
+build.sh – build distribution or MasterOS without installing and creating image:
+
+usage:
+ -c  : Continue from last failing module. Use it when fixing a module that failed to compile, continue from  
+ that point saves time.
+ -b : Build both distribution and both MasterOS
+ -d : build distribution only.
+ -a : build MasterOS only 
+
+install.sh – creates file-system from $BUILD_DIR outputs. 
+ -b : Install Build both distribution and MasterOS
+ -d : install distribution only.
+ -a : install MasterOS only 
+ -s : do not strip debug symbols from binaries, use this option when debugging with GDB
+
+
+pkginstall.sh – install a single package into the file-system 
+important flag is 1
+
+when need to build all packages because of dependencies:
+-./mkall.sh -N -ob  - not checkout code, build again all current code
+-onemk.sh all
+
+
+note that c is used for clean or continue, dont confuse.
+
+
+useful build command line examples:
+----------------------------------
+ - in the wiki
+
+
+show the versions folder:
+--------------------------
+explain what is in the folder.
+
+
+save time:
+-----------
+update dist
+
+
+change code, commit, push
+
+
+u-boot
+--------
+used to burn SW or configure ramboot / nfs.
+
+setenv - simple
+
+
+bootcmd decide if work with nfs or ramboot
+if ramboot, need to flash the SW:
+by u-boot
+or by CLI upgrade
+
+show:
+-----
+burn sw from u-boot
+
+boot and burn it by upgrade
+
+set nfs + exports
+
+bootmode

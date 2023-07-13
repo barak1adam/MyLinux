@@ -1,0 +1,23 @@
+Device Tree files - how to compile and what to compare
+======================================================= 
+
+#to get the DTS out of the DTB:
+dtc -I dtb -O dts u-boot.dtb > /tmp/u-boot.dts
+
+#my DTS includes DTSI files. DTC generates a complete final file
+#these can be compared
+#examples
+/tmp/u-boot-xlnx/arch/arm/dts/.zynqmp-zcu102-rev1.0.dtb.dts.tmp
+.xg108.dtb.dts.tmp
+
+cd ~/u-boot-2019.01-adva
+bcompare ./arch/arm/dts/.xg108.dtb.dts.tmp /tmp/u-boot-xlnx/arch/arm/dts/.zynqmp-zcu102-rev1.0.dtb.dts.tmp &
+
+
+#bootlin
+https://bootlin.com/pub/conferences/2013/elce/petazzoni-device-tree-dummies/petazzoni-device-tree-dummies.pdf
+
+#xilinx link
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842279/Build+Device+Tree+Blob#BuildDeviceTreeBlob-RelatedLinks
+
+(they have another method to compare dtbs)

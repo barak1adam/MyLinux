@@ -1,0 +1,35 @@
+stuff I mostly used yesterday to work with the u-boot:
+
+#u-boot recipe
+$/home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-core/recipes-bsp/u-boot/u-boot-xlnx_2022.1.bb
+
+#working dir
+$/home/barak/xilinx-zcu102-2022.1/build/tmp/work/xilinx_zcu102-xilinx-linux/u-boot-xlnx/v2021.01-xilinx-v2022.1+gitAUTOINC+c50d6c48f4-r0
+
+#I updated the recipe to skip the deletion of the working dirs and sources
+do_rm_work[noexec] = "1"
+
+#found the dts for modifications
+/home/barak/xilinx-zcu102-2022.1/build/tmp/work/xilinx_zcu102-xilinx-linux/u-boot-xlnx/v2021.01-xilinx-v2022.1+gitAUTOINC+c50d6c48f4-r0/gi
+t/arch/arm/dts/zynqmp-zcu102-revA.dts
+
+#clean
+petalinux-build -c u-boot -x distclean
+
+#build verbose, use -v for bitbake verbose
+$petalinux-build -c u-boot
+
+#configure u-boot
+$petalinux-config -c u-boot
+
+#change sources manually in the source folder, then complile
+$petalinux-build -c u-boot -x do_compile -f
+
+#install the u-boot image to images/linux
+$petalinux-build -c u-boot -x do_deploy -f
+
+#load the updated uboot image by jtag
+petalinux-boot --jtag --u-boot -v
+
+#when I changed the u-boot configuration I found the config fragments in the working directory of u-boot. 
+#not sure what is update in /home/barak/xilinx-zcu102-2022.1/project-spec/meta-user/

@@ -1,0 +1,46 @@
+vtysh_osm.c:
+
+upgrade_ftp_fpga_cmd
+	vtysh_set_upgrade_state_in_db
+	  build command string with user args: /usr/local/nbase/bin/copy_ethoam_fpgaver.sh //this script makes the download
+	  
+	  res = pal_snprintf (buf, sizeof(buf), "%s %s %s %s %s %s %s", UPGRADE_FPGA_COMMAND, upgrade_proto,
+                      remote_server, remote_dir, remote_file, username, password);
+
+	  res = vtysh_execute_command_without_timeout(vty, buf, __FILE__, __LINE__); // "Upgrade ftp fpga/cpld FTP-SERVER ..."
+	  
+	  now file is downloaded, start programming //what is the indication that it is completed?
+	  
+
+  
+  sTapi_main:
+  PSS_eth_oam_group
+  UID_PSS_MGMT_FPGA_UPGRADE
+
+	sTapi_mgmt_cpld.c:
+	sTapiMgmtCpld_upgrade_version_manager
+	sTapiMgmtCpld_upgrade_mgmt_fpga_version
+	    //thread is created, then return
+	    status = osTaskCreate("pssMgmtFPGAupdVer", 5, 32768,
+			  sTapiMgmtCpld_upgrade_mgnt_fpga_task, &fpga_ver->fpga_firmware_ver, &taskMgmtFPGAdownloadFWversion);
+
+	sTapiMgmtCpld_upgrade_mgnt_fpga_task --->  directc job
+	
+	what is happening when done?
+	
+
+
+other:
+PSS_send_FPGA_upgrade_event ?
+sent from pss/mainDrv/src/prestera/sTapi/sTapi_fpga.c
+handled in router/rtrmon/rtrd.c
+
+upgrade.c
+
+SFP+NiD fpga upgrade:
+
+$cd /tmp
+
+$ftpget...
+
+$direc

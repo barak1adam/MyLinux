@@ -1,0 +1,20 @@
+xg-300:
+
+linux rsyslogd is used.
+
+
+
+os-v rsyslog - daemon written in adva to handle UID requests for syslog.
+wrapper for linux rsyslog
+it is written in rsyslog.c, but the daemon name is ssyslog.
+upon installation it is installed in router install file as ssyslog (renamed)
+
+
+
+init.d rsyslog.sh script:
+invoking linux rsyslogd with its config file
+
+
+
+initd:
+invoking the ssyslog wrapper

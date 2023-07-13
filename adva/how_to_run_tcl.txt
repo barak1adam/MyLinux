@@ -1,0 +1,48 @@
+How to run Oleg scripts:
+=======================
+
+Only for the first time - install :
+
+sudo apt-get install tclreadline 
+echo "if {\$tcl_interactive} {package require tclreadline; ::tclreadline::Loop}" >> ~/.expect.rc 
+
+
+
+
+1. go to expect folder (router/scripts/expect). I coppied it to ~/mrv_dev
+2. run ./Remote_RunTclCLI_Chassis 10.100.1.200
+3. to run my script: source my_script.tcl
+4. since source is like copy+paste to the tcl command line, need to 
+decrease font size before
+5. to exit tcl command line, type "CTRL+D"
+
+
+For Z4806:
+==========
+cd ./platform/open_clovis/OP9500/src/extras/scripts/expect
+./Remote_RunTclCLI_Chassis 10.100.1.244
+source /home/barak/mrv_dev/z4806/platform/open_clovis/OP9500/src/extras/scripts/expect/scenarios/AgemaControlledUpgrade.tcl
+AgemaControlledUpgrade  "19.1.1.867.bundle"  "172.21.11.14"  "/home/barak/mrv_dev/tmp_local_build"  barak  123456
+AgemaControlledUpgrade  "19.1.1.881.bundle"  "172.21.11.14"  "/home/barak/Downloads"  barak  123456
+AgemaControlledUpgrade  "18.1.2.10850.bundle"  "172.21.9.3"  "/home/nbase/Z4806/image/18.1.2"  nbase nbase
+CTRL + d to exit tcl
+
+
+Oleg:
+----
+files organization and content
+engine vs regression engine
+how to run to multiple devices
+integration to agema
+tests examples
+how a test succeeds or fails (1 for success, 0 for failure)
+go over runall.tcl
+pages 43, 49
+understand the oam example:
+	configure master DUT
+	configure slave DUT
+	run a test
+	clean master and slave DUTs
+	return a result
+plan the VRRP test
+team city

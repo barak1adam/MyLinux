@@ -1,0 +1,53 @@
+BR2_EXTERNAL_OSV_PATH
+
++BR2_ROOTFS_DEVICE_TABLE="$(BR2_EXTERNAL_OSV_PATH)/device_table.txt"
+
+barak@barak-OptiPlex-7020:~/mrv_dev/sfp+nid/os-v$ cat device_table.txt
+# See package/makedevs/README for details
+#
+# This device table is used to assign proper ownership and permissions
+# on various files. It doesn't create any device file, as it is used
+# in both static device configurations (where /dev/ is static) and in
+# dynamic configurations (where devtmpfs, mdev or udev are used).
+#
+# <name>				<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
+/dev					d	755	0	0	-	-	-	-	-
+/tmp					d	1777	0	0	-	-	-	-	-
+/etc					d	755	0	0	-	-	-	-	-
+/root					d	700	0	0	-	-	-	-	-
+/var/www				d	755	33	33	-	-	-	-	-
+/etc/shadow				f	600	0	0	-	-	-	-	-
+/etc/passwd				f	644	0	0	-	-	-	-	-
+/etc/network/if-up.d			d	755	0	0	-	-	-	-	-
+/etc/network/if-pre-up.d		d	755	0	0	-	-	-	-	-
+/etc/network/if-down.d			d	755	0	0	-	-	-	-	-
+/etc/network/if-post-down.d		d	755	0	0	-	-	-	-	-
+# uncomment this to allow starting x as non-root
+#/usr/X11R6/bin/Xfbdev		     	f	4755	0	0	-	-	-	-	-
+/usr/bin/sudo				f	4755	0	0	-	-	-	-	-
+/etc/sudo.conf				f	544	0	0	-	-	-	-	-
+
+  
+
+some notes left during sudo integration:
+
+define SUDO_INSTALL_TARGET_CMDS
+        install -m 0555 -D $(@D)/plugins/sudoers/visudo $(TARGET_DIR)/usr/sbin/visudo
+        fakeroot install -o root -m 0440 -D $(@D)/plugins/sudoers/sudoers $(TARGET_DIR)/etc/sudoers
+        install -m 4555 -D $(@D)/src/sudo $(TARGET_DIR)/usr/bin/sudo
+endef
+
+
+
+
+#define SUDO_PERMISSIONS
+##	/home/barak/mrv_dev/sfp+nid/buildroot/output/host/bin/makedevs /usr/bin/sudo f 4755 0 0 - - - - -
+##	#echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_FULL_DEVICES_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+#	$(HOST_DIR)/bin/makedevs -d /home/barak/mrv_dev/sfp+nid/buildroot/sudo_table.txt $(TARGET_DIR)
+#
+#
+#endef
+
+
+
+  

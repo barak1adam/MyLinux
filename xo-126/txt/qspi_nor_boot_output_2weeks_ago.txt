@@ -1,0 +1,88 @@
+QSPI boot 2 weeks ago
+===================== 
+
+Xilinx Zynq MP First Stage Boot Loader 
+Release 2022.1   Jul 21 2022  -  18:00:23
+MultiBootOffset: 0x0
+Reset Mode      :       System Reset
+Platform: Silicon (4.0), Cluster ID 0x80000000
+Running on A53-0 (64-bit) Processor, Device Name: XCZU17EG
+Processor Initialization Done 
+================= In Stage 2 ============ 
+QSPI 24bit Boot Mode 
+QSPI is in single flash connection
+QSPI is using 4 bit bus
+FlashID=0xEF 0x60 0x16
+WINBOND 32M Bits
+Multiboot Reg : 0x0 
+QSPI Reading Src 0x0, Dest FFFF0040, Length EC0
+.Image Header Table Offset 0x8C0 
+QSPI Reading Src 0x8C0, Dest FFFE2028, Length 40
+.*****Image Header Table Details******** 
+Boot Gen Ver: 0x1020000 
+No of Partitions: 0x6 
+Partition Header Address: 0x440 
+Partition Present Device: 0x0 
+QSPI Reading Src 0x1100, Dest FFFE2068, Length 40
+.QSPI Reading Src 0x1140, Dest FFFE20A8, Length 40
+.QSPI Reading Src 0x1180, Dest FFFE20E8, Length 40
+.QSPI Reading Src 0x11C0, Dest FFFE2128, Length 40
+.QSPI Reading Src 0x1200, Dest FFFE2168, Length 40
+.QSPI Reading Src 0x1240, Dest FFFE21A8, Length 40
+.Initialization Success 
+======= In Stage 3, Partition No:1 ======= 
+UnEncrypted data Length: 0x5A81 
+Data word offset: 0x5A81 
+Total Data word length: 0x5A81 
+Destination Load Address: 0xFFDC0000 
+Execution Address: 0xFFDD0F18 
+Data word offset: 0x9900 
+Partition Attributes: 0x836 
+QSPI Reading Src 0x26400, Dest FFDC0000, Length 16A04
+.Partition 1 Load Success 
+======= In Stage 3, Partition No:2 ======= 
+UnEncrypted data Length: 0x247 
+Data word offset: 0x247 
+Total Data word length: 0x247 
+Destination Load Address: 0xFFDDA740 
+Execution Address: 0x0 
+Data word offset: 0xF390 
+Partition Attributes: 0x836 
+QSPI Reading Src 0x3CE40, Dest FFDDA740, Length 91C
+.Partition 2 Load Success 
+======= In Stage 3, Partition No:3 ======= 
+UnEncrypted data Length: 0x100 
+Data word offset: 0x100 
+Total Data word length: 0x100 
+Destination Load Address: 0xFFDDF6E0 
+Execution Address: 0x0 
+Data word offset: 0xF5E0 
+Partition Attributes: 0x836 
+QSPI Reading Src 0x3D780, Dest FFDDF6E0, Length 400
+.PMU Firmware 2022.1    Apr 11 2022   09:29:50
+PMU_ROM Version: xpbr-v8.1.0-0
+Partition 3 Load Success 
+======= In Stage 3, Partition No:4 ======= 
+UnEncrypted data Length: 0x31E8 
+Data word offset: 0x31E8 
+Total Data word length: 0x31E8 
+Destination Load Address: 0xFFFEA000 
+Execution Address: 0xFFFEA000 
+Data word offset: 0xF6E0 
+Partition Attributes: 0x117 
+QSPI Reading Src 0x3DB80, Dest FFFEA000, Length C7A0
+.Partition 4 Load Success 
+======= In Stage 3, Partition No:5 ======= 
+UnEncrypted data Length: 0x547C6 
+Data word offset: 0x547C6 
+Total Data word length: 0x547C6 
+Destination Load Address: 0x10080000 
+Execution Address: 0x10080000 
+Data word offset: 0x128D0 
+Partition Attributes: 0x114 
+QSPI Reading Src 0x4A340, Dest 10080000, Length 151F18
+.Partition 5 Load Success 
+All Partitions Loaded 
+================= In Stage 4 ============ 
+Protection configuration applied
+Running Cpu Handoff address: 0xFFFEA000, Exec State: 0

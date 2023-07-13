@@ -1,0 +1,120 @@
+Valgrind covers the following issues:
+------------------------------------
+allocation of wrong amount of memory
+un-initialized variables
+writing before or after a buffer  bounds
+multiple free
+allocating stack memory over the stack size
+memory leaks - allocating memory and forgetting to free...
+
+
+results:
+--------
+crashes
+junk values far from the original mistake
+
+valgrind runs on the binary, source code is not needed !
+just make sure binary is up to date.
+
+takes sometime to start  - some wrappers are inserted into the binary
+
+Valgrind drawbacks:
+------------------
+
+• Does not perform bounds checking on static arrays
+(i.e., memory allocated on the stack)
+• Only checks programs dynamically -- May report no
+errors on a particular input set although the program
+contains bugs
+• Consumes more memory (~2x)
+• Slows down the programs (10x and more)
+• Optimized binaries can cause Valgrind to wrongly
+report uninitialized value errors 
+
+How to run?
+------------
+
+1) add -g to the Makefile
+compile with -Wall -Werror to get as much info as possible by the compiler
+(-Wall: enale all warnings -Werror: a warning is an error
+-g - for debug symbols, to let valgrind give us meaningful output (the exact source file and line)
+
+2)pkginstall.sh my_package 1 (do not strip)
+
+3) cd /opt/valgrind/bin
+
+4)./valgrind vtysh
+
+
+
+The big problem which Valgrind covers:
+--------------------------------------
+programs can compile perfect (no errors, no warnings)
+program can even run normally due to some good luck.
+but still memory issues might be still there...
+do not believe the statistics. A crash is a crash !
+
+
+
+The Valgrind output:
+--------------------
+source line
+what was the problem
+memory addresses involved
+
+The Valgrind leak messages:
+---------------------------
+"Still reachable". A start-pointer or chain of start-pointers to the block is found.
+Since the block is still pointed at, the programmer could, at least in principle, have freed it before program exit.
+"Still reachable" blocks are very common and arguably not a problem. So, by default, Memcheck won't report such blocks individually.
+
+"Definitely lost". This means that no pointer to the block can be found.
+The block is classified as "lost", because the programmer could not possibly have freed it at program exit, since no pointer to it exists.
+This is likely a symptom of having lost the pointer at some earlier point in the program. Such cases should be fixed by the programmer.
+
+"Indirectly lost". This means that the block is lost, not because there are no pointers to it, but rather because all the blocks that point to it are themselves lost.
+For example, if you have a binary tree and the root node is lost, all its children nodes will be indirectly lost.
+Because the problem will disappear if the definitely lost block that caused the indirect leak is fixed, Memcheck won't report such blocks individually by default.
+
+"Possibly lost". This means that a chain of one or more pointers to the block has been found, but at least one of the pointers is an interior-pointer.
+This could just be a random value in memory that happens to point into a block, and so you shouldn't consider this ok unless you know you have interior-pointers.
+general indicates leaking memory – fix it!
+
+
+
+Tips!!!!!!!!!!
+--------------
+1) never ignore valgrind messages
+
+2)leaks considered less critical
+first handle memory corruptions
+
+3)understand the output
+
+
+useful options:
+---------------
+-v: verbose (show supressed errors)
+--log-file=filename
+--help
+--help-debug: Print help command plus debugging option
+--quiet: Show only the error message
+--version: Show version
+--num-callers=<number>: Show <number> callers in stack traces
+--gen-suppressions=no|yes|all
+
+Useful Options for Memcheck
+---------------------------
+--leak-check=yes (it is also the default tool)
+--leak-check=yes|no|summary|full
+--showreachable=yes: Print some information about blocks of memory
+not deallocated but which have references.
+–leak-resolution=low|med|high: 
+If the option low is enabled each single message
+will print only the first time it will be matched in
+leak stack traces. High prints the same message for
+each occurrence.
+--track-origins=no|yes: Show origins of undefined values or not 
+
+
+

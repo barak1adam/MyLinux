@@ -1,0 +1,22 @@
+to signal between threads of the same process:
+----------------------------------------------
+
+pthread_kill, sigwait
+
+https://pubs.opengroup.org/onlinepubs/009696899/functions/pthread_sigmask.html
+
+https://docs.oracle.com/cd/E19455-01/806-5257/gen-23/index.html
+
+to signal between the kernel and user space:
+---------------------------------------------
+
+system calls, ioctl, proc filesystem or netlink socket.
+
+system and ioctls are simple but on the direction of user to kernel only.
+
+netlink let's the kernel initiate messages and has other advantages:
+https://www.linuxjournal.com/article/7356
+
+I have a trick of using ioctls on the user space + a semaphore on the kernel space to sginal the user.
+
+

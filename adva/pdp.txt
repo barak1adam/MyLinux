@@ -1,0 +1,164 @@
+overall performance:
+===================
+I've started to work for MRV on 09/2015. Over the last year I've got lot of relevant knowledge
+in the areas of Linux Kernel internals, our debugging tools, the build environement, the git surce control 
+and of course the source code itself. Regarding (3), I really think that my performance met expectations in all areas
+especially in supporting all R&D engineers with Linux issues, build issues, training and the migration to git. There was 
+no time we had any issue without an immediate solution. In some areas related to quality (for example: I've added the Valgrind debugging
+tool both for OptiSwitch and OPX, core dump saving and analysis, code reviews) and to resolving critical bugs (which
+were defently 'show stopper' for a release) on time, I think my performance was even exceeding expectations and I would mark it 4.
+all annual goals were met (advanced kernel programming, the build environement, getting into the OPX, git migration to R&D, 
+training to employees)
+In the OPS, I would mention some critical issues resolved by me like: ubifs failures and segmentation faults
+and quality issues like handling core dumps, valgrind, handling FPGA interrupts, OD support in u-boot and kernel,
+supporting HW team (for example i2c repeated start) and production (ddr training, USB, licensing)
+In the OPX, I would mention critical issues like SW upgrade, out of space policy, LC init failures (bugs:...)
+and of course quality tasks like LC serial redirection and Valgrind which were very crucial for R&D.
+
+how can I improve:
+==================
+I can try to initiate and develop by myself more projects / utilities that will make our Linux environment better
+like python scripts, automation build scripts, easier make files and more.
+I should also keep expanding my knowledge in some areas like: Linux Kernel, distrubution build systems like BuildRoot
+and Yocto, SDN/NFV.
+
+
+Development goals:
+==================
+My annual goals were to  1) smoothly integrate into the Linux Kernel team work, to resolve Linux critical issues and
+to support R&D developers in all areas of Linux including the build env. and the migration to git. 2) to get into the OPX
+development efforts, to resolve critical issues and to improve quality. 3) make some emloyees training and improve 
+R&D quality.
+I feel I met all these three goals very well even exceeding expectations in some areas.
+exmaples for each goal achivements:
+1) resolving OPS Linux critical issues, on going support to all developers related to Build / Debug / Git.
+2) OPX critical issues and some improvements like LC redirection and Valgrind.
+3) Build training, Valgrind training, lots of Wikis and documentations like: u-boot manuals, PAM, core dumps, GDB, etc.
+
+How can I improve:
+=================
+more training
+enforce source cotrol and debugging working metholodogies to developers
+more quality improvements
+
+MRV core values:
+===============
+1) Building community - Marvell, Linux Community, Git (3)
+2) Keeping Commitments: critical issues on time, always support developers with high qaulity (4, 5)
+3) Effectively communicatios and Internal Collaboration: validation, developers, production, IT (4)
+4) Continoius improvemnt in all areas (4)
+
+Improve:
+========
+1) more with the Linux community
+2), 3) keep commitment, the connection to U.S 
+4) keep improving: kernel, teamcity, buildroot, SDN/NFV
+
+summary:
+=======
+overall performance, give examples to performance and commitment
+self training
+I expect to improve and give more to MRV
+
+Goals:
+======
+Expand Linux knowledge to keep enhance my contribution to our team required tasks and qaulity:
+1) migrate our building env. scripts from "bash" to modern Python and add some new utils.
+2) complete my private training Linux courses (user space advanced embedded programming, kernel advnaced programming and 
+device drivers, arm course, Linux administration, Python, Linux networking advanced programming)
+3) Getting deeper into TeamCity and Bitbucket, help Ran to support R&D and add some helper utils.
+
+Expand R&D trainging regarding source control, enforce R&D working metholodogy and debugging tools to improve qaulity:
+1) give R&D training & documentation: git, bitbucket and required workflow, teamcity
+2) give R&D training & documentation: GDB, core dump, valgrind, binary toolchain utils(objdump, ldd, nm, etc), kernel built in debug tools
+(strace, ps, top, dmalloc, etc).
+
+
+Employee summary:
+================
+As I wrote in "overall performance" section, I've joined MRV last year on 09/2015.
+I feel I met expectaions in all Linux team areas like:....
+and even exceed expectations in some quality areas mentioned.
+In the area of commitment and collaboration I feel exceeding expectations with high commitment to resolve any critical issue
+on time and to do my best to help and support developers in every issue like:....
+Here is the time to mention that I've started few months ago an advanced Embedded Linux training. I am taking 6 to 10 courses
+in Linux areas, Advanced!!! and I am doing it outside working hours and paying it myself. 
+It is very important to me to be as much professional as possible. I would be very thankful
+if MRV can participate somehow financing these courses.
+
+Emails:
+======
+AUFS patches and OverlayFS
+Makefiles inna, pavel and CPSS build errors
+i2c word commands
+FPGA interrupts handling
+V8M - slot in/out hot swap of cards
+add minicom
+u-boot user manuals
+V8M - uart redirection
+support FPGA team with DTS/drivers
+UBI FS tar/untar on PC
+Support Jin (u-boot)
+u-boot manuals
+OAM FW L2 cache Marvell
+SDN NFV - bring up bare metal machines, install distributions, IPMI & PXE settings
+installations with RedHat
+support Telstra - critical bug
+solaris
+taccacs
+AUFS author, SPIDEV author
+on going support: gdb, core dumps
+UBIFS errors Reuven (config RW)
+Marvell LSP build version and support
+Jira OS-2223
+Jira OS-2047 show rfc history bug (linux signals)
+OPX-3001 card init fails
+OPX-3086 OPX upgrade, delete old bundles
+NG password recovery
+Add RW debug commands for PHY
+Training for OPX employees
+Training on Valgrind
+Valgrind on NG
+Valgrind on OPX
+OPX 3021 - out of space policy and implementation
+OD - uboot and kernel support
+Add PHY read/write functions in the new Kernel 3.10, bring up the MDIO driver.
+DDR training - work with HW team
+NG u-boot: handle DDR training failure on BC2
+OD - resolve TFTP delay issues, add TFTP retries count to u-boot.
+- OD: SERDES functions to debug CRC errors on u-boot. 
+- OD: NFS not function with new ID, need to check it for Ori.
+-  OPX-2886 (critical) -  SW upgrade: do not delete Active/Secondary bundles from CC/ver directory if there are 10 previous bundles:
+   make it a global function and use it also on "bundle delete" CLI.
+-   OPX-2840 (critical) Can not connect with Telnet on "interface out of band"
+-   OPX-2694 (major) The NTP file "ntp-lc.drift.TEMP" can't be saved in the directory "var/lib/ntp/"
+Complete migration of Lattice interrupts into the new Kernel 3.10.
+Linux private training
+OPX LC uart redirect !!!
+Dying gasp migration to kernel 3.10
+OS-1645
+OPX-2639
+OS-1555
+core dump files save permanently
+NG i2c repeated start !
+FPGA interrupts handling in kernel 3.4.69
+critical seg fault: OS-1502: block signals in UiD_SubscribeEventsWithCallback thread, to avoid seg fault
+
+production support: eeprom, exe for ddr training, code.sh, sdc device and mini-usb
+
+on-going support: builds, git, gdb, cores dumps.
+
+JIRA:
+=====
+attached a report.
+
+
+Engineering:
+============
+
+
+
+
+
+
+

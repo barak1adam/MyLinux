@@ -1,0 +1,102 @@
+
+replace h file
+
+./build_cpss.sh MSYS_3_10 DX_ALL UTF_NO UNZIP CPSS_ENABLER_SHARED  NOKERNEL
+
+./build_cpss.sh MSYS_3_10 DX_ALL UTF_NO CUST CPSS_ENABLER_SHARED  NOKERNEL
+
+copy appDemo and  libs 
+
+sudo cp ./appDemo /home/barak/mrv_dev/build_eitan/build/dist/arm_msys_root/usr/local/nbase/sbin/
+
+sudo cp ./lib*.so /home/barak/mrv_dev/build_eitan/build/dist/arm_msys_root/usr/local/nbase/lib/
+
+
+
+linux root shell
+
+appDemo
+
+CLIexit
+
+@@appDemoDbEntryAdd "bc2BoardType",0x50 
+
+luaShellExecute appDemoDbEntryAdd "bc2BoardType",0x50
+
+
+shell-execute appDemoDbEntryAdd "bc2BoardType",0x50
+
+
+
+shell-execute osPrintSyncEnable 1
+
+
+Console# cpssInitSystem 29,1 noPorts apEnable 
+
+
+
+Console# configure
+Console(config)# interface range ethernet 0/67
+Console(config-if)# ap-port fc_pause false fc_asm_dir symmetric fec_supported false fec_required false lane_num 0 mode1 KR speed1 10000
+                                                                      
+
+do shell-execute mvApPortCtrlDebugInfoShow 255,255
+do shell-execute mvHwsAvagoSerdesPMDdebugPrint 0 32
+
+
+
+
+
+
+
+
+
+
+
+
+final:
+======
+appDemo
+shell-execute appDemoDbEntryAdd "bc2BoardType",0x50
+shell-execute osPrintSyncEnable 1
+Console# cpssInitSystem 29,1 noPorts apEnable 
+
+ap-port fc_pause false fc_asm_dir symmetric fec_supported disabled fec_required disabled lane_num 0 mode1 KR speed1 10000
+
+do shell-execute mvApPortCtrlDebugInfoShow 255,255
+do shell-execute mvHwsAvagoSerdesPMDdebugPrint 0 32
+
+Please do the following:
+1.       Cetus to Intel – Set the AP port to intel and provide the following:
+a.       do shell-execute mvApPortCtrlDebugInfoShow…. as you did
+b.      do shell-execute mvHwsAvagoSerdesPMDdebugPrint …. (see below)
+2.       Cetus to Cetus - Try the Cetus to Cetus configuration and provide the log
+a.       do shell-execute mvApPortCtrlDebugInfoShow… as you did
+b.      do shell-execute mvHwsAvagoSerdesPMDdebugPrint …. (see below)
+c.       do shell-execute mvDxChPortSerdesManualTxConfigGet …. (see below)
+3.       Try the EoM API with this version and let me know if that works for you
+
+Yotam:
+======
+appDemo
+shell-execute appDemoDbEntryAdd "bc2BoardType",0x50
+shell-execute osPrintSyncEnable 1
+Console# cpssInitSystem 29,1 noPorts apEnable 
+
+configure
+interface range ethernet 0/56-57
+
+
+
+speed 10000 mode KR
+prbs enable lane all mode 31
+prbs show lane all
+
+eom matrix port 0/56 serdes 2 min-dwell 1000000 max-dwell 100000000 noeye
+
+
+
+The Eye Monitor tool provides a key metric of SERDES channel quality. This document describes the functions and
+options for capturing an eye using the Eye Monitor tool. It does not describe eye measurement theory or all the details
+on when and why one might use this tool.
+

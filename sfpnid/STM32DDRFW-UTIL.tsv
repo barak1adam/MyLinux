@@ -1,0 +1,2 @@
+#Opt	Id	Name	Type	IP	Offset	Binary
+-	0x01	fsbl1-boot	Binary	none	0x0	STM32MP157C-DK2_DDR_UTILITIES_A7_signed.stm32
