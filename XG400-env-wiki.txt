@@ -1,0 +1,25 @@
+/opt/aos/ede-3.6.20
+		
+		home/$USER/.ccache ---------------------------------------------> /home/$USER/.ccache
+		
+		home/$USER/AOS -------------------------------------------------> /home/$USER/AOS
+		home/$USER/AOS/XG490_test---------------------------------------> /home/$USER/AOS/XG490_test
+		
+		#source, branch is dev-xg490
+		home/$USER/AOS/XG490_test/f4-build-test ------------------------> /home/$USER/AOS/XG490_test/f4-build-test
+		home/$USER/AOS/XG490_test/aos-ne-build-and-test-----------------> /home/$USER/AOS/XG490_test/aos-ne-build-and-test
+		
+		home/$USER/AOS/XG490_test/products/xg490/f4-ne-xg4xx------------> /home/$USER/AOS/XG490_test/products/xg490/f4-ne-xg4xx
+		
+		#kernel sources, branch is dev-xg490
+		home/$USER/AOS/XG490_test/f4-linuxkernel-xg480-----------------> /home/$USER/AOS/XG490_test/f4-linuxkernel-xg480
+		#symbolic link
+		(home/$USER/AOS/XG490_test/products/xg400/ede_targ_prod_devel/kernel_sources/default_source)
+		home/$USER/AOS/XG490_test/f4-linuxkernel-xg480/linux-5.4.47----> /home/$USER/AOS/XG490_test/f4-linuxkernel-xg480/linux-5.4.47
+		
+		#unidrv
+		home/$USER/AOS/XG490_test/aos-ne-unidrv---------------------------> /home/$USER/AOS/XG490_test/aos-ne-unidrv
+		
+		/targ/prod-devel/xg490 -------------------------------------------> /home/$USER/AOS/XG490_test/products/xg490/ede_targ_prod_devel
+		/targ/prod-devel/xg490/kernel_sources/linux-5.4.47-adva ----------> /home/baraka/AOS/XG490_test/f4-linuxkernel-xg480/linux-5.4.47-adva
+		/targ/prod-devel/xg490/modules/unidrv/aos-------------------------> /home/baraka/AOS/XG490_test/aos-ne-unidrv
