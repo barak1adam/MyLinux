@@ -1,0 +1,1012 @@
+AOS Build Environment Setup:
+
+---------------------------------------------------------------------------------------------------------------
+
+First, I set up Gerrit - on LOCAL Linux PC:
+
+1. Just followed the guide here - used existing SSH key on Linux PC:
+
+	https://polarion.advaoptical.com/polarion/#/project/CCD/wiki/SW%20and%20SIT%20Wikis/HowToGenGerritKeys
+	
+   Josh note: Can test by going to Gerrit > Browse > Repositories, in search bar, type: xo, click on e.g.
+   f4-xo126-build-and-test. Copy the SSH clone link (if you use the default Anonymous HTTP-type clone, you
+   will be forced to enter ADVA username and password (email password) for every clone - BAD).
+   
+   Then on Linux PC:
+   
+	cd /tmp
+	<paste git clone command>
+
+---------------------------------------------------------------------------------------------------------------
+
+To set up EDE, I did:
+
+1. Created directory with specific EDE version specifier in which to install entire EDE. (This is because
+   you may need to install several versions of EDE, for use with different products):
+ 
+	sudo mkdir -p /opt/aos/ede-3.6.17
+	
+   (If you want to upgrade the EDE installed in this folder at a later date, after you upgrade, you can
+    simply change the name of the installation location with: 'sudo mv /old/path /new/path', e.g.
+	'cd /opt/aos && sudo mv ede-3.6.17 ede-3.6.18').
+	
+2. Installed Rsync (was already installed):
+
+	sudo apt-get install rsync
+	
+3. Installed EDE, version 3.6.17 (according to Tziki) (took about 5 minutes for me, it says
+   up to 25 minutes on the website):
+		 
+	sudo rsync -ai rsync://GDN-S-SYS-EDE-1/ede/base/3.6.17/. /opt/aos/ede-3.6.17/.
+	
+4. Enter into IDE as root:
+
+	sudo /opt/aos/ede-3.6.17/rehome/reho -r
+
+5. Configure EDE modules to be downloaded and installed:
+
+	ede_modules_config
+	
+   Chose only the following modules (aarch64 is cross-compilation toolchain for builds
+   that will run on actual XO, vm is for builds that will run on Fred: the simulator,
+   portage is package manager for resolving dependencies, e.g. if you need to build
+   open-ssl, it will resolve dependencies for you):
+   
+	arch--aarch64-linux-gnu
+	arch--x86_64-vm-linux-gnu
+	portage
+	x--jfrog
+	
+   Select ok
+   After a while (~2 minutes), it will ask you to proceed, say “y”
+   
+   At about ~5 minutes in, it will ask for your credentials (if you select jFrog). Enter:
+
+    user: joshuam
+    pass: ADVA email pass
+	
+   and then a few minutes later (~1 minute), it will ask you to proceed, say "y".
+	
+6. Opened terminal to Linux PC, and created folder in regular Linux PC home directory for
+   working with AOS (USER is an environment variable that evaluates to current logged-in
+   user, e.g. 'josh'):
+
+	mkdir -p /home/$USER/AOS
+   
+   (Above is updated version, I used: mkdir -p /home/josh/AOS)
+	
+   Then !in EDE terminal!, created a directory rooted in the EDE directory, into which I will
+   later mount the AOS working directory from my regular PC path (/home/josh/AOS)
+   (SUDO_USER is an environment variable that - in the EDE, evaluates to user who invoked the
+   EDE with 'sudo', e.g. 'josh'):
+   
+    mkdir -p /home/$SUDO_USER/AOS
+	
+   (Above is updated version, I used: mkdir -p /home/josh/AOS)
+
+7. Exit the EDE and re-enter as josh (Linux user) (instead of root):
+   
+   Exit the ede and re-enter using the -u (user) option with the mounted home directories:
+
+	sudo /opt/aos/ede-3.6.17/rehome/reho -u $USER -e /home/$USER/AOS -DUSER=$USER
+	
+   (Above is updated version, I used: sudo /opt/aos/ede/rehome/reho -u josh -e /home/josh/AOS:/home/josh/AOS -DUSER=josh)
+
+   This mounts the the local machine's /home/josh/AOS directory (syntax: <src:dst>, or for short
+   dest is assumed to be same as source), and sets an environment variable: USER to be 'josh' ($USER from invoking shell).
+   
+   This  environment variable will be used later as a parameter in commands, such as:
+   'git clone ...$USER@...' It is important because the entering EDE command is invoked with
+   'sudo', so if you do not set the USER environment variable, once inside the EDE, your
+   USER variable will evaluate to 'root'. You can get around this by using 'SUDO_USER' environment
+   variable, which will be the username of the user who invoked command with sudo (e.g.
+   'josh').
+   
+   (Include as additional '-e' options for other external directories you want to mount as well.)
+
+   A "start_ede.sh" script has been created which you can use/customize for your environment to
+   aid in entering the EDE to build (both the product and the kernel).:
+
+8. Set up jfrog (for pulling in binary artifacts that are stored in JFrog Artifactory - I think this is
+   used so that you can compile only a certain aspect yourself locally - all the other binaries will be
+   pulled in aleady-made).
+
+   On local machine terminal prompt (NOT inside EDE), create directory for jfrog configuration, inside ~/:
+   
+	mkdir -p ~/.jfrog
+	
+   Then, log in to EDE as josh, being sure to mount .jfrog folder as well:
+   
+	sudo /opt/aos/ede-3.6.17/rehome/reho -u $USER -e /home/$USER/AOS -e /home/$USER/.jfrog -DUSER=$USER
+   
+   and INSIDE EDE, add the GDN artifactory server to jfrog. This will create a jfrog config file: in /home/josh/.jfrog/:
+   (Note: for jfrog, user credentials are ADVA credentials, e.g. username of ADVA email: joshuam, and same password)
+   
+	jfrog config add gdn --artifactory-url 'https://gdn-artifactory.rd.advaoptical.com/artifactory' --user 'joshuam'
+	
+   Then, hit <Enter> (leaving 'JFrog Platform URL' blank).
+   Hit <Enter> again.
+   Then, choose 'Username and Password / API Key' by hitting <Enter> a third time.
+   
+   Then, copy the encrypted password from: https://gdn-artifactory.rd.advaoptical.com/ui/user_profile,
+   and paste it in the terminal.
+   
+   Then, when you see the line: Is the Artifactory reverse proxy configured to accept a client certificate? (y/n) [n]?
+   
+	Hit <Enter>
+	
+   To test, do:
+   
+	jfrog rt ping --server-id gdn
+	(or just: jfrog rt ping (I think in this case, it uses default entry from jfrog conf file))
+	
+   Should see result: OK
+   
+   Now, for some reason, must do the following (Otherwise running Cmake when setting up a build directory will
+   fail due to jfrog credential configuration problem):
+   
+    cd /home/$USER/.jfrog
+	cp jfrog-cli.conf.v6 jfrog-cli.conf
+	
+   Open 'jfrog-cli.conf' in Vim, find the line that starts with 'artifactoryUrl', and change that parameter to:
+   'url', and save the file.
+   
+   Now you can use cmake and make commands without credentials prompt
+   
+9. Do additional setup for building kernels (do these in regular local Linux environment, not EDE).
+
+   Take ownership of targ/prod and targ/prod-devel directories that are in EDE:
+   
+	sudo chown $(id -u).$(id -g) ${EDE_DIR}/targ/prod ${EDE_DIR}/targ/prod-devel
+   
+---------------------------------------------------------------------------------------------------------------
+
+To build XO126 Application/kernel/SW image:
+
+>> NOTE: This type of build MUST be done once after cloning stuff for the first time. It does NOT require
+   you to manually clone and build the model, and modules repos. If you do not manually clone
+   and/or build these, the build will automatically clone the master branch, and build them.
+   
+   Typically, you should manually clone the 'modules' repo because that is where the work is done.
+
+Note about cloning: you can clone either from Local Linux PC, or from EDE. In order to clone from EDE,
+					(assuming SSH key you use to access Gerrit is stored on Local PC at /home/$USER/.ssh)
+					you MUST launch EDE with argument: '-e /home/$USER/.ssh'!
+
+1. Create new directory to hold project inside of top level AOS directory, e.g. here: XO126_test and
+   cd into it:
+
+	mkdir /home/$USER/AOS/XO126_test
+	cd /home/$USER/AOS/XO126_test
+
+2.1. To build Application: Clone XO126 'Build-and-test' repo from Gerrit, using SSH (Go to repo on Gerrit,
+     click 'SSH', and copy link:
+	
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/f4-xo126-build-and-test"
+		cd f4-xo126-build-and-test
+		git checkout F4_CMN_20230629
+		cd -
+	
+	 Clone AOS 'Build-and-test' NE repo, and create symlink to it called: 'build-and-test:
+	 
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/aos-ne-build-and-test"
+		ln -s aos-ne-build-and-test build-and-test
+		cd build-and-test
+		git checkout F4_CMN_20230629
+		cd -
+		
+	 Clone the XO-126 modules repo (if skipped, then master branch will automatically be pulled
+	 and built):
+	 
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/f4-xo126-modules"
+	 
+	 Check out personal branch if necessary:
+	 
+		cd f4-xo126-modules
+		git checkout <branch_name>
+		cd -
+		
+	--------------------------------------------------------------------------------------------	
+	 (From Tziki - untested) Bambam: if building on Bambam, change paths to specific repositories
+	 that should be used for building on bambam, in these two files:
+	 
+		/f4-xo126-build-and-test/CMakeRepoPaths.cmake:
+        /build-and-test/CMakeRepoPaths.cmake:
+	--------------------------------------------------------------------------------------------
+	
+	 Create a build dir, named whatever you want, e.g.: build_dir_arm (can also create
+     build_dir_sim for simulations, later) (documentation says that you should
+	 only have one x86 or arm build in a single build directory):
+	 
+		mkdir build_dir_arm
+		
+	 Enter the build directory, and run cmake with the following arguments, followed by appropriately
+	 called 'make':
+	 
+	 For ARM BUILD:
+		
+		cd build_dir_arm
+		cmake -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCH=arm8-64bit /home/$USER/AOS/XO126_test/f4-xo126-build-and-test/
+		make -j4 xo126
+		
+	 (Documentation also lists other possible make commands: make xg118, make xg118/fast - not sure what fast does)
+		
+	 For SIMULATION BUILD:
+	 
+		cd build_dir_sim
+		cmake -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCH=x86-64bit /home/$USER/AOS/XO126_test/f4-xo126-build-and-test/
+		make -j4 xo126
+		
+	 To make clean, for any given build_dir, e.g. build_dir_arm, do:
+	 
+		cd ~/AOS/XO126_test/build_dir_arm && rm -rf ./*
+		cd .. && rm -rf .ivy2/cache
+		
+	 If you need compile_commands.json file, for some reason, it seems like you do not get it after the first 'make'.
+	 So simply run 'make -j4 xo126' again, and compile_commands.json should be in:
+	 build_dir_arm/Build/xo126/compile_commands.json
+	
+	 To remove ALL untracked changes, from within repo (so e.g. inside /f4-xo126-modules I think), can do git clean.
+	 This is run with options: -f (force - otherwise it will fail because it is dangerous command), -d (directories
+	 too - by default, git clean doesn't remove directories, and -x (remove files that are ignored by .gitignore
+	 as well - default is to not clean these files. This option is useful because build directories will typically
+	 contain build artifacts that are added to .gitignore file, but we want to remove these files as well as other
+	 untracked files):
+	 
+	  git clean -n -d -x
+	  git clean -d -f -x
+	  
+	 Note: AOS documentation says to use only : 'git clean -d -f -x', I added the '-n' line first, which is dry run,
+	       because this is a dangerous command.
+	 
+	 ----------------------
+	 
+	 After initial application build is complete, say you make changes to a module, you can build only that specific
+	 app/lib with by entering the specific Build/xo126/source/<module_specific_subdir> dir, and then running 'make all'
+	 in that subdir:
+	 
+		Example: cd Build/xo126/source/hbm/drivers/pll
+				 make all
+			
+	 Note: To update Makefiles after adding/remove source files, one has to do a "make xo126" (make -j4 xo126) at
+	       the top level (build_dir_arm/build_dir_sim/etcetra).
+		   
+	
+				 
+	 The make output for apps and libs are located in the Build/xo126/lib or Build/xo126/bin directory. To test the change,
+	 you can copy the binary to the target or Fred-AOS dir and then do a restart, OR you can create a system image and
+	 perform a SW upgrade of the XO126 via GUI or CLI.
+	 
+	 Option 1 - copy binaries/libs to target:
+
+		EX from documentation (run from EDE):
+		
+>>>>>UPDATE>scp xg118/lib/libXg118HbmDrvPll.so $SUDO_USER@10.10.33.189:/u01/users/$SUDO_USER/aos/test_blds/xg118sh_sim/opt/adva/aos/lib/
+		
+		Ex from Tziki (run on TARGET DEVICE):
+		
+			 aosStop.sh
+			 rm /var/opt/adva/aos/log/tracelog/* # not necessary
+			 rm /tmp/core* # not necessary
+			 scp josh@10.34.71.121:/home/josh/AOS/XO126_test/build_dir_arm/Build/xo126/lib/*.so /opt/adva/aos/lib
+			 aosStart.sh
+			 
+			Note about this:
+				- Documentation says you can copy binaries as well - Tziki said he stopped doing that because it
+				  caused problems - he only flashes libs, and when he notices that that stops working, he makes
+				  a SW image and does an upgrade (Option 2).
+	 
+	 Option 2 - Do a SW upgrade using an image file:
+	 
+	    From XO126 GUI, Choose 'SCP' option to download: 
+       
+			Setting|General|ExternalAccess|SCP|
+         
+		Delete staging package (this is necessary before every upgrade, otherwise you will get error:
+		"Failed to access source file or create file on target"):
+		
+            Setting|Software|Controls|Delete|SOFTWARE IN STAGING
+        
+		Download:  
+       
+			Setting|Software|Download|Release List/Software Package|
+			 Server Access:     IP Address
+			 IP Address:        10.34.71.121
+			 Transfer Protocol: scp
+			 User Name:         josh
+			 Password:          8972 
+			 File Name:         /opt/aos/ede/targ/prod/xo126/med/f4-xo126-card-22.1.1-arm8-64bit.tar.bz2.pak
+         
+		     APPLY & EXIT
+  
+		Click Install (right arrow icon)
+		
+		Click Activate 
+                    
+			Will reboot automatically and change active partition (can take a while to go down)
+			
+        If activate is not working, add crypto via CLI:
+         
+			configure
+			configure
+			set security user admin role append Crypto
+			set card 1/1 connect-guard crypto-user 1 secure-user admin
+			commit 
+       
+	    If stuck on reboot: "Starting kernel ...", the xo126.tbd file is missing"
+		
+			copy it and deploy again
+			
+		As part of restore, XO will reboot itself (can take a long time before it goes down).
+		
+		If there are problems in the GUI of the new version, restore configuration to default. This will ERASE ALL 
+		CONFIG INCLUDING IP CONFIGURATION, so you will need to enter the configuration again when it comes
+		back up. To do the erasure, do from CLI as root:
+       
+			aosCoreSrdmDbMaintLauncher
+			execute database restore-factory-database
+			
+		After it comes back up, log in via console and set IP address settings and maximum timeout:
+	
+configure	
+set dcn 1 dcn-interface M0 dhcp-v4 role off
+set dcn 1 dcn-interface M0 dhcp-v6 role off
+set dcn 1 dcn-interface M0 ip-address/mask append 10.34.71.122/24 dad-transmits 5
+set dcn 1 ipv4-routes destination-ip-address/mask 0.0.0.0/0 next-hop 10.34.71.254 metric 20 interface M0
+set security user-settings admin cli-user-settings session-idle-timeout 0
+commit
+						
+		Check IP settings:
+			
+			run show dcn 1 dcn-interface M0
+			
+		Set no log buffering:
+		
+			Log in as root, and do
+			# echo -e "/debug/aosFwHal/trace-log/enable-in-memory-buffer off"|aosCoreDteConsole
+	
+3.1. To build Kernel specifically: 
+	 OUTSIDE of EDE, run:
+	 
+		export EDE_DIR=/opt/aos/ede-3.6.17
+		export REPOS=/home/$USER/AOS/XO126_test
+	
+	 (documentation says to ensure that you have /opt/adva/bin in your path when you enter the EDE,
+     by adding the following to your local linux .bashrc (.zshrc in my case), but for me, if I enter
+	 EDE and do 'echo $PATH', near the end of the output, I see that it already contains /opt/adva/bin:
+	
+	 if [ -e /etc/ede/ede_version ]; then
+	 	PATH=/opt/adva/bin:/opt/jfrog:${PATH}
+	 fi
+	 )
+
+	 Clone XO126 Kernel repo into EDE (from OUTSIDE EDE):
+	
+		cd /home/$USER/AOS/XO126_test
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/f4-xo126-kernel"
+		
+	 We don't use master, so checkout new branch:
+	 
+		git checkout v2022.1-xo126
+		
+	 Josh: We use slightly different hierarchy than XG118, so remove the empty 'linux-xlnx' folder
+	 located in the f4-xo126-kernel folder that you just cloned, and create a symlink with the
+	 same name (linux-xlnx), that points to the parent folder (f4-xo126-kernel) which itself holds
+	 the kernel sources:
+	 
+		rmdir /home/josh/AOS/XO126_test/f4-xo126-kernel/linux-xlnx
+		sudo ln -s /home/josh/AOS/XO126_test/f4-xo126-kernel /home/josh/AOS/XO126_test/f4-xo126-kernel/linux-xlnx
+		
+	 Clone AOS unidriver NE repo:
+			  
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/aos-ne-unidrv"
+		cd aos-ne-unidrv
+		git checkout F4_CMN_20230629
+		cd -
+		
+	 Define more Environment variables:
+	 
+		export TGTPRODDIR=$REPOS/f4-xo126-modules/ede_targ_prod_devel
+		export KERVER=$(readlink ${TGTPRODDIR}/kernel_sources/default_source)
+		export KERDIR=$REPOS/f4-xo126-kernel/$KERVER
+		export UNIDIR=$REPOS/aos-ne-unidrv
+		export TGTEDEDIR=/targ/prod-devel/xo126
+		export REHOCMD=$EDE_DIR/rehome/reho
+		
+	 Enter EDE whilst mounting additional directories related to building the kernel:
+	 
+		sudo $REHOCMD -u $USER -e /home/$USER/AOS -e $TGTPRODDIR:$TGTEDEDIR -e $KERDIR:$TGTEDEDIR/kernel_sources/$KERVER -e $UNIDIR:$TGTEDEDIR/modules/unidrv/aos -C $TGTEDEDIR -e /home/$USER/.jfrog -e /home/$USER/.ssh -DUSER=$USER
+	
+	 You should now be in /targ/prod-devel/xo126 directory.
+	 
+	 Can build ALL kernel components (kernel, kernel modules, dtb) with:
+	 
+		sudo ./build
+		
+	 Can also rebuild one component AFTER 'build' is run once, e.g.:
+	 
+		./build kernel
+		./build dtb
+		./build modules
+				
+	 INSTEAD of performing the above build commands, you can instead run some 'all'-type command that will build
+	 both kernel + final file system image. See section 4.1.	
+	
+4.1. To build SW image:
+	
+	 Must have already completed initial full build of application + kernel (steps 2.1 + 3.1)!
+	 
+		 This single step is only necessary ONCE!: (IN EDE!), create symbolic link in /targ/prod/xo126 that will point to base image
+		 (without dtb I think) that was created by full application build (2.1) and is located at:
+		 Build/xo126/staging/f4-xo126-base-22.1.1-arm8-64bit.tar.bz2:
+		 
+			sudo ln -s ~/AOS/XO126_test/build_dir_arm/Build/xo126/staging/f4-xo126-base-22.1.1-arm8-64bit.tar.bz2 /targ/prod/xo126/base.tar.bz2
+		 
+		 
+	 Copy the metadata.json file from the product repo to /targ/prod/xo126:
+	 
+		sudo cp ~/AOS/XO126_test/f4-xo126-modules/recipe/metadata.json /targ/prod/xo126/
+		
+	 Enter /targ/prod-devel/xo126 directory, and run commands:
+	 
+		cd /targ/prod-devel/xo126
+		
+		sudo ./build deploy # will build ONLY the final filesystem image (.pak file)
+		
+		OR
+		
+		sudo ./build all # will build all kernel components AND will build final filesystem image.
+		
+	 Results will be located in:
+	 
+	 Version file result (for SW upgrades): /targ/prod/xo126/med/f4-xo126-card-22.1.1-arm8-64bit.tar.bz2.pak
+     Image file result (for raw flashes):   /targ/prod/xo126/med/xo126_disk_image.gz
+		
+4.2. Typical workflow (assuming one is not making changes to kernel), and full system image has been created once:
+	
+	 - Make change to application code
+	 - Build only that specific app/lib by entering the specific Build/xo126/source/<module_specific_subdir> dir,
+	   and then running 'make all' in that subdir (see section 2.1)
+	 - If you're going to build a new SW image:
+		- Run 'make -j4 xo126' from build_dir_arm to rebuild the entire application
+		- Run 'sudo ./build deploy' from /targ/prod-devel/xo126 (like when making kernel) to create new image
+			- Note: build deploy step is REQUIRED to see changes in staging (I think: /opt/aos/ede/targ/prod/xo126/med/proxy) -
+				    'make' step is not enough (e.g. if you changed script or something)
+		
+===============================================================================================================
+
+EDE notes:
+
+---------------------------------------------------------------------------------------------------------------
+
+Useful videos:
+
+1. EDE explanation + CLI commands, from 1:23:40
+	https://web.microsoftstream.com/video/ee224f40-f330-4768-809a-447e65998a75?channelId=5469109d-3cac-4328-a737-4e46ca00a33c
+2. Introduction to AOS - Part One: Raghav Trivedi 
+	https://adva.sharepoint.com/portals/hub/_layouts/15/PointPublishing.aspx?app=video&p=p&chid=366d3b9c-9977-40b5-a19e-2f13da5c683a&vid=a04119ff-2ba2-48ad-ad99-c876c1b40b58
+	
+	
+Watched videos:
+
+AOS Eco-System
+
+1. An Introduction to the AOS Eco-System Part 1 of the kick off training given to the Yokne'am and F7 teams - Mike Mezeul (03/02/2021)
+	https://web.microsoftstream.com/video/ee224f40-f330-4768-809a-447e65998a75?channelId=5469109d-3cac-4328-a737-4e46ca00a33c
+	
+2. An Introduction to the AOS Eco-System Part II (SPE) - Mike Mezeul/Roman Kieda (03/11/2021)
+	https://web.microsoftstream.com/video/3cdfb39c-289e-4376-a813-0a73e1b076d4?channelId=5469109d-3cac-4328-a737-4e46ca00a33c
+
+3. NOT YET WATCHED An Introduction to the AOS Emulation Platform aka "Fred" - Mike Mezeul/Michał Kwaśniewicz (03/17/2021)
+	https://web.microsoftstream.com/video/496752c3-b38a-45a0-836b-9e063433c4fe
+	
+---------------
+
+Architectural Information
+
+1. Introduction to AOS - Part One: Raghav Trivedi 
+	https://adva.sharepoint.com/portals/hub/_layouts/15/PointPublishing.aspx?app=video&p=p&chid=366d3b9c-9977-40b5-a19e-2f13da5c683a&vid=a04119ff-2ba2-48ad-ad99-c876c1b40b58
+
+2. Introduction to AOS - Part Two: Raghav Trivedi
+	https://adva.sharepoint.com/portals/hub/_layouts/15/PointPublishing.aspx?app=video&p=p&chid=366d3b9c-9977-40b5-a19e-2f13da5c683a&vid=9c98c2a8-0d94-4a56-915b-1b2545759b2f
+	
+---------------------------------------------------------------------------------------------------------------
+
+0. EDE is self-contained. It contains all tools needed to perform cross-compilation
+   together with all dependencies, like dynamically-linked libraries they use, interpreters
+   and so on. It doesn't rely on any component from the host on which it runs, except for
+   the kernel. Because of this, it is basically independent of underlying host's software,
+   at the cost of increased size of EDE itself.
+
+   EDE is typically installed in /opt/adva/ede, which in turn contains the UNIX-like directory
+   hierarchy inside:
+  
+   /Documentation  /bin  /boot  /dev  /etc  /fsmods  /home  /lib  /lib32  /lib64  /media  /mnt  /opt  /proc  /rehome  /root  /run  /sbin  /sys  /targ  /tmp  /usr  /var
+
+   So we have for example /opt/adva/ede/bin/bash, which is interpreter for shell scripts working inside EDE;
+   /opt/adva/ede/usr/bin/make, which should be used as Makefile interpreter; and so on.
+   We also have glibc instance in /opt/adva/ede/lib, to which binaries within /opt/adva/ede are linked.
+   This way we don't care which versions of bash, make, and glibc are present on the host, we even don't care
+   whether they are present at all.
+
+   Cross-compilers and other cross-tools (like cross-linker) are placed in the /usr/bin directory. They are
+   named in standard way, e.g. armv7a-hardfloat-linux-gnueabi-gcc. The prefix is a standard system description
+   tuple, in form of ARCH-VENDOR-OS-LIBC. However, contrary to the name, VENDOR field does not really denote the
+   vendor. Rather, it is more like a sub-architecture. LIBC denotes the type of C library which is used
+   ('gnu' here denotes glibc, the GNU C Library), but also ABI used (in this case, EABI, a de-facto standard in
+   the ARM world).
+
+   The cross-compilers generate code for architectures different than x86_64, but themselves are x86_64 programs.
+   In addition to cross-compilers, EDE also contains some binaries (mainly libraries) for target architectures.
+   This is necessary for cross-compilation. For example, if a program is going to run on ARM and it uses ncurses
+   library, ARM version of that library must be already present in EDE, together with header files.
+   
+   
+   EDE includes extensive list of packages that we can choose to include in our product-specific distribution.
+   The Canon EC is a list of packages REQUIRED for AOS to work, but there are many other packages not part of
+   this list. If we need them, we can use them.
+   
+   - To see all EDE-supported packages, look in: /etc/ede/EDE-packages.txt/.pdf
+   - To see EDE manual, look in: /Documentation/manual.pdf
+
+1. How to login to EDE:
+
+    - Log in as root:
+    
+		sudo /opt/aos/ede-3.6.17/rehome/reho -r
+		
+    - OR Log in as user: josh:
+    
+		sudo /opt/aos/ede-3.6.17/rehome/reho -u josh
+		
+	- OR Log in as user: josh and mount josh's ~/AOS folder, and set USER env var:
+	  (Can also use: -e /home/josh/AOS, this is short for: -e <src_path_x>:<dest_path_x>)
+    
+		sudo /opt/aos/ede-3.6.17/rehome/reho -u josh -e /home/josh/AOS:/home/josh/AOS -DUSER=josh
+		
+	- OR Better log in (uses environment variables, mounts ~/AOS, ~/.jfrog, ~/.ssh and ~/.gitconfig (for commiting from EDE) in EDE):
+		
+		sudo /opt/aos/ede-3.6.17/rehome/reho -u $USER -e /home/$USER/AOS -e /home/$USER/.jfrog -e /home/$USER/.ssh -e /home/$USER/.gitconfig -DUSER=$USER
+		
+	- OR Best login - handles kernel and full image building in addition to simple application builds:
+	
+		export EDE_DIR=/opt/aos/ede-3.6.17 && export REPOS=/home/$USER/AOS/XO126_test && export TGTPRODDIR=$REPOS/f4-xo126-modules/ede_targ_prod_devel && export KERVER=$(readlink ${TGTPRODDIR}/kernel_sources/default_source) && export KERDIR=$REPOS/f4-xo126-kernel/$KERVER && export UNIDIR=$REPOS/aos-ne-unidrv && export TGTEDEDIR=/targ/prod-devel/xo126 && export REHOCMD=$EDE_DIR/rehome/reho && sudo $REHOCMD -u $USER -e /home/$USER/AOS -e $TGTPRODDIR:$TGTEDEDIR -e $KERDIR:$TGTEDEDIR/kernel_sources/$KERVER -e $UNIDIR:$TGTEDEDIR/modules/unidrv/aos -e /home/$USER/.jfrog -e /home/$USER/.ssh -e /home/$USER/.gitconfig -DUSER=$USER
+	
+	- Note: if you want to make commits from within the EDE, make sure you mount your local .gitconfig file when
+	        entering the EDE
+	
+	- Can also log in as any user, even if user does not exist already (even if does not exist on
+	  local Linux PC). In this case, on the first log in of the new user, a new user, including
+	  entries in /etc/passwd, a home directory, etc will all be created in the EDE only (not on
+	  the local PC). E.g, logging in as 'joshuam':
+	  
+		sudo /opt/aos/ede-3.6.17/rehome/reho -u joshuam -e /home/josh/AOS:/home/joshuam/AOS -e /home/josh/.jfrog:/home/joshuam/.jfrog -DUSER=joshuam
+		
+	  May get some shell errors upon first login - can ignore.
+	  
+	  To remove added user from EDE, including removing entries from EDE /etc/passwd, shadow, and home directory:
+		
+		sudo userdel -r <username_to_remove>
+		
+	  E.g. sudo userdel -r joshuam
+
+2. EDE contains Embedded OS (eos) - this is the root file system for the target, which contains packages from
+   Gentoo Linux. This is located at: /opt/aos/ede-3.6.17/targ/arch/aarch64-linux-gnu/modes/eos
+---------------------------------------------------------------------------------------------------------------
+
+Gerrit notes + Git + PRs:
+
+- Used for Source code
+- Regular branches (...F8 something) have checks. Development branches (...dev..) do not.
+- Some AOS documentation uses subversion, ALL code uses git
+
+
+
+- To open a PR on Gerrit:
+
+	1. Prepare your local branch normally with a commit
+	   (Title of commit must begin with: [X] - X must be a Polarion Work Item)
+	2. I think ensure you are rebased on whatever master you use
+	3. You need commit hooks, if you don't have them, get them
+	4. INSTEAD OF pushing your changes to remote like usual, run:
+
+		git push origin HEAD:refs/for/<MASTER_BRANCH NAME>
+		
+	   E.g. for master branch named "OUR_MASTER":
+	   
+		git push origin HEAD:refs/for/OUR_MASTER
+	 
+	   Note: If you pushed your changes to remote of your personal branch (e.g. with
+	   smart_git_push.sh), it's possible that push to HEAD:refs/for/<MASTER_BRANCH NAME>
+	   for PR will fail (because of no changes I think). To fix, run:
+		
+		git commit --amend --no-edit # This ammends the previous commit without opening the commit editor
+		
+	   Then try git push origin HEAD:refs/for/<MASTER_BRANCH NAME> again
+	   
+	Note: if you need to edit any commit in your PR, simply make changes normally, to your local
+	      branch...e.g. with 'git rebase --interactive'. Once you are done, simply push to origin
+		  again like step 4.
+
+---------------------------------------------------------------------------------------------------------------
+
+JFrog Artifactory notes:
+
+- When builds are run, artifacts are put here.
+- This is a generic repository for all artifacts, both those that came from local sources (ADVA-specific stuff) 
+  and open-source sources, like pypi index
+- Keeps track of ORIGINS (who created/deployed them, ...) of artifacts, and associates metadata to that binary,
+  which allows us to implement various maturity models of binary files
+- The idea of JFrog artifacts is that we use them as much as possible - we do BOTTOM-UP builds, which only
+  build small pieces of project, the rest uses binaries that are ready. So basically, you can #include header
+  files to use APIs from other packages in a new package that you are developing, and you don't access the
+  source code of those dependencies yourself. This makes build times shorter than
+  if we would do TOP-DOWN builds (compile EVERYTHING from source, including all dependencies).
+  
+---------------------------------------------------------------------------------------------------------------
+
+Fred notes:
+
+- Simulator - Ruby scripts - uses virtual machine to emulate real hardware for running AOS
+- Use Virtual box on Linux
+
+---------------------------------------------------------------------------------------------------------------
+
+BamBam notes:
+
+- For RUNNING builds and TESTING them, can run on simulator, can run on pre-defined real hardware, and can run on
+  user-specified HW
+- You just need to set which branch to build using a config.json file, and then the pipeline does its stuff. In the
+  same file, you can set which archs to build for (simulator, HW), and more. Basically, in the config file, you set:
+  a) what to build, and b) how to test.
+  
+  Once build is ready, you can find it on Jfrog website, under dev-... heading (libs-dev-local I think)
+  
+- Tziki said he doesn't use BamBam much at all
+  
+===============================================================================================================
+
+XO126 notes:
+
+- 'root' account has no password
+- To connect via Out of Band as root, need to use port 614. E.g.: 'ssh root@10.34.71.122 -p 614'
+- 'admin pass is: CHGME.1a
+- enter CLI via 'cli'
+- XO126 is connected to: power server http://10.32.251.182/, outlet 5 (E)
+				         terminal server 10.32.251.194, port 9 (telnet 10.32.251.194 2900)
+- I typically use IP: 10.34.71.122 for XO Out-of-band
+- To use console, MUST use special type of cable that crosses Tx of one side with Rx of the other side!
+
+- Initially, or after resetting config, need to enter via serial and configure out-of-band mgmt
+  (best to configure maximum timeout as well):
+			
+configure
+set dcn 1 dcn-interface M0 dhcp-v4 role off
+set dcn 1 dcn-interface M0 dhcp-v6 role off
+set dcn 1 dcn-interface M0 ip-address/mask append 10.34.71.122/24 dad-transmits 5
+set dcn 1 ipv4-routes destination-ip-address/mask 0.0.0.0/0 next-hop 10.34.71.254 metric 20 interface M0
+set security user-settings admin cli-user-settings session-idle-timeout 0 
+commit
+						
+		Check IP settings:
+			
+			run show dcn 1 dcn-interface M0
+			
+		Set no log buffering:
+		
+			Log in as root, and do
+			# echo -e "/debug/aosFwHal/trace-log/enable-in-memory-buffer off"|aosCoreDteConsole
+
+---------------------------------------------------------------
+
+- When logged in as root, can use 'phyinv -d' to see EPROM data
+  
+  Can use phyinv to set EEPROM values also. Example:
+  
+phyinv --partNum="1078904473-01" -F
+phyinv --serNum="LBADVA71224699993" -F
+phyinv --mfgId="0x72" -F
+phyinv --mfgSite="RO" -F
+phyinv --mfgDate="20220223" -F
+phyinv --unitName="FSP 150-XO126" -F
+phyinv --unitSName="XO126" -F
+phyinv --hwRev="1.01" -F
+phyinv --uniqueHwId="183" -F
+phyinv --hsCompatId="0"
+phyinv --baseMacAddr="18:bc:57:00:15:5f" -F
+phyinv --numMacAddr=32 -F
+phyinv --oemBrandId=0 -F
+phyinv --PSN="ITS464_00_220223_134841" -F
+
+
+
+  Equivalent commands in U-Boot (debug on):
+
+inv card set part "1078904473-01"
+inv card set usi "LBADVA71224699993"
+inv card set manu "0x72"
+inv card set site "RO"
+inv card set date "20220223"
+inv card set name "FSP 150-XO126"
+inv card set sname "XO126"
+inv card set hwrev "1.01"
+inv card set uhi "183"
+inv card set hsc "0"
+inv card set macb "18:bc:57:00:15:5f"
+inv card set macn 32
+inv card set obi 0
+#inv card set psf "ITS464_00_220223_134841"
+inv card save
+	
+---------------------------------------------------------------	
+	
+- To reset all AOS configuration (like 'write erase' I think), log in as 'root' and execute:
+
+	aosCoreSrdmDbMaintLauncher
+	execute database restore-factory-database
+	
+  Give it a few seconds, and then it should reboot on its own. If not, can reboot manually.
+  Then when it comes back up, log in and use 'pstree'. When tree is full, can log in via 'cli', only
+  via console (not Out of Band). Then set DCN settings again.
+  
+---------------------------------------------------------------
+  
+- To manually flash SW image (.gz ending):
+	- Make sure that TFTP server on Linux PC is set up - see note in Adva onedrive if not
+	- On XO, boot to Uboot, 'debug on', use 'setenv' to set 'ipaddr' variable to some IP address, and set 'serverip' to address of TFTP server, e.g.
+		setenv ipaddr 10.34.71.123
+		setenv serverip 10.34.71.121
+		# required if device and TFTP server are on different subnets: setenv gatewayip <gateway_IP>
+		# may be required: setenv netmask 255.255.255.0
+		
+	- Copy your image (from EDE_DIR/targ/prod/xo126/med/xo126_disk_image.gz) to TFTP server directory
+	  (e.g. to: /srv/tftp).
+	- write SW to eMMC:
+
+		mmc dev 0; mmc erase 0 0x800000; tftpboot 0x100 xo126_disk_image.gz
+		
+		#NOTE: I think the last argument of 'tftpboot' should be path to image file RELATIVE TO TFTP SERVER ROOT DIR.
+										   # So if you chose to put xo image file in /srv/tftp/some_subdir/xo126_disk_image.gz, then I think argument
+										   # should be: '/some_subdir/xo126_disk_image'. Note: this will take a few minutes.
+		# When TFTP is complete, note the number of bytes written in hex, e.g. Bytes transferred = 567173681 (21ce6231 hex)
+		# Use this in the next line, last argument. Write will take about 10 minutes
+		gzwrite mmc 0 0x100 21ce6231
+	- When this finishes, boot AOS:
+		bootaos
+		
+	- If you have problems booting, and in Uboot you get these errors,:
+		=>bootaos
+		Error getting a valid image index from the inventory!
+		data 0x0000: value 0x000c | mask 0x000c
+		data 0x000c: value 0x000c | mask 0x000c
+	  
+	  Ensure that 'bootloader' EPROM settings (as opposed to 'card' ('inv card print')) are configured.
+	  To view:
+	  
+		inv bl print
+		
+	  Minimum that should be set is (note: lpwd is password required to enter 'debug on' in U-Boot):
+	  
+inv bl set alev restricted 
+inv bl set lpwd ""  
+inv bl set active 1     
+inv bl save
+	
+	  If you do these, and then do power reboot, and stop at uboot and do 'inv bl print' and you see
+	  that these did not get saved, set them here, do 'bootaos' (at this point, it should boot), and then
+	  in Linux, set them using phyinv (active means active partition):
+	  
+		phyinv --accessLvl=1 -F
+		phyinv --lvlPasswd="" -F
+		phyinv --active=1 -F
+		
+					  (Good 'inv bl print' output from Barak:
+					  
+						=>inv bl print
+
+				 
+
+						Bootloader static data revision   : 6
+						Bootloader variable data revision : 9
+
+						 
+
+						alev   : restricted
+						atype  : 
+						apwd   : 0000000000000000000000000000000000000000000000000000000000000000
+						ltype  : 
+						lpwd   : 616f730000000000000000000000000000000000000000000000000000000000
+						pin1   : adva
+						baud1  : 115200 (0x0001c200)
+						pin2   : adva
+						baud2  : 115200 (0x0001c200)
+						active : 1
+						valid  : 0x07
+
+						 
+
+						=>)
+					
+---------------------------------------------------------------
+				
+- If you ever do 'phyinv -d' (dump), and you see CRC errors in 'Bootloader Static Data' area (possibly after attempting to modify
+  values with 'phyinv --key=value -F' (or possibly from U-Boot via 'inv bl set <key> <value>')),
+  
+  To Fix:
+  
+	1) Boot to Linux
+	2) Log in as root, and run: 'phyinv -E' to erase entire EPROM
+	3) Set sane values for card EEPROM using phyinv:
+	
+phyinv --partNum="1078904473-01" -F
+phyinv --serNum="LBADVA71224699993" -F
+phyinv --mfgId="0x72" -F
+phyinv --mfgSite="RO" -F
+phyinv --mfgDate="20220223" -F
+phyinv --unitName="FSP 150-XO126" -F
+phyinv --unitSName="XO126" -F
+phyinv --hwRev="1.01" -F
+phyinv --uniqueHwId="183" -F
+phyinv --hsCompatId="0"
+phyinv --baseMacAddr="18:bc:57:00:15:5f" -F
+phyinv --numMacAddr=32 -F
+phyinv --oemBrandId=0 -F
+phyinv --PSN="ITS464_00_220223_134841" -F
+		
+	4) Set sane values for bootloader EEPROM:
+	
+phyinv --accessLvl=1 -F
+phyinv --lvlPasswd="" -F
+phyinv --active=1 -F
+phyinv --baud1=115200 -F
+phyinv --baud2=115200 -F
+	
+	Done!
+
+---------------------------------------------------------------
+
+- To change (base) MAC address of XO126 (base MAC: there is base MAC, and then automatically, it creates (32?)
+  MACs from this):
+  
+	-'ethaddr' is a protected value in U-Boot and thus cannot be changed like a normal
+	 U-Boot variable (We hold it and change it in EEPROM inventory and U-Boot gets it from there)
+	 
+	To change:
+
+	1.	Stop on U-Boot.
+
+	2.	Enter debug mode: type "debug on" + ENTER
+
+	3.	Set the new base MAC address ("XX:XX:XX:XX:XX:XX") into EEPROM:
+			inv card set macb "XX:XX:XX:XX:XX:XX"
+
+	4.	Print the value to make sure it is changed.
+			inv card print 
+
+	5.	Save the new value to EEPROM
+			inv card save
+
+	6.	Power cycle the board
+
+---------------------------------------------------------------
+
+To test/perform warm reset (Requires supporting CPLD):
+
+root
+board_dbg
+cpld
+write 0x0008 0x0004
+
+---------------------------------------------------------------
+
+Useful: Can use below line to POWER CYCLE XO126:
+
+- From Linux root:
+	
+	board_dbg cpld write 8 1
+	
+- From U-boot:
+
+	cpld rw 0x8 0x1
+
+---------------------------------------------------------------
+
+-To make persistent change to say /etc/init.d/mgmt (file that technically isn't saved between reboots):
+
+	#boot with /bin/bash (no AOS because it makes it impossible to unmount /etc due to it being busy), by stopping
+		in uboot, debug on, 'enter', 'setenv setbootargs $setbootargs init=/bin/bash', 'enter', 'bootaos'
+	# find out where RO file is actually located, do: find / -name "mgmt". Example result:
+		/mnt/active/adva/system-overrides/etc/init.d/mgmt
+	umount /etc # unmount - to separate aufs (unified file system) into ro fs and rw fs
+	mount -o remount,rw /mnt/active/adva # remount partition that was previously RO and contains the actual file we want to change as RW
+	# change real file by running vim /mnt/active/adva/system-overrides/etc/init.d/mgmt, and SAVE
+	mount -o remount,ro /mnt/active/adva # remount partition as RO - unnecessary because we'll reboot anyway, but doesn't hurt
+	#reboot again into /bin/bash and check changes
+
+---------------------------------------------------------------
+LOGGING:
+
+-To temporarily (until reboot) set debug severity to DEBUG:
+	
+	# aosCoreDteConsole
+	>go debug/aosFwHal/trace-log
+	>set-filter SEVERITY ge DEBUG
+	>exit
+
+-To permanently (AFTER reboot) set debug severity to DEBUG:
+	
+	mount -o remount,rw /opt/adva 
+    vi /opt/adva/aos/etc/core-apps/sirm/appProcessActive/ec.hal.json
+       
+	# Set line: "normal": "-v=DEBUG -c etc/framework/hal/HalConfig.json",
+	
+Can do both operations above to immediately get DEBUG logs, but also set it
+permanently.
+
+>>> In both cases (and needed after every reboot, I think) best to do:
+		echo -e "/debug/aosFwHal/trace-log/enable-in-memory-buffer off" | aosCoreDteConsole
+    so that logs will happen immediately, and won't be buffered.
+---
+
+-Logs are located at: /var/opt/adva/aos/log/tracelog
+	- I think aosFwHal.log is most relevant usually
+	
+-When you set severity to DEBUG, log becomes huge, so better to filter some
+ stuff out of log. Tziki's example:
+ 
+	tail -f aosFwHal.log | grep --binary-files=text -v '0051/eeprom\|DevClkSel\|CompPtpServer\|HbmEqptCard.hpp\|DevPwrMon\|setSyncStatusReady(true)\|CompOamTsGen.cpp\|PmColDelegateImpl.cpp\|APP event\|with id 76\|HbmAppEqpt.hxx:1309'
+
+---------------------------------------------------------------
+
+-Can see version information (FPGA, CPLD, etc) with 'version' command at root prompt
+
+-Can upgrade CPLD firmware manually with: updatecpld /opt/adva/aos/firmware/cpld/f4-xo126-cpld.jed
+ In order for CPLD to load new firmware, MUST POWER CYCLE - SW reboot is not enough
+
+-FPGA files are loaded at boot, from /opt/adva/aos/fpga (on XO126 itself)
+
+	Note: In order to be able to access EEPROM bus 1 from U-Boot (e.g. to be able to do
+		  'inv bl set macb ...' 'inv bl save'), you MUST have SW written to EMMC.
+		  This is because SW image includes minimal FPGA image that goes in an
+		  EMMC partition that is loaded around when U-Boot loads, and this is used
+		  to communicate with I2C bus 1. (Later, when AOS loads, it uses full FPGA image,
+		  which includes this support for I2c bus 1 as well).
+
+-Can save XO126 configuration to a file with: run execute config-script generate filename <FILENAME>
+ Then you can read it with: run show config-script file <FILENAME>
+ 
+ Note: Michal says that you need to put 'commit' after each line when attempting to use config
+ -------------------------------------------------------------------------------------------
+  
+Notes from XO126 session with Maoz:
+
+-hbm(card? part of HAL framework) is low-level process like pss I think - deals with POE, other HW.
+ There are application processes that run at application layer - theorectically I could implement new process
+ like lldpds, that talks to hbm (like lldpd talking to hal process on NIDPlug+). They use messages to communicate
+ (like UiD requests). Another application layer process: APL (application layer) framework manages DB of information
+ - talks to CLI/SNMP/other mgmt on one hand, and on the other, talks to applications (like my lldpds).
+
+
+-If I want to use source code of application, in "build-and-test" folder, make change saying that I want to clone sources of
+ specific repo (e.g. one of the thousands of repos on Gerrit). (Note: I think the change should be made to the
+ 'CMakeRepoPaths.cmake' file.) If I do this, then we don't bring binary from Jfrog.
+
+-To add linux utility (use phyinv as example):
+	-Add sources to new directory in f4-xo126-modules/source, e.g. f4-xo126-modules/source/phyinv
+	-Add CMakeLists.txt file in same directory, set it up
+	-Add in recipe/base.hardware.recipe.cmake install rule to install the binary in the target root FS
+	
+- ede_targ_prod_devel/copy/fsmod is target filesystem
+
+-board_dbg is useful debug utility - can invoke from xo126 CLI (root)
+
+--------------------------------------------
+
+To connect to example XG118CSH Pro (Yaakov's):
+
+	- GUI: 10.35.114.51, user: admin, pass: CHGME.1a
+	- Serial: 'ssh 10.35.114.253 -p 2622'
+		- Automatically logged in as root. To get to CLI:
+			'cli', user: admin, pass: CHGME.1a
+
+---------------------------------------------------------------
