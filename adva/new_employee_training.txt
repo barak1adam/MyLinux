@@ -1,0 +1,99 @@
+
+Training plan for Shay:
+
+ 
+A welcome meeting (Barak)
+
+Linux PC installation (at least Ubuntu 20.04)
+
+XG-300 product introduction (PLM)
+
+XG-300 introduction to the build system (Barak)
+
+hands on XG-300:
+1.	XG-300 build system – learn and build the SW
+2.	Download the image (*.ver file) to a device installed in the SW lab.
+3.	Have an XG-300 CLI introduction session (SIT)
+4.	Basic configurations: UNI/NNI services, OOB.
+5.	Test the services with a traffic generator in the SW lab
+6.	Learn how to work with NFS (Barak or Josh)
+
+
+Optional: introduction to u-boot (Barak or Josh)
+
+NidPlug+ introduction 
+
+The NidPlug+ and the BR build system (Barak)
+
+Introduction to HW layout (Yotam)
+
+Introduction to FPGA (Shay)
+
+hands on NidPlug (Josh):
+
+	build
+	flashing using EVB, SW upgrade
+	
+
+git - policy and bitbucket (Barak)
+
+Hands on:
+a real bug fix - develop, build, commit.
+
+XG-400 introduction
+
+AOS training:
+
+
+
+intorduction to buildroot
+
+nidplug+
+	build
+	flashing using EVB, SW upgrade
+	a bug fix - develop, build, commit.
+	intorudction to FPGA by Shay
+	driver, TLVs, ?
+
+xg-300 introduction with Raul (PLM)
+
+xg-300 L2 / L3 key topics with Raul - vlans, OAM, protocols, subnets
+	
+xg-300 SW tree: sources organization, processes, etc.
+
+xg-300 intoroduction with Pavel: packet processor
+
+DR example - NTP, LLDP
+
+xg300 build
+
+intoroduction to Spirent
+
+xg 300 basic services configurations by SIT + TG + tests
+	OOB
+	VLAN servrices (UNI, NNI)
+	NTP
+	SW upgrades + image download from TC
+	NFS
+
+NidPlug basic services configurations by SIT + TG + tests
+
+Intorduction to TC
+
+Introduction to u-boot: env set / get etc
+
+small feature implementation on  nidplug
+
+LTE, 5G modules - review all modules (Barak), Eran (Meet and Teach), Noam
+
+AOS
+
+Optional:
+=========
+Kernel introduction
+
+Scheduler
+
+NFV  (Barak, Eran)
+
+Acitvator ?

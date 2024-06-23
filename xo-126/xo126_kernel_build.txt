@@ -9,7 +9,8 @@ cd ~/linux-xlnx/
 
 make clean
 make -f Makefile xilinx_zynqmp_defconfig
-make -f Makefile all -j 32
+#make -f Makefile all -j 32
+make
 #cp arch/arm64/boot/Image /tftpboot/Image.new
 
 

@@ -33,11 +33,16 @@ write u-boot and env to NOR:
 =============================
 tftpboot 0x08000000 /tftpboot/BOOT_2404.bin
 
-sf probe 1 0 0; sf erase 0 0x400000; sf write 0x08000000 0 0x190000
+sf probe 1 0 0; sf erase 0 0x200000; sf write 0x08000000 0 0x190000
 
 tftpboot 0x04000000 /tftpboot/uboot-env-xo126-mac.bin
 
 sf probe; sf write 0x04000000 0x200000 0x10000
+
+write 4M bin:
+=============
+tftpboot 0x100 /tftpboot/XO-126-4M.bin
+sf probe 1 0 0; sf erase 0 0x400000; sf write 0x100 0 0x400000
 
 write SW to eMMC
 ================
@@ -78,8 +83,8 @@ let the AOS to boot
 #phyinv --lvlPasswd="" -F
 #phyinv --active=1 -F
 
-phyinv --partNum="1078904473-01" -F
-phyinv --serNum="LBADVA71224699993" -F
+phyinv --partNum="1078904472-01" -F
+phyinv --serNum="LBADVA72220704685" -F
 phyinv --mfgId="0x72" -F
 phyinv --mfgSite="RO" -F
 phyinv --mfgDate="20220223" -F
@@ -88,7 +93,7 @@ phyinv --unitSName="XO126" -F
 phyinv --hwRev="1.01" -F
 phyinv --uniqueHwId="183" -F
 phyinv --hsCompatId="0"
-phyinv --baseMacAddr="18:bc:57:00:15:5f" -F
+phyinv --baseMacAddr="18:bc:57:00:15:51" -F
 phyinv --numMacAddr=32 -F
 phyinv --oemBrandId=0 -F
 phyinv --PSN="ITS464_00_220223_134841" -F
@@ -96,7 +101,5 @@ phyinv --PSN="ITS464_00_220223_134841" -F
 aosCoreSrdmDbMaintLauncher
 execute database restore-factory-database 
 wait to reboot
-
-
 
 

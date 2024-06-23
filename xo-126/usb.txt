@@ -1,0 +1,139 @@
+[xo126:~] # dmesg | grep usb
+[    1.370040] usbcore: registered new interface driver usbfs
+[    1.370079] usbcore: registered new interface driver hub
+[    1.370108] usbcore: registered new device driver usb
+[    1.441984] usbcore: registered new interface driver asix
+[    1.442028] usbcore: registered new interface driver ax88179_178a
+[    1.442055] usbcore: registered new interface driver cdc_ether
+[    1.442084] usbcore: registered new interface driver net1080
+[    1.442110] usbcore: registered new interface driver cdc_subset
+[    1.442136] usbcore: registered new interface driver zaurus
+[    1.442174] usbcore: registered new interface driver cdc_ncm
+[    1.442930] usbcore: registered new interface driver uas
+[    1.442967] usbcore: registered new interface driver usb-storage
+[    1.474591] usbcore: registered new interface driver usbhid
+[    1.474603] usbhid: USB HID core driver
+[    2.757740] dwc3-xilinx ff9d0000.usb0: Error applying setting, reverse things back
+[    2.772335] dwc3-xilinx ff9d0000.usb0: failed to add to PM domain domain9: -13
+[    2.779554] dwc3-xilinx: probe of ff9d0000.usb0 failed with error -13
+
+
+Linux:
+
+Configuration
+CONFIG_USB_DWC3=y
+CONFIG_USB_DWC3_DUAL_ROLE=y
+CONFIG_USB_LIBCOMPOSITE=m
+CONFIG_USB_F_MASS_STORAGE=m
+CONFIG_USB_CONFIGFS=m
+CONFIG_USB_CONFIGFS_MASS_STORAGE=y
+CONFIG_USB_SUPPORT=y
+CONFIG_USB_COMMON=y
+CONFIG_USB_ARCH_HAS_HCD=y
+CONFIG_USB=y
+CONFIG_USB_XHCI_HCD=y
+CONFIG_USB_XHCI_PLATFORM=y
+		
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842069/USB
+
+usb@0 {
+    #address-cells = <0x2>;
+    #size-cells = <0x1>;
+    status = "okay";
+    compatible = "xlnx,zynqmp-dwc3";
+    clock-names = "bus_clk" "ref_clk";
+   --------------------> clocks = <&&clk125>, <&&clk125>;
+    ranges;
+ 
+    dwc3@fe200000 {
+        compatible = "snps,dwc3";
+        reg = <0x0 0xfe200000 0x40000>;
+        interrupts = <0x0 0x41 0x4>;
+        dr_mode = "host";
+    };
+};
+
+
+u-boot:
+
+CONFIG_USB=y
+CONFIG_USB_ULPI_VIEWPORT=y
+CONFIG_USB_ULPI=y
+CONFIG_USB_STORAGE=y
+CONFIG_USB_GADGET=y
+CONFIG_USB_GADGET_MANUFACTURER="Xilinx"
+CONFIG_USB_GADGET_VENDOR_NUM=0x03fd
+CONFIG_USB_GADGET_PRODUCT_NUM=0x0300
+CONFIG_CMD_USB=y
+CONFIG_USB_DWC3=y
+CONFIG_USB_XHCI_DWC3=y
+CONFIG_USB_XHCI_ZYNQMP=y
+CONFIG_USB_DWC3_GADGET=y
+CONFIG_USB_HOST=y
+CONFIG_USB_DWC3_GENERIC=y
+CONFIG_ZYNQMP_USB=y
+CONFIG_USB_STORAGE=y
+CONFIG_USB_XHCI_HCD=y
+
+/* ULPI SMSC USB3320 */
+&&usb0 {
+       status = "okay";
+       pinctrl-names = "default";
+       pinctrl-0 = <&&pinctrl_usb0_default>;
+};
+  
+&&dwc3_0 {
+       status = "okay";
+       dr_mode = "host";
+       snps,usb3_lpm_capable;
+       phy-names = "usb3-phy";
+       phys = <&&lane2 PHY_TYPE_USB3 0 2 26000000>;
+       maximum-speed = "super-speed";
+};
+  
+       pinctrl_usb0_default: usb0-default {
+               mux {
+                       groups = "usb0_0_grp";
+                       function = "usb0";
+               };
+  
+               conf {
+                       groups = "usb0_0_grp";
+                       slew-rate = <SLEW_RATE_SLOW>;
+                       io-standard = <IO_STANDARD_LVCMOS18>;
+               };
+  
+               conf-rx {
+                       pins = "MIO52", "MIO53", "MIO55";
+                       bias-high-impedance;
+               };
+  
+               conf-tx {
+                       pins = "MIO54", "MIO56", "MIO57", "MIO58", "MIO59",
+                               "MIO60", "MIO61", "MIO62", "MIO63";
+                       bias-disable;
+               };
+       };
+
+ZynqMP> usb start
+starting USB...
+Bus dwc3@fe200000: probe failed, error -2
+No working controllers found
+ZynqMP>
+
+Enabling the USB and DWC3 nodes in the device tree of the u-boot and the kernel
+I am following the wikis + compared to xg108 zcu102 and checked that all USB and DWC3 compilation flags are enabled in defconfig
+in both cased dwc3 fails to probe
+dwc3_generic_probe
+
+
+tests:
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842468/ZynqMp+USB+Stadalone+Driver
+
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841729/Zynq+Ultrascale+MPSOC+Linux+USB+device+driver#ZynqUltrascaleMPSOCLinuxUSBdevicedriver-Featuressupportedindriver
+Support host, device and OTG modes
+
+bootlin testusb
+https://bootlin.com/blog/tag/usb/
+
+https://bootlin.com/doc/legacy/linux-usb/linux-usb.pdf

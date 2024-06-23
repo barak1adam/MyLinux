@@ -1,5 +1,6 @@
 SUMMARY:
 ======== 
+ZynqMP part number: XCZU17EG-ffvc1760-2-i
 
 to run petalinux tools:
 source /opt/pkg/petalinux/v2022.1/settings.sh
@@ -128,7 +129,7 @@ Install Vitis and import / opend the right workspace to zcu102
 
 connect
 targets -set -filter {name =~ "Cortex-A53 #0"}
-rst -processor
+rst -processor; 
 mwr 0xff5e0200 0x0100
 rst -system
 
@@ -138,10 +139,13 @@ targets -set -filter {name =~ "PSU"}; mwr 0xffca0038 0x1ff; after 500; targets; 
 3. Load FSBL
 targets -set -filter {name =~ "Cortex-A53 #0"}; targets; rst -processor; dow /home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf; con; after 5000
 
-4. Load U-boot (the one that is built for JTAG - no env and no autoboot)
-dow {/home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf}; con; after 500; dow {/home/barak/xilinx-zcu102-2022.1/images/linux/bl31.elf}; con; after 5000; stop
+4. Load DTB
+dow -data {/home/barak/xilinx-zcu102-2022.1/images/linux/system.dtb} 0x00100000
 
-5. now burn BIN to NOR by u-boot tfttp or get it by jtag (stop; dow -data {/home/barak/edt/zcu102_for_bringup/BOOT.bin} 0x2000000; con)
+5. Load U-boot (the one that is built for JTAG - no env and no autoboot). 
+dow {/home/barak/xilinx-zcu102-2022.1/images/linux/u-boot.elf}; con;
+
+6. now burn BIN to NOR by u-boot tfttp or get it by jtag (stop; dow -data {/home/barak/edt/zcu102_for_bringup/BOOT.bin} 0x2000000; con)
 Note:
 #if we like to make the u-boot working with ETH connectivity for BOOT.bin tftpboot, we need to load also the dtb.
 #so we need to load u-boot by "petalinux-boot --jtag --u-boot".

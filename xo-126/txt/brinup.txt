@@ -84,7 +84,9 @@ stop
 
 #targets -set -filter {name =~ "Cortex-A53 #0"}; targets; rst -processor; dow /home/barak/edt/edt_zcu102_workspace/xo126_fsbl/Debug/xo126_fsbl.elf; con; after 5000
 targets -set -filter {name =~ "Cortex-A53 #0"}; targets; rst -processor; dow /home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf; con; after 5000
- 
+
+FSBL settings - embedded tutorial, page 43.
+
 examples
 ==========
 

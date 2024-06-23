@@ -1,0 +1,136 @@
+boot chain
+===========
+The cold boot path in this implementation of TF-A depends on the execution state. For AArch64, it is divided into five steps (in order of execution):
+
+	Boot Loader stage 1 (BL1) AP Trusted ROM
+
+	Boot Loader stage 2 (BL2) Trusted Boot Firmware
+
+	Boot Loader stage 3-1 (BL31) EL3 Runtime Software
+
+		Boot Loader stage 3-2 (BL32) Secure-EL1 Payload (optional)
+
+	Boot Loader stage 3-3 (BL33) Non-trusted Firmware
+
+For AArch32, it is divided into four steps (in order of execution):
+
+	Boot Loader stage 1 (BL1) AP Trusted ROM
+
+	Boot Loader stage 2 (BL2) Trusted Boot Firmware
+
+		Boot Loader stage 3-2 (BL32) EL3 Runtime Software
+
+	Boot Loader stage 3-3 (BL33) Non-trusted Firmware
+
+1
+2
+3.1
+3.2
+3.3
+
+u-boot spl:
+
+So this first-stage bootloader is U-Boot SPL; 
+and second-stage bootloader is regular U-Boot (or U-Boot proper). 
+To be clear: SPL stands for Secondary Program Loader. Which means that ROM code is the first thing that loads (and executes) other program, and SPL is the second thing that loads (and executes) other program. 
+So usually boot sequence is next: ROM code -> SPL -> u-boot -> kernel. (And actually it's very similar to PC boot, which is: BIOS -> MBR -> GRUB -> kernel.)
+
+https://stackoverflow.com/questions/31244862/what-is-the-use-of-spl-secondary-program-loader
+
+1) SPL is the u-boot part that is doing the function of FSBL (BL2), including the _f code and  relocation to DRAM.
+
+In our ZynqMP it is done by Xilinx FSBL and this part of u-boot is not in use.
+
+ 
+
+2) After relocated, _r code is done and is part of the regular u-boot (BL3).
+
+u-boot sources organziation and build, adva code
+=================================================
+
+Usually u-boot is built for one specific board
+for each board usually the vendors provide common (to all vendor boards) and specific board folders. those 2 are getting built for the board.
+
+The board and the DTS are selected in the u-boot defconfig:
+board is selected under "General Arch"
+DTS is selected under "Devic Tree"
+
+For XO-126 I am using Xilinx/zynqmp + Xilinx/common
+Theoretically I could also merge adva common code into Xilinx/common and change the Xilinx Makefiles to compile it.
+
+aos-ne-bootloader
+	common sources
+	
+	xilinx-u-boot 2022.1
+		board
+			adva
+				xo126 ----> product specific code (board/xilinx/zynqmp + board/xilinx/common)
+				common ---> adva common sources on aos-ne-bootloader. Aligned to xg118? need to compare
+				
+
+	xilinx u-boot-2022.4
+		board
+			adva
+				xg118 ----> links to f4-bootloader-xg1 files
+				common ---> usually link to common sources on aos-ne-bootloader
+				
+	xilinx sdk
+		board
+			adva
+				aflex ----> links to f8-bootloader-aflex files
+				common ---> usually link to common sources on aos-ne-bootloader
+
+summary of adva board specific files on u-boot:
+	board/adva
+	arch/arm/dts
+	include/configs
+	configs
+
+xg118 (as explained by Russell):
+usually the clone the product f4-bootloader-xg1 and run its make files
+the make files clone the source aos-ne-bootloader and make the links into the prodcut f4-bootloader-xg1
+The build is done actually in the main source repo directory aos-ne-bootloader/source/u-boot-2022.04 with the output objects going into the product repo obj* directory. 
+(There’s a lot happening to make this work.  Look at the defines in “Makefile” and the logic in “common.mk”)
+
+why aos-ne-bootloader is not a good sharing?
+every product has its sources out of this repo, not shared
+every product duplicates u-boot code sources into aos-ne-bootloader
+you never know what patches are used for every product and what source are out of this repo, maybe they change the adva common code itself
+
+better way is branches, then there is no question about what you get. all adva code is maintained in one common branch !
+
+Aflex suggest to have product speficic branch that:
+clone on the fly of u-boot vendor code like xilinx, maintain patches to it. some of the patches add aflex Kconfig / dts
+maintain adva common code
+maintain product specific code
+
+I think adva common code should be in master branch
+
+u-boot execution and relocation
+===============================
+U-Boot executes the following main steps in DDR memory:
+
+Pre-relocation initialization (common/board_f.c): minimal initialization (such as CPU, clock, reset, DDR and console) running at the CONFIG_SYS_TEXT_BASE load address.
+
+Relocation: copy of the code to the end of DDR memory.
+
+Post-relocation initialization:(common/board_r.c): initialization of all the drivers.
+
+Command execution through autoboot (CONFIG_AUTOBOOT) or console shell.
+	Execution of the boot command (by default bootcmd=CONFIG_BOOTCOMMAND):for example, execution of the command bootm to:
+		load and check images (such as kernel, device tree and ramdisk)
+		fixup the kernel device tree
+		install the secure monitor (optional) or
+		pass the control to the Linux kernel (or to another target application)
+
+U-boot has to reserve 3 regions in memory that stores: 1) u-boot itself, 2) uImage (compressed kernel), and 3) uncompressed kernel. 
+These 3 regions must be carefully placed in u-boot to prevent conflict.
+
+However, the previous stage boot-loader, (BL2 or BL1) that brings u-boot into DRAM memory don\t know u-boot's planing on these 3 regions. So it can only loads u-boot onto a lower address in DRAM memory and jump to it. 
+Then, after u-boot execute some basic initialization and detect current PC is not in planed location, u-boot call relocate function that move u-boot to the planned location and jump to it.
+
+how to debugu-boot
+==================
+
+Vitis -  zcu102, jtag, bsp install
+===================================

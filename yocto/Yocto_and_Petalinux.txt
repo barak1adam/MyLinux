@@ -1,0 +1,940 @@
+Yocto:
+======
+
+#what is Yocto
+===============
+It is a build system - Generates Linux distribution - Kernel, libs and utils
+It generates SDK for apps development
+Supports thousands of linux packages (~10000), including modern technologies (latest GCC 7.x, Linux Kernel, virtualization, dockers, gRPC, etc)
+
+#the motivation for Yocto
+=========================
+fully flexible, built from source, easy to add packages
+embedded specific:
+	support cross compile, many CPU archetectures
+ 	embedded packages not inlcuded in desktops
+A linux foundation project
+open source
+self-contained
+bundle size was reduced within 100M
+simplified process - same build for local and TC
+supports QEMU
+
+#Cons:
+======
+not easy learning curve
+long build time - most of the build time is spent on building GCC toolchain and generic Linux
+packages. Currently, Yocto image that is used for Agema products contains around 300 packages
+
+#Yocto is OpenEmbedded Build System:
+=================================== 
+The core components of the Yocto Project are:
+• BitBake, the build engine. It is a task scheduler, like make. It interprets
+configuration files and recipes (also called metadata) to perform a set of tasks, to
+download, configure and build specified applications and filesystem images.
+• OpenEmbedded-Core, a set of base layers. It is a set of recipes, layers and classes
+which are shared between all OpenEmbedded based systems.
+• Poky, the reference system. It is a collection of projects and tools, used to bootstrap
+a new distribution based on the Yocto Project.
+
+#esdk vs sdk:
+============
+esdk = extensible sdk.
+
+A standard SDK consists of the following:
+
+Cross-Development Toolchain: This toolchain contains a compiler, debugger, and various miscellaneous tools.
+Libraries, Headers, and Symbols: The libraries, headers, and symbols are specific to the image (i.e. they match the image).
+Environment Setup Script: This *.sh file, once run, sets up the cross-development environment by defining variables and preparing for SDK use.
+You can use the standard SDK to independently develop and test code that is destined to run on some target machine.
+
+--->SDK is built is per hw, need to use the one that was built for your HW
+
+An extensible SDK consists of everything that the standard SDK has +++plus+++
+ tools that allow you to easily add new applications and libraries to an image, modify the source of an existing component, test changes on the target hardware, and easily integrate an application into the OpenEmbedded build system.
+
+The extensible SDK provides a cross-development toolchain and libraries tailored to the contents of a specific image. 
+You would use the Extensible SDK if you want a toolchain experience supplemented with the powerful set of devtool commands tailored for the Yocto Project environment.
+The installed extensible SDK consists of several files and directories. 
+Basically, it contains an SDK environment setup script, some configuration files, an internal build system, and the devtool functionality.
+
+--->The cornerstone of the extensible SDK is a command-line tool called devtool
+
+#rootfs is included in the SDK
+what's included is due to IMAGE_INSTALL_append we set in conf/local.conf
+
+#example - add a staticdev package to IMAGE_INSTALL
+By default, this toolchain does not build static binaries. 
+If you want to use the toolchain to build these types of libraries, you need to be sure your image has the appropriate static development libraries. 
+Use the IMAGE_INSTALL variable inside your local.conf file to install the appropriate library packages. 
+Following is an example using glibc static development libraries:
+     IMAGE_INSTALL_append = " glibc-staticdev"
+
+
+#building the SDK:
+=================
+The build process creates an entire Linux distribution, including the toolchain, from source.
+
+#SDK installation:
+===================
+directories struct after installation of SDK
+https://www.yoctoproject.org/docs/2.1/sdk-manual/sdk-manual.html#sdk-installed-standard-sdk-directory-structure
+
+SDK can be obtained by installer script or by extracting a tar file
+http://downloads.yoctoproject.org/releases/yocto/yocto-2.1/toolchain/x86_64/
+
+#SDK workflow:
+===============
+https://docs.yoctoproject.org/sdk-manual/extensible.html#using-devtool-in-your-sdk-workflow
+
+#devtool
+summarize devtool reset with delete folders
+
+#devtool
+when working with devtool: You must set up a new terminal to work with the eSDK. 
+You cannot use the same BitBake shell used to build the installer.
+
+
+#Agema installaion script:
+==========================
+Installs the eSDK that is built and saved in foxtrot.
+it includes Open Clovis sources required for compilation, cloned to ~/yocto/2.5.2_bcm-sdk-6.5.22/esdk/safplus/...
+	clovis infra is built under Yocto
+	clovis is still used for IPC
+	ref: http://openclovis.com/products/safplus/
+clone meta-switch
+
+#Agema build script:
+
+
+#how yocto extracted rootfs is merged with our apps?
+the Yocto rootfs is extracted into ~/yocto/2.5.2_bcm-sdk-6.5.22/esdk/poky_sdk/tmp/work/qemux86_64-poky-linux/core-image-full-cmdline/1.0-r0/rootfs
+then it is packed toghether with the applications into a bundle. this is done by the bundle creation script.
+
+Yocto directories structure:
+============================
+https://docs.yoctoproject.org/2.1/ref-manual/ref-manual.html#structure-core
+https://docs.yoctoproject.org/ref-manual/structure.html
+
+
+#my question on stack-overflow
+https://stackoverflow.com/questions/72768131/yocto-build-directories
+
+yocto - build tree for a recipe:
+================================
+
+#tmp dir
+~/mrv_dev/init-kconfig/ybld/build/tmp
+
+#tmp/work
+$~/mrv_dev/yocto-training/build/tmp/work$ ls -la
+drwxr-xr-x   8 barak barak 4.0K Jun 24 07:25 all-poky-linux
+drwxr-xr-x  84 barak barak 4.0K Jun 24 07:25 core2-64-poky-linux
+drwxr-xr-x  11 barak barak 4.0K Jun 24 08:41 qemux86_64-poky-linux
+drwxr-xr-x 145 barak barak 4.0K Jun 24 07:28 x86_64-linux
+
+--all-poky-linux holds the recipes that are architecture-independent, like scripts.
+
+--x86_64-linux: used to hold recipes that are built for the build host that are used to build other recipes for the target machine. For more info check this link
+
+--qemux86_64-poky-linux: holds recipes that are machine-specific like core-image-minimal as it is an image containing packages and boot/kernel binaries/configuration specific only to qemux86_64.
+this is the ${MACHINE}-poky-${TARGET_OS}
+
+--core2-64-poky-linux: holds recipes that are architecture-specific, recipes that runs only on that architecture. It runs on qemux86_64 machine and can run on other machines that are compatible with that architecture.
+this is the ${PACKAGE_ARCH}-poky-${TARGET_OS} 
+
+(Intel Core 2 is the processor family encompassing a range of Intel's consumer 64-bit x86-64 single-, dual-, and quad-core microprocessors based on the Core microarchitecture.)
+
+#pkg source tree
+cd ~/mrv_dev/init-kconfig/ybld/build/workspace/sources/ipmitool
+
+#pkg workdir
+~/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0
+
+#pkg S, B dir
+~/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0/ipmitool-1.8.18
+
+#pkg D dir
+~/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0/ipmitool-1.8.18/image
+
+mrv@mrv-OptiPlex-990:~/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0$ ls -la
+total 152
+drwxrwxr-x 20 mrv mrv  4096 Jun 23 07:31 .
+drwxrwxr-x  3 mrv mrv  4096 Jun 23 07:15 ..
+-rw-rw-r--  1 mrv mrv  9724 Jun 15 14:14 0001-adva-custom-changes.patch
+-rw-rw-r--  1 mrv mrv  1434 Jun 15 14:14 0001-read_fru_area-fix.patch
+-rw-r--r--  1 mrv mrv    33 Jun 23 07:15 configure.sstate
+-rw-r--r--  1 mrv mrv 30317 Jun 23 07:31 debugsources.list
+drwxr-xr-x  3 mrv mrv  4096 Jun 23 07:31 deploy-rpms
+drwxr-xr-x  3 mrv mrv  4096 Jun 23 07:19 image ----------------> D
+drwxr-xr-x  8 mrv mrv  4096 Jun 23 07:15 ipmitool-1.8.18 -------------------> S. By defalt B = S.
+-rw-r--r--  1 mrv mrv  7805 Jun 23 07:31 ipmitool.spec
+drwxrwxr-x  3 mrv mrv  4096 Jun 23 07:15 license-destdir
+drwxr-xr-x  3 mrv mrv  4096 Jun 23 07:19 package
+drwxr-xr-x  8 mrv mrv  4096 Jun 23 07:31 packages-split
+drwxr-xr-x  6 mrv mrv  4096 Jun 23 07:31 pkgdata
+drwxrwxr-x  2 mrv mrv  4096 Jun 23 07:31 pseudo
+drwxrwxr-x  5 mrv mrv  4096 Jun 23 07:31 recipe-sysroot
+drwxrwxr-x 10 mrv mrv  4096 Jun 23 07:15 recipe-sysroot-native
+drwxr-xr-x  2 mrv mrv  4096 Jun 23 07:15 sstate-install-package
+drwxrwxr-x  2 mrv mrv  4096 Jun 23 07:15 sstate-install-packagedata
+drwxr-xr-x  2 mrv mrv  4096 Jun 23 07:16 sstate-install-package_qa
+drwxr-xr-x  2 mrv mrv  4096 Jun 23 07:16 sstate-install-package_write_rpm
+drwxrwxr-x  2 mrv mrv  4096 Jun 23 07:15 sstate-install-populate_lic
+drwxr-xr-x  2 mrv mrv  4096 Jun 23 07:15 sstate-install-populate_sysroot
+drwxr-xr-x  4 mrv mrv  4096 Jun 23 07:31 sysroot-destdir
+drwxrwxr-x  2 mrv mrv 16384 Jun 23 07:31 temp
+
+# symlinks to workdir and log dir
+you will find some symbolic links created within the source tree: 
+oe-logs: which points to the directory in which log files and run scripts for each build step are created 
+oe-workdir: which points to the temporary work area for the recipe. 
+
+oe-workdir -> /home/mrv/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0/
+oe-logs -> /home/mrv/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0/temp/
+
+#pkg vaiables: more pkgdata/runtime/ipmitool
+PN: ipmitool
+PV: 1.8.18
+PR: r0
+PKGV: 1.8.18
+PKGR: r0
+LICENSE: BSD-3-Clause
+DESCRIPTION: This package contains a utility for...
+Example for src tree of a package:
+
+#image dir
+Contains all of the files installed at the do_install stage. 
+Within a recipe, this directory is referred to by the expression ${D}.
+
+#sysroot-destdir: 
+Contains a subset of files installed within do_install that have been put into the shared sysroot.
+For more information, see the "Sharing Files Between Recipes" section.
+
+#packages-split: 
+Contains subdirectories for each package produced by the recipe.
+
+#how the split is done
+The PACKAGES and FILES variables controls splitting. 
+
+#The PACKAGES variable
+lists all of the packages to be produced
+
+#The FILES variable
+the list of directories or files that are placed in packages.
+a space-separated list of files or paths that identify the files you want included as part of the resulting package.
+
+For example, FILES_${PN} specifies the files to go into the main package. PN = recipe name.
+
+example:
+
+     FILES_${PN} += "${bindir}/mydir1/ ${bindir}/mydir2/myfile"
+
+
+The order of the PACKAGES value is significant. For each installed file, the first package whose FILES value matches the file is the package into which the file goes.
+Package variables can be found in:oe-workdir/pkgdata
+
+PACKAGES and FILES values can be found under oe-workdir/pkgdata/ipmitool
+PACKAGES - The list of packages to be created from the recipe. The default value is the following:
+
+     ${PN}-dbg ${PN}-staticdev ${PN}-dev ${PN}-doc ${PN}-locale ${PACKAGE_BEFORE_PN} ${PN}
+
+example of ipmitool PACKAGES:
+PACKAGES: ipmitool-dbg ipmitool-staticdev ipmitool-dev ipmitool-doc ipmitool-locale ipmitool
+
+#what pkg is finally included in the rootfs?
+---->Usually ${PN}, here it is impitool, is the one that is appended to IMAGE_INSTALL and thus is included in the final rootfs !
+
+#the pkg recipe is located under the poky source directory, in the related layer
+/home/mrv/mrv_dev/init-kconfig/ybld/poky/meta-openembedded/meta-oe/recipes-kernel/ipmitool/ipmitool_1.8.18.bb
+
+#Bitbake and Image Generation:
+=============================
+https://docs.yoctoproject.org/1.8/ref-manual/ref-manual.html#image-generation-dev-environment
+https://docs.yoctoproject.org/overview-manual/concepts.html#bitbake-tool
+
+
+#The Open-Embedded build workflow:
+=================================
+https://docs.yoctoproject.org/overview-manual/concepts.html#openembedded-build-system-concepts
+
+Default tasks already exists, they are defined in classes:
+▶ do_fetch
+▶ do_unpack
+▶ do_patch
+▶ do_configure
+▶ do_compile
+▶ do_install
+▶ do_package
+▶ do_rootfs
+You can get a list of existing tasks for a recipe with:
+bitbake <recipe> -c listtasks
+
+
+#sourcing
+The do_fetch and do_unpack tasks fetch the source files and unpack them into the work directory.
+i.e. to S directory: ~/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0/ipmitool-1.8.18
+
+to ensure the sources are re-fetched, I did:
+bitbake -c clean ipmitool
+bitbake -c fetch ipmitool
+bitbake -c unpack ipmitool
+
+#patching
+The do_patch task uses a recipe’s SRC_URI statements and the FILESPATH variable to locate applicable patch files.
+During the build process, BitBake searches each directory in FILESPATH in the specified order when looking for files and patches specified by each file:// URI in a recipe’s SRC_URI statements.
+
+SRC_URI is per recipe.
+FILESPATH is inherited by a recipe. do not edit.
+
+FILESPATH
+The default set of directories the OpenEmbedded build system uses when searching for patches and files.
+
+#building
+do_prepare_recipe_sysroot - recipe-sysroot and recipe-sysroot-native contains depenencies of other recipes (ooutputs of other recipes do_populate_sysroot)
+do_configure
+do_compile (in $B. by default B = S)
+do_install (from $S to $D)
+
+#packaging
+do_package and do_packagedata do the split
+do_populate_sysroot copies a subset of the files into the appropriate sysroot
+do_package_write_* creates the actual packages and places them in the Package Feed area, which is ${TMPDIR}/deploy
+the feeds are the basis for the image.
+
+#image generation
+not a recipe task, but general
+do_rootfs task creates the root filesystem (file and directory structure) for an image
+
+pkg feeds are used for building the image
+When the OpenEmbedded build system generates an image or an SDK, it gets the packages from a package feed area located in the Build Directory
+
+related variables: 
+IMAGE_INSTALL: Lists out the base set of packages from which to install from the Package Feeds area.
+PACKAGE_EXCLUDE: Specifies packages that should not be installed into the image.
+
+Packages are controlled by the IMAGE_INSTALL configuration variable
+The list of packages to install is also filtered using the PACKAGE_EXCLUDE variable
+
+#finally SDK generation
+do_populate_sdk
+do_populate_sdk_ext 
+
+image is not included in eSDK, just the rootfs.
+
+#more commands- all bitbake tasks
+https://docs.yoctoproject.org/ref-manual/tasks.html#ref-tasks-rootfs
+
+bitbake summary:
+BitBake can be used to run a full build for a given target with bitbake [target].
+▶ But it can be more precise, with optional options:
+-c <task> execute the given task
+-s list all locally available packages and their versions
+-f force the given task to be run by removing its stamp file
+world keyword for all recipes
+-b <recipe> execute tasks from the given recipe (without resolving
+dependencies).
+
+bitbake -c listtasks virtual/kernel
+• Gives a list of the available tasks for the recipe providing the package
+virtual/kernel. Tasks are prefixed with do_.
+▶ bitbake -c menuconfig virtual/kernel
+• Execute the task menuconfig on the recipe providing the virtual/kernel package.
+▶ bitbake -f dropbear
+• Force the dropbear recipe to run all tasks.
+▶ bitbake world --runall=fetch
+• Download all recipe sources and their dependencies.
+▶ For a full description: bitbake --help
+
+#bitbake more commands - how to dump variables
+$ bitbake -e --dry-run core-image-minimal | grep "^MACHINE="
+MACHINE="qemux86-64"
+$ bitbake -e --dry-run core-image-minimal | grep "^PACKAGE_ARCH="
+PACKAGE_ARCH="qemux86_64"
+$ bitbake -e --dry-run core-image-minimal | grep "^PACKAGE_EXTRA_ARCHS="
+PACKAGE_EXTRA_ARCHS="x86_64 core2-64"
+
+#bitbake clean - removes all output files(i.e. do_unpack, do_configure, do_compile, do_install, and do_package) but not cleaning sstatce cache
+bitbake -c clean recipe
+#bitbake like clean  + clean of sstate cache for a target
+$ bitbake -c cleansstate recipe
+#bitbake cleansstate + the clean of the tarball from DL_DIR
+$ bitbake -c cleanall recipe
+
+#bitbake user manual
+https://docs.yoctoproject.org/bitbake/2.0/index.html
+
+#bitbake useful commands:
+https://community.nxp.com/t5/i-MX-Processors-Knowledge-Base/Useful-bitbake-commands/ta-p/1128559
+
+#Yocto sources:
+===============
+recipes are organized in layers
+
+-poky inludes the core layers
+-then comes the ref distribution layer - meta-poky
+-then comes the specific bsp layer - meta-yocto-bsp.
+-user layers - for example: meta-qt5
+
+yocto - source and build directories structures
+https://docs.yoctoproject.org/ref-manual/structure.html
+
+BitBake uses the conf/bblayers.conf file, which is part of the user configuration, to find what layers it should be using as part of the build.
+
+distribution layer - policy configuration: for example meta-poky in poky
+it contains a conf directory that has example configuration files 
+Settings you provide in conf/distro/distro.conf override similar settings that BitBake finds in your conf/local.conf file in the Build Directory.
+
+bsp layers: for example meta-yocto-bsp
+recipes-bsp, recipes-core, recipes-graphics, recipes-kernel, and so forth
+
+# site.conf
+for agema different builds?
+
+DL_DIR - This area is a cache that can hold previously downloaded source
+use of BB_GENERATE_MIRROR_TARBALLS to create downloads tarballs
+DL_DIR can be saved out of the build to keep all downloads safe in case of deleting the build dirs.
+
+#Layers
+https://docs.yoctoproject.org/dev-manual/common-tasks.html#creating-your-own-layer
+yers allow to isolate and organize the metadata.
+• A layer is a collection of recipes.
+
+
+#where to get layers from?
+layers index
+https://layers.openembedded.org/layerindex/branch/master/layers/
+
+#When adding a new package to yocto:
+==================================
+first we should decide if it deserves a separate layer or not (by size and modularity)
+If a new layer is required, then use a bitbake to create the layer:
+
+bitbake-layers create-layer ~/mrv_dev/init-kconfig/ybld/poky/meta-mylayer
+
+note: it is used with full path.
+
+Once you create your general layer, you must add it to your bblayers.conf file. 
+Adding the layer to this configuration file makes the OpenEmbedded build system aware of your layer so that it can search it for metadata.
+
+bitbake-layers add-layer ~/mrv_dev/init-kconfig/ybld/poky/meta-mylayer
+
+make sure it is added successfully:
+bitbake-layers show-layers
+or check bblayers.conf
+
+After the layer is adde successfully, it can be built using devtool modify.
+
+# Yocto BSP - uboot and kernel
+===============================
+u-boot and kernel configs under the bsp layer.
+both affected by a machine/conf file
+https://bootlin.com/doc/training/yocto/yocto-slides.pdf - slides 166-191
+
+kernel workflows in Yocto:
+https://docs.yoctoproject.org/kernel-dev/index.html#
+
+kenel in bitbake:
+▶ linux-yocto is a generic set of recipes for building mainline Linux kernel images.
+▶ PREFERRED_PROVIDER_virtual/kernel = "linux-yocto"
+▶ PREFERRED_VERSION_linux-yocto = "5.14%"
+
+
+▶ Configuration fragments can be generated directly with the bitbake command:
+1. Configure the kernel following its recipe instructions:
+bitbake -c kernel_configme linux-yocto
+2. Edit the configuration: bitbake -c menuconfig linux-yocto
+3. Save the configuration differences: bitbake -c diffconfig linux-yocto
+The differences will be saved at $WORKDIR/fragment.cfg
+▶ After integrating configuration fragments into the appended recipe, you can check
+everything is fine by running:
+bitbake -c kernel_configcheck -f linux-yocto
+
+Advanced kernel configs:
+▶ The full documentation can be found at
+https://docs.yoctoproject.org/kernel-dev/advanced.html#working-withadvanced-metadata-yocto-kernel-cache
+
+Two main configuration variables help taking advantage of this:
+LINUX_KERNEL_TYPE standard (default), tiny or preempt-rt
+• standard: generic Linux kernel policy.
+• tiny: bare minimum configuration, for small kernels.
+• preempt-rt: applies the PREEMPT_RT patch.
+KERNEL_FEATURES List of features to enable. Features are sets of patches and
+configuration fragments.
+
+#defconfigs
+working with kernel defconfig files, refer to:
+
+https://docs.yoctoproject.org/kernel-dev/common.html# 
+sections 2.3.3 Changing the Configuration and 2.3.4 Using an “In-Tree”  defconfig File
+
+important note about savedefconfig:
+You can also use a regular defconfig file, as generated by the do_savedefconfig task instead of a complete .config file. 
+Note: This only specifies the non-default configuration values !!!
+You need to additionally set KCONFIG_MODE in the linux-yocto .bbappend file in your layer:
+KCONFIG_MODE = "alldefconfig"
+
+Z4806:
+=====
+how to configure linux kernel for Yocto of Z4806?
+if virtual kernel is used - 
+PREFERRED_PROVIDER_virtual/kernel ?= "linux-ti-staging"
+otherwise -
+PREFERRED_VERSION_linux-yocto = "5.14%"
+
+
+how the content of the root-fs is set?
+Packages are controlled by the IMAGE_INSTALL configuration variable
+The list of packages to install is also filtered using the PACKAGE_EXCLUDE variable
+
+#########
+Petalinux
+#########
+
+#Petalinux project structure:
+(UG1144 Appendix B: PetaLinux Project Structure)
+
+#src folders
+project-spec
+	hw-description
+	configs
+	meta-user
+pre-built
+	linux
+		implementation
+		images
+		xen
+hardware
+	xilinx-zcu104-2020.1
+components
+	plnx_workspace
+		device-tree
+config.project
+README
+
+Description:
+
+/.petalinux/ Directory to hold tools usage and WebTalk data.
+/config.project/ Project configuration file.
+/project-spec Project specification.
+/project-spec/hw-description Hardware description imported from Vivado® design tools.
+/project-spec/configs Configuration files of top level config and RootFS config.
+/project-spec/configs/config Configuration file used to store user settings.
+/project-spec/configs/rootfs_config Configuration file used for root file system.
+/project-spec/configs/busybox Configuration file for busybox.
+/project-spec/configs/init-ifupdown Configuration file for Ethernet.
+/components/plnx_workspace/device-tree/devicetree/ Device tree files used to build device tree.
+/project-spec/meta-user/recipes-bsp/devicetree/files/ Place specific dtsi here
+/project-spec/meta-user/recipes-bsp/u-boot/files platform-auto.h and platform-top.h are copied to include/configs/ directory in the U-Boot source code
+/project-spec/meta-user/conf/petalinuxbsp.conf - will be set to local.conf #Kester - it is not like local.conf. how local conf is built?
+
+
+#Petalinux build folders
+When the project is built, three directories are auto generated:
+• <plnx-proj-root>/build for the files generated for build.
+• <plnx-proj-root>/images for the bootable images.
+• <plnx-proj-root>/build/tmp for the files generated by Yocto. This directory is configurable through petalinux-config.
+• <plnx-proj-root>/components/yocto has Yocto eSDK. This file is generated when execute petalinux-config/petalinux-build.
+
+barak@barak-OptiPlex-7020:~/xilinx-zcu102-2022.1$ ll
+total 52K
+drwxrwxr-x 8 barak barak 4.0K Jun 27 17:26 build -----------> build dir like in yocto, auto-generated, do not edit
+drwxr-xr-x 4 barak barak 4.0K May 19 19:30 components 
+-rw-r--r-- 1 barak barak  248 Apr 20 00:48 config.project
+drwxr-xr-x 4 barak barak 4.0K Apr 20 01:24 hardware
+drwxr-xr-x 3 barak barak 4.0K May 19 19:37 images -------------> final images, auto-generated, do not edit
+drwxr-xr-x 3 barak barak 4.0K Apr 20 01:05 pre-built
+drwxr-xr-x 5 barak barak 4.0K Apr 20 01:05 project-spec
+-rw-r--r-- 1 barak barak  20K Apr 20 00:51 README
+-rw-r--r-- 1 barak barak 3.1K Apr 20 00:50 README.hw
+
+#images:
+By default the build artifacts are removed to preserve space after petalinux-build
+To preserve the build artifacts, you have to add the INHERIT_remove = "rm_work" in <plnxproj-
+dor>/project-spec/meta-user/conf/petalinuxbsp.conf
+
+UG144-Generating boot images
+#what are the petalinux arch and machine folders - 
+${PACKAGE_ARCH}-poky-${TARGET_OS}
+${MACHINE}-poky-${TARGET_OS}
+
+barak@barak-OptiPlex-7020:~/xilinx-zcu102-2022.1/build/tmp/work$ ll
+total 24K
+drwxr-xr-x  13 barak barak 4.0K May 19 19:33 all-xilinx-linux
+drwxr-xr-x 150 barak barak 4.0K May 19 20:40 cortexa72-cortexa53-xilinx-linux ------> Kester: ${PACKAGE_ARCH}-poky-${TARGET_OS}?
+drwxr-xr-x 163 barak barak 4.0K May 19 19:40 x86_64-linux
+drwxr-xr-x  27 barak barak 4.0K May 19 20:59 xilinx_zcu102-xilinx-linux -------> Kester: ${MACHINE}-poky-${TARGET_OS} ? rootfs is here
+drwxr-xr-x   4 barak barak 4.0K May 19 19:35 zynqmp-eg-xilinx-linux
+drwxr-xr-x   4 barak barak 4.0K May 19 19:35 zynqmp-xilinx-linux
+
+Kester: MACHINE is not set to xilinx_zcu102, how comes?
+
+#boot flow (from bootgen UG):
+
+The boot-up process is managed and carried out by the platform management unit
+(PMU) and configuration security unit (CSU).
+
+During initial boot, the following steps occur:
+• The PMU is brought out of reset by the power on reset (POR).
+• The PMU executes in ROM.
+• The PMU initializes the SYSMON and, required PLL for the boot, clears the low power and full
+power domains and releases the CSU reset.
+
+After the PMU releases the CSU, the CSU does the following:
+• Checks to determine if authentication is required by the FSBL or the user application.
+• Performs an authentication check and proceeds only if the authentication check passes. Then
+checks the image for any encrypted partitions.
+• If the CSU detects partitions that are encrypted, the CSU performs decryption and initializes
+OCM, determines boot mode settings, performs the FSBL load and an optional PMU firmware
+load.
+• After execution of CSU ROM code, it hands off control to FSBL. FSBL uses PCAP interface to
+program the PL with bitstream.
+
+#boot flow:
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/444006775/Zynq+UltraScale+MPSoC#ZynqUltraScale%2BMPSoC-FSBL
+
+The Configuration and Security Unit (CSU) processor uses the code in the BootROM . In this configuration stage, 
+the BootROM (part of the CSU ROM code) interprets the boot header to configure the system and load the processing system’s (PS) first-stage boot loader (FSBL) code 
+into the on-chip RAM (OCM) in both secure and non-secure boot modes.
+
+The loading of the FBSL before the PMU Firmware is the default configuration
+
+Bitstream should be loaded before ATF is loaded
+
+BootROM --- > FSBL, PMU, FPGA bitstream, ATF (all to OCM)
+
+
+
+#To learn to program with JTAG and use of boot levels
+
+JTAG and BOOT LEVELS:
+
+petalinux-boot
+
+You can boot a PetaLinux image using the petalinux-boot command. 
+--qemu option for software emulation (QEMU) 
+--jtag option to boot on hardware
+--prebuilt <BOOT_LEVEL> boots prebuilt images (override all settings). 
+
+Supported boot levels are 1 to 3. 
+
+The command for JTAG boot:
+petalinux-boot --jtag --prebuilt <BOOT_LEVEL> --hw_server-url <hostname:3121>
+
+The command for the QEMU boot is as follows:
+petalinux-boot --qemu --prebuilt <BOOT_LEVEL>
+Note: The QEMU boot does not support BOOT_LEVEL 1.
+
+• Level 1: Download the prebuilt FPGA bitstream.
+It boots FSBL and PMU firmware.
+
+• Level 2: Download the prebuilt FPGA bitstream and boot the prebuilt U-Boot.
+It boots PMU firmware, FSBL, and ATF before booting UBoot.
+
+• Level 3:
+Downloads PMU firmware, prebuilt FSBL, prebuilt kernel, prebuilt FPGA bitstream, linux-boot.elf, DTB, and the prebuilt ATF on target.
+
+Example to show the usage of boot level for prebuilt option:
+$ petalinux-boot --jtag --prebuilt 3
+
+Accessing BitBake/Devtool in a Project
+======================================
+
+BitBake is available only in the bash shell.
+Steps to Access the BitBake Utility
+1. Run petalinux-config or petalinux-config --silentconfig at least once after
+creating the project, so that the required environment is setup.
+2. Source the PetaLinux tools script:
+source /opt/pkg/petalinux/settings.sh
+3. Source the Yocto e-SDK:
+source <plnx-proj-root>/components/yocto/environment-setup-aarch64-
+xilinx-linux
+4. Source the environment setup script to be redirected to the build directory:
+source <plnx-proj-root>/components/yocto/layers/core/oe-init-build-env
+Stay in the build directory to run BitBake.
+5. Export XSCT:
+export PATH=/opt/pkg/petalinux/tools/xsct/bin:$PATH
+6. Parse the PetaLinux variable to recipes:
+export BB_ENV_EXTRAWHITE="$BB_ENV_EXTRAWHITE PETALINUX"
+
+
+Questions:
+==========
+kester - what toolchain to provide application developers and what is the compiler
+gentoo? what kind of distribution is petalinux? what is the distribution layer?
+
+
+kester:
+build meta-example - build issues
+
+kester: 
+pmu-fw - more binaries for pmu?
+
+#UG1144 - Petalinux layers
+Kester - how they are added - saved in petalinux .config and then added by "bitbake-layers add-layer" ?
+review the layers, especially the distro and bsp
+
+Kester - kernel recipes exist in other layers - what for?
+./components/yocto/layers/meta-xilinx/meta-xilinx-contrib/recipes-kernel
+./components/yocto/layers/meta-xilinx/meta-xilinx-bsp/recipes-kernel
+./components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-kernel
+./components/yocto/layers/meta-xilinx/meta-xilinx-core/dynamic-layers/virtualization-layer/recipes-kernel
+./components/yocto/layers/meta-xilinx/meta-xilinx-core/recipes-kernel
+
+Kester: what's the diff between 
+/home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-core
+and 
+/home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-petalinux
+
+Kester: why to add SIGGEN_UNLOCKED_RECIPES += "<recipe-name>" ?
+
+For a .bbappend file which you create for any root file system component, you must add
+SIGGEN_UNLOCKED_RECIPES += "<recipe-name>" or SIGGEN_UNLOCKED_RECIPES
++= "u-boot-xlnx" in <plnx-proj-root>/project-spec/meta_user/conf/
+petalinuxbsp.conf.
+
+kester - building the fsbl
+how to build FSBL with petalinux? I am using fsbl-firmware
+virtual/fsbl?
+
+focus on booting FSBL from QSPI NOR
+is "petalinux-build -x mrproper" really needed before FSBL build and does it clean all project? (wiki)
+
+kester - what is exactly packed by bootgen?
+
+kester - building the kernel:
+need to set MACHINE_ESSENTIAL_EXTRA_RRECOMMENDS += "kernel-modules"? was mentioned in yocot org docs but is not part of the kernel recipe of petalinux.
+what's the good practice for pathcing the kernel - create a new layer (as in yocto org docs)?
+
+Debug BootRom and FSBL from NOR
+
+XO-126 is usign XCZU17EG, XG108S is using XCZU15EG-1FFVC900I 
+
+FSBL
+=====
+
+generated by default.
+setting under petalinux-config: Linux Components Selection --->Select First Stage Boot Loader
+
+TO DO:
+change fsbl or tf-a sources?
+
+#FSBL - where is the recipe, append files, cfg files?
+foud it as fsbl-firmware
+~/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone/recipes-bsp/embeddedsw
+
+what about fsbl recipe? looks like not used
+/home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-core/recipes-bsp/embeddedsw/fsbl.bb
+
+#FSBL  - what is the owning layer?
+meta-xilinx-standalone  /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone  7
+
+#FSBL  - where is the working dir?
+ 
+#FSBL   - where is the source dir?
+#patch ther FSBL
+#Build the FSBL when building the project:
+$ petalinux-build
+Build the FSBL only:
+$ petalinux-build -c fsbl-firmware
+#program the updated / patched FSBL with JTAG
+
+
+TF-A
+======
+
+generated by default.
+setting under petalinux-config: select Arm Trusted Firmware Compilation Configuration
+
+Xilinx ARM trusted firmware is based on arm trusted firmware at https://github.com/ARM-software/arm-trusted-firmware.
+Xilinx ARM Trusted Firmware tree will be released and available at https://github.com/Xilinx/arm-trusted-firmware.
+
+The ATF ELF file is installed as bl31.elf for Zynq UltraScale+ MPSoC in images/linux
+inside the project root directory.
+
+ref: https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842107/Arm+Trusted+Firmware
+
+TO DO:
+#TF-A - where is the recipe, append files, cfg files? 
+#TF-A - what is the owning layer?
+#TF-A - where is the working dir? 
+#TF-A - where is the source dir?
+#patch ther TF-A
+#Build the ATF when building the project:
+$ petalinux-build
+Build the ATF only:
+$ petalinux-build -c arm-trusted-firmware
+#program the updated / patched TF-A with JTAG
+
+PMU
+====
+
+setting under petalinux-config: Linux Components Selection --->Select PMU Firmware
+
+TO DO:
+#PMU-FW - where is the recipe, append files, cfg files? 
+#PMU-FW - what is the owning layer?
+#PMU-FW - where is the working dir? 
+#PMU-FW - where is the source dir?
+#patch ther PMU-FW
+#Build the PMU firmware when building the project:
+$ petalinux-build
+Build the PMU firmware only:
+$ petalinux-build -c pmufw
+
+The PMU firmware ELF file is installed as pmufw.elf for Zynq UltraScale+ MPSoC in
+images/linux inside the project root directory.
+
+ref: http://www.wiki.xilinx.com/PMU+Firmware
+
+
+U-BOOT
+======
+
+TO DO:
+#U-BOOT - where is the recipe, append files, cfg files?
+~/xilinx-zcu102-2022.1/project-spec/meta-user/recipes-bsp/u-boot/files/bsp.cfg ?
+#U-BOOT - what is the owning layer?
+#U-BOOT - where is the working dir? 
+#U-BOOT - where is the source dir?
+~/xilinx-zcu102-2022.1/build/tmp/work/xilinx_zcu102-xilinx-linux/u-boot-xlnx/v2021.01-xilinx-v2022.1+gitAUTOINC+c50d6c48f4-r0 ?
+#patch ther U-BOOT
+#configure the u-boot
+petalinux-configure -c u-boot
+#build u-boot
+$ petalinux-build -c u-boot
+Clean up u-boot and build again:
+$ petalinux-build -c u-boot -x distclean
+above command will remove tmp files and sstate cache of u-boot.
+#program the updated / patched U-BOOT with JTAG
+
+KERNEL
+=======
+
+TO DO:
+#kerenel - where is the recipe, append files, cfg files?
+/home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-core/recipes-kernel/linux/linux-xlnx_2022.1.bb?
+#kernel - what is the owning layer?
+#kernel - where is the working dir?
+~/xilinx-zcu102-2022.1/build/tmp/work/xilinx_zcu102-xilinx-linux/linux-xlnx/5.15.19+gitAUTOINC+b0c1be301e-r0 ?
+#kernel  - where is the source dir?
+#patch ther kernel
+try:
+#Build kernel only:
+  $ petalinux-build -c kernel
+#Compile kernel forcefully:
+  $ petalinux-build -c kernel -x compile -f
+#Deploy kernel forcefully:
+  $ petalinux-build -c kernel -x deploy -f
+#Build kernel and update the bootable images:
+  $ petalinux-build -c kernel
+  $ petalinux-build -x package
+#configure the kernel
+  $ petalinux-configure -c kernel
+#program the updated / patched kernel with JTAG
+#related yocto variables to work with kernel - already set in petalinux?
+#dump PREFERRED_VERSION_linux-yocto
+
+
+ROOTFS
+=======
+
+#Build rootfs only:
+  $ petalinux-build -c rootfs
+#Build myapp of rootfs only:
+  $ petalinux-build -c myapp
+
+#Generating a bootable image BOOT.BIN:
+
+A boot image usually contains a first stage boot loader image, FPGA bitstream (optional), PMU firmware, ATF, and U-Boot
+kernel and rootfs can be loaded later on.
+
+barak@barak-OptiPlex-7020:~/xilinx-zcu102-2022.1$ petalinux-package --boot --u-boot --format BIN
+
+why the outputs shows it also contains a system.dtb file.
+
+
+#petalinux layers
+barak@barak-OptiPlex-7020:~/xilinx-zcu102-2022.1/build$ bitbake-layers show-layers
+
+layer                 path                                      priority
+==========================================================================
+meta                  /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/core/meta  5
+meta-poky             /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/core/meta-poky  5
+meta-perl             /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-openembedded/meta-perl  6
+meta-python           /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-openembedded/meta-python  7
+meta-filesystems      /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-openembedded/meta-filesystems  6
+meta-gnome            /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-openembedded/meta-gnome  7
+meta-multimedia       /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-openembedded/meta-multimedia  6
+meta-networking       /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-openembedded/meta-networking  5
+meta-webserver        /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-openembedded/meta-webserver  6
+meta-xfce             /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-openembedded/meta-xfce  7
+meta-initramfs        /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-openembedded/meta-initramfs  8
+meta-oe               /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-openembedded/meta-oe  6
+meta-clang            /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-clang  7
+meta-chromium         /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-browser/meta-chromium  7
+meta-qt5              /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-qt5  7
+meta-microblaze       /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-microblaze  5
+meta-xilinx-core      /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-core  5
+meta-xilinx-bsp       /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-bsp  5
+meta-xilinx-pynq      /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-pynq  5
+meta-xilinx-contrib   /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-contrib  5
+meta-xilinx-standalone  /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx/meta-xilinx-standalone  7
+meta-xilinx-tools     /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-xilinx-tools  8
+meta-petalinux        /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-petalinux  6
+meta-virtualization   /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-virtualization  8
+meta-openamp          /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-openamp  5
+meta-jupyter          /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-jupyter  7
+meta-python2          /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-python2  7
+meta-som              /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-som  5
+meta-security         /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-security  8
+meta-tpm              /home/barak/xilinx-zcu102-2022.1/components/yocto/layers/meta-security/meta-tpm  10
+meta-user             /home/barak/xilinx-zcu102-2022.1/project-spec/meta-user  7
+workspace             /home/barak/xilinx-zcu102-2022.1/components/yocto/workspace  99
+
+
+#/project-spec/meta-usermeta-user
+This layer is a place holder for all user-specific changes. You can add your own bbappend and
+configuration files in this layer.
+
+#/project-spec/meta-user/recipes-bsp
+/project-spec/meta-user/recipes-bsp/devicetree/files/ - add my dtsi files here. our soc is Zynq UltraScale+ MPSoC only. device tree is zynqmp.dtsi
+/project-spec/meta-user/conf/petalinuxbsp.conf - will be used for build local.conf file.
+
+petalinux - layers are added by menuconfig directly to bblayers.conf.
+petalinux config is saved to project-spec/configs/config
+
+
+Learn QEMU
+===========
+QEMU booting ref: UG1144 Steps to Boot a PetaLinux Image on QEMU
+
+Learn SD CARD creation
+=======================
+ref: UG144 - Partitioning and Formatting an SD Card
+
+
+Vitis and bringup:
+=================
+Usually XSA file includes
+FPGA bit file, initialziation data for DDR, PLLs, Clocks, ...
+The initialziation data is ina a format of C files - auto generated !
+It will be compiled in Xilinix FSBL 
+The FSBL is Xilinix but an open source
+
+Usually problems are with the loading the FSBL or with hanging on DDR tuning
+(but not with the FSBL code itself)
+
+With the ZCU102 EVB I will try Vitis Hello world application (bare metal application, FSBL+ hello world) , the DDR tester template application, and the “peripherals tester application”.
+
+It will let me be ready for the real HW bring up steps:
+	o	Generate the real XSA file with Vivado to have all the specific initialization files
+	o	Build the FSBL based on these XSA files
+	o	Try Hello World application
+	o	If the Hello app fails to run from the DDR, I will probably have to try the DDR tester
+	o	Try the “peripherals tester application”
+
+FSBL usually do the following for DDR:
+set the registers of the DDR controller with the relevant values for the DDR tuning
+Set the registers of the DDR controller to start the DDR training - if something is misconfigured here it might hang...
+

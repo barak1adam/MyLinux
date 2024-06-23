@@ -1,0 +1,24 @@
+Eran TOI August 2023:
+=====================
+
+XG-300 for Excelon - 
+	Noam setup is running with T.City Engineering drop
+	need to make sure about MAC addresses on setup
+
+
+UPEDD-65214 - Telstra - OS: After upgrade to 21.1.1 LTE module wan stays up, loop issue by Przemek:
+
+	The issue -
+	before upgrade - PRI active, LTE disabled
+	after upgrade - PRI active, LTE active ---- > loop
+
+	we provided workaround how to make upgrade properly
+	need a fix for 23.1.1
+
+	do they like to integrate the workaround into their automatic upgrade procedures?
+
+Sierra open question:
+
+	IP fragmented packets, bellow 150 Mbps - no issues. above 150 - packets are dropped
+	Fragmentation is done by our app and it wat tested without the modem - no issues! the issue is 100% with the modem.
+	Opened since March 2023.

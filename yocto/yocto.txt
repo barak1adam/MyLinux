@@ -1,0 +1,9 @@
+Yocto:
+=======
+
+1. wha't the diff between the yocto build env and the yocto esdk ?
+
+2. when to add a new layer? what is required for adding a new source code package ?
+
+describe a development cycle with a package in yocto.
+how to change source code of a package ?

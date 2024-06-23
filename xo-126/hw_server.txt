@@ -1,0 +1,39 @@
+hw_server to connect to a remote board with JTAG:
+================================================
+
+setup:
+
+my local Vitis with XSCT ---- internet --------- remote PC running Vivado hw_server app and connected to the board with JTAG
+
+
+https://docs.xilinx.com/r/en-US/ug908-vivado-programming-debugging/Command-Line-Options-for-hw_server
+
+on my local XSCT I used connect command like : connect -url TCP:DAL-W-FPGA07201:3121
+instead of just "connect"
+
+it can also be done by Petalinux: petalinux-boot --jtag --prebuilt <BOOT_LEVEL> --hw_server-url <hostname:3121>
+
+summary:
+=======
+connect -url TCP:GDN-N-BARTD:3121
+targets
+targets -set -filter {name =~ "Cortex-A53 #0"}
+rst -system
+rst -processor; 
+mwr 0xff5e0200 0x0100
+rst -system
+
+2. Load PMU FW
+targets -set -filter {name =~ "PSU"}; mwr 0xffca0038 0x1ff; after 500; targets; targets -set -filter {name =~ "MicroBlaze PMU"}; targets; after 100; dow {/home/barak/xilinx-zcu102-2022.1/images/linux/pmufw.elf}; con; after 500
+
+3. Load FSBL
+targets -set -filter {name =~ "Cortex-A53 #0"}; targets; rst -processor; dow /home/barak/xilinx-zcu102-2022.1/images/linux/zynqmp_fsbl.elf; con; after 5000
+
+4. Load DTB
+cp ~/aos-ne-bootloader/source/u-boot-2022.01-xlnx/u-boot.dtb /home/barak/xilinx-zcu102-2022.1/images/linux/system.dtb
+dow -data {/home/barak/xilinx-zcu102-2022.1/images/linux/system.dtb} 0x00100000
+
+5. Load U-boot (the one that is built for JTAG - no env and no autoboot).
+dow {/home/barak/xilinx-zcu102-2022.1/images/linux/u-boot-for-JTAG.elf}; con;
+
+now: stop on u-boot, set ip connection, tftp BOOT image and sf probe it

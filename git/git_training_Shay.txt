@@ -1,0 +1,30 @@
+GIT:
+===
+
+git basics: 
+snapshots, hashing, branches as pointers. changes are not stored.
+distributed, no single server
+a complete story on your host
+modified (working tree), staged - the index (git add), committed (in git db)
+
+
+remote vs local:
+remote tracking branches (origin/master) vs tracking branches (master)
+git fetch
+git pull (merge / rebase)
+
+
+rebase vs merge
+
+our workflow and policy
+feature branch workflow
+	creating feature branch
+	develop
+	rebase on master (smart rebase)
+	push the feature branch (smart push)
+	create a PR
+	review
+	merge to master
+
+
+task: gerrit

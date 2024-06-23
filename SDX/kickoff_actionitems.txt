@@ -1,0 +1,25 @@
+SDX Action Items:
+=================
+
+IronMan - what is supported for SAT. 
+	Eran: same like Cetus, 1G.
+
+	Eran sent another question about those 2 issues:
+	There is a MAC TG up to 10G but probably not exactly for SAT.
+	Marvell dont recommend it for production.
+
+IronMan OAM - what is supported
+
+	1) The OAM FW is needed exactly as it was on Cetus, the same code, it calls the same CPSS API and should not be changed.
+
+	2) It's size was checked and it can run on one of the Ironman uControllers that has 192K memory which is enough to hold it.
+
+	3) On XG-300 it was running on ARMv7 which the same like the ARM uControllers on the Ironman. The ARM-A main cores on Ironman are v8 and it will require extra work to port it from v7 to v8, it's preferred to run it on the uControllers as is.
+
+	it was checked with Igor and Eran
+	
+
+Forwarding perfomance with LTE connected with USB and without external CPU
+	tested by Eran on XG118
+	~10-20Mbps.
+	there is a summary in the emails.
