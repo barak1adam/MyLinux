@@ -1,0 +1,71 @@
+we have 2 set of partitions:
+=============================
+/dev/mmcblk0p1     cs         ext3    ro
+/dev/mmcblk0p5     boot       ext3    ro
+/dev/mmcblk0p6     modules    ext4    ro
+/dev/mmcblk0p7     main       ext4    ro (rootfs)
+/dev/mmcblk0p8     adva       ext4    ro
+/dev/mmcblk0p9     rwd        ext4    rw
+/dev/mmcblk0p10    rwda       ext4    rw
+
+/dev/mmcblk0p2     cs         ext3    ro
+/dev/mmcblk0p11    boot       ext3    ro
+/dev/mmcblk0p12    modules    ext4    ro
+/dev/mmcblk0p13    main       ext4    ro (rootfs)
+/dev/mmcblk0p14    adva       ext4    ro
+/dev/mmcblk0p15    rwd        ext4    rw
+/dev/mmcblk0p16    rwda       ext4    rw
+
+other parts:
+/dev/mmcblk0p17    staging    ext4    rw
+/dev/mmcblk0p18    vm         ext4    rw
+/dev/mmcblk0p19    common     ext4    rw
+
+the flow summary:
+=================
+bootcmd=bootaos ------- > load cs_script from the active partition and call it ----------- > load boot script from the active partition and call it ------ > kernel boot
+
+1) u-boot bootcmd=bootaos !
+	bootaos is implemented in u-boot code as a new Adva commond: aos-ne-bootloader: source/u-boot-2022.04/board/adva/common/aos_cmd_bootaos.c
+		-based on the inventory actimg value, this command selects eosboot_a or eosboot_b.
+		-$actbank u-boot variable is set.
+
+then eosboot_a or eosboot_b loads the same cs scripts from the selected cs partition
+
+	eosboot_a=run eosboot_emmc_a
+	eosboot_b=run eosboot_emmc_b
+	eosboot_emmc_a=run setbootargs;run boot_dpl;ext2load mmc 0:1 88000000 cs_script.uimg;source 88000000
+	eosboot_emmc_b=run setbootargs;run boot_dpl;ext2load mmc 0:2 88000000 cs_script.uimg;source 88000000
+	
+	setbootargs=setenv bootargs ethaddr=$ethaddr panic=5  $extraargs  $bootargs craft=$baudrate
+
+
+
+2) cs_script set the active bootpart and calls from there the desired boot_script.uimg
+
+cs script:
+==========
+#note: this script is using the $actbank
+
+setenv bootpartnum0 5
+setenv bootpartnum1 b
+if test "x$actbank" = "x1"; then
+    setenv bootpartnum $bootpartnum1
+else
+    setenv actbank 0
+    setenv bootpartnum $bootpartnum0
+fi
+ext2load mmc 0:$bootpartnum 08100000 boot_script.uimg
+source 08100000
+
+3) the boot script is running fromt he deidred partition and boot the boot from there the kernel with intitramfs and dtb
+
+	boot_script.uimg:
+	=================
+		setenv bootargs "$bootargs cs.0=/dev/mmcblk1p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk1p2"
+		setenv bootargs "$bootargs $append"
+		setenv bootargs "$bootargs sw.all=$actbank ecc=on"
+		ext2load mmc 0:$bootpartnum 00200000 kernel
+		ext2load mmc 0:$bootpartnum 04000000 initramfs
+		ext2load mmc 0:$bootpartnum 00010000 xo126.dtb
+		booti 00200000 04000000 00010000

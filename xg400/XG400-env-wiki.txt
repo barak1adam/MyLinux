@@ -1,0 +1,124 @@
+1. download and configure EDE
+2. setup connection with Jfrog for pulling binaries. will be mounted to every EDE
+3. change ownership of targ/prod and targ/prod-devel directories
+4. For target only: Build BOOT image including u-boot.
+5. For target only: Flash the BOOT image
+6. Build the application (for sim or target). final image is bz2.
+	6.1 Optional - Build additional packages locally, steps A to G.
+7. For target only: Build the kernel, steps 2-4. Optional ?
+8. For target only: Full Monolitic image build. including distribution, qumran and unidrv.
+9. For target only: SW Flashing / upgrade
+10. For simulator only: one time, installations for Simulator
+11. For simulator only: run the simulator
+
+
+
+/opt/aos/ede-3.6.20
+		
+		ede:																host:
+		====																===== 
+		
+		/home/$USER/.ccache ---------------------------------------------> /home/$USER/.ccache
+		
+		/home/$USER/AOS -------------------------------------------------> /home/$USER/AOS
+		/home/$USER/AOS/XG490_test---------------------------------------> /home/$USER/AOS/XG490_test
+		
+		#source, branch is dev-xg490
+		/home/$USER/AOS/XG490_test/f4-build-test ------------------------> /home/$USER/AOS/XG490_test/f4-build-test (same repo for xg400, different branch)
+		/home/$USER/AOS/XG490_test/aos-ne-build-and-test-----------------> /home/$USER/AOS/XG490_test/aos-ne-build-and-test (same repo for xg400, different branch)
+		
+		/home/$USER/AOS/XG490_test/products/xg490/f4-ne-xg4xx------------> /home/$USER/AOS/XG490_test/products/xg490/f4-ne-xg4xx (f4-ne-xg400 for xg400)
+		
+		#kernel sources, branch is dev-xg490
+		/home/$USER/AOS/XG490_test/f4-linuxkernel-xg480-----------------> /home/$USER/AOS/XG490_test/f4-linuxkernel-xg480
+		#symbolic link
+		(home/$USER/AOS/XG490_test/products/xg400/ede_targ_prod_devel/kernel_sources/default_source)
+		/home/$USER/AOS/XG490_test/f4-linuxkernel-xg480/linux-5.4.47----> /home/$USER/AOS/XG490_test/f4-linuxkernel-xg480/linux-5.4.47
+		
+		#unidrv
+		/home/$USER/AOS/XG490_test/aos-ne-unidrv---------------------------> /home/$USER/AOS/XG490_test/aos-ne-unidrv
+		
+		/targ/prod-devel/xg490 -------------------------------------------> /home/$USER/AOS/XG490_test/products/xg490/ede_targ_prod_devel
+		/targ/prod-devel/xg490/kernel_sources/linux-5.4.47-adva ----------> /home/baraka/AOS/XG490_test/f4-linuxkernel-xg480/linux-5.4.47-adva
+		/targ/prod-devel/xg490/modules/unidrv/aos-------------------------> /home/baraka/AOS/XG490_test/aos-ne-unidrv
+		
+		
+		
+
+Kasen, how to build XG-400 on Jenkins:
+=======================================
+
+build Kernel (jenkins: f4-product-xg400-kernel) ------ triggers -----> unify driver and Qumran lib
+
+build metaswitch (jenkins: 3rd-party-metaswitch)
+
+Finally is to compile the XG400 pipeline (jenkins: f4--F4_R22.1.x). for KD5 select "BUILD ALL".
+
+For XG400 23.1.1: F4_CMN_20230629 branch, EDE 3.6.20
+For XG490: dev-xg490 branch, EDE 3.6.20
+
+Local builds
+============
+
+Like the wiki for XG118: https://polarion.advaoptical.com/polarion/#/project/CCD/wiki/SW%20and%20SIT%20Wikis/HowToBuildInAos
+But with changes for XG400:
+1.	In the Wiki below, XG118 product build-and-test REPO is f4-xg118pro-csh-build-and-test.
+For XG400, it is f4-build-test.
+2.	The product REPO for XG118 is f4-xg118pro-csh-modules.
+For XG400, it is f4-ne-xg400.
+3.	The command line for X86 for XG400:
+cmake -DUSE_CCACHE=YES -DDEBUG_SYMBOLS=YES -DTARGET_ARCH=x86-64bit -DCMAKE_BUILD_TYPE=Release -DBUILD_AOS=1 /aos-code/f4-build-test
+4.	The command line for arm for XG400:
+cmake -DUSE_CCACHE=YES -DDEBUG_SYMBOLS=YES -DTARGET_ARCH=arm8-64bit -DCMAKE_BUILD_TYPE=Release -DBUILD_AOS=1 /aos-code/f4-build-test
+
+After CMake, you can use “make xg400” for XG480/XG404/XG418
+
+For xg490, use "make xg490"
+
+f4-linuxkernel-xg480 - same kernel repo for xg400 / xg490, different config files
+
+
+For 23.5.1 - dev-xg400 is not used. master is used with features merged into it. EDE is 3.9.8 (will be 3.10.3)
+
+
+Important notes about XG490 branches:
+=====================================
+One of the most important repository is the XG490 product code repo, “f4-ne-xg4xx”, which is created for XG490 only
+
+new repo ! different from f4-ne-xg400 !
+
+Hughes - the main reasons for a new repo:
+1. simplify HAL layer
+2. Optimization for L2 desgin
+3. major changes to Qumran driver
+4. no IO FPGA, lot of code not needed
+
+master branch - not relevant, changes never merged back to this master branch.
+
+dev-xg400 - agreed to develop with this branch. dev-xg490 was merged couple of months ago, but then they have crashes on this branch (low level board_dbg with accessing some external circuit like CPLD, etc.)
+after this merge, development of some commits was done on this branch, mainly for defect fixes.
+
+
+dev-xg490 - stable, no crashes.
+according to Hughes, it has some features that are not yet merged to xg400 (like ELP G.8031), but it was decided not to support this features.
+
+
+Raghav:
+For XG4xx R23.5.1 (without XG490), we are not taking the dev-xg400 branch, since the whole release has been rescoped.  We have feature specific dev branches and as each feature gets done, we merge it to master.
+but master is empty... !
+
+what repo is used for xg400 - was it intended to move from xg400 to xg4xx for 23.5.x?
+Hughes stated that this repo f4-ne-xg4xx was created for xg490 !
+
+I see commits keep merged to master branch on legacy f4-xg-400
+
+AI  - analyze the difference between f4-xg-400 and f4-ne-xg4xx/dev-xg400 ?
+
+on f4-ne-xg4xx repo, why it was decided to merge 490 into 400? why not develop on 490?
+
+AI - need to compare carefully dev-xg400 and dev-xg490:
+go to a common point where the 2 were stable
+make sure any needed commit is merged into dev-xg400.
+use a graphichal diff tool
+
+

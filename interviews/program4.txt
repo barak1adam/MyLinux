@@ -1,0 +1,63 @@
+Using semaphore in the kernel:
+=============================
+The FPGA / Lattice trick:
+
+user ---> ioctl()
+in the driver ioctl: sem wait
+in the driver interrupt handler release the sem, it unblock the user
+
+this is like a blocking system call
+
+what can be done with semaphores for handling the reading from 2 ports:
+
+interrupt the driver on recieving frames on each port ---> on the interrupt handlers check if frames arrived on 2 ports, if yes release a semphore.
+Then the user will be unblocked and process the frames for transmition till the buffer is empty.
+
+
+Eran: use timeouts to non blocking reads till the q is empty
+=============================================================
+without the semaphore, we can use Eran's idea of timeout handlers.
+simple interrupt with timers and if there are frames from the 2 ports, then process them till the buffer is empty.
+this skip all the semahore and context switch between the user and kernel.
+
+Eran: "In general from what I learned the priority doesn't seem to help. The problem is the performance of the RX thread. either it's processing is highly not efficient (requires review) or waiting on queue interrupt is not good enough. In case of the 2nd option, normally what helps is moving to none-blocking/polling reading from the queue: instead of "select" or so,
+rx thread should do non-block forever read from the queue and process all messages until the queue is empty, than wait on timer (give up CPU) and retry reading after tick time"
+
+
+
+
+
+
+sem_t data_ready_sem; // Semaphore to signal data availability
+
+// ... (Rest of the program)
+
+while (1) {
+    // Read data from port 1
+    int bytes_read1 = read(port_rx1, buffer1, sizeof(buffer1));
+    if (bytes_read1 < 0) {
+        perror("Error reading from port 1");
+    }
+
+    // Read data from port 2
+    int bytes_read2 = read(port_rx2, buffer2, sizeof(buffer2));
+    if (bytes_read2 < 0) {
+        perror("Error reading from port 2");
+    }
+
+    // Increment semaphore if both ports have data
+    if (bytes_read1 > 0 && bytes_read2 > 0) {
+        sem_post(&data_ready_sem);
+    }
+
+    // Wait on the semaphore if data isn't ready (optional)
+    // sem_wait(&data_ready_sem);  // Uncomment to wait
+
+    // Check if data is signaled (can be done inside critical section)
+    if (/* check semaphore state */) {
+        // Process and transmit combined data
+        process_and_transmit(buffer1, buffer2, port_tx);
+    } else {
+        // Handle cases where only one port has data or no data
+    }
+}

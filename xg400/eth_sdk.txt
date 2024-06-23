@@ -1,0 +1,6 @@
+what is ETH SDK?
+
+was grouped out of AOS
+includes Ethernet Domain Applications on Polarion AOS PM (~22 apps)
+
+Focal:  Steve Riegel

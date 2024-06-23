@@ -1,0 +1,130 @@
+//////////////////////////// multithread ////////////////////////////////
+threads have overhead and comlexity
+also hard to debug and restore scenarios because they are async and the order of actions is not gauranteed. 
+
+#include <stdio.h>
+#include <pthread.h>
+#include <string.h>
+
+#define BUFFER_SIZE 10
+#define FRAME_SIZE 16
+
+// Ring buffer structure
+typedef struct {
+    char data[BUFFER_SIZE][FRAME_SIZE];
+    int head, tail;
+} ring_buffer_t;
+
+ring_buffer_t buffer;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
+void buffer_init() {
+    buffer.head = buffer.tail = 0;
+}
+
+int buffer_is_full() {
+    return (buffer.tail + 1) % BUFFER_SIZE == buffer.head;
+}
+
+int buffer_is_empty() {
+    return buffer.head == buffer.tail;
+}
+
+void buffer_push(char *frame) {
+    pthread_mutex_lock(&mutex);
+
+    if (buffer_is_full()) {
+        // Handle buffer full condition (e.g., drop a frame)
+        printf("Buffer full!\n");
+    } else {
+        memcpy(buffer.data[buffer.tail], frame, FRAME_SIZE);
+        buffer.tail = (buffer.tail + 1) % BUFFER_SIZE;
+    }
+
+    pthread_mutex_unlock(&mutex);
+}
+
+void buffer_pop(char *frame) {
+    pthread_mutex_lock(&mutex);
+
+    if (buffer_is_empty()) {
+        // Handle buffer empty condition
+        printf("Buffer empty!\n");
+    } else {
+        memcpy(frame, buffer.data[buffer.head], FRAME_SIZE);
+        buffer.head = (buffer.head + 1) % BUFFER_SIZE;
+    }
+
+    pthread_mutex_unlock(&mutex);
+}
+
+// Simulated receive function (replace with actual receive logic)
+void simulate_receive(char *frame) {
+    // Simulate receiving a frame (e.g., read from network)
+    memset(frame, 'A', FRAME_SIZE);
+    printf("Received frame: %s\n", frame);
+}
+
+// Simplified simulate_transmit function (replace with actual logic)
+void simulate_transmit(char *frame) {
+    printf("Transmitting frame: %s\n", frame);
+}
+
+// Receive thread function
+void *receive_thread(void *arg) {
+    while (1) {
+        char frame[FRAME_SIZE];
+        simulate_receive(frame); // Simulate receiving a frame
+
+        buffer_push(frame); // Add frame to the buffer
+    }
+    return NULL;
+}
+
+// Transmit thread function
+void *transmit_thread(void *arg) {
+    while (1) {
+        char frame[FRAME_SIZE];
+        buffer_pop(frame); // Get frame from the buffer
+
+        pthread_mutex_lock(&mutex);
+        simulate_transmit(frame); // Simulate transmitting the frame
+        pthread_mutex_unlock(&mutex);
+
+        usleep(50000); // Simulate some delay between transmissions
+    }
+    return NULL;
+}
+
+int main() {
+    buffer_init();
+
+    pthread_t receive_thread_id, transmit_thread_id;
+
+    // Create the threads
+    pthread_create(&receive_thread_id, NULL, receive_thread, NULL);
+    pthread_create(&transmit_thread_id, NULL, transmit_thread, NULL);
+
+    // Wait for the threads to finish (they won't in this program)
+    pthread_join(receive_thread_id, NULL);
+    pthread_join(transmit_thread_id, NULL);
+
+    return 0;
+}
+Use code with caution.
+Explanation:
+
+Structure and Initialization:
+
+The program defines a ring_buffer_t structure to hold frames and initialize the head and tail pointers to 0.
+A mutex (mutex) ensures exclusive access to the buffer by one thread at a time.
+Buffer Functions:
+
+buffer_is_full and buffer_is_empty check the buffer state.
+buffer_push adds a frame to the buffer (handles full condition).
+buffer_pop retrieves a frame from the buffer (handles empty condition).
+Simulation Functions:
+
+simulate_receive simulates receiving a frame (replace with actual receive logic).
+simulate_transmit simulates transmitting a frame (replace with actual transmit logic).
+**Receive Thread

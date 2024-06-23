@@ -1,0 +1,151 @@
+Comments to Josh wikis:
+=======================
+
+mkdir -p
+
+XG490_test - explain it is the roor dir
+
+git clone - $USER instead of Josh
+
+for me: try and map to other folders
+
+	XG490_ test:
+		f4_build_test
+		build_and_test
+		under products: xg490 / xg400
+		build_dir_arm
+
+export REPOS=/home/$USER/AOS/XG490 && \
+docker run \
+-itd \
+                                                --privileged \
+--name xg490_container \
+--user $USER \
+--env USER=$USER \
+--workdir /home/$USER/AOS/project \
+--mount type=bind,source=/home/$USER/.jfrog,target=/home/$USER/.jfrog \
+--mount type=bind,source=/home/$USER/.ssh,target=/home/$USER/.ssh \
+--mount type=bind,source=/home/$USER/.gitconfig,target=/home/$USER/.gitconfig \
+--mount type=bind,source=$REPOS,target=/home/$USER/AOS/project \
+ede-3.9.8:latest /bin/bash
+
+------> barak: fix the docker run command
+# user user and group IDs:
+usr="--user $(id -u myuser):$(id -g myuser)"
+mountdirs="-v /etc/passwd:/etc/passwd:ro -v /etc/shadow:/etc/shadow:ro -v /etc/group:/etc/group:ro"
+
+options="-p 6379:6379"
+# I use 
+# options="-ti --rm --entrypoint=/bin/bash"
+
+image=redisc
+
+docker run ${options} ${usr} ${mountdirs} -w /home/myuser "${image}"
+
+
+-----> barak: add paths to $PATH including /opt/adva/bin, etc...
+-----> barak: history not saved
+-----> barak: sudo not allowed
+------> exit == stop?
+
+Gentoo:
+=======
+
+
+how lists f packages are managed for embedded target? where the lists are built?
+---> list exist upon EDE install
+---> eos doent exist after EDE install
+
+if it is created by ./usr/portages/targ-manual/profiles/eos/aarch64-linux-gnu/make.defaults after aarch64-linux-gnu is set
+
+(syncing rsync://GDN-S-SYS-EDE-1.advaoptical.com/ede/full/3.9.8)
+
+specimen for the product
+
+how is the rootfs composed?
+
+after building the base image, prod, prod-devel stil empty
+
+what is exactly prod, prod_devel and all these product_copy_sync scripts?
+
+prod_devel/fsmods kryztof
+
+fsmode vs modes?
+fsmode doesnt exist after ede install but exists prior to adva_deploy (binaries still not installed there)
+
+rootfs on kryztof ppt
+
+rootfs: /targ/arch/aarch64-linux-gnu/modes/eos
+
+When the full image is built:
+
+/targ/prod/xg490/med/proxy/main = /targ/arch/aarch64-linux-gnu/modes/eos
+
+ADVA apps are placed into:    
+/targ/prod/xg490/med/proxy/adva/aos
+
+
+docker
+
+debug symbols
+
+built a base package, why not with ebuild?
+
+
+https://polarion.advaoptical.com/polarion/#/project/EDE/wiki/EDE%20Version%20Comparison
+
+
+
+
+
+
+root fs and the pkg lists (embedded target + EC ( CC +)
+when is the merge for the final rootfs
+
+
+=====================================
+eos holds gentoo packages, /build_dir_arm/Install/bin or lib holds AOS apps
+
+/build_dir_arm/Build/xg490/staging/base - aos packages after they are built locally
+
+When the full image is built:
+
+/targ/prod/xg490/med/proxy/main = /targ/arch/aarch64-linux-gnu/modes/eos
+
+ADVA apps are placed into:    
+/targ/prod/xg490/med/proxy/adva/aos
+======================================
+
+
+how to cross compile an ede pkg
+ebuild vs emerge, portage module
+
+
+prod / prod-devel
+
+
+cross compile packages:
+
+repo: aos-ne-os
+ede-server-config
+
+dede/README.txt  - info about all lists
+dede/bin/int/crosspacks - list of embedded target packages on EDE server
+
+other-tools-and-scripts/tools/check_required_packages_updates.sh
+modules/arch--aarch64-linux-gnu/Manifest.combo
+
+under ede: 
+EDE-packages.txt
+The embedded target list is general, all supported packges. Only CC/EC are actually installed on target.
+
+find /targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/ -mindepth 2 -maxdepth 2  -type d
+
+initramfs:
+==========
+cs_init is built with ebuild profile and is installed into main
+
+initramfs is busy box based. tarred as cpio based on initramfs_source. ir_init as init.
+swtich_root is called to switch to real root fs after mounted and call cs_init as its init. cs_init:
+
+inittab is the blueprint for the init process.

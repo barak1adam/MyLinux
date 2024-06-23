@@ -1,0 +1,144 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
+
+#define BUFFER_SIZE 10
+#define FRAME_SIZE 16
+#define TIMEOUT_SEC 5 // Timeout duration in seconds
+
+// Ring buffer structure
+typedef struct {
+  char data[BUFFER_SIZE][FRAME_SIZE];
+  int head, tail;
+} ring_buffer_t;
+
+ring_buffer_t buffer1, buffer2;
+char combined_buffer[BUFFER_SIZE * 2 * FRAME_SIZE]; // Buffer for combined frames
+int buffer1_count = 0; // Count of frames in buffer1
+int buffer2_count = 0; // Count of frames in buffer2
+
+void buffer_init(ring_buffer_t *buffer) {
+  buffer->head = buffer->tail = 0;
+}
+
+int buffer_is_full(ring_buffer_t *buffer) {
+  return (buffer->tail + 1) % BUFFER_SIZE == buffer->head;
+}
+
+int buffer_is_empty(ring_buffer_t *buffer) {
+  return buffer->head == buffer->tail;
+}
+
+void buffer_push(ring_buffer_t *buffer, char *frame) {
+  if (buffer_is_full(buffer)) {
+    // Handle buffer full condition (e.g., drop a frame)
+    printf("Buffer full!\n");
+  } else {
+    memcpy(buffer->data[buffer->tail], frame, FRAME_SIZE);
+    buffer->tail = (buffer->tail + 1) % BUFFER_SIZE;
+    if (buffer == &buffer1) {
+      buffer1_count++;
+    } else {
+      buffer2_count++;
+    }
+  }
+}
+
+void buffer_pop(ring_buffer_t *buffer, char *frame) {
+  if (buffer_is_empty(buffer)) {
+    // Handle buffer empty condition
+  } else {
+    memcpy(frame, buffer->data[buffer->head], FRAME_SIZE);
+    buffer->head = (buffer->head + 1) % BUFFER_SIZE;
+    if (buffer == &buffer1) {
+      buffer1_count--;
+    } else {
+      buffer2_count--;
+    }
+  }
+}
+
+// Simulated receive functions (replace with actual logic)
+void simulate_receive_buffer1(char *frame) {
+  // Simulate receiving a frame for buffer 1 (e.g., read from network)
+  memset(frame, 'A', FRAME_SIZE);
+  printf("Received frame for buffer 1: %s\n", frame);
+}
+
+void simulate_receive_buffer2(char *frame) {
+  // Simulate receiving a frame for buffer 2 (e.g., read from network)
+  memset(frame, 'B', FRAME_SIZE);
+  printf("Received frame for buffer 2: %s\n", frame);
+}
+
+// Combine frames from buffers into a single buffer
+void combine_frames() {
+  int combined_index = 0;
+
+  // Check if both buffers have frames
+  if (buffer1_count > 0 && buffer2_count > 0) {
+    // Process the first frame from each buffer
+    char frame1[FRAME_SIZE], frame2[FRAME_SIZE];
+    buffer_pop(&buffer1, frame1);
+    buffer_pop(&buffer2, frame2);
+    memcpy(combined_buffer + combined_index, frame1, FRAME_SIZE);
+    combined_index += FRAME_SIZE;
+    memcpy(combined_buffer + combined_index, frame2, FRAME_SIZE);
+    combined_index += FRAME_SIZE;
+
+    // Process subsequent pairs of frames
+    while (buffer1_count > 0 && buffer2_count > 0) {
+      buffer_pop(&buffer1, frame1);
+      buffer_pop(&buffer2, frame2);
+      memcpy(combined_buffer + combined_index, frame1, FRAME_SIZE);
+      combined_index += FRAME_SIZE;
+      memcpy(combined_buffer + combined_index, frame2, FRAME_SIZE);
+      combined_index += FRAME_SIZE;
+    }
+  }
+}
+
+// Timeout handler function
+void timeout_handler(int sig) {
+  printf("Timeout occurred! Processing buffers and combining frames...\n");
+
+  // Disable timer to prevent re-triggering during processing
+  alarm(0);
+
+  // Combine frames from both buffers
+  combine_frames();
+
+  // You can add logic here to transmit the combined buffer (replace with actual logic)
+  printf("Combined frame: %s\n", combined_buffer);
+
+  printf("Buffers emptied.\n");
+
+  // Re-enable timer after processing
+  alarm(TIMEOUT_SEC);
+}
+
+int main() {
+  buffer_init(&buffer1);
+  buffer_init(&buffer2);
+
+  // Install signal handler for timeout
+  signal(SIGALRM, timeout_handler);
+  alarm(TIMEOUT_SEC); // Set timeout
+
+  while (1) {
+    char frame[FRAME_SIZE];
+
+    // Alternate receiving frames for buffer 1 and buffer 2
+    if (rand() % 2 == 0) {
+      simulate_receive_buffer1(frame);
+      buffer_push(&buffer1, frame);
+    } else {
+      simulate_receive_buffer2(frame);
+      buffer_push(&buffer2, frame);
+    }
+  }
+
+  return 0;
+}

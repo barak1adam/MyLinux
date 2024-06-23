@@ -1,0 +1,127 @@
+<!-- AOS -->
+"aos-ne-build-and-test" path="build-and-test" groups="sdk"/>
+"aos-common-tools-pyang" path="aos-common-tools-pyang" groups="model"/>
+"aos-common-cim-aos-model" path="aos-common-cim-aos-model" groups="model"/>
+"aos-standard-openconfig-model" path="aos-standard-openconfig-model" groups="model"/>
+"aos-ne-apl" path="framework/apl" groups="sdk,framework"/>
+"aos-ne-auditsync" path="framework/auditsync" groups="sdk,framework"/>
+"aos-fw-cli" path="framework/cli" groups="sdk,framework"/>
+"aos-ne-common" path="framework/common" groups="sdk,framework"/>
+"aos-ne-hal" path="framework/hal" groups="sdk,framework"/>
+"aos-ne-hbm-drivers" path="framework/hbm-drivers" groups="sdk,framework"/>
+"aos-ne-hbm-framework" path="framework/hbm-framework" groups="sdk,framework"/>
+"aos-ne-tools" path="framework/ne-tools" groups="sdk,framework"/>
+"aos-open-source-netsnmp" path="framework/netsnmp" groups="sdk,framework"/>
+"aos-ne-platform" path="framework/platform" groups="sdk,framework"/>
+"aos-ne-app-snmp" path="framework/snmp" groups="sdk,framework"/>
+"aos-ne-steering" path="framework/steering" groups="sdk,framework"/>
+"aos-ne-fw-webserver" path="framework/webserver" groups="sdk,framework"/>
+"aos-ne-core-async" path="core-apps/async" groups="sdk,core-apps"/>
+"aos-ne-app-base" path="core-apps/base" groups="sdk,core-apps"/>
+"aos-ne-app-base" path="core-apps/base-fw" groups="sdk,core-apps"/>
+"aos-ne-core-bridge" path="core-apps/bridge" groups="sdk,core-apps"/>
+"aos-ne-core-certmgr" path="core-apps/certmgr" groups="sdk,core-apps"/>
+"aos-ne-core-connect-guard" path="core-apps/cg" groups="sdk,core-apps"/>
+"aos-ne-core-configfiles" path="core-apps/config-files" groups="sdk,core-apps"/>
+"aos-app-ethernet-fac-tm" path="core-apps/core-ethernet" groups="sdk,core-apps"/>
+"aos-ne-core-protection" path="core-apps/core-prot" groups="sdk,core-apps"/>
+"aos-ne-core-fac" path="core-apps/corefacility" groups="sdk,core-apps"/>
+"aos-ne-core-dcn" path="core-apps/dcn" groups="sdk,core-apps"/>
+"aos-ne-core-dte" path="core-apps/dte" groups="sdk,core-apps"/>
+"aos-ne-core-eq-display" path="core-apps/eqdisplay" groups="sdk,core-apps"/>
+"aos-ne-app-eqpt" path="core-apps/equipment" groups="sdk,core-apps"/>
+"aos-ne-core-eventchannel" path="core-apps/eventchannel" groups="sdk,core-apps"/>
+"aos-ne-core-fibermap" path="core-apps/fibermap" groups="sdk,core-apps"/>
+"aos-ne-core-fm" path="core-apps/fm" groups="sdk,core-apps"/>
+"aos-ne-core-fm" path="core-apps/fm-apinoapl" groups="sdk,core-apps"/>
+"aos-ne-core-ip" path="core-apps/ip" groups="sdk,core-apps"/>
+"aos-ne-core-iptables" path="core-apps/iptables" groups="sdk,core-apps"/>
+"aos-ne-core-security-keychain" path="core-apps/keychain" groups="sdk,core-apps"/>
+"aos-ne-core-led-control" path="core-apps/led" groups="sdk,core-apps"/>
+"aos-ne-core-linear-protection" path="core-apps/linear-prot" groups="sdk,core-apps"/>
+"aos-ne-core-ethernet-lldp" path="core-apps/lldp" groups="sdk,core-apps"/>
+"aos-ne-core-license" path="core-apps/lm" groups="sdk,core-apps"/>
+"aos-ne-core-log" path="core-apps/log" groups="sdk,core-apps"/>
+"aos-ne-core-lti" path="core-apps/lti" groups="sdk,core-apps"/>
+"aos-ne-core-mgmt-vrf" path="core-apps/management-vrf" groups="sdk,core-apps"/>
+"aos-ne-core-master-profile" path="core-apps/master-profile" groups="sdk,core-apps"/>
+"aos-ne-core-mrg" path="core-apps/mrg" groups="sdk,core-apps"/>
+"aos-ne-core-ethernet-mrport" path="core-apps/mrport" groups="sdk,core-apps"/>
+"aos-ne-core-naming-service" path="core-apps/naming-service" groups="sdk,core-apps"/>
+"aos-ne-core-netconf" path="core-apps/netconf" groups="sdk,core-apps"/>
+"aos-ne-core-object-tag" path="core-apps/objecttag" groups="sdk,core-apps"/>
+"aos-ne-core-ospf" path="core-apps/ospf" groups="sdk,core-apps"/>
+"aos-ne-core-pm" path="core-apps/pm" groups="sdk,core-apps"/>
+"aos-ne-core-routing-frr" path="core-apps/routing-frr" groups="sdk,core-apps"/>
+"aos-ne-app-rsm" path="core-apps/rsm" groups="sdk,core-apps"/>
+"aos-ne-core-sched" path="core-apps/sched" groups="sdk,core-apps"/>
+"aos-ne-core-security" path="core-apps/security" groups="sdk,core-apps"/>
+"aos-ne-core-sirm" path="core-apps/sirm" groups="sdk,core-apps"/>
+"aos-ne-core-state-management" path="core-apps/sm" groups="sdk,core-apps"/>
+"aos-ne-core-smdm" path="core-apps/smdm" groups="sdk,core-apps"/>
+"aos-ne-core-srdm" path="core-apps/srdm" groups="sdk,core-apps"/>
+"aos-ne-core-storage" path="core-apps/storage" groups="sdk,core-apps"/>
+"aos-ne-core-stp" path="core-apps/stp" groups="sdk,core-apps"/>
+"aos-ne-core-streaming-telemetry" path="core-apps/streaming-telemetry" groups="sdk,core-apps"/>
+"aos-ne-core-streaming-telemetry" path="core-apps/streaming-telemetry-plugin" groups="sdk,core-apps"/>
+"aos-ne-core-software-manager" path="core-apps/swm" groups="sdk,core-apps"/>
+"aos-ne-core-tllp" path="core-apps/tllp" groups="sdk,core-apps"/>
+"aos-ne-core-time-and-date" path="core-apps/tnd" groups="sdk,core-apps"/>
+"aos-ne-core-topology" path="core-apps/topology" groups="sdk,core-apps"/>
+"aos-ne-core-tracelog" path="core-apps/tracelog" groups="sdk,core-apps"/>
+"aos-ne-core-ztp" path="core-apps/ztp" groups="sdk,core-apps"/>
+"aos-eth-common" path="core-apps/app-common" groups="sdk,core-apps"/>
+"aos-ne-core-ip-bfd" path="core-apps/bfd" groups="sdk,core-apps"/>
+"aos-ne-core-ip-bgp" path="core-apps/bgp" groups="sdk,core-apps"/>
+"aos-ne-metaswitch-mgr" path="core-apps/metaswitch-mgr" groups="sdk,core-apps"/>
+"aos-ne-core-consequent-action" path="core-apps/coreca" groups="sdk,core-apps"/>
+"aos-ne-domain-cccp" path="domain-apps/cccp" groups="sdk,domain-apps"/>
+"aos-ne-domain-croma" path="domain-apps/croma" groups="sdk,domain-apps"/>
+"aos-ne-domain-edgeols" path="domain-apps/edgeols" groups="sdk,domain-apps"/>
+"aos-ne-domain-fibrechan" path="domain-apps/fibrechannel" groups="sdk,domain-apps"/>
+"aos-ne-domain-ocm" path="domain-apps/ocm" groups="sdk,domain-apps"/>
+"aos-ne-domain-openconfig" path="domain-apps/openconfig" groups="sdk,domain-apps"/>
+"aos-ne-domain-otn-linear-protection" path="domain-apps/otn-linear-prot" groups="sdk,domain-apps"/>
+"aos-ne-domain-opp" path="domain-apps/otn-op-prot" groups="sdk,domain-apps"/>
+"aos-ne-domain-otn" path="domain-apps/otndomain" groups="sdk,domain-apps"/>
+"aos-ne-domain-roadm" path="domain-apps/roadmdomain" groups="sdk,domain-apps"/>
+"aos-ne-domain-sami" path="domain-apps/sami" groups="sdk,domain-apps"/>
+"aos-ne-domain-sdhsonet" path="domain-apps/sdhsonetdomain" groups="sdk,domain-apps"/>
+"aos-ne-domain-otn-spaneq" path="domain-apps/spaneq" groups="sdk,domain-apps"/>
+"aos-ne-domain-wdm-mgr" path="domain-apps/wdm-mgr" groups="sdk,domain-apps"/>
+"aos-ne-domain-otdr" path="domain-apps/otdr" groups="sdk,domain-apps"/>
+  99   <!-- ETH SDK -->
+ "aos-ne-core-snmpdying-gasp" path="core-apps/dyinggasp" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-core-8021x" path="core-apps/ieee8021x" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-core-igmp" path="core-apps/igmp" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-core-igmp-snooping" path="core-apps/igmpsnooping" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-core-is-is" path="core-apps/isis" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-core-ip-pim" path="core-apps/pim" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-core-mpls" path="core-apps/mpls" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-core-mpls-ldp" path="core-apps/mpls-ldp" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-core-ip-vrrp" path="core-apps/vrrp" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-core-ip-l3vpn" path="core-apps/l3vpn" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-core-ip-evpn" path="core-apps/evpn" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-core-mpls-rsvp" path="core-apps/rsvpte" groups="f4,eth_sdk,core-apps"/>
+ "aos-ne-domain-cfm" path="domain-apps/cfm" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-ethernet" path="domain-apps/domain-ethernet" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-ip" path="domain-apps/domain-ip" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-efmoam" path="domain-apps/efm" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-elmi" path="domain-apps/elmi" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-eompls" path="domain-apps/eompls" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-erp" path="domain-apps/erp" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-lag" path="domain-apps/lag" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-ethernet-latching-loopback" path="domain-apps/llb" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-llf" path="domain-apps/llf" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-port-mirror" path="domain-apps/mirror" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-pdh" path="domain-apps/pdh" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-ptp-1588" path="domain-apps/ptp-1588" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-sat" path="domain-apps/sat" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-ip-sat" path="domain-apps/ip-sat" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-segment-routing" path="domain-apps/segment-routing" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-soam-pm" path="domain-apps/soampm" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-synce" path="domain-apps/synce" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-timing" path="domain-apps/timing" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-twamp" path="domain-apps/twamp" groups="f4,eth_sdk,domain-apps"/>
+ "aos-ne-domain-connect-guard" path="domain-apps/dcg" groups="f4,eth_sdk,domain-apps"/>
+ "aos-domain-vm-server" path="domain-apps/vm-server" groups="f4,eth_sdk,domain-apps"/>

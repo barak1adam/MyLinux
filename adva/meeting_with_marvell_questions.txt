@@ -1,0 +1,8 @@
+learn the following use cases:
+=============================
+ carrier eth
+ cellular backhaul
+ cell site gw
+ aggregators
+ 
+ HW: serdes, table size

@@ -1,0 +1,5 @@
+Loopback - 
+
+According to Emil port and service based loopback are required
+
+Accordign to Reuven - service based not implemented

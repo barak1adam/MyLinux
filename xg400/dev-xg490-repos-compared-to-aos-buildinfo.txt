@@ -1,0 +1,19 @@
+in aos buildinfo but not in dev-xg490:
+"aos-ne-domain-edgeols" path="domain-apps/edgeols" groups="sdk,domain-apps"/>
+
+in dev-xg490 only:
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/aos-common-cli
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/aos-common-python-container
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/aos-ne-python-container
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/aos-ne-core-viewpart
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/aos-ne-python-container-backends
+
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/f4-build-test
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/f4-model
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/f4-qumran-mx-api
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/f4-qumran-2c-api
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/f4-ne-xg400
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/f4-ne-xg4xx
+
+in dev-xg490 but also in SDK build info under F8:
+Repository: ssh://aos_build@muc-gerrit.rd.advaoptical.com:29418/aos-common-ne-gui

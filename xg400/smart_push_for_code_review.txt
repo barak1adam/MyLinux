@@ -1,0 +1,70 @@
+Discussion Barak, Josh:
+=======================
+before a pushing a change - squash all commits into one atomic commit
+(1. a new commit is created with all commits squashed and this is why the push into refs/for/master will succeed even without the %base arg
+if you have only one commit pushed to your feature branch, then a squash not needed for the developer, so the %base arg is mandatory to make the push successful
+2. Roman works with local merges (--no-ff), so a new merge commit is created:
+-always one change only is pushed to Gerrit, not a change per commit
+-the merge commit is a new commit and we can always push it without %base arg.
+
+once you push a change for master, block it with a veto vote (C.Review = -2). Only once you are ready to merge, set it to +2 and let the Gerrit trigger the test job in Jenkins and submit.
+before set the +2, make sure the changes are rebased on top of master
+
+
+action items:
+==============
+
+add %base to the push for c.review script
+
+
+test the squash script - how to automate the squash?
+---------------------------------------------------
+create a new branch from master and checkout to it
+git cherry-pick the first commit from my branch
+then git merge --squash each of the other commits
+then push this new squashed branch for code review
+
+demo:
+=====
+- daily work with a feature branch: smart rebase, smart push
+- push for code review HEAD:refs/for/master fails ---- > this is why smart push for code review added
+
+
+- push few commits, a change per commit is created - complicated
+- solution: smart squash before pushing for code review
+
+- verified is done by pre-commit jobi n Jenkins
+- block it untill you get all reviewers by a veto vote of CR = -2
+- change will be submitted automatically
+
+#summary:
+#1. work on dev branch, smart rebase it and smart push it for backup
+#2. before pushing to code review, use smart squash rebase
+#3. then push with smart push for code review
+
+#demo:
+#work on dev branch, create 3 commits and push my branch for backup
+#then, push HEAD:refs/for/master fails ---- > this is why smart push for code review added
+#show https://muc-gerrit.rd.advaoptical.com/Documentation/user-upload.html#base
+#show now that 3 changes were created, one per commit
+#show a vote for all 3 is mandatory to submit
+#it's complicated
+#delete all changes one by one
+#smart squash rebase
+# show the local backup branch that is created
+#smart push for backup
+#smart push for code review
+#show only one change in Gerrit
+
+
+#explain about the pre-commit jobs in Jenkins, verified can't be voted manaully
+#show the job is started after submit conditions are applied (+2 on Code Review)
+#show the link for the job on Gerrit change log
+#to disable the verfication job, use veto vote CR = -2. Once all reviewers approved use +2
+#before set the +2, make sure the changes are rebased on top of master
+#once verified, the change is merged automatically
+#no need to worry about the master that was changed during the job, there is a job queue and on other change could be added
+#polarion page: https://polarion.advaoptical.com/polarion/#/project/GSPE/wiki/Processes/AOS%20Pre-Commit%20High%20Level%20Workflow
+
+
+

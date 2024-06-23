@@ -1,0 +1,264 @@
+emerge-aarch64-linux-gnu --info
+sudo emerge-aarch64-linux-gnu ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/net-misc/curl-7.78.0-r1/curl-7.78.0-r1.ebuild
+   44  sudo emerge-aarch64-linux-gnu ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/net-misc/curl-7.78.0-r1/curl-7.78.0-r1.ebuild ask
+   45  sudo emerge-aarch64-linux-gnu curl ask
+   46  sudo ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/net-misc/curl-7.78.0-r1/curl-7.78.0-r1.ebuild
+   47  sudo ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/net-misc/curl-7.78.0-r1/curl-7.78.0-r1.ebuild ask
+sudo find ./targ/arch/aarch64-linux-gnu/modes/eos -iname logrotate
+   55  ls -la ./targ/arch/aarch64-linux-gnu/modes/eos/usr/bin/logrotate
+sudo find ./targ/arch/aarch64-linux-gnu/modes/eos -mmin -10
+sudo emerge-aarch64-linux-gnu logrotate
+   57  ls -la ./targ/arch/aarch64-linux-gnu/modes/eos/usr/bin/logrotate
+   58  ll /var/tmp/targ-portage/aarch64-linux-gnu/portage/app-admin/logrotate-3.17.0/image
+   sudo vim ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   74  sudo emerge-aarch64-linux-gnu logrotate
+   sudo find ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/ -iname "*.ebuild" | grep logrotate
+sudo emerge-aarch64-linux-gnu --fetchonly logrotate
+  111  sudo find ./targ/arch/aarch64-linux-gnu/ -mmin -10
+  112  sudo find ./tmp/ -mmin -10
+ll ./targ/arch/aarch64-linux-gnu/modes/eos/etc/portage/package.use
+sudo find . -iname "make.conf"
+sudo emerge-aarch64-linux-gnu --info | grep ^USE
+sudo vim ./targ/arch/aarch64-linux-gnu/modes/eos/etc/portage/make.conf
+ll /var/tmp/portage/app-admin/logrotate-3.14.0/work/logrotate-3.14.0
+sudo tar -xvf ./var/portage/distfiles/logrotate-3.17.0.tar.gz -C /tmp
+ls -la ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild compile
+  347  ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild unpack
+portageq get_repo_path / gentoo
+  363  ll /usr/portages/gentoo
+  364  sudo vim ./etc/portage/make.conf
+  365  ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild compile
+  366  cd /
+  367  ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild compile
+  368  export PORTDIR=/targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg
+  369  ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild compile
+  370  sudo vim /targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+  371  ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild compile
+  372  sudo emerge-aarch64-linux-gnu --info
+  373  sudo vim /usr/aarch64-linux-gnu/etc/portage/make.conf
+  374  sudo emerge-aarch64-linux-gnu --info
+  375  ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild compile
+  376  ll /var/tmp/targ-portage/aarch64-linux-gnu
+  377  ll /var/tmp/targ-portage/aarch64-linux-gnu/portage/
+  378  sudo vim /usr/aarch64-linux-gnu/etc/portage/make.conf
+  379  crossdev --help
+  380  crossdev -t help
+  381  sudo emerge-aarch64-linux-gnu --info
+  382  sudo emerge --info
+  383  cd usr/aarch64-linux-gnu/
+ll
+  385  ll usr
+  386  ll usr/include/
+  387  emerge-wrapper --init
+  388  ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild compile
+  389  emerge-aarch64-linux-gnu logrotate
+  390  sudo emerge-aarch64-linux-gnu logrotate
+  391  sudo emerge-aarch64-linux-gnu app-admin/logrotate
+  392  sudo emerge-aarch64-linux-gnu -av app-admin/logrotate | tee /tmp/build.log
+  393  sudo vim /usr/aarch64-linux-gnu/etc/portage/make.conf
+  394  sudo emerge-aarch64-linux-gnu -av app-admin/logrotate | tee /tmp/build.log
+  395  ls -la ./targ/arch/aarch64-linux-gnu/modes/eos/usr/bin/logrotate
+  396  cd /
+  397  ls -la ./targ/arch/aarch64-linux-gnu/modes/eos/usr/bin/logrotate
+  398  man ebuild
+  399  man make.conf
+  400  history
+  401  sudo emerge-aarch64-linux-gnu --ask logrotate
+  402  man 5 ebuild
+
+ 
+     2  sudo emerge-aarch64-linux-gnu logrotate
+    3  sudo vim /usr/aarch64-linux-gnu/etc/portage/make.conf
+    4  sudo mkdir -p /var/tmp/targ-portage/aarch64-linux-gnu
+    5  sudo emerge-aarch64-linux-gnu logrotate
+    6  sudo FEATURES="-sandbox -usersandbox" emerge-aarch64-linux-gnu --oneshot logrotate
+    7  cd /
+    8  find . -iname logrotate -type f
+    9  sudo find . -iname logrotate -type f
+   10  ls -la ./targ/arch/aarch64-linux-gnu/modes/eos/usr/bin/logrotate
+   11  sudo find . -iname "*logrotate*.ebuild" -type f
+   12  #sudo ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild compile
+   13  man ebuild
+   14  sudo ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild compile
+   15  sudo FEATURES="-sandbox -usersandbox" emerge-aarch64-linux-gnu --oneshot logrotate
+   16  sudo vim ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   17  sudo FEATURES="-sandbox -usersandbox" emerge-aarch64-linux-gnu --oneshot logrotate
+   18  sudo FEATURES="-sandbox -usersandbox" emerge-aarch64-linux-gnu --help
+   19  sudo FEATURES="-sandbox -usersandbox" emerge-aarch64-linux-gnu --oneshot --noreplace logrotate
+   20  sudo FEATURES="-sandbox -usersandbox" emerge-aarch64-linux-gnu --oneshot logrotate
+   21  ls /usr/aarch64-linux-gnu/etc/portage/
+   22  sudo PORTDIR="/usr/aarch64-linux-gnu/etc/portage/" ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild compile
+   23  sudo export PORTDIR="/usr/aarch64-linux-gnu/etc/portage/"; ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild compile
+   24  emerge-aarch64-linux-gnu --info
+   25  sudo ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild manifest
+   26  sudo vim /usr/aarch64-linux-gnu/etc/portage/make.conf
+   27  sudo vim /etc/portage/make.conf 
+   28  cd usr/aarch64-linux-gnu/
+   29  ll
+   30  sudo vim /etc/portage/make.conf 
+   31  cd usr/local/
+   32  ll
+   33  sudo vim /etc/portage/make.conf 
+   34  cd ..
+   35  ll
+   36  cd ..
+   37  ll
+   38  sudo vim etc/portage/make.conf 
+   39  #sudo cp ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild usr/local/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   40  sudo mkdir -p sr/local/app-admin/logrotate-3.17.0
+   41  sudo cp ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild usr/local/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   42  cd /
+   43  sudo cp ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild /usr/aarch64-linux-gnu/usr/local/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   44  ll ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   45  ll /usr/aarch64-linux-gnu/usr/local/app-admin/logrotate-3.17.0/
+   46  mkdir -p /usr/aarch64-linux-gnu/usr/local/app-admin/logrotate-3.17.0/
+   47  sudo mkdir -p /usr/aarch64-linux-gnu/usr/local/app-admin/logrotate-3.17.0/
+   48  sudo cp ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild /usr/aarch64-linux-gnu/usr/local/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   49  sudo vim /usr/aarch64-linux-gnu/usr/local/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   50  sudo emerge-aarch64-linux-gnu logrotate
+
+   51  sudo emerge-aarch64-linux-gnu --info
+   52  sudo vim etc/portage/make.conf 
+   53  cd usr/aarch64-linux-gnu/
+   54  sudo vim etc/portage/make.conf 
+   55  sudo emerge-aarch64-linux-gnu --info
+   56  sudo vim etc/portage/make.conf 
+   57  sudo vim etc/portage/make.conf 
+   58  sudo mkdir -p /usr/aarch64-linux-gnu/usr/local/portage/app-admin/logrotate-3.17.0/
+   59  sudo cp ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild /usr/aarch64-linux-gnu/usr/local/portage/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   60  cd /
+   61  sudo cp ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild /usr/aarch64-linux-gnu/usr/local/portage/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   62  sudo vim /usr/aarch64-linux-gnu/usr/local/portage/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   63  sudo emerge-aarch64-linux-gnu logrotate
+   64  ls -la /usr/local/portage
+   65  cd -
+   66  ls -la /usr/local/portage
+   67  sudo ls /usr/aarch64-linux-gnu/usr/local/portage/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   68  sudo vim etc/portage/make.conf 
+   69  sudo emerge-aarch64-linux-gnu logrotate
+   70  sudo ls /usr/aarch64-linux-gnu/usr/local/portage/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   71  sudo vim /usr/aarch64-linux-gnu/usr/local/portage/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   72  sudo emerge-aarch64-linux-gnu --help
+   73  sudo emerge-aarch64-linux-gnu /usr/aarch64-linux-gnu/usr/local/portage/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   74  sudo emerge-aarch64-linux-gnu logrotate
+   75  sudo emerge-aarch64-linux-gnu logrotate | vim  -
+   76  sudo find . -iname "logrotate-3.17.0.ebuild"
+   77  sudo rm ./usr/local/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild
+   78  cd /
+   79  sudo find . -iname "logrotate-3.17.0.ebuild"
+   80  sudo vim ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild
+   81  sudo emerge-aarch64-linux-gnu logrotate
+   82  sudo emerge-aarch64-linux-gnu logrotate manifest
+   83  sudo emerge-aarch64-linux-gnu --help
+   84  sudo emerge-aarch64-linux-gnu --skip-manifest
+   85  sudo emerge-aarch64-linux-gnu --digest logrotate
+   86  #sudo ebuild ./targ/arch/aarch64-linux-gnu/modes/eos/var/db/pkg/app-admin/logrotate-3.17.0/logrotate-3.17.0.ebuild manifest
+   87  sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild compile
+
+  man ebuild
+   89  sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild install
+   90  ls -la /usr/bin/logrotate
+   91  ll /var/tmp/portage/app-admin/logrotate-3.17.0/image
+   92  sudo ll /var/tmp/portage/app-admin/logrotate-3.17.0/image
+   93  sudo ls /var/tmp/portage/app-admin/logrotate-3.17.0/image
+   94  find . -iname emerge-aarch64-linux-gnu
+   95  sudo find . -iname emerge-aarch64-linux-gnu
+   96  file ./usr/bin/emerge-aarch64-linux-gnu
+   97  sudo find . -iname cross-emerge
+   98  ls -la /usr/bin/cross*
+   99  /usr/bin/crossdev --help
+  100  /usr/bin/cross-emerge --help
+  101  sudo /usr/bin/cross-emerge --help
+  102  /usr/bin/crossdev -L
+  103  sudo /usr/bin/crossdev -L
+  104  sudo emerge-aarch64-linux-gnu --info
+  105  man ebuild
+  106  sudo ebuild -C aarch64-linux-gnu ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild install
+  107  $HOME/opt/cross/bin/$TARGET-gcc --version
+  108  emerge --ask sys-devel/crossdev
+  109  sudo emerge --ask sys-devel/crossdev
+  110  sudo export CHOST=aarch64-linux-gnu ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild install
+  111  sudo CHOST=aarch64-linux-gnu ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild install
+  112  sudo CHOST=aarch64-linux-gnu ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild compile
+  113  export CHOST=aarch64-linux-gnu
+  114  export CC=aarch64-linux-gnu-gcc
+  115  export CXX=aarch64-linux-gnu-g++
+  116  sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild compile
+  117  sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild clean
+  118  sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild compile
+  119  export CBUILD=x86_64-pc-linux-gnu
+  120  sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild compile
+ man ebuild
+  122  #sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild compile
+  123  sudo vim ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild
+  124  #sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild compile
+  125  sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild compile
+  126  man ebuild
+  127  sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest compile
+  128  sudo vim ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild
+  129  sudo emerge-aarch64-linux-gnu --info
+  130  sudo emerge-aarch64-linux-gnu logrotate
+  131  sudo vim ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild
+  132  sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest compile
+  133  sudo vim ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild
+  134  sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest compile
+  135  sudo vim ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild
+  136  echo ${CHOST}
+  137  echo ${EPREFIX}
+  138  echo ${CBUILD}
+  139  CBUILD=x86_64-pc-linux-gnu; sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest compile
+  140  export CBUILD=x86_64-pc-linux-gnu; sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest compile
+  141  sudo vim ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild
+  142  export CBUILD=x86_64-pc-linux-gnu; sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest compile
+  143  sudo vim ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild
+  144  sudo emerge-aarch64-linux-gnu logrotate
+  145  sudo emerge-aarch64-linux-gnu --info logrotate
+  146  echo ${ABI}
+  147  echo LIBDIR_${ABI}
+  148  echo $LIBDIR
+  149  find . -iname profile
+  150  sudo find . -iname profile
+  151  cat ./usr/share/crossdev/etc/portage/profile
+  152  sudo vim ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild
+  153  man econf
+
+155  export CBUILD=x86_64-pc-linux-gnu; sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest compile
+  156  export CBUILD=x86_64-pc-linux-gnu; sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest clean
+  157  export CBUILD=x86_64-pc-linux-gnu; sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest compile
+  158  export CBUILD=x86_64-pc-linux-gnu; sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest install
+  159  man ebuild
+  160  export CBUILD=x86_64-pc-linux-gnu; sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest merge
+  161  find . -iname logrotate -type f
+  162  sudo find . -iname logrotate -type f
+  163  ls -la ./targ/arch/aarch64-linux-gnu/modes/eos/usr/bin/logrotate
+  164  ls -la ./usr/bin/logrotate
+  165  file ./usr/bin/logrotate
+  166  export CBUILD=x86_64-pc-linux-gnu; sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest unpack
+  167  sudo vim ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild
+  168  sudo emerge-aarch64-linux-gnu --info logrotate
+  169  export CBUILD=x86_64-pc-linux-gnu; ROOT=/targ/arch/aarch64-linux-gnu/modes/eos; sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest merge
+  170  ls -la ./targ/arch/aarch64-linux-gnu/modes/eos/usr/bin/logrotate
+  171  export CBUILD=x86_64-pc-linux-gnu; export ROOT=/targ/arch/aarch64-linux-gnu/modes/eos; sudo ebuild ./usr/portages/gentoo/app-admin/logrotate/logrotate-3.17.0.ebuild --skip-manifest merge
+  172  ls -la /targ/arch/aarch64-linux-gnu/modes/eos/usr/bin/logrotate
+  173  which emerge-aarch64-linux-gnu
+  174  sudo ls -la /usr/bin/emerge-aarch64-linux-gnu
+  175  ls /usr/aarch64-linux-gnu/
+  176  cat /etc/portage/make.conf
+  177  cat /usr/share/portage/config/make.globals 
+  178  cat /usr/share/portage/config/make.globals | grep GENTOO_MIRRORS
+  179  cd /usr/aarch64-linux-gnu/
+  180  find . -iname make.globals
+  181  find . -iname "make.globals"
+  182  ls /etc/portage/make.profile
+  183  ls /etc/portage/make.profile -la
+
+
+
+/configure --prefix=/usr --build=x86_64-pc-linux-gnu --host=aarch64-linux-gnu --mandir=/usr/share/man --infodir=/usr/share/info --datadir=/usr/share --sysconfdir=/etc --localstatedir=/var/lib --disable-dependency-tracking --disable-silent-rules --docdir=/usr/share/doc/logrotate-3.17.0 --htmldir=/usr/share/doc/logrotate-3.17.0/html --without-acl --without-selinux --with-state-file-path=/var/lib/misc/logrotate.status
+configure: loading site script /usr/share/config.site
+configure: loading site script /usr/share/crossdev/include/site/linux
+configure: loading site script /usr/share/crossdev/include/site/linux-gnu
+checking for a BSD-compatible install... /usr/bin/install -c
+
+./configure --prefix=/usr --build=aarch64-linux-gnu --host=aarch64-linux-gnu --mandir=/usr/share/man --infodir=/usr/share/info --datadir=/usr/share --sysconfdir=/etc --localstatedir=/var/lib --disable-dependency-tracking --disable-silent-rules --docdir=/usr/share/doc/logrotate-3.17.0 --htmldir=/usr/share/doc/logrotate-3.17.0/html --libdir=/usr/lib64 --build=x86_64-pc-linux-gnu --with-acl --without-selinux --with-state-file-path=/var/lib/misc/logrotate.status

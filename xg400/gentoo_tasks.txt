@@ -1,0 +1,12 @@
+Gentoo and EDE tasks:
+=====================
+learn fromm Gentoo:
+	OpenRC and SystemD
+	GRUB, GPL
+	Kernel config and old config
+
+Eran, Josh - review content of partitions
+
+NTP - can I build by Gentoo and not as presented by the GDN? will it be the same?
+
+Overlay

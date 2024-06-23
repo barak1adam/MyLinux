@@ -1,0 +1,203 @@
+we have 2 set of partitions:
+/dev/mmcblk0p1     cs         ext3    ro
+/dev/mmcblk0p5     boot       ext3    ro
+/dev/mmcblk0p6     modules    ext4    ro
+/dev/mmcblk0p7     main       ext4    ro (rootfs)
+/dev/mmcblk0p8     adva       ext4    ro
+/dev/mmcblk0p9     rwd        ext4    rw
+/dev/mmcblk0p10    rwda       ext4    rw
+
+/dev/mmcblk0p2     cs         ext3    ro
+/dev/mmcblk0p11    boot       ext3    ro
+/dev/mmcblk0p12    modules    ext4    ro
+/dev/mmcblk0p13    main       ext4    ro
+/dev/mmcblk0p14    adva       ext4    ro
+/dev/mmcblk0p15    rwd        ext4    rw
+/dev/mmcblk0p16    rwda       ext4    rw
+
+other parts:
+/dev/mmcblk0p17    staging    ext4    rw
+/dev/mmcblk0p18    vm         ext4    rw
+/dev/mmcblk0p19    common     ext4    rw
+
+same in xg118:
+/dev/ubi0_1     cs         ubifs    ro
+/dev/ubi0_2     boot       ubifs    ro
+/dev/ubi0_3     modules    ubifs    ro
+/dev/ubi0_4     main       ubifs    ro
+/dev/ubi0_5     rwd        ubifs    rw
+/dev/ubi0_6     adva       ubifs    ro
+/dev/ubi0_7     rwda       ubifs    rw
+
+
+/dev/ubi0_8     cs         ubifs    ro
+/dev/ubi0_9     boot       ubifs    ro
+/dev/ubi0_10    modules    ubifs    ro
+/dev/ubi0_11    main       ubifs    ro
+/dev/ubi0_12    rwd        ubifs    rw
+/dev/ubi0_13    adva       ubifs    ro
+/dev/ubi0_14    rwda       ubifs    rw
+
+the flow summary:
+=================
+1) u-boot bootcmd=bootaos !
+	bootaos is implemented in u-boot code as a new Adva commond: aos-ne-bootloader: source/u-boot-2022.04/board/adva/common/aos_cmd_bootaos.c
+		-based on the inventory actimg value, this command selects eosboot_a or eosboot_b.
+		-$actbank u-boot variable is set.
+
+then eosboot_a or eosboot_b loads the same cs scripts from the selected cs partition
+
+	eosboot_a=run eosboot_emmc_a
+	eosboot_b=run eosboot_emmc_b
+	eosboot_emmc_a=run setbootargs;run boot_dpl;ext2load mmc 0:1 88000000 cs_script.uimg;source 88000000
+	eosboot_emmc_b=run setbootargs;run boot_dpl;ext2load mmc 0:2 88000000 cs_script.uimg;source 88000000
+	
+	setbootargs=setenv bootargs ethaddr=$ethaddr panic=5  $extraargs  $bootargs craft=$baudrate
+
+
+
+2) cs_script set the active bootpart and calls from there the desired boot_script.uimg
+
+cs script:
+==========
+#note: this script is using the $actbank
+
+setenv bootpartnum0 5
+setenv bootpartnum1 b
+if test "x$actbank" = "x1"; then
+    setenv bootpartnum $bootpartnum1
+else
+    setenv actbank 0
+    setenv bootpartnum $bootpartnum0
+fi
+ext2load mmc 0:$bootpartnum 08100000 boot_script.uimg
+source 08100000
+
+3) the boot script is running fromt he deidred partition and boot the boot from there the kernel with intitramfs and dtb
+
+	boot_script.uimg:
+	=================
+		setenv bootargs "$bootargs cs.0=/dev/mmcblk1p1 csfs=ext3 csmo=ro cs.1=/dev/mmcblk1p2"
+		setenv bootargs "$bootargs $append"
+		setenv bootargs "$bootargs sw.all=$actbank ecc=on"
+		ext2load mmc 0:$bootpartnum 00200000 kernel
+		ext2load mmc 0:$bootpartnum 04000000 initramfs
+		ext2load mmc 0:$bootpartnum 00010000 xo126.dtb
+		booti 00200000 04000000 00010000
+
+4) initramfs is busybox based, it is running and called ir_init.
+ir_init is an init adva program, it is calling busybox switch_root to mount the real rootfs and call its real init program, the cs_init.
+
+5) cs_init is the init for Adva rootfs: mount partitions based on the cs_tab and "all" flag.
+it loads the cs_tab, learn which set is active and which is standby, generate the /etc/fstab file (ro fs like main rootfs are mounted with aufs), and call m_mount to make the actual mount.
+
+then cs_init calls /sbin/init
+
+6) then the aos init system is invoked openRC with the relevant run levels, all under /etc/init.d
+Originally created for Gentoo Linux. OpenRC uses a dependency-based approach to manage services
+
+7) then aos start scripts
+
+More detailed Expanations:
+=========================== 
+
+Inventory (eeprom):
+which is active and which is standby is determined by the flag in the physical inventory
+The "active" field in physical inventory is 1 based so should be set to either "1" or "2"
+
+adva u-boot provides the actimg command to set the active flag to 1 or 2
+it sets the $actbank to 0 or 1.
+
+cs_script looks at the $actbank variable that was set in step 1.
+it set the $bootpartnum to the desired boot parition (0x5 or 0xb) and source the boot script from that partition.
+
+boot script set boot arguments for the kernel: sw.all=$actbank and cs.0=/dev/mmcblk1p1 cs.1=/dev/mmcblk1p2, so the kernel sw will know about the active bank and the cs1 and cs2 active and standby partitions.
+
+The code that is used to look at sw.all flag is in aos-ne-os repo, in cs_init
+
+
+in the cs partition, there are the same ! cs_script and cs_tab files.
+
+cs_tab:
+
+Both the active and standby partitions are listed with the "all" flag indicating which are active and which are standby 
+The single common partitions have "true" in the "all" field and are mounted for either partition group.
+all=0 is one partition group, all=1 is the other
+
+cs_tab is not modified, only sw.all is used to select between one group (all=0) to the other (all=1)
+
+
+
+initramfs:
+==========
+short for initial RAM file system, is a crucial component of the Linux boot process. It's a temporary root filesystem loaded into RAM before the actual root filesystem is mounted.
+
+The Chicken/Egg modules Problem and initrd/initramfs:
+
+	The root file system may reside on a partition with some capabilities required:
+		Logical Volume Management, Software RAID, NFS (Network File System), Some other encrypted partition
+	The linux kernel doesn’t have these features compiled into it. (Otherwise it will be very large). 
+
+example tasks before mounting:
+	load and configure storage / network / graphics drives - necessary for the mount itself
+	decrypt the root fs for secure boot
+	other environment preparations like tmpfs
+	Adva - decide and mount the desired set of partitions
+
+initramfs is busy box based. tarred as cpio based on initramfs_source. ir_init as init.
+
+https://muc-gerrit.rd.advaoptical.com/gitweb?p=aos-ne-os.git;a=blob_plain;f=src/cs/ir_init.c;hb=HEAD
+
+cs_init and ir_init are built with ebuild profiles and are installed into main /sbin/.
+
+
+busy_box switch_root:
+=====================
+
+busybox switch_root is a powerful command used in initramfs to switch the root filesystem from the temporary initramfs to the actual root filesystem.
+
+it mounts the new root fs instead of initramfs and call the new final root fs init program. in our case it is cs_init !
+
+switch_root takes 2 args - a path to the new rootfs (example: /dev/sda1), a path to the new init (example /sbin/init)
+
+
+cs_init is the init for Adva rootfs: mount partitions based on the cs_tab and "all" flag.
+it loads the cs_tab, learn which set is active and which is standby, generate the /etc/fstab file (ro fs like main rootfs are mounted with aufs), and call m_mount to make the actual mount.
+
+I don't unerstand why this real mount is done in cs_init and not in ir_init.
+
+final user rootfs init process:
+==============================
+for the real init process, the inittab is the configuration file that affect this init behvior. 
+
+inittab is the blueprint for the init process: https://www.cyberciti.biz/howto/question/man/inittab-man-page.php
+
+
+
+example for our cs_tab:
+=======================
+
+all=0    /dev/mmcblk0p1     cs         ext3    ro
+all=1    /dev/mmcblk0p2     cs         ext3    ro
+all=0    /dev/mmcblk0p5     boot       ext3    ro
+all=0    /dev/mmcblk0p6     modules    ext4    ro
+all=0    /dev/mmcblk0p7     main       ext4    ro
+all=0    /dev/mmcblk0p8     adva       ext4    ro
+all=0    /dev/mmcblk0p9     rwd        ext4    rw
+all=0    /dev/mmcblk0p10    rwda       ext4    rw
+all=1    /dev/mmcblk0p11    boot       ext3    ro
+all=1    /dev/mmcblk0p12    modules    ext4    ro
+all=1    /dev/mmcblk0p13    main       ext4    ro
+all=1    /dev/mmcblk0p14    adva       ext4    ro
+all=1    /dev/mmcblk0p15    rwd        ext4    rw
+all=1    /dev/mmcblk0p16    rwda       ext4    rw
+true     /dev/mmcblk0p17    staging    ext4    rw
+true     /dev/mmcblk0p18    vm         ext4    rw
+true     /dev/mmcblk0p19    common     ext4    rw
+
+questions:
+----------
+what is the diff between aos-ne-os and  ede-eos-src
+
+
+note: on xo-126 it was impossible to read the physical inventory before loading the fpga.

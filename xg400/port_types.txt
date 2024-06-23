@@ -1,0 +1,48 @@
+traffic ports:
+==============
+
+SFP - 1G
+
+SFP+ - 10G
+
+SFP28 - 1G / 10G / 25G
+looks like regular SFP
+
+QSFP - 40G (4 x 10G)
+QSFP28 - 100G (4 x 25G)
+
+QSFPDD - 200G (8x25G) / 400G (8x50G)
+
+XG490:
+------
+4x 200/400G ports via QSFP-DD,
+22x 100G ports via QSFP28,
+4x 1/10/25G ports via SFP/SFP+/SFP28.
+
+Data Plane capacity:
+The product supports 2.4Tbps full-duplex switching (Qumran2C).
+
+
+QSFP-DD port configuration
+Each QSFP-DD port can be configured to:
+1x 400GE,
+1x 200GE.
+
+QSFP-DD port breakout:
+Each QSFP-DD port support breakout in:
+4x 100G
+2x 200G.
+
+QSFP28 port configuration:
+Each QSFP28 port can be configured to:
+1x 100GE, 
+1x 50GE, ?
+1x 40GE,
+1x 25GE, ?
+1x 10GE. ?
+
+QSFP28 port breakout:
+Each QSFP28 port can be configured to:
+2x 50G,
+4x 25GE,
+4x 10GE.

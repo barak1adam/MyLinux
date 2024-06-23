@@ -1,0 +1,511 @@
+after ede first rsync:
+ebuilds under /opt/aos/ede-3.6.20/usr/portages/targ-manual with multiple versions
+most ebuilds are under /opt/aos/ede-3.6.20/var/db/pkg/
+
+questions:
+==========
+is emerge calling underlying ebuild?
+
+GDN:
+===
+1) cross compile - how packages are selected from gentoo? how to control/change it? is there any EOS list?
+2) Building a package with emerge for target, I am using emerge-aarch64-linux-gnu. when it is created? 
+it is a link to cross-merge? what is the cross-merge?
+I checked that the ebuild file is not used from /usr/aarch64-linux-gnu
+what is used from /usr/aarch64-linux-gnu (make.conf, sets, ...)?
+3) why emerge-aarch64-linux-gnu had all ENV vars set and ebuild not?
+here is the actions I did before running ebuild:
+...
+is it possible to automate it and not to run it manually?
+why I had to change (configure) the ebuild itself for the cross compile?
+I want to make sure my program is build and linked properly with ebuild !
+4)is emerge-aarch64-linux-gnu calling ebuild?
+5) USE - relevant for embedded?
+where are the cross compile profiles, make.conf?
+6) sets, world and select / eselect
+
+what are we synced to? are we synced to servers to get new versions?
+how to upgrade EDE and what happens to EOS list?
+//opt/adva/bin/download_external_modules_from_arti.py jfrog
+INFO: External modules are not a part of the EDE.
+
+PORTDIR, PORTDIR_OVERLAY
+
+ROOT, PORTAGE_CONFIGROOT
+https://wiki.gentoo.org/wiki/Embedded_Handbook/General/Cross-compiling_with_Portage
+
+The idea of overlay
+
+what other tools to know and what to use
+equery, eix, etc...
+
+how to use SLOT
+
+nfs
+
+what exactly is happening on sync (what files get updated)
+
+References: 
+	1) Gentoo Linux FAQ: https://wiki.gentoo.org/wiki/FAQ
+	2) Portage: https://en.wikipedia.org/wiki/Portage_(software)
+	   Portage more in depth: https://wiki.gentoo.org/wiki/Handbook:AMD64/Working/Portage
+	3) Installing Gentoo (on VM) video: https://www.youtube.com/watch?v=q9_sXkA4Rv8
+	4) Installing Gentoo (documentation): https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation
+	5) Package sets: https://wiki.gentoo.org/wiki/Package_sets
+	6) Profiles: https://wiki.gentoo.org/wiki/Profile_(Portage)
+	7) Portage manpage: https://dev.gentoo.org/~zmedico/portage/doc/man/portage.5.html
+	8) Ebuild manpage: https://dev.gentoo.org/~zmedico/portage/doc/man/ebuild.1.html
+	9) Emerge manpage: https://dev.gentoo.org/~zmedico/portage/doc/man/emerge.1.html
+	
+--------------------------------------------------------------------------------------------------------
+Gentoo Linux:
+
+- By default, Gentoo BUILDS AND INSTALLS SYSTEM PACKAGES from source code
+	- Supports multiple architectures: x86_64, ARM, ARM64, ...
+	- Features can be selected/deselected, such as DVD/bluetooth support (including optimizations) with USE flags
+	- Compiles packages specifically for your architecture
+	- Can customize every aspect of system, including init system (open RC/systemD), kernel, etc
+- Rolling distribution - packages are added/updated/patched often - no set 'releases'
+
+- Uses 'Portage' - package management system created for Gentoo Linux
+
+	- Written in Python and Bash
+	
+	- Consists of two main parts:
+	
+		1. ebuild system - takes care of BUILDING and INSTALLING packages
+		
+		   Gentoo does not, by default, use binary packages as other package management systems do
+		   (like pacman or apt), employing instead a format known as the ebuild.
+		   Whereas RPM binaries are precompiled binaries, ebuilds are shell scripts with variables
+		   and functions which contain a description of the software, and instructions on how to obtain,
+		   configure, compile, and install it.
+		   
+		   These ebuilds reside in /var/db/repos/gentoo by default. When someone asks Portage to perform
+		   some action regarding software titles, it will use the ebuilds on the system as a base. Therefore,
+		   it's important to regularly update the ebuilds on the system (like 'sudo apt update'). 
+		   
+		   The official repository provides over 19,600 ebuilds, the majority of which are distributed
+		   by the Gentoo mirrors. New and updated ebuilds can be obtained by synchronizing the local ebuild 
+		   repositories with the mirrors. This is done by executing the command emaint sync -a.
+		   Historically, Gentoo has provided pre-compiled binary packages for many common programs,
+		   especially those which are lengthy to compile, such as Mozilla Firefox and OpenOffice.org.
+		   These are still installed with emerge, just by appending a "-bin" to the package name to
+		   instead install the binary version.
+		   
+				- USE flags:
+
+					The Portage system offers the use of "USE flags", which allows users to indicate which software
+					features they would like to include (and exclude) while building packages. For example, there is
+					a USE flag to include DVD support, where available, in packages compiled with the flag enabled.
+					The USE flags affect which dependencies are required, generally affecting which optional features
+					will be built into a given program when it is compiled. For example, in packages which use a
+					configure script, the USE flag feature would translate to ./configure --with-feature.
+
+                    The specification of USE flags is the usual way to configure programs on Gentoo. USE flags may be
+					set manually, or via user-friendly tools such as 'ufed' (USE flag editor), which lists flags along
+					with their description. A list of available USE flags is available at the Gentoo website's USE Flag Index.
+					
+					In the USE variable users define keywords which are mapped onto compile-options. For instance, 'ssl' will
+					compile SSL support in the programs that support it. '-X' will remove X-server support
+					(note the minus sign in front). 'gnome gtk -kde -qt5' will compile programs with GNOME (and GTK+) support,
+					and not with KDE (and Qt) support, making the system fully tweaked for GNOME (if the architecture supports it).
+
+					The default USE settings are placed in the make.defaults files of the Gentoo profile used by the system.
+					Gentoo uses a complex inheritance system for system profiles (not covered here). 
+					he easiest way to check the currently active USE settings is to run 'emerge --info' and select the line that
+					starts with USE:
+
+						emerge --info | grep ^USE
+						
+					Output (actual output is much longer):
+					
+						USE="X acl alsa amd64 berkdb bindist bzip2 cli cracklib crypt cxx dri ..."
+					
+					USE flags are set in /etc/portage/make.conf, e.g.:
+					
+						USE="-gtk -gnome qt5 kde dvd alsa cdr"
+						
+					When a USE value is defined in /etc/portage/make.conf, it is ADDED to the system's USE flag list.
+					USE flags can be globally REMOVED by adding a - minus sign in front of the value in the the list.
+					For example, to disable support for X graphical environments, -X can be set: USE="-X acl alsa"
+					
+					- Package-specific USE flags can be set in /etc/portage/package.use
+					
+		   
+			
+		2. 'emerge' - provides an INTERFACE to 'ebuild': managing an ebuild repository, resolving dependencies and similar issues.
+		
+		   	'emerge' calculates and manages dependencies, executes ebuilds and maintains the local Portage tree
+			and database of installed packages. The compilation settings used by ebuilds can be changed through the
+			CFLAGS environment variable, based on the specifications of the individual computer and on the user's
+			desire for optimization. The emerge utility executes ebuilds in a sandbox environment. This way the
+			system is protected from software executed by the ebuild and resulting binaries are only merged after a
+			successful build and sandboxed install.What emerge installs as dependencies is affected by the USE flag-settings.
+			They decide which optional features will be included when installing or upgrading an application. The emerge
+			command can also be used to download and install precompiled binary files.
+
+		
+		(These two therefore have roughly the same relation as rpm has with yum, or dpkg has with APT.)
+		
+		
+- SETS:
+	- Gentoo uses a concept called 'sets' to define groups of packages
+	- 3 main types - collectively referred to as @world:
+		1) @selected
+		2) @system
+		3) @profile
+		
+		- @system and @profile are a STATIC list of packages which are rquired for the base system to operate as intended. These two
+		  sets are defined by the Gentoo development team.
+		  
+			- The @system set (along with the following @profile set) define the base set of packages on a Gentoo system. The @system set is
+			  maintained by the Gentoo development team.
+
+			- The profile set (along with @system defined in the preceding section) define the base set of packages on a Gentoo system.
+			  The differences between the two is described in the man pages of Portage but the distinction does not usually matter to the
+			  system administrator. The packages that make up this set are determined by the system's profile and/or computer's architecture. 
+			
+		 - @selected is a superset: a union of @selected-packages and @selected-sets. That is to say, the output of this set includes ALL
+		   packages intentionally installed by the system administrator. Take careful note that packages which are listed in the @selected
+		   set may or may not include packages which are also defined in the @system or @profile sets by Gentoo developers. It is unwise to
+		   blindly uninstall packages from this set. Portage will provide a warning when attemping to unmerge a package which is defined in
+		   the @system or @profile set.
+		   
+		   - @selected-packages is the list of packages found in the world file (/var/lib/portage/world). It is a static list of packages that
+		     have been explicitly installed by the system administrator. Adding a package to this set can be avoided by passing the --oneshot option
+			 to emerge.
+
+		   - @selected-sets is a superset: a union of any and all custom sets emerged by the system administrator. It includes a list of every
+		     package that been explicitly installed onto the system by a result of inclusion of an installed set
+		     (except if --oneshot was used - see below). The members of this set are listed in the /var/lib/portage/world_sets file.
+		     The file will be empty if the system administrator has not (yet) emerged any custom sets. If the --oneshot option was passed when
+			 installing a custom set then the packages included in the set will not be listed, nor will the custom set be recorded in the world_sets file.
+			 
+	- There are also Custom Sets...see documentation for more info
+	
+	
+- Profiles:
+	- A Portage PROFILE specifies the default state of USE flags, sets default values for most variables found in /etc/portage/make.conf,
+	  defines a set of system packages, and selects available package versions.
+	  
+	  Profiles are central to a Gentoo system because they define core system functionality. New profiles are made available when there are
+	  fundamental changes to the way Gentoo works. Profile releases can be years apart, the current (17.1) profile is nearly 5 years old (as of 2023).
+
+	  A profile is selected at INSTALL time, according to the intended use of the system. It's fine to change profiles as needs change or when
+	  a new major profile version is released. Please only change profile versions (different names are fine) after following a news item.
+	  It is not possible to change to profiles with a different ABI (e.g. pure LLVM or musl) without a reinstall.
+
+	  Profiles are defined on an ebuild repository basis; the ones from the main repository are maintained by the Gentoo developers,
+	  but users can define their own. The profile module of the eselect tool allows users to switch profiles.
+	
+----------------
+	
+- Main features of Portage:
+
+	- With Portage different versions of a single package can coexist on a system. While other distributions tend to name their package to
+	  those versions (like gtk+2 and gtk+3) Portage uses a technology called SLOTs. An ebuild declares a certain SLOT for its version.
+	  Ebuilds with different SLOTs can coexist on the same system. For instance, the gtk+ package has ebuilds with SLOT="2" and SLOT="3".
+      
+	  There are also packages that provide the same functionality but are implemented differently. For instance, metalogd, sysklogd, and syslog-ng
+	  are all system loggers. Applications that rely on the availability of "a system logger" cannot depend on, for instance, metalogd, as the
+	  other system loggers are as good a choice as any. Portage allows for virtuals: each system logger is listed as an "exclusive" dependency
+	  of the logging service in the logger virtual package of the virtual category, so that applications can depend on the virtual/logger package.
+	  When installed, the package will pull in the first logging package mentioned in the package, unless a logging package was already installed
+	  (in which case the virtual is satisfied).
+
+      Software in the Gentoo repository can reside in different branches. By default the system only accepts packages that Gentoo deems stable.
+	  Most new software titles, when committed, are added to the testing branch, meaning more testing needs to be done before it is marked as stable.
+	  Although the ebuilds for those software are in the Gentoo repository, Portage will not update them before they are placed in the stable branch.
+
+      Some software is only available for a few architectures. Or the software doesn't work on the other architectures, or it needs more testing,
+	  or the developer that committed the software to the Gentoo repository is unable to verify if the package works on different architectures.
+
+      Each Gentoo installation also adheres to a certain profile which contains, amongst other information, the list of packages that are required for a system to function normally.
+
+
+	- Compiles from SOURCE CODE packages user wishes to install
+		- Allows for customization of compiler and target application options
+		
+	- Portage reads in the make.conf (/etc/portage/make.conf) file when it runs, which will change runtime behavior depending
+	  on the values saved in the file. make.conf can be considered the primary configuration file for Portage,
+	  so treat its content carefully.
+	  
+	  Important variables:
+		
+		- CFLAGS: flags used when compiling C source code, e.g. '-march=native' for setting target architecture to native
+		- CXXFLAGS: same as above, for C++
+		- MAKEOPTS: jobs and load-average: e.g. '-j4' and '-l4'
+		- USE: USE flags, e.g. USE="-gtk -gnome qt5 kde dvd alsa cdr"
+
+	  Tip: A commented listing of all possible variables can be found in /usr/share/portage/config/make.conf.example.
+	  Additional documentation on make.conf can be found by running man 5 make.conf.
+	 
+	- The Gentoo ebuild repository is configured via the /etc/portage/repos.conf/gentoo.conf file.
+	  This file contains the sync information needed to update the package repository
+	  (the collection of ebuilds and related files containing all the information Portage needs to
+	  download and install software packages).
+
+	- Gentoo uses PROFILES: A profile is a building block for any Gentoo system. Not only does it specify default values
+	  for USE, CFLAGS, and other important variables, it also locks the system to a certain range of package versions.
+	  These settings are all maintained by Gentoo's Portage developers.
+	  
+	  To see what profile the system is currently using, run eselect using the profile module:
+		
+		eselect profile list
+	
+- Basic use:
+
+	- Commands:
+		
+		- emerge --sync # syncs Gentoo ebuild repo from a mirror (like 'sudo apt update' I think)
+		- emerge --search <keyword> # searchs for packages whose names contain the keyword
+			- E.g.
+			
+				emerge --search pdf
+				
+		- emerge <package_name> # installs a package - includes step wherein Portage BUILDS the package to YOUR specifications and optimizes it for your hardware
+			- E.g.
+				
+				emerge --ask --verbose sys-fs/e2fsprogs	# Installs tools for checking ext2/3/4 file systems, 'ask' will ask for confirmation
+				
+		  During the installation of a package, Portage will download the necessary source code from the Internet (if necessary) and store it by default
+		  (as a tar file) in /var/cache/distfiles.
+		  After this, it will unpack, compile and install the package. To tell Portage to only download the sources without installing them,
+		  add the --fetchonly option to the emerge command. E.g.:
+
+				emerge --fetchonly gnumeric
+				
+		  Note: I believe that what emerge does when installing a package is actually ($(portageq get_repo_path) is: /var/db/repos/gentoo)
+		        (I tested these steps, and you can use them to make changes to source code of application, and after 'merge' step, you'll
+				see changes):
+			
+				ebuild $(portageq get_repo_path / gentoo)/<category>/<package>/<package>-<version>.ebuild unpack
+				ebuild $(portageq get_repo_path / gentoo)/<category>/<package>/<package>-<version>.ebuild prepare
+				ebuild $(portageq get_repo_path / gentoo)/<category>/<package>/<package>-<version>.ebuild compile
+				ebuild $(portageq get_repo_path / gentoo)/<category>/<package>/<package>-<version>.ebuild install	# installs into temp location ('image'), e.g (log output of 'ag' install):  Completed installing sys-apps/the_silver_searcher-2.2.0 into /var/tmp/portage/sys-apps/the_silver_searcher-2.2.0/image
+				ebuild $(portageq get_repo_path / gentoo)/<category>/<package>/<package>-<version>.ebuild merge		# replaces currently used binary in local filesystem (e.g. in /usr/bin) with new one
+				
+		- To safely remove software from a system, use
+		
+				emerge --deselect <package_name>
+				
+		  This will tell Portage a package is no longer required (removes it from @world set) and it is eligible for cleaning through --depclean. E.g.
+		  
+				emerge --deselect gnumeric
+				
+		  When a package is no longer selected, the package and its dependencies that were installed automatically when it was installed
+		  are still left on the system. To have Portage locate all dependencies that can now be removed, use emerge's --depclean:
+		  
+				emerge --ask --depclean
+				
+		- emerge --update --deep @world # updates all packages on the system (Like 'sudo apt upgrade' I think)
+
+--------------------------------------------------------------------------------------------------------
+
+EDE:
+
+- EDE team contact: Krzysztof Wisniewski
+
+- EDE provides all distribution packages as pre-compiled binaries!
+
+	- EDE/EOS important file locations:
+	
+		A. When EDE base is installed (before any modules are installed), only the host rootfs (EDE) is downloaded.
+		   For example, the host 'gzip' utility is located at: <EDE_INSTALL_PATH>/bin/gzip, and is compiled for x86_64,
+		   version 1.9.
+		   
+		B. When portage module is installed, you get the Portage package manager. I believe that this allows you to manage
+		   packages for both the EDE (host system) AND for the EOS (embedded target rootfs).
+		   
+		   After portage is installed, it provides ebuilds for packages. Note: it puts them in /usr/portages/gentoo/ instead of the
+		   'typical' Gentoo path: /var/db/repos/gentoo). 
+		   
+		   Example: 'gzip' version 1.9 ebuild (that is used on EDE itself) is located in: /usr/portages/gentoo/app-arch/gzip/gzip-1.9.ebuild.
+		   
+		   At this point, you can run ebuild steps as described in the Gentoo section above (tested and verified). This allows one to
+		   download source tarfile from vanilla source website  (unpack + prepare), compile the application, .
+		   For example (EDE host 'gzip'):
+		   
+				ebuild /usr/portages/gentoo/app-arch/gzip/gzip-1.9.ebuild unpack
+				ebuild /usr/portages/gentoo/app-arch/gzip/gzip-1.9.ebuild prepare
+				ebuild /usr/portages/gentoo/app-arch/gzip/gzip-1.9.ebuild compile
+				ebuild /usr/portages/gentoo/app-arch/gzip/gzip-1.9.ebuild install
+				ebuild /usr/portages/gentoo/app-arch/gzip/gzip-1.9.ebuild merge
+		   
+		C) When jfrog module is installed, the jfrog package (jfrog utility) for downloading artifacts is installed
+		
+		D) When arch--aarch64-linux-gnu module is installed, it provides 3 important things:
+		   
+		   1) A cross-compilation toolchain for aarch64 (compiler, linker, binutils, gdb, etc)
+			  For example, the C++ compiler: 		   <EDE_INSTALL_PATH>/usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-g++
+			  and also, GNU binututils (e.g. objcopy): <EDE_INSTALL_PATH>/usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/binutils-bin/2.35/objcopy
+	
+		   2) A basic root file system for target EMBEDDED devices, with its root at: <EDE_INSTALL_PATH>/targ/arch/aarch64-linux-gnu/modes/eos
+			  For example, the embedded 'gzip' utility is located at: <EDE_INSTALL_PATH>/targ/arch/aarch64-linux-gnu/modes/eos/bin/gzip,
+			  and is compiled for aarch64, version 1.10.
+			  
+			  Note 1: binaries in target rootfs are stripped
+			  
+		>>>>>>Note 2: it also appears that installing the aarch64 module installs debug symbol files (<PROG_NAME>.debug) for utilities in rootfs to
+		               <EDE_INSTALL_PATH>/targ/arch/aarch64-linux-gnu/modes/eos/usr/lib/debug.
+					   For example, using the cross 'nm' tool to inspect the cross-compiled ntpd.debug file like so shows that it contains debugging symbols:
+		
+							find / -name "*gzip*debug"	# Inside EDE, to find debug symbol file for cross-compiled 'gzip'
+							# result:
+							
+								/targ/arch/aarch64-linux-gnu/modes/eos/usr/lib/debug/bin/gzip.debug
+								
+							# then use 'nm':
+							
+								/usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/binutils-bin/2.35/nm /targ/arch/aarch64-linux-gnu/modes/eos/usr/lib/debug/bin/gzip.debug
+		
+		   3) (NEED TO VERIFY THIS) Portage support for the aarch64 architecture. Namely: ebuilds for embedded target packages
+		      (at /usr/portages/targ-auto/ and /usr/portages/targ-manual/)
+			  
+		E) When the base application image is built (e.g. 'make -j4 xg490), AOS applications are downloaded and product is compiled.
+		   
+		   1) AOS application binaries are placed in: build_dir_arm/Install/bin (Libs are placed in build_dir_arm/Install/lib).
+		      For example, the AOS application 'aosCoreTnd' is created in: build_dir_arm/Install/bin/aosCoreTnd.
+			  
+			  Debug symbol files are placed in: build_dir_arm/debug/ and: build_dir_arm/Install/debug/.
+			  However, only binaries/libs that were built locally will have non-empty symbol files.
+			  
+			  For example, the debug file for aosDomPtp1588RT (built locally) is placed at: build_dir_arm/debug/aosDomPtp1588RT.debug
+			  and also: 																	build_dir_arm/Install/debug/xg490/aosDomPtp1588RT.debug
+			  (and both copies contain the symbol files)
+			  
+			  Note regarding building EXTRA AOS apps LOCALLY:
+					I) The binary will be built in: build_dir_arm/Build (and then placed in Install/bin). For example, if you
+			           build 'aosCoreTnd' locally, the resulting binary will be placed in: build_dir_arm/Build/tnd/bin/aosCoreTnd,
+					   and then additionally, in: /home/josh/AOS/project/build_dir_arm/Install/bin/aosCoreTnd.
+					   
+				   II) The corresponding symbol file in: build_dir_arm/debug will NOT contain debug symbols. Only the
+			           symbol file in: build_dir_arm/Install/debug/ will contain symbols. For example, with 'aosCoreTnd', if you build it locally,
+					   build_dir_arm/debug/aosCoreTnd.debug will NOT contain debug symbols - only
+					   build_dir_arm/Install/debug/tnd/aosCoreTnd.debug will contain debug symbols!
+								  
+		   2) Afterwards, all binaries and libs (both AOS components that were specially built locally AND product binaries/libraries)
+		      are placed in the staging directory: /build_dir_arm/Build/xg490/staging/base.
+			  For example, 'aosCoreTnd' is placed in: /build_dir_arm/Build/xg490/staging/base/opt/adva/aos/bin/aosCoreTnd
+		   
+		   3) Then, base application image (.bz2 and .pak) files are created. These files are NOT the complete rootfs - they do NOT include for
+		      example binaries from base rootfs (<EDE_INSTALL_PATH>/targ/arch/aarch64-linux-gnu/modes/eos). They only contain ADVA apps/libs + some
+			  configuration file overrides. If the .bz2 image is unpacked, it can be seen that the main directory which holds ADVA apps/libs is
+			  /opt/adva/aos, with the important subdirectories being: /opt/adva/aos/bin and /opt/adva/aos/lib.
+		   
+		F) When the full image is built, binaries from base rootfs are placed into /targ/prod/xg490/med/proxy/main/bin (for example, 'gzip' is placed
+		   into: /targ/prod/xg490/med/proxy/main/bin/gzip) (/targ/prod/xg490/med/proxy/main is basically a copy of base rootfs:
+		   /targ/arch/aarch64-linux-gnu/modes/eos, with some minor changes). ADVA apps are placed into: /targ/prod/xg490/med/proxy/adva/aos. For
+		   example, 'aosCoreTnd' is placed into: /targ/prod/xg490/med/proxy/adva/aos/bin/aosCoreTnd).
+		   
+		   When the device is booted, binaries from the base rootfs are placed in /bin. For example, 'gzip' is placed in: /bin/gzip. AOS apps are placed
+		   in /opt/adva/aos/bin. For example, 'aosCoreTnd' is placed in: /opt/adva/aos/bin/aosCoreTnd.
+	----------------
+
+	- For EDE manual: after installing EDE, see the PDF: /Documentation/manual.pdf (from WITHIN EDE)
+	
+	- To see release notes/history/changes of each EDE version, INSIDE EDE, see the file: /etc/ede/ede_history
+	
+	- To see information about package VERSIONS, INSIDE EDE, see see the pdf: /etc/ede/EDE-packages.pdf
+	                                                        or the text file: /etc/ede/EDE-packages.txt
+													   
+		- The file(s) contain several important sections:
+		
+			1) Packages in embedded targets: lists names and versions of ALL available packages intended for EMBEDDED targets
+			   This includes packages intended for products other than F8, e.g. F7 as well. As such, this list is
+			   larger than Canon EC.
+			2) EDE tools - packages: lists package versions available as TOOLS (on HOST SYSTEM, inside EDE)
+			
+			- Regarding the sections Canon CC and Canon EC: Canon CC (Card Controller) and EC (Element Controller) are both
+			  lists of packages that are relevant for F8 devices only! EC CONTAINS all packages in CC list + more!
+			  For XG4xx, only Canon EC is relevant.
+			  
+			  (Can also see list of CC and EC packages inside EDE, at: /opt/adva/share/canon/cc
+																  and: /opt/adva/share/canon/ec)
+			
+		- To get source code for SPECIFIC package, download from EDE server by running the command (can also try GDN-S-SYS-EDE-2):
+		
+				sudo mkdir -p /opt/adva/<EDE_VERSION>-src/<PKG_BASE_DIR>/<PKG_NAME>-<PKG_VERSION>
+				sudo rsync -ai rsync://GDN-S-SYS-EDE-1.advaoptical.com/ede/src/<EDE_VERSION>/<PKG_BASE_DIR>/<PKG_NAME>-<PKG_VERSION>/. /opt/adva/<EDE_VERSION>-src/<PKG_BASE_DIR>/<PKG_NAME>-<PKG_VERSION>/.
+				
+			E.g. (using EDE version 3.6.20, and package: gzip-1.10 - package version taken from EDE-packages.txt file):
+				
+				sudo mkdir -p /opt/aos/ede-3.6.20-src/app-arch/gzip-1.10
+				sudo rsync -ai rsync://GDN-S-SYS-EDE-1.advaoptical.com/ede/src/3.6.20/app-arch/gzip-1.10/. /opt/aos/ede-3.6.20-src/app-arch/gzip-1.10/.
+				
+			Note: you may wish instead to import source code into project root directory. In that use, can do
+			      ('chown' is necessary because otherwise files will be owned by 'portage' user, and operations like './configure' will fail):
+			
+				mkdir -p <PROJECT_ROOT_DIR>/ede-src/app-arch/gzip-1.10
+				sudo rsync -ai rsync://GDN-S-SYS-EDE-1.advaoptical.com/ede/src/3.6.20/app-arch/gzip-1.10/. <PROJECT_ROOT_DIR>/ede-src/app-arch/gzip-1.10/.
+				sudo chown -R <USERNAME>:<USERNAME> <PROJECT_ROOT_DIR>/ede-src/
+				
+			E.g.
+			
+				mkdir -p /home/josh/AOS/XG490_test/ede-src/app-arch/gzip-1.10
+				sudo rsync -ai rsync://GDN-S-SYS-EDE-1.advaoptical.com/ede/src/3.6.20/app-arch/gzip-1.10/. /home/josh/AOS/XG490_test/ede-src/app-arch/gzip-1.10/.
+				sudo chown -R josh:josh /home/josh/AOS/XG490_test/ede-src
+			
+		- To get source code for ALL cross-compiled-packages, download them from EDE servers (takes about 5 minutes) (Can also use GDN-S-SYS-EDE-2):
+		
+				sudo mkdir -p /opt/adva/<EDE_VERSION>-src
+				sudo rsync -ai rsync://GDN-S-SYS-EDE-1.advaoptical.com/ede/src/<EDE_VERSION>/. /opt/adva/<EDE_VERSION>-src/.
+				sudo chown -R <USER>:<USER> /opt/adva/<EDE_VERSION>-src
+				
+			E.g.
+				
+				sudo mkdir -p /opt/adva/ede-3.6.20-src
+				sudo rsync -ai rsync://GDN-S-SYS-EDE-1.advaoptical.com/ede/src/3.6.20/. /opt/adva/ede-3.6.20-src/.
+				sudo chown -R josh:josh /opt/adva/ede-3.6.20-src
+				
+				
+	- AOS products use a product configuration file - also called: SPECIMEN file
+	  (e.g. for XG400: products/xg400/ede_targ_prod_devel/specimen/xg400.specimen) to override list of
+	  packages that will be installed on embedded target. Packages can both be added and removed by PRODUCT TEAM (us). The 'base'
+	  configuration for XG4xx devices is the Canon EC list. Packages can be removed or added; if they are added, they are added
+	  from full list of embedded targets.
+		- This file is read by AOS tool: adva_deploy, which is the script that we use to create disk images.
+		- Can also set:
+			- NETWORK information: things like which interfaces should exist, what their IPs should be (or use DHCP), what device hostname
+			  should be, DNS, NTP
+			- PARTITION layout information: (size/type/ro or rw), e.g.: adva, main, staging, ... partitions
+		- For more info, see EDE manual, section 2.1.7 - adva_deploy
+		
+		- If I ADD package (via specimen file), EDE handles adding required dependencies as well by EDE.
+		- If I REMOVE a package (via specimen file), its dependencies will be removed as well by EDE.
+			- Some packages have many dependencies, can check dependencies of package with 'eos_dep_check -h' from inside EDE
+			- NOTE: If I choose to remove a package, it's possible that it will be added to rootfs anyway,
+			        if it's a dependency of another package.
+
+	--------
+	
+	- General EDE/dev notes:
+	
+		- EDE itself is held in 'aos-ne-os' repository
+	
+		- As per Raghav, in general, the product teams (us) STAY AWAY from participating in EDE/EOS development. Raghav says that changing this
+		  behavior is possible, but this has not been formalized thus far.
+		  
+		  HOWEVER:
+		 
+		  PrzemysBaw Guza says that: EDE must be as generic as possible. It is delivered with vanilla packages, downloaded directly from package
+		                             providers. If we make modifications to packages, we have to take care to distribute our modifications to the
+									 public (if necessary - as required by each package's license, e.g. GPL).
+									 
+		  This means that any changes (e.g. that Barak's team wants to make) to the downloaded vanilla source code must be made as changes
+		  applied by locally (ADVA) developed PATCHES, and ONLY the EDE Team can make these patches.
+		  All "clients" (e.g. Barak's team) must create a request for any required changes and submit it to the EDE Team
+		  (on Polarion in the form of an EDE Work Package (https://polarion.advaoptical.com/polarion/#/project/EDE/workitems/workpackage))!
+		  We also need to specify if we are asking for a tool to be added to the TOOLS section (e.g. to EDE rootfs) or to the TARGETS section
+		  (e.g. for EOS rootfs) - see EDE manual section 1.2. This is the only way to keep the high quality of the EDE product!
+		  
+		  This is because all packages available in EDE must be patched (according to security policy) for bug fixing and security issues,
+		  and there is a danger that local changes could conflict with 'official' patches.
+			  
+		  In summary, we deliver a product as generic as possible (EOS), which must cover all ADVA products and according to this fact, all functionality
+		  changes must be done by product teams, and changed component should be compiled into EDE by Product Team
+		  (because it must be compatible with other components), kept in repositories for dedicated product (not in EDE) and developed as an external component. 
+		  
+		  
+		  Barak: https://wiki.gentoo.org/wiki/Embedded_Handbook/General/Full#Introduction

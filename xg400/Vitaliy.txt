@@ -1,0 +1,36 @@
+quesiotn 1:
+
+not sure it completely answer my question.
+
+still not clear what packages were downloaded and installed by EDE and what by Gentoo.
+
+As I explained you, I didn't really build packages into targ/arch/aarch64-linux-gnu/modes/eos, but rather downloaded them, they were already prebuilt by the EDE team I guess.
+
+So it looks to me that the output I get from Gentoo commands are not aligned with was installed there.
+
+For example:
+if you compare the output of "qlist --verbose --installed --repo --root
+/targ/arch/aarch-linux-gnu/modes/eos/" to the output of "qlist -vIR", then it is exactly the same.
+so how comes the installed packages on host are the same like those on the target ?
+it makes no sense.
+
+In addition, not everything that is listed by "qlist --verbose --installed --repo --root /targ/arch/aarch-linux-gnu/modes/eos/" is really installed.
+For example, the following packages are listed but not found.
+$ find /targ/arch/aarch64-linux-gnu/modes/eos/ -iname mail -type f
+baraka@ede-3.6.20  / 
+$ find /targ/arch/aarch64-linux-gnu/modes/eos/ -iname tape -type f
+baraka@ede-3.6.20  / 
+$ find /targ/arch/aarch64-linux-gnu/modes/eos/ -iname video -type f
+baraka@ede-3.6.20  / 
+
+It looks like the output of "qlist --verbose --installed --repo --root /targ/arch/aarch-linux-gnu/modes/eos/" is a general list, not actaul list in target
+It is simial to the general list of packages that is named "packages in Embedded Targets" in the EDE-packges.pdf.
+
+
+it all let me think that the output of Gentoo for installed packages is not really related to what is installed in my actual rootfs targ/arch/aarch64-linux-gnu/modes/eos.
+
+I am trying to understand:
+-what is really the list of installed packages for the target?
+-can I really output this list or control it (remove or add packages) by the Gentoo tools? what repo gentoo is using for my target? is it the same repo that is used for the host?
+
+maybe it is not possible since the EDE download is not related to the actual Gentoo repo for the target. I don't know, this is what I was trying to figure out...

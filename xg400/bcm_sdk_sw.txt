@@ -1,0 +1,20 @@
+BCM SW on xg490:
+
+DTE is an ADVA implementation (it has CLI that calls ADVA API)
+
+Qumran App binary is an ADVA implementation ( use adva and BCM libs ). works with CINT / DTE
+
+
+DTE / Qumran app ------- > driver ---------> BCM sdk
+
+
+Usually SDK is built without symbols, in order to debug - we build the relevant BCM lib with symbols and cp it to the device.
+
+
+investigate source code flows:
+DnxDte....cpp / Dnx...system.cpp ------ > CompDnxQueue....cpp
+
+Reuven:
+each port has 8 queues
+each protocol has 4 strict queues
+

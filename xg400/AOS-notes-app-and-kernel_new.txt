@@ -1,0 +1,1318 @@
+Setup:
+
+1) Only if not already done, set up Gerrit like in step 1 of general AOS doc.
+
+2) Install EDE (all XG400 products (including XG490) use EDE 3.6.20). Run from Linux shell:
+
+	sudo mkdir -p /opt/aos/ede-3.6.20
+	sudo apt-get install rsync
+	sudo rsync -ai rsync://GDN-S-SYS-EDE-1/ede/base/3.6.20/. /opt/aos/ede-3.6.20/.
+	
+3) Configure EDE by following steps 4, 5, 6 of general AOS doc
+
+4) Only if not already done, configure jfrog by following steps 7, 8 of general AOS
+   doc
+  
+5) Follow step 9 of general AOS doc to take ownership of directories for kernel building
+
+6) Outside of EDE, create directory for 'ccache' that EDE will want to use while building the application.
+  (if you don't do this step, application builds will fail):
+   
+		mkdir /home/$USER/.ccache
+
+---------------------------------------------------------------------------------------------------------------
+
+----
+U-BOOT, DTB, and full Boot Image (including TFA)
+----
+To build XG400 U-boot (including U-boot dtb):
+
+   XG404/418/480 AND XG490 use repos/branch:
+		- aos-ne-bootloader/master
+		- f4-bootloader-xg480/master
+		
+   - aos-ne-bootloader/source/<U-BOOT-VER> contains main U-boot source code
+   - f4-bootloader-xg480/<PROD>/<U-BOOT-VER> (e.g. f4-bootloader-xg480/xg480/u-boot-2017.07) contains BOARD SPECIFIC code.
+     When you run a u-boot build, a symbolic link in tmp-aos-ne-bootloader/source/<U-BOOT-VER>/board/adva/<PROD> will be
+	 created that points to f4-bootloader-xg480/<PROD>. Code from tmp-aos-ne-bootloader is compiled in the end.
+
+- Note: Built INSIDE EDE!
+
+1) Create folder named "tmp-aos-ne-bootloader" repo, and checkout aos-ne-bootloader into it,
+   then clone f4-bootloader-xg480:
+
+		mkdir tmp-aos-ne-bootloader && git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/aos-ne-bootloader" tmp-aos-ne-bootloader && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "tmp-aos-ne-bootloader/.git/hooks/"
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/f4-bootloader-xg480" && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "f4-bootloader-xg480/.git/hooks/"
+
+2) Enter (basic) EDE, e.g. with:
+
+		sudo /opt/aos/ede-3.6.20/rehome/reho -u $USER -e /home/$USER/AOS -e /home/$USER/.jfrog -e /home/$USER/.ssh -e /home/$USER/.gitconfig -DUSER=$USER
+		
+3) Enter f4-bootloader-xg480 folder inside EDE, and run specific 'make ...' command. Depending on 'make'
+   command entered, TFA will be built as well, and secure boot mode might be set for the device.
+   See f4-bootloader-xg480/Makefile contents for exact command to use to build.
+   Main make variables that should be set as part of 'make' command:
+
+	- BLD_PROD: 'xg480' for XG404/418/480, 'xg490' for XG490
+	- BLD_UVER: 'u-boot-2017.07' or 'u-boot-2020.04' depending on product
+	- BLD_BOOT: 'nor' (parallel nor flash) or 'qspi' (qspi nor flash) for XG404/418/480 depending on product, 'xspi' for XG490
+	
+	Additional options:
+	- BLD_TFA: '1' if want to build tfa
+	- BLD_SECURE: '1' if want to use secure boot (I think)
+	
+	Examples (Inside EDE):
+	
+	XG480:
+		
+		make BLD_PROD=xg480 BLD_UVER=u-boot-2017.07 BLD_BOOT=nor
+		make BLD_PROD=xg480 BLD_UVER=u-boot-2017.07 BLD_BOOT=qspi
+		
+	XG490:
+	
+		make BLD_PROD=xg490 BLD_UVER=u-boot-2020.04 BLD_BOOT=xspi
+		
+4) Build directory is: f4-bootloader-xg480/obj/<U-BOOT-VER>. Some output files are placed here
+   as well after a build. For example, U-boot binary (u-boot.elf), and DTB (u-boot.dtb) are
+   put here after a build.
+   
+   Files that are used to flash U-boot will be located in: f4-bootloader-xg480/firmware.
+   
+   Most relevant files:
+   
+   XG480 (ls -la /home/josh/AOS/XG400_test/f4-bootloader-xg480/firmware): 
+   
+	- u-boot-xg480-qspi-R5.1.bin # U-boot image
+	- XG480-QSPI-NOR-R5.1.bin	 # Full bootloader image that should be flashed - padded to 4 MB
+   
+   XG490 (ls -la /home/josh/AOS/XG490_test/f4-bootloader-xg480/firmware):
+   
+	- u-boot-xg490-xspi-R5.1.bin # U-boot image
+	- XG490-XSPI-NOR-R5.1.bin	 # Full bootloader image that should be flashed - padded to 4 MB
+	
+   Note: very helpful to understand steps taken to build final image: run a clean U-boot build
+         with verbose flag (V=1), and pipe build output to build log, e.g:
+   
+			make BLD_PROD=xg490 BLD_UVER=u-boot-2020.04 BLD_BOOT=xspi V=1 2>&1 | tee build.log
+   
+- Other useful commands (use inside EDE, from directory: f4-bootloader-xg480)
+	
+	- Clean:      make clean
+	- Menuconfig: make BLD_PROD=xg480 BLD_UVER=u-boot-2020.04 BLD_BOOT=qspi menuconfig
+	
+- Notes:
+
+	- To stop boot at U-boot prompt, while device is booting, press <SPACE>. No other key will work!
+		- To enter 'debug' mode in U-boot, enter 'debug on', <ENTER>. Password is 'aos'.
+	
+---
+
+TFA Notes:
+
+	- TFA source code directory is: f4-bootloader-xg480/atf
+	- TFA build directory is	  : f4-bootloader-xg480/atf/build/xg490/release (XG490)
+	- TFA important makefiles are : f4-bootloader-xg480/atf/atf.mk (XG-specific make recipes)
+	                          and : f4-bootloader-xg480/atf/Makefile (main TFA makefile)
+	
+	
+-------------------------------------------------------------------------
+Flashing Boot Image
+-------------------------------------------------------------------------
+
+1) 	TODO
+
+---------------------------------------------------------------------------------------------------------------
+
+To build XG400 Application/kernel/SW image:
+
+1) Create directory to hold all AOS/Kernel repos:
+
+		mkdir /home/$USER/AOS/XG400_test
+		
+   OR (for XG490):
+   
+		mkdir /home/$USER/AOS/XG490_test
+
+----
+APPLICATION
+----
+2) Clone Application repos:
+
+   XG404/418/480 use repos/branch:
+		- f4-build-test/F4_CMN_20230629
+		- aos-ne-build-and-test/F4_CMN_20230629
+		- f4-ne-xg400/F4_CMN_20230629
+		
+   XG490 uses repos/branch:
+		- f4-build-test/dev-xg490
+		- aos-ne-build-and-test/dev-xg490
+		- f4-ne-xg4xx/dev-xg490
+   
+   The newest release of XG400 is 23.1.1.
+   The corresponding branch name is F4_CMN_20230629.
+ 
+   The kernel uses the same branch.
+   The branch of kernel of 23.1.1 is also F4_CMN_20230629.
+   
+   
+   The F4_CMN_20230629 branch doesn’t support XG490.
+   The XG490 is still in development branch - this means the branch to use for all repos
+   for XG490 is: dev-xg490)
+ 
+ 
+	XG404/418/480:
+	
+		cd /home/$USER/AOS/XG400_test
+		
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/f4-build-test" && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "f4-build-test/.git/hooks/"
+		cd f4-build-test && git checkout F4_CMN_20230629 && cd -
+		
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/aos-ne-build-and-test" build-and-test && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "build-and-test/.git/hooks/"
+		cd build-and-test && git checkout F4_CMN_20230629 && cd -
+		
+		mkdir -p products/xg400 && git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/f4-ne-xg400" products/xg400 && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "products/xg400/.git/hooks/"
+		cd products/xg400 && git checkout F4_CMN_20230629 && cd -
+	
+	
+	XG490:
+	
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/f4-build-test" && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "f4-build-test/.git/hooks/"
+		cd f4-build-test && git checkout dev-xg490 && cd -
+		
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/aos-ne-build-and-test" build-and-test && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "build-and-test/.git/hooks/"
+		cd build-and-test && git checkout dev-xg490 && cd -
+		
+		mkdir -p products/xg490 && git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/f4-ne-xg4xx" products/xg490 && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "products/xg490/.git/hooks/"
+		cd products/xg490 && git checkout dev-xg490 && cd -
+		
+	
+3) Create a build directory, e.g. for arm:
+
+		mkdir build_dir_arm
+		
+   OR for simulator:
+   
+		mkdir build_dir_sim
+   
+   ENTER EDE, cd to build directory, and there (inside EDE) run cmake:
+   (Note: the '-e /home/$USER/.ccache' is REQUIRED, otherwise application build will fail)
+   
+   XG404/418/480:
+
+		sudo /opt/aos/ede-3.6.20/rehome/reho -u $USER -e /home/$USER/AOS -e /home/$USER/.ccache -e /home/$USER/.jfrog -e /home/$USER/.ssh -e /home/$USER/.gitconfig -DUSER=$USER
+		cd AOS/XG400_test/build_dir_arm/
+		cmake -DUSE_CCACHE=YES -DDEBUG_SYMBOLS=YES -DTARGET_ARCH=arm8-64bit -DCMAKE_BUILD_TYPE=Release -DBUILD_AOS=1 /home/$USER/AOS/XG400_test/f4-build-test
+   
+   OR for simulator, replace last two lines with:
+   
+		cd AOS/XG400_test/build_dir_sim/
+		cmake -DUSE_CCACHE=YES -DDEBUG_SYMBOLS=YES -DTARGET_ARCH=x86-64bit -DCMAKE_BUILD_TYPE=Release -DBUILD_AOS=1 /home/$USER/AOS/XG400_test/f4-build-test
+   
+   
+   X490:
+
+		sudo /opt/aos/ede-3.6.20/rehome/reho -u $USER -e /home/$USER/AOS -e /home/$USER/.ccache -e /home/$USER/.jfrog -e /home/$USER/.ssh -e /home/$USER/.gitconfig -DUSER=$USER
+		cd AOS/XG490_test/build_dir_arm/
+		cmake -DUSE_CCACHE=YES -DDEBUG_SYMBOLS=YES -DTARGET_ARCH=arm8-64bit -DCMAKE_BUILD_TYPE=Release -DBUILD_AOS=1 /home/$USER/AOS/XG490_test/f4-build-test
+   
+   OR for simulator, replace last two lines with:
+   
+		cd AOS/XG490_test/build_dir_sim/
+		cmake -DUSE_CCACHE=YES -DDEBUG_SYMBOLS=YES -DTARGET_ARCH=x86-64bit -DCMAKE_BUILD_TYPE=Release -DBUILD_AOS=1 /home/$USER/AOS/XG490_test/f4-build-test
+   
+   NOTE: running the 'cmake ...' command (either arm or x86-64) will create 'f4-model' and 'framework' directories in project
+         root directory
+   
+4) To build application, run:
+	-	'make -j4 xg400' to build the application for XG480/XG404/XG418
+		- NOTE: The SAME build steps build an image (.pak) that is suitable for multiple products: XG480/XG404/XG418 - 
+	            the product type/functionality is detected per the HW inventory - by the device itself
+	-	'make -j4 xg490' to build the application for XG490
+	
+	Build output will be in: (or build_dir_sim)
+	
+		XG400:	build_dir_arm/Build/xg400/staging:
+					- f4-xg400-base-23.1.1-arm8-64bit.tar.bz2
+					- f4-xg400-base-23.1.1-arm8-64bit.tar.bz2.pak
+ 
+		XG490:  build_dir_arm/Build/xg490/staging:
+					- f4-xg490-base-F4DEV_23.5.0-arm8-64bit.tar.bz2
+					- f4-xg490-base-F4DEV_23.5.0-arm8-64bit.tar.bz2.pak
+					
+---
+
+- To get source code of additional package, compile it locally, and build full application using this source code
+  (XG490 used as example here, steps are similar for XG404/418/480):
+  
+  References: 1. https://polarion.advaoptical.com/polarion/#/project/CCD/wiki/SW%20and%20SIT%20Wikis/Edit_CFM_and_transfer_executables
+			  2. https://polarion.advaoptical.com/polarion/#/project/GE1D/wiki/F4/build-eth-sdk-and-xg480
+
+	Note: steps are the SAME whether you already have built full application and you just want to add build of one
+	      (or several) locally-built packages, or you are starting from scratch (without having built AOS application)
+
+	A) Find out the path where the source code of your package should be cloned to. This is usually a path of the form:
+		
+			<application-layer>/<package_name>
+			
+	   where application layer is something like: 'core-apps', 'domain-apps', 'framework', etc.
+	   
+	   To do this, there are two possibly relevant files: build-and-test/CMakeRepoPaths.cmake
+													 and: f4-build-test/CMakeRepoPaths.cmake
+	   
+	   Both files hold information about where source code for packages should be placed IF you define that you want to
+	   compile the package locally. The file in 'build-and-test' holds information about general AOS packages, and the
+	   file in 'f4-build-test' holds information about XG400/XG490-specific packages. Most of the time, the package that
+	   you are interested in can be found in build-and-test/CMakeRepoPaths.cmake.
+	   
+	   Example: using 'tnd' (time and date) package: search in: build-and-test/CMakeRepoPaths.cmake for the line:
+	   
+			set(tnd_SOURCE_DIR ${TND_PATH})
+			
+	   Then, search for 'TND_PATH' in the same file, and note the line:
+	   
+			get_filename_component(TND_PATH "${BUILD_SYSTEM_ROOT_PATH}/${TND_DIR}" REALPATH)
+			
+	   Then, search for 'TND_DIR' in the same file, and note the line:
+	   
+			set(TND_DIR "${TND_SW_LAYER}/tnd")
+			
+	   and the line above it:
+	   
+			set(TND_SW_LAYER "core-apps")
+			
+	   All this taken together means that the source code for the 'tnd' package should be cloned into:
+	   
+			core-apps/tnd
+			
+	B) Figure out the repository name that holds the source code of your package. Search in the same
+	   CMakeRepoPaths.cmake file for the relevant '<package_name>_GIT_REPOSITORY' line, e.g.:
+	   
+			set(tnd_GIT_REPOSITORY ${VCS_BASE_URL}/aos-ne-core-time-and-date)
+			
+	   In this example, the name of the repo that we are interested in is:
+	   
+			aos-ne-core-time-and-date
+	   
+	C) In project root dir, you need to create a file: GitProjects.cmake, which will contain a line that lists all of
+	   the packages (that are NOT typically built locally) that you wish to build locally. The line is of the form:
+	   
+			set(projects_from_git <package_1_name> <package_2_name> ... package_N_name)
+	   
+	   For our example, run:
+
+			echo "set(projects_from_git tnd)" > GitProjects.cmake
+			
+	D) NOTE: If you simply want the source code for your package(s) to be cloned and built locally (that is, if you
+	   don't need to checkout a specific branch), SKIP THIS STEP! During the application build, the relevant
+	   application repo will be cloned into the correct directory (e.g. core-apps/tnd), and the branch used will
+	   be the same branch as the f4-build-test repo (if a matching branch in the application repo doesn't exist,
+	   step F (build) will fail).
+	   
+	   IF YOU DO WANT TO CHECKOUT YOUR BRANCH: Clone all package repos into their proper paths and checkout your branch,
+	   e.g. following our example, we clone the 'aos-ne-core-time-and-date' repo into the path:
+	   'core-apps/tnd' (relative to project root):
+	
+			git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/aos-ne-core-time-and-date" core-apps/tnd && (cd "core-apps/tnd" && mkdir -p `git rev-parse --git-dir`/hooks/ && curl -Lo `git rev-parse --git-dir`/hooks/commit-msg http://muc-gerrit.rd.advaoptical.com/tools/hooks/commit-msg && chmod +x `git rev-parse --git-dir`/hooks/commit-msg)
+			cd core-apps/tnd && git checkout test-josh && cd -
+
+	E) INSIDE EDE, configure your project:
+
+			cd build_dir_arm
+			cmake -DUSE_CCACHE=YES -DDEBUG_SYMBOLS=YES -DTARGET_ARCH=arm8-64bit -DCMAKE_BUILD_TYPE=Release -DBUILD_AOS=1 /home/$USER/AOS/XG490_test/f4-build-test # This creates (empty) core-apps/tnd folder in root workspace
+			
+	F) INSIDE EDE, run typical build commands. This will build entire application, INCLUDING your package, and your package will be
+	   built from your locally cloned sources:
+	   
+			make -j4 xg490 # to build entire application, including tnd
+		
+	   NOTE: instead of doing entire application build, you can also build just your package, e.g:
+	   
+			make -j4 tnd
+			
+	   This command can also be used AFTER full application build to rebuild JUST your application.
+	   
+	G) To test your changes, follow 'Test Your Changes' section of Reference Link #1 above.
+					
+----
+Kernel
+----
+
+	XG404/418/480 use repos/branch:
+			- aos-ne-unidrv/F4_CMN_20230629
+			- f4-linuxkernel-xg480/F4_CMN_20230629
+			
+    XG490 uses repos/branch:
+			- aos-ne-unidrv/dev-xg490
+			- f4-linuxkernel-xg480/dev-xg490
+
+	Note: XG404/418/480 uses different kernel config than XG490: compare:
+		- EITHER: /home/josh/AOS/XG490_test/products/xg490/ede_targ_prod_devel/kernel_configs/linux-5.4.47-adva/xg480_config /home/josh/AOS/XG400_test/products/xg400/ede_targ_prod_devel/kernel_configs/linux-5.4.47-adva/xg480_config
+
+2) OUTSIDE of EDE, run:
+	
+	- XG404/418/480:
+	 
+		export EDE_DIR=/opt/aos/ede-3.6.20
+		export REPOS=/home/$USER/AOS/XG400_test
+		
+		cd /home/$USER/AOS/XG400_test
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/f4-linuxkernel-xg480" && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "f4-linuxkernel-xg480/.git/hooks/"
+		cd f4-linuxkernel-xg480 && git checkout F4_CMN_20230629 && cd -
+		
+     Create a symlink in f4-linuxkernel-xg480 with the name of whatever products/xg400/ede_targ_prod_devel/kernel_sources/default_source points to
+     (e.g. linux-5.4.47-adva), that points to the corresponding folder in f4-linuxkernel-xg480 which itself holds
+     the kernel sources (e.g. f4-linuxkernel-xg480/linux-5.4.47):
+	 
+		sudo ln -s /home/josh/AOS/XG400_test/f4-linuxkernel-xg480/linux-5.4.47 /home/josh/AOS/XG400_test/f4-linuxkernel-xg480/linux-5.4.47-adva
+		
+	 Clone the aos-ne-unidrv repo:
+	 
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/aos-ne-unidrv" && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "aos-ne-unidrv/.git/hooks/"
+		cd aos-ne-unidrv && git checkout F4_CMN_20230629 && cd -
+		
+	- XG490:
+	
+		export EDE_DIR=/opt/aos/ede-3.6.20
+		export REPOS=/home/$USER/AOS/XG490_test
+		
+		cd /home/$USER/AOS/XG490_test
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/f4-linuxkernel-xg480" && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "f4-linuxkernel-xg480/.git/hooks/"
+		cd f4-linuxkernel-xg480 && git checkout dev-xg490 && cd -
+		
+     Create a symlink in f4-linuxkernel-xg480 with the name of whatever products/xg490/ede_targ_prod_devel/kernel_sources/default_source points to
+     (e.g. linux-5.4.47-adva), that points to the corresponding folder in f4-linuxkernel-xg480 which itself holds
+     the kernel sources (e.g. f4-linuxkernel-xg480/linux-5.4.47):
+	 
+		sudo ln -s /home/josh/AOS/XG490_test/f4-linuxkernel-xg480/linux-5.4.47 /home/josh/AOS/XG490_test/f4-linuxkernel-xg480/linux-5.4.47-adva
+		
+	 Clone the aos-ne-unidrv repo:
+	 
+		git clone "ssh://joshuam@muc-gerrit.rd.advaoptical.com:29418/aos-ne-unidrv" && scp -p -P 29418 joshuam@muc-gerrit.rd.advaoptical.com:hooks/commit-msg "aos-ne-unidrv/.git/hooks/"
+		cd aos-ne-unidrv && git checkout dev-xg490 && cd -
+		
+3) Define more Environment variables:
+
+	- XG404/418/480:
+	 
+		export TGTPRODDIR=$REPOS/products/xg400/ede_targ_prod_devel
+		export KERVER=$(readlink ${TGTPRODDIR}/kernel_sources/default_source)
+		export KERDIR=$REPOS/f4-linuxkernel-xg480/$KERVER
+		export UNIDIR=$REPOS/aos-ne-unidrv
+		export TGTEDEDIR=/targ/prod-devel/xg400
+		export REHOCMD=$EDE_DIR/rehome/reho
+		
+	- XG490:
+	
+		export TGTPRODDIR=$REPOS/products/xg490/ede_targ_prod_devel
+		export KERVER=$(readlink ${TGTPRODDIR}/kernel_sources/default_source)
+		export KERDIR=$REPOS/f4-linuxkernel-xg480/$KERVER
+		export UNIDIR=$REPOS/aos-ne-unidrv
+		export TGTEDEDIR=/targ/prod-devel/xg490
+		export REHOCMD=$EDE_DIR/rehome/reho
+		
+4) Enter EDE whilst mounting additional directories related to building the kernel:
+
+	- XG404/418/480:
+	 
+		sudo $REHOCMD -u $USER -e /home/$USER/AOS -e $TGTPRODDIR:$TGTEDEDIR -e $KERDIR:$TGTEDEDIR/kernel_sources/$KERVER -e $UNIDIR:$TGTEDEDIR/modules/unidrv/aos -C $TGTEDEDIR -e /home/$USER/.ccache -e /home/$USER/.jfrog -e /home/$USER/.ssh -DUSER=$USER
+	
+      You should now be in /targ/prod-devel/xg400 directory.
+	  
+	  Can build ALL kernel components (kernel, kernel modules, dtb) with:
+	 
+		sudo ./build
+   
+	- XG490:
+	
+		sudo $REHOCMD -u $USER -e /home/$USER/AOS -e $TGTPRODDIR:$TGTEDEDIR -e $KERDIR:$TGTEDEDIR/kernel_sources/$KERVER -e $UNIDIR:$TGTEDEDIR/modules/unidrv/aos -C $TGTEDEDIR -e /home/$USER/.ccache -e /home/$USER/.jfrog -e /home/$USER/.ssh -DUSER=$USER
+	 
+	  You should now be in /targ/prod-devel/xg490 directory.
+	 
+   Can build ALL kernel components (kernel, kernel modules, dtb) with:
+	 
+		sudo ./build xg490
+	
+----
+SW image:
+----
+	
+- Must have already completed initial full build of application + kernel!
+- Verify that you are in EDE using environment variables from Kernel Build steps!
+
+1) This single step is only necessary ONCE! (PROD_NAME = 'xg400' OR 'xg490'):
+   (IN EDE!), create symbolic link in: /targ/prod/<PROD_NAME> that will point to base image that was created by full
+   application build (e.g. for XG404/418/480): Build/xg400/staging/f4-xg400-base-23.1.1-arm8-64bit.tar.bz2:
+
+	- XG404/418/480:
+	
+		sudo ln -s ~/AOS/XG400_test/build_dir_arm/Build/xg400/staging/f4-xg400-base-23.1.1-arm8-64bit.tar.bz2 /targ/prod/xg400/base.tar.bz2
+		
+	- XG490:
+	
+		sudo ln -s ~/AOS/XG490_test/build_dir_arm/Build/xg490/staging/f4-xg490-base-F4DEV_23.5.0-arm8-64bit.tar.bz2 /targ/prod/xg490/base.tar.bz2
+		
+		--->for similator:
+		sudo ln -s /home/baraka/AOS/XG490_test/Build/xg490/staging/f4-xg490-base-F4DEV_23.5.0-x86-64bit.tar.bz2 /targ/prod/xg490/base.tar.bz2
+		
+2) Copy the metadata.json file from the product repo to /targ/prod/xg400:
+
+	- XG404/418/480:
+	
+		sudo cp ~/AOS/XG400_test/products/xg400/recipe/xg400/metadata.json /targ/prod/xg400/
+		
+	- XG490:
+	
+		sudo cp ~/AOS/XG490_test/products/xg490/recipe/metadata.json /targ/prod/xg490/
+
+3) Create Distribution/Boot Image:
+
+	- XG404/418/480:
+	
+	A)	EITHER do:
+		- Download f4-xg400-mc.tar.bz2 from Artifactory, from: https://gdn-artifactory.rd.advaoptical.com/ui/native/f4/hw/f4-xg400-mc/10.24.0/f4-xg400-mc.tar.bz2
+		- FROM OUTSIDE EDE: extract the file inside ('mc-xg480.bin') into ${EDE_DIR}/targ/prod/xg400/boot:
+		
+			sudo tar -xvf ~/Downloads/f4-xg400-mc.tar.bz2 -C /opt/aos/ede-3.6.20/targ/prod/xg400/boot mc-xg480.bin
+		
+		OR do (Inside EDE):
+			
+				sudo rm -f /tmp/f4-xg400-mc.tar.bz2
+				sudo /opt/jfrog/jfrog rt dl --server-id=gdn --flat=true f4/hw/f4-xg400-mc/10.24.0/f4-xg400-mc.tar.bz2 /tmp/
+				sudo tar -xvf /tmp/f4-xg400-mc.tar.bz2 -C /targ/prod/xg400/boot mc-xg480.bin
+		
+	B)	In EDE: Create os.tar.bz2 file:
+		
+			cd /targ/prod/xg400
+			sudo tar cvjf os.tar.bz2 -C /targ/prod/xg400/ arch.txt boot config fsmod kernel_modules mode.txt scripts tools
+
+	C)	EITHER do:
+		- Download release (23.1.1) .pom file - to be used by the deploy script,
+		  from: https://gdn-artifactory.rd.advaoptical.com/ui/native/libs-snapshot-local/com/adva/f4/f4-xg400-kernel/23.1.1-SNAPSHOT/
+			- .pom files contain metadata that can be used to understand which VCS and similar stuff was used to build this image
+		- FROM OUTSIDE EDE: rename it to 'os.pom' and move it to ${EDE_DIR}/targ/prod/xg400:
+		  
+			sudo mv ~/Downloads/f4-xg400-kernel-23.1.1-20230710.142754-11.pom /opt/aos/ede-3.6.20/targ/prod/xg400/os.pom
+		
+		OR do (Inside EDE):
+			
+			sudo rm -f /targ/prod/xg400/os.pom
+			sudo /opt/jfrog/jfrog rt dl --server-id=gdn --flat=true --sort-by=updated --sort-order=desc --limit=1 --exclusions=*x86-64bit* "libs-snapshot-local/com/adva/f4/f4-xg400-kernel/23.1.1-SNAPSHOT/f4-xg400-kernel-23.1.1-*.pom" /targ/prod/xg400/os.pom
+
+	---------------------------
+	
+		- XG490:
+		
+		A)	EITHER do:
+			- Download f4-xg400-mc.tar.bz2 from Artifactory, from: https://gdn-artifactory.rd.advaoptical.com/ui/native/f4/hw/f4-xg400-mc/10.24.0/f4-xg400-mc.tar.bz2
+			- FROM OUTSIDE EDE: extract the files inside ('mc-xg480.bin' and 'mc-xg490.bin') into ${EDE_DIR}/targ/prod/xg490/boot:
+			
+				sudo tar -xvf ~/Downloads/f4-xg400-mc.tar.bz2 -C /opt/aos/ede-3.6.20/targ/prod/xg490/boot
+		
+			OR do (Inside EDE):
+			
+				sudo rm -f /tmp/f4-xg400-mc.tar.bz2
+				sudo /opt/jfrog/jfrog rt dl --server-id=gdn --flat=true f4/hw/f4-xg400-mc/10.24.0/f4-xg400-mc.tar.bz2 /tmp/
+				sudo tar -xvf /tmp/f4-xg400-mc.tar.bz2 -C /targ/prod/xg490/boot
+		
+		B)  In EDE: Create os.tar.bz2 file:
+			
+				cd /targ/prod/xg490
+				sudo tar cvjf os.tar.bz2 -C /targ/prod/xg490/ arch.txt boot config fsmod kernel_modules mode.txt scripts
+
+		C)  EITHER do:
+			-->ask: do we need to dowload f4-xg400-kernel or f4-xg490-kernel snapshot? in Jenkins build console of xg490 it uses xg400.
+			- Download release (23.5.0) .pom file - to be used by the deploy script,
+			  from: https://gdn-artifactory.rd.advaoptical.com/ui/native/libs-snapshot-local/com/adva/f4/f4-xg400-kernel/23.5.0-SNAPSHOT/
+			- FROM OUTSIDE EDE: rename it to 'os.pom' and move it to ${EDE_DIR}/targ/prod/xg490:
+			  
+				sudo mv ~/Downloads/f4-xg400-kernel-F4DEV_23.5.0-20230712.064033-16.pom /opt/aos/ede-3.6.20/targ/prod/xg490/os.pom
+				
+		    OR do (Inside EDE):
+			
+				sudo rm -f /targ/prod/xg490/os.pom
+				sudo /opt/jfrog/jfrog rt dl --server-id=gdn --flat=true --sort-by=updated --sort-order=desc --limit=1 --exclusions=*x86-64bit* "libs-snapshot-local/com/adva/f4/f4-xg400-kernel/F4DEV_23.5.0-SNAPSHOT/f4-xg400-kernel-F4DEV_23.5.0-*.pom" /targ/prod/xg490/os.pom
+
+4) Unidrv: Create and tar ADVA-related external modules, - as aos related - kernel modules
+
+	- XG404/418/480:
+	
+		A)
+		- Inside EDE, create the modules:
+			
+			cd /targ/prod-devel/xg400
+			sudo xkmake xg400 ext_modules
+			
+		- Tar them:
+		
+			cd modules
+			find . -name "*.ko" | xargs tar cjf ./xg400-unidrv.tar.bz2
+
+		- Move the tar file (or copy it) to product dir:
+		
+			sudo mv xg400-unidrv.tar.bz2 /targ/prod/xg400/unidrv.tar.bz2
+
+		B) EITHER do:
+			- Download .pom file - that MATCHES RELEASE from:
+				https://gdn-artifactory.rd.advaoptical.com/artifactory/libs-snapshot-local/com/adva/f4/f4-xg400-unidrv
+			  E.g. for release 23.1.1: https://gdn-artifactory.rd.advaoptical.com/artifactory/libs-snapshot-local/com/adva/f4/f4-xg400-unidrv/23.1.1-SNAPSHOT/f4-xg400-unidrv-23.1.1-20230710.150506-8-arm8-64bit.pom
+			- FROM OUTSIDE EDE, rename it to 'unidrv.pom' and move it to ${EDE_DIR}/targ/prod/xg400/
+				
+				sudo mv ~/Downloads/f4-xg400-unidrv-23.1.1-20230710.150506-8-arm8-64bit.pom /opt/aos/ede-3.6.20/targ/prod/xg400/unidrv.pom
+
+			OR do (Inside EDE):
+				
+				sudo rm -f /targ/prod/xg400/unidrv.pom
+				sudo /opt/jfrog/jfrog rt dl --server-id=gdn --flat=true --sort-by=updated --sort-order=desc --limit=1 --exclusions=*x86-64bit* "libs-snapshot-local/com/adva/f4/f4-xg400-unidrv/23.1.1-SNAPSHOT/f4-xg400-unidrv-23.1.1-*-arm8-64bit.pom" /targ/prod/xg400/unidrv.pom
+
+	---------------------------
+	
+	- XG490:
+	
+		A)
+		- Inside EDE, create the modules:
+			
+			cd /targ/prod-devel/xg490
+			sudo xkmake xg490 ext_modules
+			
+		- Tar them:
+		
+			cd modules
+			find . -name "*.ko" | xargs tar cjf ./xg490-unidrv.tar.bz2
+
+		- Move the tar file (or copy it) to product dir:
+		
+			sudo mv xg490-unidrv.tar.bz2 /targ/prod/xg490/unidrv.tar.bz2
+		
+		B)  EITHER do:
+		-->ask: do we need to dowload f4-xg400-kernel or f4-xg490-kernel snapshot? in Jenkins build console of xg490 it uses xg400.
+			- Download .pom file - that MATCHES RELEASE from:
+				https://gdn-artifactory.rd.advaoptical.com/artifactory/libs-snapshot-local/com/adva/f4/f4-xg400-unidrv
+			  E.g. for release 23.5.0: https://gdn-artifactory.rd.advaoptical.com/artifactory/libs-snapshot-local/com/adva/f4/f4-xg400-unidrv/F4DEV_23.5.0-SNAPSHOT/f4-xg400-unidrv-F4DEV_23.5.0-20230712.072004-20-arm8-64bit.pom
+			- FROM OUTSIDE EDE, rename it to 'unidrv.pom' and move it to ${EDE_DIR}/targ/prod/xg400/
+				
+				sudo mv ~/Downloads/f4-xg400-unidrv-F4DEV_23.5.0-20230712.072004-20-arm8-64bit.pom /opt/aos/ede-3.6.20/targ/prod/xg490/unidrv.pom
+
+			OR do (Inside EDE):
+				
+				sudo rm -f /targ/prod/xg490/unidrv.pom
+				sudo /opt/jfrog/jfrog rt dl --server-id=gdn --flat=true --sort-by=updated --sort-order=desc --limit=1 --exclusions=*x86-64bit* "libs-snapshot-local/com/adva/f4/f4-xg400-unidrv/F4DEV_23.5.0-SNAPSHOT/f4-xg400-unidrv-F4DEV_23.5.0-*-arm8-64bit.pom" /targ/prod/xg490/unidrv.pom
+
+5) Qumran drivers:
+
+	- XG404/418/480:
+
+		A) 	EITHER do:
+			- Either build them by cloning 'f4-3rd-party-qumran-mx' repo and building it, or
+			  fetch them from JFrog (release 23.1.1), from: https://gdn-artifactory.rd.advaoptical.com/artifactory/libs-snapshot/com/broadcom/broadcom-qumran-bin
+			  e.g. from: https://gdn-artifactory.rd.advaoptical.com/artifactory/libs-snapshot/com/broadcom/broadcom-qumran-bin/6.5.24_r23.1.1-SNAPSHOT/broadcom-qumran-bin-6.5.24_r23.1.1-20230911.174032-3-arm8-64bit.tar.bz2
+			- FROM OUTSIDE EDE, rename it to 'qumran.tar.bz2' and move it to ${EDE_DIR}/targ/prod/xg400/
+				
+				sudo mv ~/Downloads/broadcom-qumran-bin-6.5.24_r23.1.1-20230911.174032-3-arm8-64bit.tar.bz2 /opt/aos/ede-3.6.20/targ/prod/xg400/qumran.tar.bz2
+
+			OR do (Inside EDE):
+			
+				sudo rm -f /targ/prod/xg400/qumran.tar.bz2
+				sudo /opt/jfrog/jfrog rt dl --server-id=gdn --flat=true --sort-by=updated --sort-order=desc --limit=1 --exclusions=*x86-64bit* "libs-snapshot/com/broadcom/broadcom-qumran-bin/6.5.24_r23.1.1-SNAPSHOT/broadcom-qumran-bin-6.5.24_r23.1.1-*-arm8-64bit.tar.bz2" /targ/prod/xg400/qumran.tar.bz2
+
+		B)	EITHER DO:
+			- Fetch MATCHING .pom file, e.g from: https://gdn-artifactory.rd.advaoptical.com/artifactory/libs-snapshot/com/broadcom/broadcom-qumran-bin/6.5.24_r23.1.1-SNAPSHOT/broadcom-qumran-bin-6.5.24_r23.1.1-20230911.174032-3-arm8-64bit.pom
+			- FROM OUTSIDE EDE, rename it to 'qumran.pom' and move it to ${EDE_DIR}/targ/prod/xg400/
+			
+				sudo mv ~/Downloads/broadcom-qumran-bin-6.5.24_r23.1.1-20230911.174032-3-arm8-64bit.pom /opt/aos/ede-3.6.20/targ/prod/xg400/qumran.pom
+
+			OR do (Inside EDE):
+			
+				sudo rm -f /targ/prod/xg400/qumran.pom
+				sudo /opt/jfrog/jfrog rt dl --server-id=gdn --flat=true --sort-by=updated --sort-order=desc --limit=1 --exclusions=*x86-64bit* "libs-snapshot/com/broadcom/broadcom-qumran-bin/6.5.24_r23.1.1-SNAPSHOT/broadcom-qumran-bin-6.5.24_r23.1.1-*-arm8-64bit.pom" /targ/prod/xg400/qumran.pom
+		
+	---------------------------
+	
+	- XG490:
+	
+		A)	EITHER do:
+			- Either build them by cloning 'f4-3rd-party-qumran-mx' repo (NOT UP TO DATE FOR XG490!!!) and building it, or
+			  fetch them from JFrog (release 23.5.0), from: https://gdn-artifactory.rd.advaoptical.com/artifactory/libs-snapshot/com/broadcom/broadcom-qumran-dnx-bin
+			  e.g. from: https://gdn-artifactory.rd.advaoptical.com/artifactory/libs-snapshot/com/broadcom/broadcom-qumran-dnx-bin/F4DEV_6.5.27_r23.5.0-SNAPSHOT/broadcom-qumran-dnx-bin-F4DEV_6.5.27_r23.5.0-20230707.044604-15-arm8-64bit.tar.bz2
+			- FROM OUTSIDE EDE, rename it to 'qumran.tar.bz2' and move it to ${EDE_DIR}/targ/prod/xg490/
+				
+				sudo mv ~/Downloads/broadcom-qumran-dnx-bin-F4DEV_6.5.27_r23.5.0-20230707.044604-15-arm8-64bit.tar.bz2 /opt/aos/ede-3.6.20/targ/prod/xg490/qumran.tar.bz2
+
+			OR do (Inside EDE):
+			
+				sudo rm -f /targ/prod/xg490/qumran.tar.bz2
+				sudo /opt/jfrog/jfrog rt dl --server-id=gdn --flat=true --sort-by=updated --sort-order=desc --limit=1 --exclusions=*x86-64bit* "libs-snapshot/com/broadcom/broadcom-qumran-dnx-bin/F4DEV_6.5.27_r23.5.0-SNAPSHOT/broadcom-qumran-dnx-bin-F4DEV_6.5.27_r23.5.0-*-arm8-64bit.tar.bz2" /targ/prod/xg490/qumran.tar.bz2
+
+--> what to download for sim?
+
+		B)	EITHER do:
+			- Fetch MATCHING .pom file, e.g from: https://gdn-artifactory.rd.advaoptical.com/artifactory/libs-snapshot/com/broadcom/broadcom-qumran-dnx-bin/F4DEV_6.5.27_r23.5.0-SNAPSHOT/broadcom-qumran-dnx-bin-F4DEV_6.5.27_r23.5.0-20230707.044604-15-arm8-64bit.pom
+			- FROM OUTSIDE EDE, rename it to 'qumran.pom' and move it to ${EDE_DIR}/targ/prod/xg490/
+		
+				sudo mv ~/Downloads/broadcom-qumran-dnx-bin-F4DEV_6.5.27_r23.5.0-20230707.044604-15-arm8-64bit.pom /opt/aos/ede-3.6.20/targ/prod/xg490/qumran.pom
+
+			OR do (Inside EDE):
+			
+				sudo rm -f /targ/prod/xg490/qumran.pom
+				sudo /opt/jfrog/jfrog rt dl --server-id=gdn --flat=true --sort-by=updated --sort-order=desc --limit=1 --exclusions=*x86-64bit* "libs-snapshot/com/broadcom/broadcom-qumran-dnx-bin/F4DEV_6.5.27_r23.5.0-SNAPSHOT/broadcom-qumran-dnx-bin-F4DEV_6.5.27_r23.5.0-*-arm8-64bit.pom" /targ/prod/xg490/qumran.pom
+
+6) Full build:
+
+	- XG404/418/480:
+
+		- This is how the product directory should look before commencing a full image build:
+	
+			josh@ede-3.6.20  /targ/prod/xg400 
+			$ ls -la
+			total 32736
+			drwxr-xr-x 10 root root     4096 Oct 16 18:08 .
+			drwxr-xr-x  3 root root     4096 Oct  9 16:16 ..
+			-rw-rw-r--  1 josh josh       18 Oct  9 11:52 arch.txt
+			lrwxrwxrwx  1 root root       99 Oct  9 17:53 base.tar.bz2 -> /home/josh/AOS/XG400_test/build_dir_arm/Build/xg400/staging/f4-xg400-base-23.1.1-arm8-64bit.tar.bz2
+			drwxr-xr-x  3 root root     4096 Oct 16 17:33 boot
+			drwxr-xr-x  2 root root     4096 Oct  9 16:16 config
+			drwxr-xr-x  9 root root     4096 Oct  9 16:16 fsmod
+			drwxr-xr-x  2 root root     4096 Oct  9 16:16 initramfs
+			drwxr-xr-x  3 root root     4096 Oct  9 17:46 kernel_modules
+			-rwxr-xr-x  1 root root     1104 Oct  9 17:55 metadata.json
+			-rw-rw-r--  1 josh josh        4 Oct  9 11:52 mode.txt
+			-rw-rw-r--  1 josh josh      804 Oct 16 17:38 os.pom
+			-rw-r--r--  1 root root 25219821 Oct 16 17:34 os.tar.bz2
+			-rw-rw-r--  1 josh josh      978 Oct 16 18:06 qumran.pom
+			-rw-rw-r--  1 josh josh    50104 Oct 16 18:03 qumran.tar.bz2
+			drwxr-xr-x  3 root root     4096 Oct 16 17:00 scripts
+			drwxr-xr-x  2 root root     4096 Oct  9 16:16 tools
+			-rw-rw-r--  1 josh josh      952 Oct 16 17:41 unidrv.pom
+			-rw-r--r--  1 josh josh  8175402 Oct 16 18:08 unidrv.tar.bz2
+
+	    - Inside EDE, build image:
+	   
+			cd /targ/prod-devel/xg400
+			time BUILD_ID="$(date)" BUILD_NUMBER=100 sudo adva_deploy -i -d xg400 -f /targ/prod-devel/xg400/specimen/xg400.specimen
+
+		- Build artifacts will be in (of EDE!): /targ/prod/xg400/med
+			- Relevant artifacts are:
+			
+				- Version file result (for SW upgrades): f4-xg400-card-23.1.1-arm8-64bit.tar.bz2.pak
+				- Image file result   (for raw flashes): xg400_disk_image.gz
+			
+	---------------------------
+	
+	- XG490:
+	
+		- This is how the product directory should look before commencing a full image build:
+	
+			josh@ede-3.6.20  /targ/prod-devel/xg490 
+			$ ls -la /targ/prod/xg490/
+			total 33336
+			drwxr-xr-x 9 root root     4096 Nov 13 14:19 .
+			drwxr-xr-x 4 root root     4096 Oct 18 19:36 ..
+			-rwxrwxr-x 1 josh josh       18 Oct 16 10:40 arch.txt
+			lrwxrwxrwx 1 root root      105 Nov 12 14:06 base.tar.bz2 -> /home/josh/AOS/XG490_test/build_dir_arm/Build/xg490/staging/f4-xg490-base-F4DEV_23.5.0-arm8-64bit.tar.bz2
+			drwxr-xr-x 3 root root     4096 Nov 12 14:15 boot
+			drwxr-xr-x 2 root root     4096 Oct 18 19:36 config
+			drwxr-xr-x 9 root root     4096 Oct 18 19:36 fsmod
+			drwxr-xr-x 2 root root     4096 Oct 18 19:36 initramfs
+			drwxr-xr-x 3 root root     4096 Oct 18 20:15 kernel_modules
+			drwxr-xr-x 3 root root     4096 Nov 13 14:39 med
+			-rwxr-xr-x 1 root root     1040 Nov 12 14:10 metadata.json
+			-rwxrwxr-x 1 josh josh        4 Oct 16 10:40 mode.txt
+			-rw-r--r-- 1 root root      770 Nov 13 13:54 os.pom
+			-rw-r--r-- 1 root root 24815564 Nov 13 12:43 os.tar.bz2
+			-rw-r--r-- 1 root root      950 Nov 13 13:58 qumran.pom
+			-rw-r--r-- 1 root root    52463 Nov 13 13:58 qumran.tar.bz2
+			drwxr-xr-x 3 root root     4096 Nov 12 15:33 scripts
+			-rw-r--r-- 1 root root      911 Nov 13 13:57 unidrv.pom
+			-rw-r--r-- 1 josh josh  9192343 Nov 13 13:55 unidrv.tar.bz2
+			
+		- Inside EDE, create xg490.specimen file. Currently, this file is missing for the XG490, so
+          we will make one by copying the xg400.specimen file, and replacing each occurence of the
+		  word 'xg400' with 'xg490':
+		  
+			echo "$(sed -e 's/xg400/xg490/g' /targ/prod-devel/xg490/specimen/xg400.specimen)" | sudo tee /targ/prod/xg490/xg490.specimen > /dev/null
+
+		- Inside EDE, build image:
+	   
+			cd /targ/prod-devel/xg490
+			time BUILD_ID="$(date)" BUILD_NUMBER=100 sudo adva_deploy -i -d xg490 -f /targ/prod/xg490/xg490.specimen
+
+		- Build artifacts will be in (of EDE!): /targ/prod/xg490/med
+			- Relevant artifacts are:
+			
+				- Version file result (for SW upgrades): f4-xg490-card-F4DEV_23.5.0-arm8-64bit.tar.bz2.pak
+				- Image file result   (for raw flashes): xg490_disk_image.gz
+		
+-------------------------------------------------------------------------
+Flashing/SW Upgrade Image
+-------------------------------------------------------------------------
+
+Useful reference (XG400): https://polarion.advaoptical.com/polarion/#/project/GE1D/wiki/F4/How%20to%20update%20software%20for%20XG480
+Useful reference (XG490): https://polarion.advaoptical.com/polarion/#/project/GE1D/wiki/F4/How%20to%20update%20software%20for%20XG490
+
+Flashing disk image from U-boot:
+
+1) 	- Ensure that you have a TFTP server configured and running.
+	- One time only: Create a directory INSIDE your TFTP server root directory (e.g. /srv/tftp) to hold disk images. E.g.
+		
+		- XG404/418/480:
+		
+			mkdir -p /srv/tftp/xg400
+		
+		
+		- XG490:
+		
+			mkdir -p /srv/tftp/xg490
+		
+	- Copy your disk image file to the directory in your TFTP server:
+	
+		- XG404/418/480:
+		
+			cp /opt/aos/ede-3.6.20/targ/prod/xg400/med/xg400_disk_image.gz /srv/tftp/xg400
+		
+		
+		- XG490:
+		
+			cp /opt/aos/ede-3.6.20/targ/prod/xg490/med/xg490_disk_image.gz /srv/tftp/xg490
+
+2) 	- XG404/418/480:
+
+		On the XG400 series, EMMC is used to store the AOS image, rootfs, Linux kernel, DTB, etc, and it uses the ext4 fs
+
+		- Restart/Power Cycle the system, and stop it at U-boot prompt by repeatedly pressing <SPACEBAR>
+		- Enter debug node (if necessary) by entering:
+			
+			debug on
+			aos			# This is the default debug password, it will be invisible as you type it
+		
+
+	- XG490:
+		
+		On the XG490, EMMC is used to store the AOS image, rootfs, Linux kernel, DTB, etc, and it uses the ext4 fs
+	
+		- Restart/Power Cycle the system, and stop it at U-boot prompt by repeatedly pressing any key
+		- Enter debug node (if necessary) by entering:
+			
+			debug on
+			aos			# This is the default debug password, it will be invisible as you type it
+				
+3) 	- XG404/418/480:
+
+		- Enter the following commands, replacing the values as necessary:
+		
+			- ipaddr: IP address of device, will be used to transfer image to device
+			- netmask: subnet mask of network that XG device is connected to
+			- gatewayip: IP address of default gateway that XG device should use - leave blank if device and machine running TFTP server are on same subnet
+			- serverip: IP address of machine running TFTP server
+			- ipconfig: set this to 'static' (if not set to 'static', device will try to use BOOTP - I haven't tested this)
+			- serverdir: set to name of folder inside TFTP server root directory that holds disk image, e.g. 'xg490'
+			- emmcfile: set to path to disk image relative to 'serverdir', e.g. 'xg400_disk_image.gz' or 'folder_name/xg400_disk_image.gz' (if absolute path is: /srv/tftp/xg400/folder_name/xg400_disk_image.gz)
+		
+			Example:
+		
+				setenv ipaddr 10.34.70.30
+				setenv netmask 255.255.255.0
+				setenv gatewayip 10.34.70.254
+				setenv serverip 10.34.71.121
+				setenv ipconfig static
+				setenv serverdir xg400
+				setenv emmcfile xg400_disk_image.gz
+				ping $serverip
+				
+
+	- XG490:
+	
+		- Enter the following commands, replacing the values as necessary:
+		
+			- ipaddr: IP address of device, will be used to transfer image to device
+			- netmask: subnet mask of network that XG device is connected to
+			- gatewayip: IP address of default gateway that XG device should use - leave blank if device and machine running TFTP server are on same subnet
+			- serverip: IP address of machine running TFTP server
+			- ipconfig: set this to 'static' (if not set to 'static', device will try to use BOOTP - I haven't tested this)
+			- serverdir: set to name of folder inside TFTP server root directory that holds disk image, e.g. 'xg490'
+			- emmcfile: set to path to disk image relative to 'serverdir', e.g. 'xg490_disk_image.gz' or 'folder_name/xg490_disk_image.gz' (if absolute path is: /srv/tftp/xg490/folder_name/xg490_disk_image.gz)
+		
+			Example:
+		
+				setenv ipaddr 10.34.70.38
+				setenv netmask 255.255.255.0
+				setenv gatewayip 10.34.70.254
+				setenv serverip 10.34.71.121
+				setenv ipconfig static
+				setenv serverdir xg490
+				setenv emmcfile xg490_disk_image.gz
+				ping $serverip
+				
+4) 	- XG404/418/480 & XG490:
+		
+		- If ping was successful, save env variables for convenience, run the update command to download and flash the new disk image file, and then run the 'boot'
+		  command to boot the device:
+				
+				saveenv
+				run update_emmc
+				boot
+
+		- Note: it will take about ~10 minutes to transfer the disk image file, and then another ~8 minutes to write to flash
+		  (on the XG490 - will take much longer on XG418)
+	
+-------------------------------
+
+SW Upgrade: TODO
+	
+-------------------------------------------------------------------------
+Simulator
+-------------------------------------------------------------------------
+
+Setup:
+
+- Follow this link for INSTALLATION and RUNNING, but NOT configuration files:
+	https://pypi.rd.advaoptical.com/global/gitlab/vbox-fred/latest/+d/installation.html
+- Follow this link for CONFIGURATION FILE INFO but NOT installation and running:
+	https://polarion.advaoptical.com/polarion/#/project/GE1D/wiki/F4/Xg480InFredHowto
+- For full documentation about YAML config file options:
+	https://pypi.rd.advaoptical.com/global/gitlab/vbox-fred/latest/+d/yaml_params.html
+
+1) Follow the instructions for installing the appropriate VirtualBox version for your Linux distribution from here:
+	https://www.virtualbox.org/wiki/Linux_Downloads
+	
+	Summary here:
+	
+	- Add the following line to /etc/apt/sources.list, replacing <mydist> with the name of your Ubuntu release, e.g. 'focal':
+		
+		deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian <mydist> contrib
+
+	  E.g.
+	  
+		sudo vim /etc/apt/sources.list
+		# add following line
+		deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian focal contrib
+
+	- Download the Oracle public key for verifying the signatures and register it by running:
+ 
+		wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
+		
+	- Then install virtualbox:
+	
+		sudo apt-get update
+		sudo apt-get install virtualbox-7.0
+		
+2) Install Vagrant (CLI utility for managing VMs). Link: https://developer.hashicorp.com/vagrant/downloads
+
+   Summary: 
+
+		wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+		echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+		sudo apt update && sudo apt install vagrant
+
+3) Install vbox-fred:
+
+		pip3 install vbox-fred --extra-index-url https://pypi.rd.advaoptical.com/global/production
+
+4) Create a JFrog API key if you don't already have one by following the steps here:
+	https://polarion.advaoptical.com/polarion/#/project/AE/wiki/Fred/How%20to%20generate%20own%20ARTF_TOKEN
+	
+	Summary: 
+	
+		- Go to: https://gdn-artifactory.rd.advaoptical.com/ui/user_profile and if you don't already have one,
+          scroll down and click on 'Generate an API' key.
+			
+5) Run command:
+  WARNING: The script vbox-fred is installed in '/home/baraka/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  
+		vbox-fred init
+   
+   And follow the instructions
+
+------------
+
+Use (only requires application build, not kernel/full image/bootloader):
+
+1) Make sure you have a .yaml configuration file for fred - device specific. You can download an
+   example .yaml config from section 1.3.3 of:
+	https://polarion.advaoptical.com/polarion/#/project/GE1D/wiki/F4/Xg480InFredHowto
+	
+2) Edit the configuration file. Minimum changes:
+
+	- Set the 'cardAos' parameter to path to your SIMULATOR application build, e.g:
+		/home/josh/AOS/XG400_test/build_dir_sim/Build/xg400/staging/f4-xg400-base-23.1.1-x86-64bit.tar.bz2
+		
+	XG490 only!: Change the value of both the 'shelfType' and 'cardType' parameters to 'xg490'
+		
+	- Other useful parameters to change:
+
+		- cardBridged:    name of HOST network interface that simulated card's serial0 interface should be
+		                  bridged to. Nice to set to name of host interface used to connect to internet
+					      (suggested by fred itself upon startup if not set or problem with set name) so
+					      that you won't be prompted to choose, e.g.: enp0s31f6. See step 4 for purpose.
+		- cardIP:         choose an unused IP address on same subnet as HOST network interface that VM
+		                  is bridged to, e.g: 10.32.8.60 (if host has 10.32.8.125).
+						  See step 4 for purpose.
+		- cardNetmask:    set to same netmask as that of host bridged NIC, e.g: 255.255.254.0
+		- cardBaseBoxVer: should be set to EDE version: 3.6.20
+		
+		----> delete dumbcards
+		
+3) Run fred with:
+	
+		vbox-fred up <path/to/config/file> <your_chosen_vm_id>
+	
+   E.g.
+   
+		vbox-fred up /home/josh/AOS/XG400_test/xg480.yaml testid123
+		
+   It will take a few minutes to get started. If prompted to choose a network interface to bridge to,
+   can follow what it suggests, by entering a number of an interface , and then <Enter>.
+		
+4) Once you see that AOS has started, you can (on your Linux machine) see the state of your simulation
+   with:
+   
+		vbox-fred status
+		
+   Note the 'Forwarded Port' (FP) fields.
+   
+   - Note: To connect to the simulator IN ANY WAY (ssh, GUI, etc), after you see that AOS has started, YOU MUST
+     WAIT ~1 minute before you can successfully connect. Otherwise, connections simply will fail.
+	 
+   Simulator Login Info:	 
+	   Username is: admin
+	   Password is: CHGME.1a
+   
+   I) To connect to the simulator via GUI (simulated serial), on your Linux machine, open a browser, and
+      enter (replace 'host ip' with 127.0.0.1 and 'FP 443' with the value from the output of
+	  'vbox-fred status'):
+   
+		https://<host ip>:<FP 443>/gui/#/login
+		
+	  e.g.
+	 
+		https://127.0.0.1:1467/gui/#/core/dashboard
+		
+	  ---
+	  
+	   If additionally, you want to be able to connect to simulator via GUI (simulated serial) from some other PC
+		 (not the one running the VM) (will also work from same PC):
+		 
+			- Before running the simulator, make sure that 'cardBridged' is set
+			- If the NIC that 'cardBridged' is bridged to uses DHCP, no need to set extra params - 
+			  the 'serial0' interface (seen with 'ifconfig' in root shell of simulator) will get
+			  IP address via DHCP.
+				- If you want to use static IP, make sure that the 'cardIP' and 'cardNetmask'
+				  parameters are set to an IP address IN THE SAME SUBNET as NIC that you are
+				  bridging to (e.g. 10.32.8.60 if host NIC is using 10.32.8.125), and same netmask
+				  (e.g. 255.255.254.0).
+		
+		 Then connect from ANY PC on that subnet, open a browser, and enter:
+   
+			https://<IP>/gui/#/login
+		
+		 e.g.
+	 
+			https://10.32.8.60/gui/#/login
+		
+	II) To connect to card CLI (admin) (simulated serial), on Linux shell, enter
+	    (replacing FP 22 and host ip with values from output of 'vbox-fred status'):
+
+			ssh -p <FP 22> admin@<host ip>
+			
+		e.g.
+		
+			ssh -p 2467 admin@127.0.0.1
+			
+		---
+		
+		 If additionally, you want to be able to connect to card CLI (admin) (simulated serial) from some other PC
+		 (not the one running the VM) (will also work from same PC):
+		 
+			- Before running the simulator, make sure that 'cardBridged' is set
+			- If the NIC that 'cardBridged' is bridged to uses DHCP, no need to set extra params - 
+			  the 'serial0' interface (seen with 'ifconfig' in root shell of simulator) will get
+			  IP address via DHCP.
+				- If you want to use static IP, make sure that the 'cardIP' and 'cardNetmask'
+				  parameters are set to an IP address IN THE SAME SUBNET as NIC that you are
+				  bridging to (e.g. 10.32.8.60 if host NIC is using 10.32.8.125), and same netmask
+				  (e.g. 255.255.254.0).
+		
+		 Then connect from ANY PC on that subnet using the regular (non-forwarded port): 22:
+		 
+			ssh -p 22 admin@<IP>
+			
+		 E.g.
+			
+			ssh -p 22 admin@10.32.8.60
+			
+	III) To connect to card root shell (simulated serial), on Linux shell, enter
+	     (replacing FP 614 and host ip with values from output of 'vbox-fred status'):
+
+			ssh -p <FP 614> root@<host ip>
+			
+		 e.g.
+		
+			ssh -p 2222 root@127.0.0.1
+			
+		---
+		
+		 If additionally, you want to be able to connect to card root shell (simulated serial) from some other PC
+		 (not the one running the VM) (will also work from same PC):
+		 
+			- Before running the simulator, make sure that 'cardBridged' is set
+			- If the NIC that 'cardBridged' is bridged to uses DHCP, no need to set extra params - 
+			  the 'serial0' interface (seen with 'ifconfig' in root shell of simulator) will get
+			  IP address via DHCP.
+				- If you want to use static IP, make sure that the 'cardIP' and 'cardNetmask'
+				  parameters are set to an IP address IN THE SAME SUBNET as NIC that you are
+				  bridging to (e.g. 10.32.8.60 if host NIC is using 10.32.8.125), and same netmask
+				  (e.g. 255.255.254.0).
+		
+		 Then connect from ANY PC on that subnet using the regular (non-forwarded port): 614:
+		 
+			ssh -p 614 root@<IP>
+			
+		 E.g.
+			
+			ssh -p 614 root@10.32.8.60
+
+5) To kill fred instance:
+
+		vbox-fred destroy <simulator_ID>
+		
+   E.g:
+
+		vbox-fred destroy testid123
+		
+6) To destroy and restart fred instance (using EXISTING CONFIGURATION):
+
+		vbox-fred recreate <simulator_ID>
+		
+	E.g:
+	
+		vbox-fred recreate testid123
+		
+7) Changing specific product type (XG404/418/480 only!)
+   CURRENTLY NOT WORKING!!!
+   
+   Notes regarding changing product type for simulator for XG404/418/480:
+
+   Eran initially told me:
+
+	Hi Josh,
+	To match a certain HW type (480 / 418 / 404) The simulator requires internal configuration set of HW type number  call UHI – i.e. fake the HW inventory.
+	See below Kasen’s instructions.
+	The UHI numbers are:
+	XG480 - 82 default variant, XG480B - 81, XG480C - 106, XG418 - 134, XG418B - 133, XG404 - 131, XG404B – 132
+
+	Let me know if it worked and for fine tunes you’ve made
+
+	Thank you,
+	Eran
+
+	From: Kasen Zeng <kasen.zeng@adtran.com> 
+	Sent: Saturday, October 7, 2023 6:06 AM
+	To: Eran Agmon (ADVA) <EAgmon@adva.com>
+	Subject: RE: XG400 - System Architecture Overview
+
+	Hi Eran,
+
+	Please do umount before changing the UHI.
+
+		umount /opt/adva/aos/etc/framework/hal/
+		mount -o remount,rw /opt/adva/
+
+	Then change the UHI in below files:
+
+		vi /opt/adva/aos/etc/framework/hal/FakedInventory.json
+		vi /opt/adva/aos/etc/framework/hal/FakedShelfInventory.json
+		vi /opt/adva/aos/etc/framework/hal/xg400/HalConfig.json
+		vi /opt/adva/aos/etc/framework/hal/xg400/FakedInventory.json
+		vi /opt/adva/aos/etc/framework/hal/xg400/FakedShelfInventory.json
+		vi /opt/adva/aos/etc/framework/hal/xg480/FakedInventory.json
+		vi /opt/adva/aos/etc/framework/hal/xg480/FakedShelfInventory.json
+		
+		# Shortcut to change above files on Simulator - Josh:
+				find /opt/adva/aos/etc/framework/hal/ -name "*Inventory.json" | xargs sed -i 's/"Uhi"   : 82,/"Uhi"   : 134,/g' \
+				&& sed -i 's/"Uhi"   : 82,/"Uhi"   : 134,/g' /opt/adva/aos/etc/framework/hal/xg400/HalConfig.json
+
+		mount -o remount,ro /opt/adva/
+		
+>>>>But this did not work for me, because after rebooting the simulator, it is impossible to reconnect
+    to it (e.g. via SSH or GUI)
+	
+    Then Eran said that only thing that worked for him is to change UHI in these 4 files in SOURCE code, then make new image
+    and start simulator using this image:
+
+	products/xg400/etc/framework/hal/etc/vm64/FakedInventory.json 
+	products/xg400/etc/framework/hal/etc/vm64/xg400/FakedInventory.json 
+	products/xg400/etc/framework/hal/etc/vm64/FakedShelfInventory.json 
+	products/xg400/etc/framework/hal/etc/vm64/xg400/FakedShelfInventory.json
+	
+>>>>This made no difference - I ran simulator using image built with this change, and it showed XG480 in GUI
+    instead of XG418 as expected!
+		
+------------
+
+Notes:  
+
+1) I found that it's sufficient (for simulator) to: make change to .cpp file (e.g.
+   products/xg400/source/hbm/hbmtree/cfm/CfmHbmFm.cpp), and then, from build_dir_sim,
+   to run: 'make -j4 xg400', and then to load simulator. That is, NOT NECESSARY to run
+   app-specific 'make' command before 'make -j4 xg400' (that is: 'make all' from
+   Build/xg400/source/hbm/hbmtree/cfm/).
+		   
+2) Production/Development mode (only relevant for physical product I think, not simulator.
+   I think simulator is always in development mode):
+	
+	The mode is determined by the value of the "mode" key in the sirmConfigurationFile.json file. 
+	(products/xg400/etc/core-apps/sirm/etc/sirmConfigurationFile.json in source code,
+	 /opt/adva/aos/etc/core-apps/sirm/sirmConfigurationFile.json on device)
+	
+	Its possible values are: "production" and "development" (with quotes).
+	
+	When in production mode, many features that are available in development mode are blocked, for
+	example: logging in as root (to gain access to Linux shell).
+	
+	- To TEMPORARILY (until next reboot) gain access to Linux shell, when in PRODUCTION MODE:
+	  
+	  METHOD 1:
+		(Steps a and b are only required ONCE, thanks to 'commit')
+		a) Add the Debug role to the admin user:
+		
+				configure
+				set security user admin role append Debug
+				commit
+			
+		b) Log out then log back in as admin:
+		
+				exit
+				exit
+				# log back in
+			
+		c) Enable ssh to port 614:
+		
+				configure
+				run execute debug-system exec-cmd cmd "/shell/enable-ssh"
+
+		   Enable debug commands output to serial port
+
+				run execute debug-system exec-cmd cmd "/shell/enable-serial"
+			
+		d) Now log in with login: root
+		
+	  METHOD 2:
+		a) POWERCYCLE device, stop at U-boot (by repeatedly pressing spacebar), and then enter:
+		
+				debug on
+				
+	       When prompted, enter the debug password, and then <ENTER>:
+		   
+				aos
+			
+		   Then enter:
+		   
+				bootaos active privilege
+				
+		b) When you arrive at menu, choose the desired option, e.g. 2 - Development Mode
+			
+		
+>>>>TEST- To PERMANENTLY change to DEVELOPMENT MODE:
+	
+	  METHOD 1 (build and flash new image):
+		- Find the "miscellaneous" section of the sirmConfigurationFile.json file in the source code
+		  (products/xg400/etc/core-apps/sirm/etc/sirmConfigurationFile.json), and change the value
+		  of the "mode" key to: "development" (with quotes). Then find the "watchdog" section and change
+		  the value of the "enabled" key to: false (no quotes).
+		  Then run "make -j4 <PRODUCT_NAME>" (xg400, xg490), and then rebuild the full
+		  image file, and then upgrade or flash the new image to the device.
+		  
+	  METHOD 2 (change file on device):
+		a) Log in to device shell as root
+		
+		b) Run:
+		
+				mount -o remount,rw /opt/adva
+				
+		c) Find the "miscellaneous" section of the sirmConfigurationFile.json file on the device
+		   (/opt/adva/aos/etc/core-apps/sirm/sirmConfigurationFile.json), and change the value
+		   of the "mode" key to: "development" (with quotes). Then find the "watchdog" section and change
+		   the value of the "enabled" key to: false (no quotes).
+		   
+		d) Then save the file, and reboot the device.
+		  
+------------
+
+To connect to XG418 in SIT lab:
+
+- Serial (InReach): ssh -p 3122 InReach@10.35.108.253
+- DCN: IP: 10.35.108.89 (ssh admin@10.35.108.89)
+
+- User: admin, Pass: CHGME.1b
+- Can access GUI via both Linux and Windows PCs
+- For SW upgrade: USE 10.32.8.125 (External IP) as server IP -
+  10.34.71.121 (Internal IP) will NOT WORK!
+  - Set gateway on device: 10.35.108.254
+  - To test connectivity on device, from CLI, run:
+		ping address <ADDRESS>	# if you see 'success', it only means that it successfully sent ping, not that it got reply
+		show dcn 1 ping-result
+  
+- Connected to power server, outlet F (Eran's XG - with IP 10.35.108.88 - is
+  connected to outlet E).
+	- Power server IP (use browser to access): 10.32.251.168
+	- Power server user: snmp
+	- Power server pass: 1234
+	
+
+- If have problems, e.g. after SW upgrade, run (from admin CLI):
+
+	execute database restore-factory-database
+	
+   It will take a few minutes, but it will eventually restart. Then, when device comes back up,
+   log in to admin CLI (login: admin, pass: CHGME.1a), it should ask to change password, so do so,
+   and then enter:
+
+configure
+set dcn 1 dcn-interface M0 dhcp-v4 role off
+set dcn 1 dcn-interface M0 dhcp-v6 role off
+set dcn 1 dcn-interface M0 ip-address/mask replace all 10.34.70.38/24 dad-transmits 5
+set dcn 1 ipv4-routes destination-ip-address/mask 0.0.0.0/0 next-hop 10.34.70.254 metric 20 interface M0
+set security user-settings admin cli-user-settings session-idle-timeout 0
+commit
+
+   Now, DCN interface should work (including GUI).
+   
+---
+
+UNTESTED:
+- To boot specific partition from U-boot, with FACTORY DEFAULTS:
+
+	a) Stop at U-boot by power-cycling and then hitting spacebar
+	
+	b) Enter 'debug' node with 'debug on', and then password: 'aos'
+	
+	c) Enter following command:
+	
+		bootaos <PARTITION> factorydefaults
+		
+	   Where PARTITION is either: 'active' or 'standby'
+	   
+	   E.g.
+	   
+		bootaos active factorydefaults
+		
+---
+
+- To reboot device (cold/warm) from admin CLI:
+
+	execute card 1/1 restart type cold 	# cold reboot
+	execute card 1/1 restart type warm 	# warm reboot
+	
+- To enter AOS CLI (as 'admin') from root shell prompt (XG490 tested only), enter:
+
+	aosFwMplCliProxy	# This is like 'cli' on XO126
+	
+  To return to shell prompt after logging in as 'admin':
+  
+	Ctrl+D
+
+SW upgrade:
+===========
+execute software copy-package-from filename /home/nbase/tziki5-arm8-64bit.tar.bz2.pak server-type ip-address server-ip-address 10.32.23.3 protocol scp user-id nbase password
+execute software install
+
+show card 1/1 software active package 

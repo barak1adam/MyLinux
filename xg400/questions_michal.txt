@@ -1,0 +1,54 @@
+AOS Questions to Michal:
+========================
+
+what is exactly built unde (all binaries) for all AOS Apps. 
+
+what is AOS SDK after cmake in the pipeline
+
+when is the EOS created and what exactly included?
+
+after the base image build, what is under Build/xg490, Build/xg490/Staging, Install...? what is the diff between build and install ...?
+(usually we have all artifacts under build and rootfs installed artifcats under install)
+
+how to build a cross-compile gentoo pkg for my target?
+
+how to manipulate the list of my gentoo packages in my product?
+
+how to build gentoo minimal set or just linux?
+
+what USE is used? from whihc conf file?
+./usr/share/crossdev/etc/portage/make.conf
+./etc/portage/make.conf
+./targ/arch/aarch64-linux-gnu/modes/eos/etc/portage/make.conf
+
+Josh - in EDE need to use sudo for every single command
+
+What is the idea of updating the HOST EDE itself?
+
+what is the relevant repo in gerrit?
+
+how lists f packages are managed for embedded target? where the lists are built?
+
+how is the rootfs composed?
+
+what is exactly prod, prod_devel and all these product_copy_sync scripts?
+
+fsmodes?
+
+rootfs: /targ/arch/aarch64-linux-gnu/modes/eos
+
+When the full image is built:
+
+/targ/prod/xg490/med/proxy/main = /targ/arch/aarch64-linux-gnu/modes/eos
+
+ADVA apps are placed into:    
+/targ/prod/xg490/med/proxy/adva/aos
+
+
+barak:
+docker from Josh
+build an AOS app and watch what is placed where, including debug symbols
+build image only with distribution
+boot with linux only, no aos
+
+

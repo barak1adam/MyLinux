@@ -1,0 +1,19 @@
+upload to github my basrch, vimrc
+
+bashrc.kostaz is used for zshrc
+
+zsh is installed, I moved back to bash
+
+fzf is installed as the fuzzy finder
+
+vimrc was fixed to have all plugins installed successfully
+
+vimrc is used both by vim and gvim
+
+beyond compare was installed and key was copied from prev pc 10.32.8.145
+
+
+need to:
+review env installs
+make sure cscope is installed and working in gvim
+fix geany warnings

@@ -1,0 +1,20 @@
+
+merge dev-xg490 with master:
+
+on product:
+	rebase and move it to master branch
+	
+AOS - all repos are now built with their own dev-xg490 branch
+
+upgrade product to EDE 3.10.3, because master and product should be built with the same EDE
+
+fix f4-model to align it with AOS
+
+build with AOS master
+
+test it
+
+for each AOS repo merge changes into master and test them one by one.
+need to make sure all other products are not affected !
+According to Raghav it might take few days up to few weeks.
+

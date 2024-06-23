@@ -1,0 +1,16 @@
+According Emil the line-rate 400G capability of Qumran's SAT module can be differed
+
+Feature summary:
+Up to 400Gb/s data rate.
+Transmit 64 flows.
+Receiving 128 flows.
+Seems only support up direction.
+
+SAT has 2 main parts:
+
+Tests part: in Qumran 2C
+Data RatePacket Loss rate (PLR): 
+Lost, erroneous, and misordered packets.
+
+FTD and FDV part: in FPGA
+Frame Transmission Delay(FTD): maximum, minimum, averageFrame Delay Variation (FDV): in a 10-bin histogram.

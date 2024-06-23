@@ -1,0 +1,170 @@
+/////////////////// blocking sys call ///////////////////////////////////////
+
+//// copt the semaphore version
+
+
+comments:
+==========
+
+this program uses blocking read () but not mutex or semaphores.
+
+busy wait - cpu cycles are wasted for checking forever ! (even if not necessary) if the condition is met, can't do other tasks.
+but on the other hand the responisveness is very high, good for simple cases or for specific cores.
+
+blocking system call:
+	the program waits to the system call to complete and the CPU can be used for other tasks
+	but the program needs to wait on each system call indpenedtly, for example on 2 ports and can waste time if the packets arrives almost together on the ports.
+	a full context switch between the user and the kernel - registers, memory pointers, program counters, hw priviledges - large amount of stuff to save and restore
+
+mutex/ sempahores
+	the program waits and lets the CPU do other tasks but more efficient
+	can wait and notified selectively only when all conditions are met
+	not a full context switch - threads share the same memory address space and the kernel can schedule other threads where less states are saved and restored (only registers and program counters)
+
+however blocking system calls are simple to use and if high granularity of conditions is not required, then it might be used.
+busy wait is less efficient but most simple	
+
+buffer size:
+------------
+	if rx link is faster than tx link: usually the rule is processing time * rate of ouptut link, example: 100ms processing time (0.1s) * 10Gbps = 1gb buffer
+	
+	consider:
+	
+	minimum to hold MTU
+	
+	rx rate and processing time - to catch up processing of rx frames
+	
+	memory limitaions
+	
+	
+	tips: start with large buffer and reduce after reviewing the performance
+	
+	
+
+the blocking for reading from buffer1 and buffer2 makes the sync tx
+
+
+open points to consider:
+--------------------------
+
+do we need to interleave the packets from the 2 buffers or just send whatever is ready? is any other processing needed?
+
+is the order of packets is important (<1,1> <2,2>, etc...)?
+
+are the rx links faster than the tx?
+
+if data is not recieved on one of the ports - implement timeouts handler to not to wait forever and handle it (for example, drop what was buffered from the first port)
+
+ineffecient if one port is very slow than the other, the program will wait a lot. 	
+
+threads and locking add complexity and overhead of contex switch and scheduling
+
+one thread is simple and efficient !
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <termios.h>
+
+#define BUFFER_SIZE 1024
+
+// Function prototypes
+int open_serial_port(const char *port_name);
+void process_and_transmit(char *data1, char *data2, int port_tx);
+
+int main(int argc, char *argv[]) {
+  // Check for arguments
+  if (argc != 4) {
+    printf("Usage: %s <port1> <port2> <port3>\n", argv[0]);
+    exit(1);
+  }
+
+  // Open serial ports
+  int port_rx1 = open_serial_port(argv[1]);
+  if (port_rx1 < 0) {
+    perror("Failed to open port 1");
+    exit(1);
+  }
+  int port_rx2 = open_serial_port(argv[2]);
+  if (port_rx2 < 0) {
+    perror("Failed to open port 2");
+    exit(1);
+  }
+  int port_tx = open_serial_port(argv[3]);
+  if (port_tx < 0) {
+    perror("Failed to open port 3");
+    exit(1);
+  }
+
+  // Allocate buffers for received data
+  char buffer1[BUFFER_SIZE];
+  char buffer2[BUFFER_SIZE];
+
+  // Main loop for receiving and processing
+  while (1) {
+    // Read data from port 1
+    int bytes_read1 = read(port_rx1, buffer1, sizeof(buffer1));
+    if (bytes_read1 < 0) {
+      perror("Error reading from port 1");
+    }
+
+    // Read data from port 2
+    int bytes_read2 = read(port_rx2, buffer2, sizeof(buffer2));
+    if (bytes_read2 < 0) {
+      perror("Error reading from port 2");
+    }
+
+    // Check if data was received from both ports
+    if (bytes_read1 > 0 && bytes_read2 > 0) {
+      // Process and transmit combined data
+      process_and_transmit(buffer1, buffer2, port_tx);
+    } else {
+      // Handle cases where only one port has data or no data
+      // (Optional: implement logic to handle partial data or no data)
+    }
+  }
+////////////////////// one thread /////////////////////////////////////////
+
+  // Close serial ports (unreachable in this loop)
+  close(port_rx1);
+  close(port_rx2);
+  close(port_tx);
+
+  return 0;
+}
+
+// Open serial port with basic settings
+int open_serial_port(const char *port_name) {
+  int fd = open(port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
+  if (fd < 0) {
+    return -1;
+  }
+
+  // Configure port settings (adjust as needed)
+  struct termios options;
+  tcgetattr(fd, &options);
+  cfsetispeed(&options, B9600);
+  cfsetospeed(&options, B9600);
+  options.c_cflag &= ~PARENB;
+  options.c_cflag &= ~CSTOPB;
+  options.c_cflag &= ~CSIZE;
+  options.c_cflag |= CS8;
+  options.c_cflag &= ~CRTSCTS;
+  options.c_cflag |= (CREAD | CLOCAL);
+  options.c_lflag &= ~ICANON;
+  options.c_lflag &= ~ECHO;
+  options.c_iflag &= ~(IXON | IXOFF | IXANY);
+  options.c_cc[VMIN] = 1;
+  options.c_cc[VTIME] = 0;
+  tcsetattr(fd, TCSANOW, &options);
+
+  return fd;
+}
+
+// Function to process and transmit combined data (replace with your logic)
+void process_and_transmit(char *data1, char *data2, int port_tx) {
+  // Combine data (e.g., concatenate or interleave)
+  // ... (

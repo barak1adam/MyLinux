@@ -1,0 +1,211 @@
+login as root (how to block it?)
+ ssh -p 614 root@<ip>
+ 
+to enter to DTE:
+===============
+aosCoreDteConsole
+
+go /debug/aosFwHal
+?
+
+help <cmd>
+
+go adva.hbmcard.xg490
+
+to enter the CLI: 
+==================
+aosFwCliProxy
+
+
+login: admin
+password: CHGME.1a
+
+
+config node:
+------------
+config
+
+set - used to configure things
+run - like "do", to do things from operational node
+run execute ..
+run show ..
+
+example:
+run show interface 1/1/p1/fp-200 detail
+
+commit  - to commit changes, e.g to activate and save them
+
+to see what was configured (without showing the default values)
+---------------------------------------------------------------
+run execute config-script generate filename <filename>
+
+example:
+run execute config-script generate filename 2
+run show config-script file 2
+
+operational node:
+------------------
+run is not needed, can type directly execute or show
+
+example:
+show interface 1/1/p1/fp-200 detail
+
+
+
+Upgrade SW version (3 steps):
+=============================
+ 
+configure
+ 
+run execute software copy-package-from server-type ip-address server-ip-address 10.32.23.3 user-id nbase filename /home/nbase/XG400/24.1.1/f4-xg490-base-24.1.1-arm8-64bit.tar.bz2.pak protocol scp password nbase
+ 
+run execute software install -----install software after copy
+ 
+run execute software activate activate-now true  -----activate software after install
+
+how to delete any configurations? (factory defaults)
+=====================================================
+ 
+ 
+Upgrade SW version (1 step):
+=============================
+ 
+run execute software single-step-upgrade server-type ip-address server-ip-address 10.35.111.5 protocol tftp filename f4-xg400-23.5.1-20240323.161958-1208.pak activate-now true | progress
+
+
+after rebooted:
+===============
+from the Linux Shell prompt, please restore the database to defaults by entering the following 2 commands:
+
+aosCoreSrdmDbMaintLauncher
+execute database restore-factory-database
+
+
+GUI to CLI:
+===========
+I configured one fp with VLAN 200 on the GUI, then got it on the CLI:
+
+set interface 1/1/p1/fp-200 admin is default-member-enabled false untagged-membership-enabled false vlan-membership "200" c-tag-control none s-tag-control none egress-shaping-type flow-based >>
+  set split-horizon-group shgid None
+  set prio-mapping ingress-prio-map-profile "default" egress-prio-map-profile None ingress-pcp-remarking-profile None
+  set mcos mcos-enabled false
+  set l2cp l2cp-profile "default"
+  set e-lmi evc-identifier ""
+  set wfq qid 0 eir 0 prio 0
+  set hcos enabled false guarantee-bw 0 max-bw 0
+  done
+
+
+Config examples on CLI:
+=======================
+config
+set interface 1/1/p1 admin oos
+set interface 1/1/p1/eth mac ingress-service-type service-multiplexing
+set interface 1/1/p1 admin is
+set interface 1/1/p1/fp-1 vlan-membership 60
+set interface 1/1/p1/fp-1 queue type tm cos 0 bw-profile "100G" buffersize-profile "default"
+set interface 1/1/p1/fp-1 policer cos 0 profile "100G"
+set interface 1/1/p1/fp-1 admin is
+commit
+
+set interface 1/1/p9 admin oos
+set interface 1/1/p9/eth mac ingress-service-type service-multiplexing
+set interface 1/1/p9 admin is
+set interface 1/1/p9/fp-1 vlan-membership 60
+set interface 1/1/p9/fp-1 queue type tm cos 0 bw-profile "100G" buffersize-profile "default"
+set interface 1/1/p9/fp-1 policer cos 0 profile "100G"
+set interface 1/1/p9/fp-1 admin is
+commit
+
+set connection eth/flow-1 tp-list 1/1/p1/fp-1,1/1/p9/fp-1;
+commit
+
+
+rollback example:
+------------------ 
+set interface 1/1/p5/fp-60 vlan-membership 60 admin is
+set interface 1/1/p5/fp-60 queue type tm cos 0 bw-profile 1G buffersize-profile default
+set interface 1/1/p5/fp-60 policer cos 0 profile 1G
+rollback
+
+delete examples:
+----------------
+delete a flow point (if it is "enabled" meanning admin = in service (is)):
+ 
+set interface 1/1/p5/fp-100 vlan-membership 100 admin is
+set interface 1/1/p5/fp-100 policer cos 0 profile 1G
+set interface 1/1/p5/fp-100 queue cos 0 type tm buffersize-profile default bw-profile 1G
+commit
+set interface 1/1/p5/fp-100 admin oos
+delete interface 1/1/p5/fp-100
+commit
+ 
+delete a flow point (if it is "disabled" meanning admin = out of service (oos)):
+ 
+set interface 1/1/p5/fp-100 vlan-membership 100
+set interface 1/1/p5/fp-100 policer cos 0 profile 1G
+set interface 1/1/p5/fp-100 queue cos 0 type tm buffersize-profile default bw-profile 1G
+commit
+delete interface 1/1/p5/fp-100
+commit
+ 
+delete a flow:
+set connection eth/flow-30 admin oos
+delete connection eth/flow-30
+commit
+
+example for p2p flow with cfm "up mep":
+------------------------------------------
+ 
+set interface 1/1/p1/eth mac ingress-service-type service-multiplexing
+set interface 1/1/p1 admin is
+commit
+ 
+set interface 1/1/p1/fp-30 vlan-membership 30 admin is
+set interface 1/1/p1/fp-30 queue type tm cos 0 bw-profile 1G buffersize-profile default
+set interface 1/1/p1/fp-30 policer cos 0 profile 1G
+commit
+ 
+set interface 1/1/p5/eth mac ingress-service-type service-multiplexing
+set interface 1/1/p5 admin is
+commit
+ 
+set interface 1/1/p5/fp-30 vlan-membership 30 admin is
+set interface 1/1/p5/fp-30 queue type tm cos 0 bw-profile 1G buffersize-profile default
+set interface 1/1/p5/fp-30 policer cos 0 profile 1G
+commit
+ 
+set connection eth/flow-30 tp-list 1/1/p1/fp-30,1/1/p5/fp-30 snc-type p2p-flow admin is
+commit
+ 
+set cfm-system md 1 sender-id-control none md-level 1 mip-creation-control default name no-name
+set cfm-system md 1 ma 30 ccm-interval 10s mep-id-list 1,2 name uint16 30
+set cfm-system md 1 ma 30 macomp component-id 1/1/p1/eth primary-vid 30 mip-creation-control default sender-id-control none flowpoint 1/1/p1/fp-30
+set mep 1/30/1 ccm-ltm-priority 0 interface 1/1/p1/eth primary-vid 30 direction up
+commit
+
+
+
+
+
+
+General info:
+==============
+Reuven:
+each port has 8 queues
+each protocol has 4 strict queues ?
+
+policers = mef 10.3 policers
+used to control QoS (drops on congestion) on ingress
+
+shapers
+service levels used to control the QoS (drops on congestion) on egress
+every port has 8 output (tx) queues, one per pcp (0-7)
+default mapping is between pcp values to tx queues (0 to q1 ,1 to q2, ...)
+service levels are used to change the default mappings
+or to map frames to queues according to other criterias like ip dscp / tos, and so on.
+
+loopback - 
+
+facility - to loop the frames immediately on the port level without processing it
+terminal - to loop it after it is fully processed. for example i want to check if the problem is during processing or if you need the processing to loop it back for example with different mpls label.

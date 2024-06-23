@@ -1,0 +1,182 @@
+aos boot:
+
+Russell:
+========
+
+[2/9 5:56 PM] Barak Adam
+So, when doing SW upgrade in AOS, it updates a value in the EEPROM inventory to detect whether to boot from the active or standby bank of SW in the next time.
+Then, after a reboot, the u-boot reads that flag and is using bootagrs to boot from the desired partition.
+For example it sets the arguments for the bootcmd to boot from active/cs partition or from the standby/cs partition.
+ 
+anyway, in that cs partitions there is a cs_script that is then called and boot the kernel / dtb / initramfs from the desired boot partition.
+besides the cs_script, in that cs partitions, there is also a cs_tab file.
+ 
+I found out that the initramfs logic (cs_init, ir_init) is based on that cs_tab - depends on the content and active flags in this list, the desired AOS partitions will get mounted.
+ 
+I played with that cs_tab files and verified that once the content of this file is changed, I get the desired set of partitions mounted as I expect.
+ 
+but the problem is that we have the same cs_tab file (the same content) in both active and standby partitions, so we always get the same partitions mounted. do you know where is the place to affect this cs_tab and to generate different cs_tab files for active and standby?
+Maoz tried to look into the deply hooks, I think into a function install_cs_content. is it the right place?
+ 
+I know your system is NAND and UBI based, but I am trying just to understand the general idea.
+[2/9 6:00 PM] Russell Neeper
+I haven't looked at this area recently but I believe that the cs_tab file is the same on active and standby.  Both the active and standby partitions are listed with the "all" flag indicating which are active and which are standby 
+[2/9 6:01 PM] Russell Neeper
+The single common partitions have "true" in the first field and are mounted for either partition group.
+[2/9 6:02 PM] Russell Neeper
+all=0    /dev/ubi0_1     cs         ubifs    ro
+
+all=0    /dev/ubi0_2     boot       ubifs    ro
+
+all=0    /dev/ubi0_3     modules    ubifs    ro
+
+all=0    /dev/ubi0_4     main       ubifs    ro
+
+all=0    /dev/ubi0_5     rwd        ubifs    rw
+
+all=0    /dev/ubi0_6     adva       ubifs    ro
+
+all=0    /dev/ubi0_7     rwda       ubifs    rw
+
+all=1    /dev/ubi0_8     cs         ubifs    ro
+
+all=1    /dev/ubi0_9     boot       ubifs    ro
+
+all=1    /dev/ubi0_10    modules    ubifs    ro
+
+all=1    /dev/ubi0_11    main       ubifs    ro
+
+all=1    /dev/ubi0_12    rwd        ubifs    rw
+
+all=1    /dev/ubi0_13    adva       ubifs    ro
+
+all=1    /dev/ubi0_14    rwda       ubifs    rw
+
+true     /dev/ubi0_15    staging    ubifs    rw
+
+true     /dev/ubi0_16    common     ubifs    rw
+
+[2/9 6:02 PM] Barak Adam
+Yep exactly.
+[2/9 6:02 PM] Russell Neeper
+all=0 is one partition group, all=1 is the other
+[2/9 6:02 PM] Russell Neeper
+which is active and which is standby is determined by the flag in the physical inventory
+[2/9 6:03 PM] Barak Adam
+yep, so once you swap the 1 and 0 values, then you get the other bank mounted...
+that's exactly what i tried
+[2/9 6:03 PM] Russell Neeper
+so I don't understand when you say you want a different cs_tab on active than on standby.  they should be the same.
+[2/9 6:03 PM] Russell Neeper
+you don't swap the 1 and 0 values.  you change the flag in physical inventory
+[2/9 6:04 PM] Russell Neeper
+at least that's the way I remember it when I looked at this during initial setup, which has been a while.
+[2/9 6:05 PM] Barak Adam
+I generated 2 different cs_tabs, with that "all" values swapped...
+[2/9 6:05 PM] Russell Neeper
+The "active" field in physical inventory is 1 based so should be set to either "1" or "2"
+
+[2/9 6:05 PM] Barak Adam
+I understand
+[2/9 6:05 PM] Russell Neeper
+swapping the all values is not the correct way to switch active standby partition groups
+[2/9 6:06 PM] Barak Adam
+I see
+[2/9 6:06 PM] Russell Neeper
+I can point you to the source code for the "init" program that runs in the initramfs if you want
+[2/9 6:06 PM] Russell Neeper
+not my code by the way
+[2/9 6:07 PM] Barak Adam
+what is u-boot argument used to hold this value? my u-boot is not aligned yet to AOS so I will have to set it manually
+[2/9 6:07 PM] Russell Neeper
+I have also been told that there is a design issue on the xo board that prevents reading physical inventory before loading the fpga.
+[2/9 6:08 PM] Barak Adam
+yes, that's another reason why I am doing it "manually" now
+[2/9 6:08 PM] Barak Adam
+Russell Neeper
+I can point you to the source code for the "init" program that runs in the initramfs if you want
+cs_init?
+[2/9 6:09 PM] Russell Neeper
+the kernel command line for the 118csh looks like this:
+ubi.mtd=ubi panic=5 cs.0=/dev/ubi0_1 cs.1=/dev/ubi0_8 csfs=ubifs csmo=ro sw.all=1 sb=0 craft=115200
+[2/9 6:10 PM] Russell Neeper
+the cs.0 and cs.1 parameters specify the root filesystems.  the sw.all=1 is the active group to use
+[2/9 6:10 PM] Russell Neeper
+so, set sw.all=0 or sw.all=1.  I think it's zero based.
+[2/9 6:11 PM] Barak Adam
+so cs.0 and cs.1 are fixed and what is changed is the sw.all?
+[2/9 6:11 PM] Russell Neeper
+yes,  cs.0=/dev/ubi0_1 cs.1=/dev/ubi0_8 are fixed I believe.  only the sw.all=X changes
+[2/9 6:14 PM] Barak Adam
+I will try that
+[2/9 6:15 PM] Barak Adam
+I didn't notice about that sw.all boot parameter...
+[2/9 6:15 PM] Russell Neeper
+I just verified that sw.all=X is zero based.  Use 0 or 1.
+[2/9 6:15 PM] Barak Adam
+Yep, Thanks Russel !
+
+[2/9 6:15 PM] Russell Neeper
+that selects which set of partitions to use in the cs_tab
+[2/9 6:15 PM] Russell Neeper
+[2/9 6:17 PM] Barak Adam
+if you have a quick reference to that piece of code that is looking onto this sw.all value, I will be glad.
+I guess it is in cs_init.  Only if this is a quick action for you, please no need to invest time there...
+[2/9 6:19 PM] Russell Neeper
+let me find which repo it's in again.  one sec...
+[2/9 6:20 PM] Barak Adam
+aos-ne-os
+[2/9 6:20 PM] Russell Neeper
+yep. under src/cs
+[2/9 6:21 PM] Russell Neeper
+be warned, it's messy code and no comments
+[2/9 6:21 PM] Russell Neeper
+again, not my code
+[2/9 6:23 PM] Russell Neeper
+I did however have to modify it to support secure boot on the xg118procsh.  So for now we have a local copy in our product repo.
+[2/9 6:24 PM] Barak Adam
+Yep, I remember you had a local copy
+[2/9 6:24 PM] Barak Adam
+it's ok Thanks Russel
+[2/9 6:25 PM] Barak Adam
+Russell
+[2/9 6:25 PM] Barak Adam
+I am trying now
+[2/9 6:48 PM] Barak Adam
+it's not working for me yet
+[2/9 6:48 PM] Barak Adam
+but I got to leave now, I will try again later
+[2/9 6:48 PM] Barak Adam
+keep you updated
+[2/9 6:48 PM] Russell Neeper
+ok
+[2/9 7:00 PM] Russell Neeper
+I told you something that was incorrect.  The kernel command line args cs.0= and cs.1= should point to the active and standby cs partitions.  not the root partitions.  that could be your issue if you are specifying the root partitions.  sorry about that. 
+[2/9 10:22 PM] Barak Adam
+I tried again carefully, it all works
+[2/9 10:22 PM] Barak Adam
+Thanks again Russell !
+[2/9 10:22 PM] Russell Neeper
+great!
+[2/9 10:22 PM] Barak Adam
+it was very helpful
+
+Maci
+
+Eran:
+[9/28 11:56 AM] Eran Agmon
+So, I wandered thorough everything I have to get a clue on you 'gentoo question'.  I have some info  
+[9/28 11:57 AM] Eran Agmon
+gentoo is eventually in the EDE
+[9/28 11:58 AM] Eran Agmon
+As far as I understand it get's there from a repo called ede-build found on gerrit
+[9/28 11:58 AM] Eran Agmon
+all the EDE construction and code distribution seems to be controlled from Jfrog
+[9/28 12:00 PM] Eran Agmon
+For example,  distro network tools are found under  ede-build/lrs/template/usr/portages/targ-manual/net-misc/  in  ede-build repo
+[9/28 12:01 PM] Eran Agmon
+for 'curl' you have a file named ./ede-build/lrs/template/usr/portages/targ-manual/net-misc/curl/curl-7.74.0-r2.ebuild 
+[9/28 12:01 PM] Eran Agmon
+that takes care to bring it
+[9/28 12:01 PM] Eran Agmon
+cat ./ede-build/lrs/template/usr/portages/targ-manual/net-misc/curl/curl-7.74.0-r2.ebuild 

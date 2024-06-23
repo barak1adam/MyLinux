@@ -1,0 +1,447 @@
+On branch master
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	deleted:    etc/ede/powerpc64-e5500-linux-gnu.txt
+	deleted:    etc/env.d/binutils/config-powerpc-e500v2-linux-gnu
+	deleted:    etc/env.d/binutils/config-powerpc64-e5500-linux-gnu
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-addr2line
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-ar
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-as
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-c++filt
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-dwp
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-elfedit
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-gprof
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-ld
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-ld.bfd
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-ld.gold
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-nm
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-objcopy
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-objdump
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-ranlib
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-readelf
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-size
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-strings
+	deleted:    usr/bin/armv7a-hardfloat-linux-gnueabi-strip
+	deleted:    usr/bin/i686-vm-linux-gnu-addr2line
+	deleted:    usr/bin/i686-vm-linux-gnu-ar
+	deleted:    usr/bin/i686-vm-linux-gnu-as
+	deleted:    usr/bin/i686-vm-linux-gnu-c++filt
+	deleted:    usr/bin/i686-vm-linux-gnu-dwp
+	deleted:    usr/bin/i686-vm-linux-gnu-elfedit
+	deleted:    usr/bin/i686-vm-linux-gnu-gprof
+	deleted:    usr/bin/i686-vm-linux-gnu-ld
+	deleted:    usr/bin/i686-vm-linux-gnu-ld.bfd
+	deleted:    usr/bin/i686-vm-linux-gnu-ld.gold
+	deleted:    usr/bin/i686-vm-linux-gnu-nm
+	deleted:    usr/bin/i686-vm-linux-gnu-objcopy
+	deleted:    usr/bin/i686-vm-linux-gnu-objdump
+	deleted:    usr/bin/i686-vm-linux-gnu-ranlib
+	deleted:    usr/bin/i686-vm-linux-gnu-readelf
+	deleted:    usr/bin/i686-vm-linux-gnu-size
+	deleted:    usr/bin/i686-vm-linux-gnu-strings
+	deleted:    usr/bin/i686-vm-linux-gnu-strip
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-addr2line
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-ar
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-as
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-c++filt
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-dwp
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-elfedit
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-embedspu
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-gprof
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-ld
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-ld.bfd
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-ld.gold
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-nm
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-objcopy
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-objdump
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-ranlib
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-readelf
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-size
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-strings
+	deleted:    usr/bin/powerpc-e500v2-linux-gnu-strip
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-addr2line
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-ar
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-as
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-c++filt
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-dwp
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-elfedit
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-embedspu
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-gprof
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-ld
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-ld.bfd
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-ld.gold
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-nm
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-objcopy
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-objdump
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-ranlib
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-readelf
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-size
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-strings
+	deleted:    usr/bin/powerpc64-e5500-linux-gnu-strip
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/addr2line
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/ar
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/as
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/c++filt
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/dwp
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/elfedit
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/gprof
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/ld
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/ld.bfd
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/ld.gold
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/nm
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/objcopy
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/objdump
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/ranlib
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/readelf
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/size
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/strings
+	deleted:    usr/libexec/gcc/armv7a-hardfloat-linux-gnueabi/strip
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/addr2line
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/ar
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/as
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/c++filt
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/dwp
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/elfedit
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/gprof
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/ld
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/ld.bfd
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/ld.gold
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/nm
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/objcopy
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/objdump
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/ranlib
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/readelf
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/size
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/strings
+	deleted:    usr/libexec/gcc/i686-vm-linux-gnu/strip
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/addr2line
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/ar
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/as
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/c++filt
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/dwp
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/elfedit
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/embedspu
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/gprof
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/ld
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/ld.bfd
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/ld.gold
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/nm
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/objcopy
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/objdump
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/ranlib
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/readelf
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/size
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/strings
+	deleted:    usr/libexec/gcc/powerpc-e500v2-linux-gnu/strip
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/addr2line
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/ar
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/as
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/c++filt
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/dwp
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/elfedit
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/embedspu
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/gprof
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/ld
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/ld.bfd
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/ld.gold
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/nm
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/objcopy
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/objdump
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/ranlib
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/readelf
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/size
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/strings
+	deleted:    usr/libexec/gcc/powerpc64-e5500-linux-gnu/strip
+	deleted:    usr/portages/host-archeo/cross-powerpc-e500v2-linux-gnu/binutils
+	deleted:    usr/portages/host-archeo/cross-powerpc-e5500-linux-gnu/binutils
+	deleted:    usr/portages/host-archeo/cross-powerpc64-e5500-linux-gnu/binutils
+	deleted:    usr/portages/targ-manual/profiles/eos/armv7a-hardfloat-linux-gnueabi/make.defaults
+	deleted:    usr/portages/targ-manual/profiles/eos/armv7a-hardfloat-linux-gnueabi/parent
+	deleted:    usr/portages/targ-manual/profiles/eos/i686-vm-linux-gnu/make.defaults
+	deleted:    usr/portages/targ-manual/profiles/eos/i686-vm-linux-gnu/parent
+	deleted:    usr/portages/targ-manual/profiles/eos/powerpc-e500v2-linux-gnu/make.defaults
+	deleted:    usr/portages/targ-manual/profiles/eos/powerpc-e500v2-linux-gnu/parent
+	deleted:    usr/portages/targ-manual/profiles/eos/powerpc64-e5500-linux-gnu/make.defaults
+	deleted:    usr/portages/targ-manual/profiles/eos/powerpc64-e5500-linux-gnu/parent
+	modified:   usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/7.5.0/aarch64-linux-gnu-c++
+	modified:   usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/7.5.0/aarch64-linux-gnu-cpp
+	modified:   usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/7.5.0/aarch64-linux-gnu-g++
+	modified:   usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/7.5.0/aarch64-linux-gnu-gcc
+	modified:   usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-c++
+	modified:   usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-cpp
+	modified:   usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-g++
+	modified:   usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/armv5tel-softfloat-linux-gnueabi/gcc-bin/7.5.0/armv5tel-softfloat-linux-gnueabi-c++
+	deleted:    usr/x86_64-pc-linux-gnu/armv5tel-softfloat-linux-gnueabi/gcc-bin/7.5.0/armv5tel-softfloat-linux-gnueabi-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/armv5tel-softfloat-linux-gnueabi/gcc-bin/7.5.0/armv5tel-softfloat-linux-gnueabi-g++
+	deleted:    usr/x86_64-pc-linux-gnu/armv5tel-softfloat-linux-gnueabi/gcc-bin/7.5.0/armv5tel-softfloat-linux-gnueabi-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/armv5tel-softfloat-linux-gnueabi/gcc-bin/8.4.0/armv5tel-softfloat-linux-gnueabi-c++
+	deleted:    usr/x86_64-pc-linux-gnu/armv5tel-softfloat-linux-gnueabi/gcc-bin/8.4.0/armv5tel-softfloat-linux-gnueabi-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/armv5tel-softfloat-linux-gnueabi/gcc-bin/8.4.0/armv5tel-softfloat-linux-gnueabi-g++
+	deleted:    usr/x86_64-pc-linux-gnu/armv5tel-softfloat-linux-gnueabi/gcc-bin/8.4.0/armv5tel-softfloat-linux-gnueabi-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.5.0/armv7a-hardfloat-linux-gnueabi-c++
+	deleted:    usr/x86_64-pc-linux-gnu/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.5.0/armv7a-hardfloat-linux-gnueabi-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.5.0/armv7a-hardfloat-linux-gnueabi-g++
+	deleted:    usr/x86_64-pc-linux-gnu/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.5.0/armv7a-hardfloat-linux-gnueabi-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/armv7a-hardfloat-linux-gnueabi/gcc-bin/8.4.0/armv7a-hardfloat-linux-gnueabi-c++
+	deleted:    usr/x86_64-pc-linux-gnu/armv7a-hardfloat-linux-gnueabi/gcc-bin/8.4.0/armv7a-hardfloat-linux-gnueabi-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/armv7a-hardfloat-linux-gnueabi/gcc-bin/8.4.0/armv7a-hardfloat-linux-gnueabi-g++
+	deleted:    usr/x86_64-pc-linux-gnu/armv7a-hardfloat-linux-gnueabi/gcc-bin/8.4.0/armv7a-hardfloat-linux-gnueabi-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/armv7a-hardfloat-linux-gnueabi/lib/ldscripts
+	deleted:    usr/x86_64-pc-linux-gnu/i686-vm-linux-gnu/gcc-bin/7.5.0/i686-vm-linux-gnu-c++
+	deleted:    usr/x86_64-pc-linux-gnu/i686-vm-linux-gnu/gcc-bin/7.5.0/i686-vm-linux-gnu-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/i686-vm-linux-gnu/gcc-bin/7.5.0/i686-vm-linux-gnu-g++
+	deleted:    usr/x86_64-pc-linux-gnu/i686-vm-linux-gnu/gcc-bin/7.5.0/i686-vm-linux-gnu-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/i686-vm-linux-gnu/gcc-bin/8.4.0/i686-vm-linux-gnu-c++
+	deleted:    usr/x86_64-pc-linux-gnu/i686-vm-linux-gnu/gcc-bin/8.4.0/i686-vm-linux-gnu-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/i686-vm-linux-gnu/gcc-bin/8.4.0/i686-vm-linux-gnu-g++
+	deleted:    usr/x86_64-pc-linux-gnu/i686-vm-linux-gnu/gcc-bin/8.4.0/i686-vm-linux-gnu-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/i686-vm-linux-gnu/lib/ldscripts
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e500v2-linux-gnu/gcc-bin/7.5.0/powerpc-e500v2-linux-gnu-c++
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e500v2-linux-gnu/gcc-bin/7.5.0/powerpc-e500v2-linux-gnu-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e500v2-linux-gnu/gcc-bin/7.5.0/powerpc-e500v2-linux-gnu-g++
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e500v2-linux-gnu/gcc-bin/7.5.0/powerpc-e500v2-linux-gnu-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e500v2-linux-gnu/gcc-bin/8.4.0/powerpc-e500v2-linux-gnu-c++
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e500v2-linux-gnu/gcc-bin/8.4.0/powerpc-e500v2-linux-gnu-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e500v2-linux-gnu/gcc-bin/8.4.0/powerpc-e500v2-linux-gnu-g++
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e500v2-linux-gnu/gcc-bin/8.4.0/powerpc-e500v2-linux-gnu-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e500v2-linux-gnu/lib/ldscripts
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e5500-linux-gnu/gcc-bin/7.5.0/powerpc-e5500-linux-gnu-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e5500-linux-gnu/gcc-bin/7.5.0/powerpc-e5500-linux-gnu-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e5500-linux-gnu/gcc-bin/8.4.0/powerpc-e5500-linux-gnu-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc-e5500-linux-gnu/gcc-bin/8.4.0/powerpc-e5500-linux-gnu-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc64-e5500-linux-gnu/gcc-bin/7.5.0/powerpc64-e5500-linux-gnu-c++
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc64-e5500-linux-gnu/gcc-bin/7.5.0/powerpc64-e5500-linux-gnu-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc64-e5500-linux-gnu/gcc-bin/7.5.0/powerpc64-e5500-linux-gnu-g++
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc64-e5500-linux-gnu/gcc-bin/7.5.0/powerpc64-e5500-linux-gnu-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc64-e5500-linux-gnu/gcc-bin/8.4.0/powerpc64-e5500-linux-gnu-c++
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc64-e5500-linux-gnu/gcc-bin/8.4.0/powerpc64-e5500-linux-gnu-cpp
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc64-e5500-linux-gnu/gcc-bin/8.4.0/powerpc64-e5500-linux-gnu-g++
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc64-e5500-linux-gnu/gcc-bin/8.4.0/powerpc64-e5500-linux-gnu-gcc
+	deleted:    usr/x86_64-pc-linux-gnu/powerpc64-e5500-linux-gnu/lib/ldscripts
+	modified:   usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/7.5.0/x86_64-vm-linux-gnu-c++
+	modified:   usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/7.5.0/x86_64-vm-linux-gnu-cpp
+	modified:   usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/7.5.0/x86_64-vm-linux-gnu-g++
+	modified:   usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/7.5.0/x86_64-vm-linux-gnu-gcc
+	modified:   usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-c++
+	modified:   usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-cpp
+	modified:   usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-g++
+	modified:   usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-gcc
+	modified:   var/cache/edb/counter
+	modified:   var/cache/edb/mtimedb
+	modified:   var/cache/edb/vdb_blockers.pickle
+	modified:   var/cache/edb/vdb_metadata.pickle
+	modified:   var/cache/edb/vdb_metadata_delta.json
+	deleted:    var/cache/ldconfig/aux-cache
+	modified:   var/lib/portage/world
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	etc/ede/Manifest.combo
+	etc/ede/modules/.configured
+	etc/ede/modules/arch--aarch64-linux-gnu/Manifest.combo
+	etc/ede/modules/arch--aarch64-linux-gnu/wanted
+	etc/ede/modules/arch--x86_64-vm-linux-gnu/Manifest.combo
+	etc/ede/modules/arch--x86_64-vm-linux-gnu/wanted
+	etc/ede/modules/portage/Manifest.combo
+	etc/ede/modules/portage/wanted
+	etc/ede/modules/prod--vm64/Manifest.combo
+	etc/ede/modules/prod-devel--vm64/Manifest.combo
+	etc/ede/modules/tool--libguestfs-appliance/Manifest.combo
+	etc/ede/modules/x--jfrog/wanted
+	etc/ede/verinfo/
+	etc/env.d/binutils/aarch64-linux-gnu-2.35
+	etc/env.d/binutils/config-aarch64-linux-gnu
+	etc/env.d/binutils/config-x86_64-vm-linux-gnu
+	etc/env.d/binutils/x86_64-vm-linux-gnu-2.35
+	etc/env.d/gcc/aarch64-linux-gnu-7.5.0
+	etc/env.d/gcc/aarch64-linux-gnu-8.4.0
+	etc/env.d/gcc/config-aarch64-linux-gnu
+	etc/env.d/gcc/config-x86_64-vm-linux-gnu
+	etc/env.d/gcc/x86_64-vm-linux-gnu-7.5.0
+	etc/env.d/gcc/x86_64-vm-linux-gnu-8.4.0
+	etc/portage/categories
+	etc/portage/env/
+	etc/portage/package.accept_keywords/cross-aarch64-linux-gnu
+	etc/portage/package.accept_keywords/cross-x86_64-vm-linux-gnu
+	etc/portage/package.env/
+	etc/portage/package.mask/cross-aarch64-linux-gnu
+	etc/portage/package.mask/cross-x86_64-vm-linux-gnu
+	etc/portage/package.use/cross-aarch64-linux-gnu
+	etc/portage/package.use/cross-x86_64-vm-linux-gnu
+	etc/portage/profile/
+	etc/revdep-rebuild/05cross-aarch64-linux-gnu
+	etc/revdep-rebuild/05cross-aarch64-linux-gnu-7.5.0
+	etc/revdep-rebuild/05cross-aarch64-linux-gnu-8.4.0
+	etc/revdep-rebuild/05cross-x86_64-vm-linux-gnu
+	etc/revdep-rebuild/05cross-x86_64-vm-linux-gnu-7.5.0
+	etc/revdep-rebuild/05cross-x86_64-vm-linux-gnu-8.4.0
+	opt/jfrog/
+	targ/
+	usr/aarch64-linux-gnu
+	usr/bin/aarch64-linux-gnu-c++
+	usr/bin/aarch64-linux-gnu-c++-7.5.0
+	usr/bin/aarch64-linux-gnu-c++-8.4.0
+	usr/bin/aarch64-linux-gnu-cpp
+	usr/bin/aarch64-linux-gnu-cpp-7.5.0
+	usr/bin/aarch64-linux-gnu-cpp-8.4.0
+	usr/bin/aarch64-linux-gnu-emerge
+	usr/bin/aarch64-linux-gnu-fix-root
+	usr/bin/aarch64-linux-gnu-g++
+	usr/bin/aarch64-linux-gnu-g++-7.5.0
+	usr/bin/aarch64-linux-gnu-g++-8.4.0
+	usr/bin/aarch64-linux-gnu-gcc
+	usr/bin/aarch64-linux-gnu-gcc-7.5.0
+	usr/bin/aarch64-linux-gnu-gcc-8.4.0
+	usr/bin/aarch64-linux-gnu-gcc-ar
+	usr/bin/aarch64-linux-gnu-gcc-nm
+	usr/bin/aarch64-linux-gnu-gcc-ranlib
+	usr/bin/aarch64-linux-gnu-gcov
+	usr/bin/aarch64-linux-gnu-gcov-7.5.0
+	usr/bin/aarch64-linux-gnu-gcov-8.4.0
+	usr/bin/aarch64-linux-gnu-gcov-dump
+	usr/bin/aarch64-linux-gnu-gcov-tool
+	usr/bin/aarch64-linux-gnu-gfortran
+	usr/bin/aarch64-linux-gnu-gfortran-8.4.0
+	usr/bin/aarch64-linux-gnu-pkg-config
+	usr/bin/emerge-aarch64-linux-gnu
+	usr/bin/emerge-x86_64-vm-linux-gnu
+	usr/bin/x86_64-vm-linux-gnu-c++
+	usr/bin/x86_64-vm-linux-gnu-c++-7.5.0
+	usr/bin/x86_64-vm-linux-gnu-c++-8.4.0
+	usr/bin/x86_64-vm-linux-gnu-cpp
+	usr/bin/x86_64-vm-linux-gnu-cpp-7.5.0
+	usr/bin/x86_64-vm-linux-gnu-cpp-8.4.0
+	usr/bin/x86_64-vm-linux-gnu-emerge
+	usr/bin/x86_64-vm-linux-gnu-fix-root
+	usr/bin/x86_64-vm-linux-gnu-g++
+	usr/bin/x86_64-vm-linux-gnu-g++-7.5.0
+	usr/bin/x86_64-vm-linux-gnu-g++-8.4.0
+	usr/bin/x86_64-vm-linux-gnu-gcc
+	usr/bin/x86_64-vm-linux-gnu-gcc-7.5.0
+	usr/bin/x86_64-vm-linux-gnu-gcc-8.4.0
+	usr/bin/x86_64-vm-linux-gnu-gcc-ar
+	usr/bin/x86_64-vm-linux-gnu-gcc-nm
+	usr/bin/x86_64-vm-linux-gnu-gcc-ranlib
+	usr/bin/x86_64-vm-linux-gnu-gcov
+	usr/bin/x86_64-vm-linux-gnu-gcov-7.5.0
+	usr/bin/x86_64-vm-linux-gnu-gcov-8.4.0
+	usr/bin/x86_64-vm-linux-gnu-gcov-dump
+	usr/bin/x86_64-vm-linux-gnu-gcov-tool
+	usr/bin/x86_64-vm-linux-gnu-gfortran
+	usr/bin/x86_64-vm-linux-gnu-gfortran-8.4.0
+	usr/bin/x86_64-vm-linux-gnu-pkg-config
+	usr/lib/ccache/bin/aarch64-linux-gnu-c++
+	usr/lib/ccache/bin/aarch64-linux-gnu-g++
+	usr/lib/ccache/bin/aarch64-linux-gnu-g++-7.5.0
+	usr/lib/ccache/bin/aarch64-linux-gnu-g++-8.4.0
+	usr/lib/ccache/bin/aarch64-linux-gnu-gcc
+	usr/lib/ccache/bin/aarch64-linux-gnu-gcc-7.5.0
+	usr/lib/ccache/bin/aarch64-linux-gnu-gcc-8.4.0
+	usr/lib/ccache/bin/clang
+	usr/lib/ccache/bin/clang++
+	usr/lib/ccache/bin/clang++-10
+	usr/lib/ccache/bin/clang-10
+	usr/lib/ccache/bin/i686-pc-linux-gnu-clang
+	usr/lib/ccache/bin/i686-pc-linux-gnu-clang++
+	usr/lib/ccache/bin/i686-pc-linux-gnu-clang++-10
+	usr/lib/ccache/bin/i686-pc-linux-gnu-clang-10
+	usr/lib/ccache/bin/x86_64-pc-linux-gnu-clang
+	usr/lib/ccache/bin/x86_64-pc-linux-gnu-clang++
+	usr/lib/ccache/bin/x86_64-pc-linux-gnu-clang++-10
+	usr/lib/ccache/bin/x86_64-pc-linux-gnu-clang-10
+	usr/lib/ccache/bin/x86_64-vm-linux-gnu-c++
+	usr/lib/ccache/bin/x86_64-vm-linux-gnu-g++
+	usr/lib/ccache/bin/x86_64-vm-linux-gnu-g++-7.5.0
+	usr/lib/ccache/bin/x86_64-vm-linux-gnu-g++-8.4.0
+	usr/lib/ccache/bin/x86_64-vm-linux-gnu-gcc
+	usr/lib/ccache/bin/x86_64-vm-linux-gnu-gcc-7.5.0
+	usr/lib/ccache/bin/x86_64-vm-linux-gnu-gcc-8.4.0
+	usr/lib/gcc/aarch64-linux-gnu/
+	usr/lib/gcc/x86_64-vm-linux-gnu/
+	usr/lib/python3.7/__pycache__/
+	usr/lib/python3.7/collections/__pycache__/
+	usr/lib/python3.7/encodings/__pycache__/
+	usr/lib/python3.7/site-packages/yaml/__pycache__/
+	usr/lib64/binutils/aarch64-linux-gnu/
+	usr/lib64/binutils/x86_64-vm-linux-gnu/
+	usr/libexec/gcc/aarch64-linux-gnu/7.5.0/
+	usr/libexec/gcc/aarch64-linux-gnu/8.4.0/
+	usr/libexec/gcc/x86_64-vm-linux-gnu/7.5.0/
+	usr/libexec/gcc/x86_64-vm-linux-gnu/8.4.0/
+	usr/portages/crossdev/
+	usr/portages/gentoo/
+	usr/portages/host-auto/net-misc/
+	usr/portages/host-auto/profiles/auto/
+	usr/portages/host-auto/sys-devel/
+	usr/portages/targ-auto/app-admin/
+	usr/portages/targ-auto/app-editors/
+	usr/portages/targ-auto/app-misc/
+	usr/portages/targ-auto/dev-embedded/
+	usr/portages/targ-auto/dev-libs/
+	usr/portages/targ-auto/dev-util/
+	usr/portages/targ-auto/net-analyzer/
+	usr/portages/targ-auto/net-dialup/
+	usr/portages/targ-auto/net-dns/
+	usr/portages/targ-auto/net-libs/
+	usr/portages/targ-auto/net-misc/
+	usr/portages/targ-auto/net-wireless/
+	usr/portages/targ-auto/profiles/auto/
+	usr/portages/targ-auto/sys-auth/
+	usr/portages/targ-auto/sys-boot/
+	usr/portages/targ-auto/sys-cluster/
+	usr/portages/targ-auto/sys-devel/
+	usr/portages/targ-auto/sys-fs/
+	usr/portages/targ-auto/sys-libs/
+	usr/portages/targ-auto/virtual/
+	usr/portages/targ-auto/www-servers/
+	usr/share/binutils-data/aarch64-linux-gnu/
+	usr/share/binutils-data/x86_64-vm-linux-gnu/
+	usr/share/gcc-data/aarch64-linux-gnu/
+	usr/share/gcc-data/x86_64-vm-linux-gnu/
+	usr/share/gdb/auto-load/usr/lib/gcc/aarch64-linux-gnu/
+	usr/share/gdb/auto-load/usr/lib/gcc/x86_64-vm-linux-gnu/
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/binutils-bin/
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/7.5.0/aarch64-linux-gnu-gcc-7.5.0
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/7.5.0/aarch64-linux-gnu-gcc-ar
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/7.5.0/aarch64-linux-gnu-gcc-nm
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/7.5.0/aarch64-linux-gnu-gcc-ranlib
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/7.5.0/aarch64-linux-gnu-gcov
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/7.5.0/aarch64-linux-gnu-gcov-dump
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/7.5.0/aarch64-linux-gnu-gcov-tool
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-gcc-8.4.0
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-gcc-ar
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-gcc-nm
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-gcc-ranlib
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-gcov
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-gcov-dump
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-gcov-tool
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/gcc-bin/8.4.0/aarch64-linux-gnu-gfortran
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/lib/7.5.0/
+	usr/x86_64-pc-linux-gnu/aarch64-linux-gnu/lib/8.4.0/
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/binutils-bin/
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/7.5.0/x86_64-vm-linux-gnu-gcc-7.5.0
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/7.5.0/x86_64-vm-linux-gnu-gcc-ar
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/7.5.0/x86_64-vm-linux-gnu-gcc-nm
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/7.5.0/x86_64-vm-linux-gnu-gcc-ranlib
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/7.5.0/x86_64-vm-linux-gnu-gcov
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/7.5.0/x86_64-vm-linux-gnu-gcov-dump
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/7.5.0/x86_64-vm-linux-gnu-gcov-tool
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-gcc-8.4.0
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-gcc-ar
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-gcc-nm
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-gcc-ranlib
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-gcov
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-gcov-dump
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-gcov-tool
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/gcc-bin/8.4.0/x86_64-vm-linux-gnu-gfortran
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/lib/7.5.0/
+	usr/x86_64-pc-linux-gnu/x86_64-vm-linux-gnu/lib/8.4.0/
+	usr/x86_64-vm-linux-gnu
+	var/cache/edb/dep/usr/portages/crossdev/
+	var/db/pkg/cross-aarch64-linux-gnu/
+	var/db/pkg/cross-x86_64-vm-linux-gnu/
+	var/ede/
+
+no changes added to commit (use "git add" and/or "git commit -a")
