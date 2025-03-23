@@ -1,0 +1,35 @@
+cold / warm reboot meeting with Raghav and Frank:
+=================================================
+
+the update about warm/cold is stored in CPLD regs.
+
+SIRM is reading it on init and send this info to all drivers init() funftions.
+
+All drivers will skip the relevant actions on warm reboot - the target is not to break customer services. 
+for cold any action is taken by the drivers
+
+the user reboot is considred a gracefull reboot  - synchronized.
+it calls the aosStop script and the shutdown () functions of the drivers.
+
+In shutdown, a driver can take acations that will be used after the warm reboot.
+
+For example in Qumran driver, the BCM settings are saved to a file and are restored after warm reboot without repplaying them to the HW, the HW is not touched.
+The driver is also calling detach() procedure to close all BCM services gracefully in the driver level only (not in HW !)
+
+examples: DevCpldxg490.cpp, DevQumran2c.cpp
+
+An issue was raised:
+--------------------
+if the SW is stuck and there a WD timer expires, then it is a kind of warm reboot, but not a gracefull one, but asynchronized.
+The BCM settings are not saved to file nor it is gracefully detached. 
+Then the u-boot identifes there was no successfull warm reboot and switching it to cold reboot.
+
+Need to:
+-------
+make sure on this WD timer reboot, to check the last boot cause and refer to it as a warm reboot.
+on any BCM action - save the settings to that file and keep it upated and not just upon the user warm reboot.
+
+Remember:
+---------
+Xg400SirmPlugIn.cpp - check the last reboot cause
+WD is enabled only in production mode

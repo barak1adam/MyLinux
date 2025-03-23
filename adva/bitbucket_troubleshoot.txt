@@ -2,6 +2,7 @@ bitbucket troubleshoot:
 
 how to enter recovery mode?
 ---------------------------
+login as mrv, password: YoramRan2016
 
 su atlbb
 cd ~

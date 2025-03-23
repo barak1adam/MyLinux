@@ -1,0 +1,44 @@
+# Grab active Vendor ID from usb driver
+tiva_driver_vendor_id="1cbe"
+tiva_driver_product_id="0003"
+
+usb_devices=$(ls /sys/bus/usb/devices)
+for d in $usb_devices; do
+    dev_folder=/sys/bus/usb/devices/$d
+    if [ -f $dev_folder/product ]; then
+        product=$(cat $dev_folder/product)
+        id_vendor=$(cat $dev_folder/idVendor)
+        id_product=$(cat $dev_folder/idProduct)
+        if [ -f $dev_folder/authorized_default ]; then
+            echo "FOUND HUB $d ($id_vendor:$id_product $product)"
+            echo 0 > $dev_folder/authorized_default
+        else
+            if [ "$id_vendor" = "$tiva_driver_vendor_id" ] && [ "$id_product" = "$tiva_driver_product_id" ]; then
+                echo "FOUND TIVA $d ($id_vendor:$id_product $product)"
+                echo 1 > $dev_folder/authorized
+            else
+                echo "FOUND $d ($id_vendor:$id_product $product)"
+                echo 0 > $dev_folder/authorized
+            fi
+        fi
+    fi
+done
+
+
+#enable back
+usb_devices=$(ls /sys/bus/usb/devices)
+for d in $usb_devices; do
+    dev_folder=/sys/bus/usb/devices/$d
+    if [ -f $dev_folder/product ]; then
+        product=$(cat $dev_folder/product)
+        id_vendor=$(cat $dev_folder/idVendor)
+        id_product=$(cat $dev_folder/idProduct)
+        if [ -f $dev_folder/authorized_default ]; then
+            echo "FOUND HUB $d ($id_vendor:$id_product $product)"
+            echo 1 > $dev_folder/authorized_default
+        else
+                echo "FOUND $d ($id_vendor:$id_product $product)"
+                echo 1 > $dev_folder/authorized
+        fi
+    fi
+done

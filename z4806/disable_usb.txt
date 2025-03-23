@@ -1,0 +1,86 @@
+unbind usb controllers (PCI and non PCI)
+========================================
+
+#!/bin/bash
+
+echo "Unbinding USB Controllers (PCI and Non-PCI):"
+echo "============================================"
+
+# Unbind PCI-based USB controllers
+echo "Processing PCI-Based USB Controllers..."
+for id in $(lspci | grep -i usb | awk '{print $1}'); do
+    PCI_PATH="/sys/bus/pci/devices/0000:$id"
+    DRIVER_PATH="$PCI_PATH/driver"
+
+    if [ -d $DRIVER_PATH ]; then
+        DRIVER=$(basename $(readlink $DRIVER_PATH))
+        echo "Unbinding PCI USB Controller 0000:$id (Driver: $DRIVER)..."
+        echo "0000:$id" > $DRIVER_PATH/unbind
+        echo "Unbound successfully."
+    else
+        echo "PCI USB Controller 0000:$id is not bound to any driver."
+    fi
+done
+
+# Unbind platform-based USB controllers
+echo
+echo "Processing Platform-Based USB Controllers..."
+for device in $(ls /sys/bus/platform/devices | grep -i usb); do
+    PLATFORM_PATH="/sys/bus/platform/devices/$device"
+    DRIVER_PATH="$PLATFORM_PATH/driver"
+
+    if [ -d $DRIVER_PATH ]; then
+        DRIVER=$(basename $(readlink $DRIVER_PATH))
+        echo "Unbinding Platform USB Controller $device (Driver: $DRIVER)..."
+        echo "$device" > $DRIVER_PATH/unbind
+        echo "Unbound successfully."
+    else
+        echo "Platform USB Controller $device is not bound to any driver."
+    fi
+done
+
+echo "Unbinding complete."
+
+
+enable back script:
+===================
+#!/bin/bash
+
+echo "Automatically Rebiding USB Controllers:"
+echo "========================================"
+
+for id in $(lspci | grep -i usb | awk '{print $1}'); do
+    echo "Processing USB Controller: $id"
+    lspci -s $id
+    PCI_PATH="/sys/bus/pci/devices/0000:$id"
+    DRIVER_PATH="$PCI_PATH/driver"
+
+    # Check if the controller is currently unbound
+    if [ ! -d $DRIVER_PATH ]; then
+        # Identify the driver for the controller
+        VENDOR=$(cat $PCI_PATH/vendor)
+        DEVICE=$(cat $PCI_PATH/device)
+        DRIVER_DIR="/sys/bus/pci/drivers"
+        
+        echo "Controller $id is not bound to any driver. Searching for a compatible driver..."
+        
+        # Look for a compatible driver
+        for driver in $(ls $DRIVER_DIR); do
+            if [ -f $DRIVER_DIR/$driver/new_id ]; then
+                echo $VENDOR $DEVICE > $DRIVER_DIR/$driver/new_id 2>/dev/null
+                if [ $? -eq 0 ]; then
+                    echo "Found compatible driver: $driver"
+                    echo "Binding $id to $driver..."
+                    echo "0000:$id" > $DRIVER_DIR/$driver/bind
+                    echo "Controller $id bound to $driver successfully."
+                    break
+                fi
+            fi
+        done
+    else
+        DRIVER=$(basename $(readlink $DRIVER_PATH))
+        echo "Controller $id is already bound to driver: $DRIVER"
+    fi
+
+    echo
+done

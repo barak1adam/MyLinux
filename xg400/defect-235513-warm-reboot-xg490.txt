@@ -1,0 +1,52 @@
+description:
+-------------
+bug on warm reboot
+happens on GUI/Serial/SSH
+there is a ping
+we had it before login (in dev mode)
+sometimes you can't type any input for user / password, so it's not related to login
+
+
+settings aspect:
+----------------
+
+no bug:
+without AOS, only Linux
+factory defaults
+no ptp license + no ptp settings
+
+
+--local time backward + full config
+--future time + default config
+isAnyValidLicense = FALSE + PTP node lock and then server
+
+bug:
+ptp + node lock licensing
+ptp + server licensing
+isAnyValidLicense = FALSE
+source clock = local + ptp licensing + ptp settings to work as slave but not used for date time
+
+
+under test:
+no LM process + no LM plugin
+source clock = local + ptp licensing  without other ptp settings
+
+more sw aspects:
+----------------
+24.1.1 1099 is good
+24.1.1 1110 is bad
+builds in-between make a different bug - invalid user name and password
+
+what to show:
+-------------
+logs 9 and 10 and the thread under product
+the lm monitoring debug messages with isAnyValidLicense = FALSE
+
+
+tests by SVT:
+=============
+1) date-time local, licnese ptp = node lock, no ptp clock/ports configured --------------> reproduced yesterday after 15 reboots.
+2) date-time local, licnese ptp = node lock, ptp-clock + ptp-port on physical port --------------- > not reproduced
+3) date-time local, licnese ptp = node lock, ptp-clock + ptp-port on lag port --------> under test
+
+
