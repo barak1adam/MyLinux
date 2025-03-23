@@ -37,7 +37,22 @@ So usually boot sequence is next: ROM code -> SPL -> u-boot -> kernel. (And actu
 
 https://stackoverflow.com/questions/31244862/what-is-the-use-of-spl-secondary-program-loader
 
-1) SPL is the u-boot part that is doing the function of FSBL (BL2), including the _f code and  relocation to DRAM.
+1) SPL is the u-boot part that is doing the function of FSBL (BL2).
+
+relocation for the u-boot is done by the u-boot itself and copies the u-boot from top of the DDR to its final location.
+_f fucntions - before relocation.
+_r functions - after relocation.
+
+for example: board_init_f()
+	Initialize essential hardware components required for U-Boot execution.
+	Set up console for early debugging, Configure DRAM controller.
+	Location: Defined in board/<vendor>/common/board_init.c or SoC-specific files.
+
+for example: board_init_r()
+	Runs after U-Boot relocates itself to RAM.
+	Initialize drivers for peripherals, set up networking, storage, and other interfaces.
+	Location: Typically found in common/board_r.c.
+	
 
 In our ZynqMP it is done by Xilinx FSBL and this part of u-boot is not in use.
 
