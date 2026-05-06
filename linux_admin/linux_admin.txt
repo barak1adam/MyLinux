@@ -333,3 +333,11 @@ sudo du -BM --max-depth=1
 
 # rounded to GBytes
 sudo du -BG --max-depth=1
+
+#The df -h command in Linux is used to display disk space usage in a human-readable format
+#df: Disk Free — shows disk space usage. 
+#can be applied to file or dir:
+df -h [options] [file]
+df -h /home
+df -h somefile
+df -h -x tmpfs //to exclude some FS type

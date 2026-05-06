@@ -1,0 +1,784 @@
+Yocto:
+======
+
+refernces:
+==========
+*Yocto - https://docs.yoctoproject.org/
+*bootlin slides
+*Kosta TOI document
+
+#what is Yocto
+===============
+It is a build system - Generates Linux distribution - Kernel, libs and utils
+It generates SDK for apps development. (we use the image-based sdk)
+Supports thousands of linux packages (~10000), including modern technologies (latest GCC 7.x, Linux Kernel, virtualization, dockers, gRPC, etc)
+The idea - Recipes organized in layers.
+
+The general use case:
+=====================
+*Yocto SDK is built for the specific HW, an image-based SDK.
+*This SDK is then installed by the developers on their host.
+	Upon installation, the SDK is self extracted and the cross compile env is set.
+*The application are easliy built in that env.
+*The target Yocto rootfs along with the appications compose the final image. 
+
+#the motivation for Yocto
+=========================
+*fully flexible, built from source, easy to add packages
+*embedded specific:
+	support cross compile, many CPU archetectures
+ 	embedded packages not inlcuded in desktops
+*A linux foundation project
+*open source
+*self-contained
+*bundle size was reduced within 100M
+*simplified process - same build for local and TC
+*supports QEMU
+
+Yocto is not a fixed set but a base of tools, fully flexible.
+
+#Cons:
+======
+*not easy learning curve
+*long build time - most of the build time is spent on building GCC toolchain and generic Linux
+packages. Currently, Yocto image that is used for Agema products contains around 300 packages
+
+#Yocto is OpenEmbedded Build System:
+=================================== 
+The core components of the Yocto Project are:
+
+• BitBake, the build engine. It is a task scheduler, like make. It interprets
+configuration files and recipes (also called metadata) to perform a set of tasks, to
+download, configure and build specified applications and filesystem images.
+
+• OpenEmbedded-Core, a set of base layers. It is a set of recipes, layers and classes
+which are shared between all OpenEmbedded based systems.
+
+• Poky, the reference system. It is a collection of projects and tools (with recipes), used to bootstrap
+a new distribution based on the Yocto Project.
+
+#esdk vs sdk:
+============
+esdk = extensible sdk.
+we use image-based esdk.
+
+#image types:
+==============
+core-image-minimal - A very basic image with just enough to boot and run.
+	Includes BusyBox, a minimal shell, and essential system utilities.
+	Ideal for testing and as a base for custom images.
+	No graphical interface or package management tools by default.
+
+core-image-base - Builds on core-image-minimal with additional tools like SSH server and package management (e.g., opkg).
+
+core-image-full-cmdline - Includes a more complete command-line environment. --------------------> this is the type used for EA !
+Useful for systems that need more shell utilities and scripting capabilities.
+
+#A standard SDK consists of the following:
+=========================================
+The SDK includes the cross toolchain, the target sysroot, host sysroot, env scripts, other metadata and config.
+	Cross-Development Toolchain: This toolchain contains a compiler, debugger, and various miscellaneous tools.
+	Target sysroot: Libraries, Headers, and Symbols: The libraries, headers, and symbols are specific to the image (i.e. they match the image).
+	Host sysroot: Matches the SDK host system (usually x86_64) and used by the yocto env itself, like: cmake, pkg-config, ...
+	Environment Setup Script: This *.sh file, once run, sets up the cross-development environment by defining variables and preparing for SDK use.
+
+
+--->SDK is built is per hw, need to use the one that was built for your HW
+
+--->An extensible SDK - 
+consists of everything that the standard SDK has +++plus+++:
+tools that allow you to easily add new applications and libraries to an image, modify the source of an existing component, test changes on the target hardware, and easily integrate an application into the OpenEmbedded build system.
+
+	The extensible SDK provides a cross-development toolchain and libraries tailored to the contents of a specific image. 
+	You would use the Extensible SDK if you want a toolchain experience supplemented with the powerful set of devtool commands tailored for the Yocto Project environment.
+	The installed extensible SDK consists of several files and directories. 
+	Basically, it contains an SDK environment setup script, some configuration files, an internal build system, and the devtool functionality.
+
+--->The cornerstone of the extensible SDK is a command-line tool called devtool
+
+--->rootfs is included in the SDK
+what's included is due to IMAGE_INSTALL_append we set in conf/local.conf
+
+	#example - add a staticdev package to IMAGE_INSTALL
+	By default, this toolchain does not build static binaries. 
+	If you want to use the toolchain to build these types of libraries, you need to be sure your image has the appropriate static development libraries. 
+	Use the IMAGE_INSTALL variable inside your local.conf file to install the appropriate library packages. 
+	Following is an example using glibc static development libraries:
+     IMAGE_INSTALL_append = " glibc-staticdev"
+
+#generic SDK vs image-based SDK
+================================
+Two different SDKs can be generated:
+--->A generic SDK, including:
+	* A toolchain.
+	* Common tools.
+	* A collection of basic libraries.
+--->An image-based SDK, including:
+	* The generic SDK.
+	* he sysroot matching the target root filesystem.
+	* Its toolchain is self-contained (linked to an SDK embedded libc).
+--->he SDKs generated with Poky are distributed in the form of a shell script.
+--->Executing this script extracts the tools and sets up the environment.
+
+#building the SDK:
+=================
+The build process creates an entire Linux distribution, including the toolchain, from source.
+
+#SDK installation:
+===================
+A good link to see the directory structure of the extracted eSDK:
+https://docs.yoctoproject.org/2.1/sdk-manual/sdk-manual.html#sdk-installed-standard-sdk-directory-structure
+section A.5
+
+SDK can be obtained by installer script or by extracting a tar file
+http://downloads.yoctoproject.org/releases/yocto/yocto-2.1/toolchain/x86_64/
+
+#SDK self extraction upon installation:
+=======================================
+
+In a Yocto SDK .sh installer, the compressed tarball (usually a .tar.xz archive containing the SDK files) is literally appended to the end of the shell script.
+Then a trick with "tail" is used at the first part of the script to untar and install it: tail -n +$ARCHIVE_START_LINE $0 | tar xJf - -C $INSTALL_DIR
+This installer script is generated by the populate_sdk bitbake command.
+
+
+#Agema installaion script:
+==========================
+Installs the eSDK that is built and saved in foxtrot.
+	it includes Open Clovis sources required for compilation, cloned to ~/yocto/2.5.2_bcm-sdk-6.5.22/esdk/safplus/...
+	clovis infra is built under Yocto
+		clovis is still used for IPC
+		ref: http://openclovis.com/products/safplus/
+	clone meta-switch
+
+#Agema build script: 
+in EA this installer script is called by the ./agema_install_dev_env.sh and installed under ~/yocto/2.5.2_bcm-sdk-6.5.22/esdk$ cd poky_sdk/.
+
+#how yocto SDK rootfs is merged with our apps?
+the Yocto rootfs is extracted into ~/yocto/2.5.2_bcm-sdk-6.5.22/esdk/poky_sdk/tmp/work/qemux86_64-poky-linux/core-image-full-cmdline/1.0-r0/rootfs
+then it is packed toghether with the applications into a bundle. this is done by the bundle creation script.
+
+YOCTO SDK BUILD
+
+#how to build:
+==============
+
+(look at the TOI doc for further explanations)
+*first, we clone git init-kconfig, it includes build scripts, defconfigs and "make menuconfig" implementation
+	cd mrv_dev/init-kconfig/
+	git pull
+	ll defconfigs/
+*cp defconfigs/agema_yocto-3.1.33_bcm-sdk-6.5.30_x86_64 .config
+	kconifg works with the .config
+	.config_auto_generated holds kind of formatted entries out of .config, used in the init-kconfig build_yocto_step* scripts
+*./build_yocto_step_01_configure.sh - convert menu configs to our config format
+*./build_yocto_step_02_remove_previous.sh -  rm -rf previous ybld - MUST in TC, not recommended in local build
+*./build_yocto_step_03_clone.sh - repo clone for all manifests
+*./build_yocto_step_04_checkout_branches.sh 
+*./build_yocto_step_05_customize_yocto_build_conf.sh - source oe-init-build-env ../build, create build dir with basic Yocto configurations, copy all configs from local.conf (yocto-cust-temp)
+*./build_yocto_step_06_add_layers.sh 
+*./build_yocto_step_07_yocto_build.sh - run bitbake commands to build Yocto and populate the SDK
+ls -lrt ybld/build/tmp/deploy/sdk/
+./build_yocto_step_08_upload.sh - upload SDK to servers
+
+I'm running on 10.32.23.228 bamba agent. user: mrv pass:123456, ~/mrv_dev/init-kconfig.
+
+Kosta tried to generate buildroot kconfig files for Yocto, we need to remove it - instead maintain this info under the appropriate branches and remove the yocto custom temp repo.
+
+#note 1: source vs build
+=========================
+sources in ybld/poky: all reciepes...
+build in ybld/build: all sources + artifacts
+
+#note 2: env setup - oe-init-build-env script
+=============================================
+under poky we have oe-init-build-env script to set up the OpenEmbedded build environment. It will create
+the build directory. It takes an optional parameter which is the build directory name. By default, this is build. This script has to be sourced
+because it changes environment variables.
+
+#note 3: we need to save and maintain our build settings
+========================================================
+conf/local.conf
+conf/bblayers.conf 
+these are under build directory, and will be lost upon every env setup
+we need to maintaing it under git or with other technique like a sepcific layer
+
+show:
+https://hfa-vs-bitbucket.advaoptical.com:8443/projects/YOC/repos/yocto-cust-temp/browse - for local and bcm conf
+https://hfa-vs-bitbucket.advaoptical.com:8443/projects/YOC/repos/meta-agema/browse - specific EA layers and settings including 3rd parties and kernel
+other EA specific layers like: meta-bcm, meta-openclovis, meta-flexera, meta-sysrepo
+source EA repos like: BCM sdk, linux-yocto, linux-ptp, flexera sdk, etc.
+
+#Yocto sources:
+===============
+The Yocto idea - recipes are organized in layers !
+
+-poky inludes the core layers
+-then comes the ref distribution layer - meta-poky
+-then comes the specific bsp layer - meta-yocto-bsp.
+-user layers - for example: meta-qt5
+
+poky is the ref distribution, open-embedded based, usually we don't edit.
+it is built on top of the specific target bsp layers.
+
+yocto - source and build directories structures
+-------------------------------------------------
+https://docs.yoctoproject.org/2.1/ref-manual/ref-manual.html#ref-structure
+section 6
+
+BitBake uses the conf/bblayers.conf file, which is part of the user configuration, to find what layers it should be using as part of the build.
+
+distribution layer - policy configuration: for example meta-poky in poky
+it contains a conf directory that has example configuration files 
+Settings you provide in conf/distro/distro.conf override similar settings that BitBake finds in your conf/local.conf file in the Build Directory.
+
+bsp layers: for example meta-yocto-bsp
+recipes-bsp, recipes-core, recipes-graphics, recipes-kernel, and so forth
+
+# site.conf
+for agema different builds?
+
+DL_DIR - This area is a cache that can hold previously downloaded source
+use of BB_GENERATE_MIRROR_TARBALLS to create downloads tarballs
+DL_DIR can be saved out of the build to keep all downloads safe in case of deleting the build dirs.
+
+#Layers
+https://docs.yoctoproject.org/dev-manual/common-tasks.html#creating-your-own-layer
+yers allow to isolate and organize the metadata.
+• A layer is a collection of recipes.
+
+
+#where to get layers from?
+layers index
+https://layers.openembedded.org/layerindex/branch/master/layers/
+
+
+#a yocto recipe
+================
+a file (with a .bb extension) that defines how to fetch, configure, build, and package a software component. Recipes are the fundamental building blocks of a Yocto build system
+implemented in bitbake syntax - bash (usually for variable) and python (usually for tasks/ functions) and parsed by bitbake
+
+example:
+--------
+SUMMARY = "MyApp - A simple example application"
+DESCRIPTION = "This is a simple example application for Yocto."
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=abc123..."
+
+SRC_URI = "git://github.com/example/myapp.git;branch=main"
+SRCREV = "abcdef1234567890"
+
+S = "${WORKDIR}/git"
+
+inherit cmake
+
+DEPENDS = "boost"
+
+do_install() {
+    install -d ${D}${bindir}
+    install -m 0755 myapp ${D}${bindir}/myapp
+}
+
+explanations:
+--------------
+SUMMARY / DESCRIPTION - Metadata for the package
+LICENSE / LIC_FILES_CHKSUM - License info and checksum of license file
+SRC_URI - Where to fetch the source code
+SRCREV - Git commit hash or version
+S - Source directory after unpacking
+inherit - Inherit a class (e.g., cmake, autotools, cve-check)
+DEPENDS - Build-time dependencies
+do_install() - Custom install steps (optional)
+
+in: meta-my-layer/recipes-example/myapp/myapp_1.0.bb
+
+will be added with create-layer and add-layer
+
+# A yocto class
+================
+(.bbclass extension) is a reusable set of build logic that can be shared across multiple recipes. 
+loacted under meta/calsses. can be used by "inherit" in a specific recipe or in local.conf for all recipes
+
+examples:
+---------
+base.bbclass - Core functionality for all recipes. every recipe inherits the base class.
+autotools.bbclass - Adds support for GNU Autotools (configure, make, etc.)
+cmake.bbclass - Adds support for CMake-based builds
+cve-check.bbclass - Adds CVE vulnerability scanning
+spdx.bbclass - Enables SPDX sBOM generation
+
+
+
+Yocto directories structure:
+============================
+https://docs.yoctoproject.org/2.1/ref-manual/ref-manual.html#structure-core
+https://docs.yoctoproject.org/ref-manual/structure.html
+
+
+yocto - build tree for a recipe:
+================================
+
+#tmp dir
+~/mrv_dev/init-kconfig/ybld/build/tmp
+
+#tmp/work
+$~/mrv_dev/yocto-training/build/tmp/work$ ls -la
+drwxr-xr-x   8 barak barak 4.0K Jun 24 07:25 all-poky-linux
+drwxr-xr-x  84 barak barak 4.0K Jun 24 07:25 core2-64-poky-linux
+drwxr-xr-x  11 barak barak 4.0K Jun 24 08:41 qemux86_64-poky-linux
+drwxr-xr-x 145 barak barak 4.0K Jun 24 07:28 x86_64-linux
+
+--all-poky-linux holds the recipes that are architecture-independent, like scripts.
+
+--x86_64-linux: used to hold recipes that are built for the build host that are used to build other recipes for the target machine. For more info check this link
+
+--qemux86_64-poky-linux: holds recipes that are machine-specific like core-image-minimal as it is an image containing packages and boot/kernel binaries/configuration specific only to qemux86_64.
+this is the ${MACHINE}-poky-${TARGET_OS}
+
+--core2-64-poky-linux: holds recipes that are architecture-specific, recipes that runs only on that architecture. It runs on qemux86_64 machine and can run on other machines that are compatible with that architecture.
+this is the ${PACKAGE_ARCH}-poky-${TARGET_OS} 
+
+(Intel Core 2 is the processor family encompassing a range of Intel's consumer 64-bit x86-64 single-, dual-, and quad-core microprocessors based on the Core microarchitecture.)
+
+#pkg source tree
+cd ~/mrv_dev/init-kconfig/ybld/build/workspace/sources/ipmitool
+
+#pkg workdir
+~/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0
+
+#pkg S, B dir
+~/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0/ipmitool-1.8.18
+
+#pkg D dir
+~/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0/ipmitool-1.8.18/image
+
+mrv@mrv-OptiPlex-990:~/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0$ ls -la
+total 152
+drwxrwxr-x 20 mrv mrv  4096 Jun 23 07:31 .
+drwxrwxr-x  3 mrv mrv  4096 Jun 23 07:15 ..
+-rw-rw-r--  1 mrv mrv  9724 Jun 15 14:14 0001-adva-custom-changes.patch
+-rw-rw-r--  1 mrv mrv  1434 Jun 15 14:14 0001-read_fru_area-fix.patch
+-rw-r--r--  1 mrv mrv    33 Jun 23 07:15 configure.sstate
+-rw-r--r--  1 mrv mrv 30317 Jun 23 07:31 debugsources.list
+drwxr-xr-x  3 mrv mrv  4096 Jun 23 07:31 deploy-rpms
+drwxr-xr-x  3 mrv mrv  4096 Jun 23 07:19 image ----------------> D
+drwxr-xr-x  8 mrv mrv  4096 Jun 23 07:15 ipmitool-1.8.18 -------------------> S. By defalt B = S.
+-rw-r--r--  1 mrv mrv  7805 Jun 23 07:31 ipmitool.spec
+drwxrwxr-x  3 mrv mrv  4096 Jun 23 07:15 license-destdir
+drwxr-xr-x  3 mrv mrv  4096 Jun 23 07:19 package
+drwxr-xr-x  8 mrv mrv  4096 Jun 23 07:31 packages-split
+drwxr-xr-x  6 mrv mrv  4096 Jun 23 07:31 pkgdata
+drwxrwxr-x  2 mrv mrv  4096 Jun 23 07:31 pseudo
+drwxrwxr-x  5 mrv mrv  4096 Jun 23 07:31 recipe-sysroot
+drwxrwxr-x 10 mrv mrv  4096 Jun 23 07:15 recipe-sysroot-native
+drwxr-xr-x  2 mrv mrv  4096 Jun 23 07:15 sstate-install-package
+drwxrwxr-x  2 mrv mrv  4096 Jun 23 07:15 sstate-install-packagedata
+drwxr-xr-x  2 mrv mrv  4096 Jun 23 07:16 sstate-install-package_qa
+drwxr-xr-x  2 mrv mrv  4096 Jun 23 07:16 sstate-install-package_write_rpm
+drwxrwxr-x  2 mrv mrv  4096 Jun 23 07:15 sstate-install-populate_lic
+drwxr-xr-x  2 mrv mrv  4096 Jun 23 07:15 sstate-install-populate_sysroot
+drwxr-xr-x  4 mrv mrv  4096 Jun 23 07:31 sysroot-destdir
+drwxrwxr-x  2 mrv mrv 16384 Jun 23 07:31 temp
+
+# symlinks to workdir and log dir
+you will find some symbolic links created within the source tree: 
+oe-logs: which points to the directory in which log files and run scripts for each build step are created 
+oe-workdir: which points to the temporary work area for the recipe. 
+
+oe-workdir -> /home/mrv/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0/
+oe-logs -> /home/mrv/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0/temp/
+
+#pkg vaiables: more pkgdata/runtime/ipmitool
+PN: ipmitool
+PV: 1.8.18
+PR: r0
+PKGV: 1.8.18
+PKGR: r0
+LICENSE: BSD-3-Clause
+DESCRIPTION: This package contains a utility for...
+Example for src tree of a package:
+
+#image dir
+Contains all of the files installed at the do_install stage. 
+Within a recipe, this directory is referred to by the expression ${D}.
+
+#sysroot-destdir: 
+Contains a subset of files installed within do_install that have been put into the shared sysroot.
+For more information, see the "Sharing Files Between Recipes" section.
+
+#packages-split: 
+Contains subdirectories for each package produced by the recipe.
+
+#how the split is done
+The PACKAGES and FILES variables controls splitting. 
+
+#The PACKAGES variable
+lists all of the packages to be produced
+
+#The FILES variable
+the list of directories or files that are placed in packages.
+a space-separated list of files or paths that identify the files you want included as part of the resulting package.
+
+For example, FILES_${PN} specifies the files to go into the main package. PN = recipe name.
+
+example:
+
+     FILES_${PN} += "${bindir}/mydir1/ ${bindir}/mydir2/myfile"
+
+
+The order of the PACKAGES value is significant. For each installed file, the first package whose FILES value matches the file is the package into which the file goes.
+Package variables can be found in:oe-workdir/pkgdata
+
+PACKAGES and FILES values can be found under oe-workdir/pkgdata/ipmitool
+PACKAGES - The list of packages to be created from the recipe. The default value is the following:
+
+     ${PN}-dbg ${PN}-staticdev ${PN}-dev ${PN}-doc ${PN}-locale ${PACKAGE_BEFORE_PN} ${PN}
+
+example of ipmitool PACKAGES:
+PACKAGES: ipmitool-dbg ipmitool-staticdev ipmitool-dev ipmitool-doc ipmitool-locale ipmitool
+
+#what pkg is finally included in the rootfs?
+---->Usually ${PN}, here it is impitool, is the one that is appended to IMAGE_INSTALL and thus is included in the final rootfs !
+
+#the pkg recipe is located under the poky source directory, in the related layer
+/home/mrv/mrv_dev/init-kconfig/ybld/poky/meta-openembedded/meta-oe/recipes-kernel/ipmitool/ipmitool_1.8.18.bb
+
+#Bitbake and Image Generation:
+=============================
+https://docs.yoctoproject.org/1.8/ref-manual/ref-manual.html#image-generation-dev-environment
+https://docs.yoctoproject.org/overview-manual/concepts.html#bitbake-tool
+
+
+#The Open-Embedded build workflow:
+=================================
+https://docs.yoctoproject.org/overview-manual/concepts.html#openembedded-build-system-concepts
+
+Default tasks already exists, they are defined in classes:
+▶ do_fetch
+▶ do_unpack
+▶ do_patch
+▶ do_configure
+▶ do_compile
+▶ do_install
+▶ do_package
+▶ do_rootfs
+You can get a list of existing tasks for a recipe with:
+bitbake <recipe> -c listtasks
+
+
+#sourcing
+The do_fetch and do_unpack tasks fetch the source files and unpack them into the work directory.
+i.e. to S directory: ~/mrv_dev/init-kconfig/ybld/build/tmp/work/core2-64-poky-linux/ipmitool/1.8.18-r0/ipmitool-1.8.18
+
+to ensure the sources are re-fetched, I did:
+bitbake -c clean ipmitool
+bitbake -c fetch ipmitool
+bitbake -c unpack ipmitool
+
+#patching
+The do_patch task uses a recipe’s SRC_URI statements and the FILESPATH variable to locate applicable patch files.
+During the build process, BitBake searches each directory in FILESPATH in the specified order when looking for files and patches specified by each file:// URI in a recipe’s SRC_URI statements.
+
+SRC_URI is per recipe.
+FILESPATH is inherited by a recipe. do not edit.
+
+FILESPATH
+The default set of directories the OpenEmbedded build system uses when searching for patches and files.
+
+#building
+do_prepare_recipe_sysroot - recipe-sysroot and recipe-sysroot-native contains depenencies of other recipes (ooutputs of other recipes do_populate_sysroot)
+do_configure
+do_compile (in $B. by default B = S)
+do_install (from $S to $D)
+
+#packaging
+do_package and do_packagedata do the split
+do_populate_sysroot copies a subset of the files into the appropriate sysroot
+do_package_write_* creates the actual packages and places them in the Package Feed area, which is ${TMPDIR}/deploy
+the feeds are the basis for the image.
+
+#image generation
+not a recipe task, but general
+do_rootfs task creates the root filesystem (file and directory structure) for an image
+
+pkg feeds are used for building the image
+When the OpenEmbedded build system generates an image or an SDK, it gets the packages from a package feed area located in the Build Directory
+
+related variables: 
+IMAGE_INSTALL: Lists out the base set of packages from which to install from the Package Feeds area.
+PACKAGE_EXCLUDE: Specifies packages that should not be installed into the image.
+
+Packages are controlled by the IMAGE_INSTALL configuration variable
+The list of packages to install is also filtered using the PACKAGE_EXCLUDE variable
+
+#finally SDK generation
+do_populate_sdk
+do_populate_sdk_ext 
+
+-------->image is not included in eSDK, just the rootfs.
+
+#more commands- all bitbake tasks
+https://docs.yoctoproject.org/ref-manual/tasks.html#ref-tasks-rootfs
+
+bitbake summary:
+BitBake can be used to run a full build for a given target with bitbake [target].
+▶ But it can be more precise, with optional options:
+-c <task> execute the given task
+-s list all locally available packages and their versions
+-f force the given task to be run by removing its stamp file
+world keyword for all recipes
+-b <recipe> execute tasks from the given recipe (without resolving
+dependencies).
+
+bitbake -c listtasks virtual/kernel
+• Gives a list of the available tasks for the recipe providing the package
+virtual/kernel. Tasks are prefixed with do_.
+▶ bitbake -c menuconfig virtual/kernel
+• Execute the task menuconfig on the recipe providing the virtual/kernel package.
+▶ bitbake -f dropbear
+• Force the dropbear recipe to run all tasks.
+▶ bitbake world --runall=fetch
+• Download all recipe sources and their dependencies.
+▶ For a full description: bitbake --help
+
+#bitbake more commands - how to dump variables
+$ bitbake -e --dry-run core-image-minimal | grep "^MACHINE="
+MACHINE="qemux86-64"
+$ bitbake -e --dry-run core-image-minimal | grep "^PACKAGE_ARCH="
+PACKAGE_ARCH="qemux86_64"
+$ bitbake -e --dry-run core-image-minimal | grep "^PACKAGE_EXTRA_ARCHS="
+PACKAGE_EXTRA_ARCHS="x86_64 core2-64"
+
+#bitbake clean - removes all output files(i.e. do_unpack, do_configure, do_compile, do_install, and do_package) but not cleaning sstatce cache
+bitbake -c clean recipe
+#bitbake like clean  + clean of sstate cache for a target
+$ bitbake -c cleansstate recipe
+#bitbake cleansstate + the clean of the tarball from DL_DIR
+$ bitbake -c cleanall recipe
+
+#bitbake user manual
+https://docs.yoctoproject.org/bitbake/2.0/index.html
+
+#bitbake useful commands:
+https://community.nxp.com/t5/i-MX-Processors-Knowledge-Base/Useful-bitbake-commands/ta-p/1128559
+
+#When adding a new package to yocto:
+=====================================
+first we should decide if it deserves a separate layer or not (by size and modularity)
+If a new layer is required, then use a bitbake to create the layer:
+
+bitbake-layers create-layer ~/mrv_dev/init-kconfig/ybld/poky/meta-mylayer
+
+note: it is used with full path.
+
+Once you create your general layer, you must add it to your bblayers.conf file. 
+Adding the layer to this configuration file makes the OpenEmbedded build system aware of your layer so that it can search it for metadata.
+
+bitbake-layers add-layer ~/mrv_dev/init-kconfig/ybld/poky/meta-mylayer
+
+make sure it is added successfully:
+bitbake-layers show-layers
+or check bblayers.conf
+
+After the layer is adde successfully, it can be built using devtool modify.
+
+# Yocto BSP - uboot and kernel
+===============================
+(https://bootlin.com/doc/training/yocto/yocto-slides.pdf - slides 166-191)
+usually a layer is used for the specific target hw. example: meta-ti (meta-agema is not a good example, it covers also apps for EA)
+	machine conf files under: meta-<bsp_name>/conf/machine/*.conf. for example: meta-ti/conf/machine/beaglebone.conf
+	u-boot and kernel configs under the bsp layer. both affected by a machine/conf file
+u-boot layer: meta/recipes-bsp/u-boot
+kernel: https://hfa-vs-bitbucket.advaoptical.com:8443/projects/YOC/repos/meta-agema/browse/recipes-kernel/linux/linux-yocto
+
+show Josh the kernel bb file under poky.
+
+kernel workflows in Yocto:
+https://docs.yoctoproject.org/kernel-dev/index.html#
+
+kenel in bitbake:
+▶ linux-yocto is a generic set of recipes for building mainline Linux kernel images.
+▶ PREFERRED_PROVIDER_virtual/kernel = "linux-yocto"
+▶ PREFERRED_VERSION_linux-yocto = "5.14%"
+
+
+▶ Configuration fragments can be generated directly with the bitbake command:
+1. Configure the kernel following its recipe instructions:
+bitbake -c kernel_configme linux-yocto
+2. Edit the configuration: bitbake -c menuconfig linux-yocto
+3. Save the configuration differences: bitbake -c diffconfig linux-yocto
+The differences will be saved at $WORKDIR/fragment.cfg
+▶ After integrating configuration fragments into the appended recipe, you can check
+everything is fine by running:
+bitbake -c kernel_configcheck -f linux-yocto
+
+Advanced kernel configs:
+▶ The full documentation can be found at
+https://docs.yoctoproject.org/kernel-dev/advanced.html#working-withadvanced-metadata-yocto-kernel-cache
+
+Two main configuration variables help taking advantage of this:
+LINUX_KERNEL_TYPE standard (default), tiny or preempt-rt
+• standard: generic Linux kernel policy.
+• tiny: bare minimum configuration, for small kernels.
+• preempt-rt: applies the PREEMPT_RT patch.
+KERNEL_FEATURES List of features to enable. Features are sets of patches and
+configuration fragments.
+
+#defconfigs
+working with kernel defconfig files, refer to:
+
+https://docs.yoctoproject.org/kernel-dev/common.html# 
+sections 2.3.3 Changing the Configuration and 2.3.4 Using an “In-Tree”  defconfig File
+
+important note about savedefconfig:
+You can also use a regular defconfig file, as generated by the do_savedefconfig task instead of a complete .config file. 
+Note: This only specifies the non-default configuration values !!!
+You need to additionally set KCONFIG_MODE in the linux-yocto .bbappend file in your layer:
+KCONFIG_MODE = "alldefconfig"
+
+#how do you know which layers and recipes are built for the image?
+==================================================================
+list all layers in the build: bitbake-layers show-layers
+list all recipes in the build: bitbake -g core-image-full-cmdline
+inspecting the IMAGE_INSTALL variable: bitbake -e <your-image-name> | grep ^IMAGE_INSTALL=
+
+#sysroot
+=========
+our machine is MACHINE ??= "qemux86-64"
+
+the SDK includes both:
+
+target sysroot - will be used by the cross compilation to build recipes for the target archetiecure.
+	When building the SDK: 
+	Yocto collects all relevant files from each recipe's recipe-sysroot.
+	It merges them into a complete target sysroot.
+    This merged sysroot is packaged into the SDK archive and appended to the .sh installer.
+
+	Inside the final sysroot you'll find:
+
+	/usr/include/: headers
+	/usr/lib/: target libraries
+	/etc/: configuration files
+	/usr/share/pkgconfig/: .pc files for pkg-config
+	/usr/bin/: target binaries (sometimes)
+	Symlinks and directory structure mimicking the target root filesystem
+
+it also includes host sysroot  - Matches the SDK host system (usually x86_64) and used by the yocto env itself, like: cmake, pkg-config, ...
+
+#don't mix the env files
+=========================
+* environment-setup-i586-poky-linux - used to set the yocto cross compile env for the developers to build their apps, based on the apps sdk.
+
+* unlike the oe-init-build-env script to set up the OpenEmbedded build environment for building the yoctor image and sdk
+
+
+DEVTOOL
+
+#SDK devtool workflow:
+======================
+https://docs.yoctoproject.org/sdk-manual/extensible.html#using-devtool-in-your-sdk-workflow
+
+#devtool
+summarize devtool reset with delete folders
+
+#devtool
+when working with devtool: You must set up a new terminal to work with the eSDK. 
+You cannot use the same BitBake shell used to build the installer.
+
+
+SBOM GENERATION
+
+what packages are included in the final image? learned for SBOM generation
+===========================================================================
+bitbake -e core-image-full-cmdline -c do_rootfs | grep "^IMAGE_INSTALL" | tr ' ' '\n' | sed '/^$/d' 
+this is not sufficient because Yocto uses dependency resolution and package splitting, so the final image includes:
+
+	Packages from IMAGE_INSTALL and CORE_IMAGE_EXTRA_INSTALL
+	Dependencies of those packages (automatically pulled in)
+	Runtime dependencies (RDEPENDS)
+	Split packages (e.g., a recipe might produce multiple packages like foo, foo-dev, foo-doc, etc.)
+
+So, the actual image may contain many more packages than those listed in IMAGE_INSTALL.
+
+more reliable way is the manifest file and the buildhistory files that are generated the files along the build process
+
+I compared them and finally I asked Josh to use the manifest file, it is good enough. can be just filtered out with *-dbg, *-doc and so on
+
+here is what I wrote to Josh:
+---------------------------
+I tried more alternatives like dumping yocto BUILD variables but they don't give a complete list of the packages since they refer only to what the use configured to build on top of some base packages and they don't list dependencies libs and so on.
+Eventually  I found out that the manifest is indeed reliable and includes all packages on the image only !
+It doesn't refer to any files on the host.
+But it includes some packages that are named *-dev, *-dbg, *-doc, *-locale, *-ptest - and we can filter them out because they are not used in runtime.
+ 
+In addition, there are build history files that save anything that is built for the image, files like: files-in-image.txt or installed-package-names.txt
+I do have them generated, but I compared it to the manifest and I don't see an added value, just the same names without the package version numbers...
+Anyway it is another fact that let me think that the manifest is ok.
+ 
+-------> So bottom line - I think let's continue with the manifest, you can just filter out the non-runtime names.
+
+I also used some yocto util (oe-pkgdata-util) that lists the relevant rootfs files for every package and then found them on a real Activator machine.
+for example : oe-pkgdata-util list-pkg-files rsyslog:
+ 
+mrv@mrv-OptiPlex-990:~/mrv_dev/init-kconfig/ybld/build/buildhistory/images/qemux86_64/glibc/core-image-full-cmdline$ oe-pkgdata-util list-pkg-files rsyslog
+rsyslog:
+	/etc/init.d/syslog
+	/etc/logrotate.d/logrotate.rsyslog
+	/etc/rsyslog.conf
+	/usr/lib/rsyslog/fmhash.so
+	/usr/lib/rsyslog/fmhttp.so
+	/usr/lib/rsyslog/imdiag.so
+	/usr/lib/rsyslog/imfile.so
+	/usr/lib/rsyslog/imklog.so
+	/usr/lib/rsyslog/immark.so
+	/usr/lib/rsyslog/imrelp.so
+	/usr/lib/rsyslog/imtcp.so
+	/usr/lib/rsyslog/imudp.so
+	/usr/lib/rsyslog/imuxsock.so
+	/usr/lib/rsyslog/liboverride_getaddrinfo.so
+	/usr/lib/rsyslog/liboverride_gethostname.so
+	/usr/lib/rsyslog/liboverride_gethostname_nonfqdn.so
+	/usr/lib/rsyslog/lmcry_gcry.so
+	/usr/lib/rsyslog/lmnet.so
+	/usr/lib/rsyslog/lmnetstrms.so
+	/usr/lib/rsyslog/lmnsd_gtls.so
+	/usr/lib/rsyslog/lmnsd_ptcp.so
+	/usr/lib/rsyslog/lmregexp.so
+	/usr/lib/rsyslog/lmtcpclt.so
+	/usr/lib/rsyslog/lmtcpsrv.so
+	/usr/lib/rsyslog/lmzlibw.so
+	/usr/lib/rsyslog/mmexternal.so
+	/usr/lib/rsyslog/omrelp.so
+	/usr/lib/rsyslog/omstdout.so
+	/usr/lib/rsyslog/omtesting.so
+	/usr/sbin/rsyslogd
+ 
+I found these files on a real target
+
+##########################################
+Eventuall 2 flags were added to local.conf
+===========================================
+INHERIT += "create-spdx"                                                                                                
+INHERIT += "cve-check"
+
+#create-spdx:
+==============
+use the spdx class
+yocto generates all SBOM files under tmp/deploy/spdx
+for all relevant recipes that are used for the image, it will create one spdx file per recipe, containing metadata like: Source files, Licenses, Checksums, Package relationships
+it also creates the spdx summry file about the enitre image
+
+bitbake core-image-full-cmdline -c create_spdx
+
+#cve-check:
+===========
+do the check like blackduck or loadpress
+for all relevant recipes that are used for the image, it will check each recipe for known Common Vulnerabilities and Exposures (CVEs) against the NVD (National Vulnerability Database) or other CVE databases.
+Produces output files under tmp/deploy/cve containing: CVEs found per package, Summary of all CVEs, CVEs grouped by severity or status
+Output is typically in .txt and .csv formats. JSON output is available in newer Yocto versions (e.g., Kirkstone and later) with CVE_CHECK_FORMAT = "json".
+
+bitbake core-image-full-cmdline -c cve_check
+#############################################
+
+
+Your API Key: fa2811df-20e5-4713-842a-c96a8d0abec2
+
